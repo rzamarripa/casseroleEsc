@@ -1,0 +1,87 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i> 
+				Grupos 
+			<span>&gt; 
+				Listar
+			</span>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" href="./grupo" ng-click="gp.nuevoGrupo()">
+		  Nuevo
+		</a>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered table-responsive">
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Ciclo</div></th>
+					<th width="10%"><div class="text-center">Grupo</div></th>
+					<th width="10%"><div class="text-center">Tipo</div></th>
+					<th width="30%"><div class="text-center">Cupo</div></th>
+					<th width="10%"><div class="text-center">Turno</div></th>
+					<th width="15%"><div class="text-center">Sección</div></th>
+					<th width="5%"><div class="text-center">Grado</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="grupo in gp.grupos">
+			    <td class="text-center">{{gp.getCiclo(grupo.ciclo_id)}}</td>
+			    <td class="text-center">{{grupo.identificador}} </td>
+			    <td class="text-center">{{grupo.tipo}}</td>
+			    <td class="text-center">
+				    <div class="progress right">
+							<div class="progress-bar bg-color-blue" aria-valuetransitiongoal="75" aria-valuenow="75" style="width: {{gp.getInscritos(grupo._id)/grupo.cupo*100}}%;">
+								{{gp.getInscritos(grupo._id)/grupo.cupo*100 | number:00}}%
+							</div>
+						</div>
+					</td>
+			    <td class="text-center">{{gp.getTurno(grupo.turno_id)}}</td>
+			    <td>{{gp.getSeccion(grupo.seccion_id)[0]}}</td>
+			    <td>{{grupo.grado}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="grupo.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!grupo.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="./grupo/{{grupo._id}}"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="gp.cambiarEstatus(grupo._id)"><i class="fa fa-trash"></i> {{gp.getEstatus(grupo.estatus)}}</a></li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+  </div>
+</div>

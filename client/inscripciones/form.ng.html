@@ -1,0 +1,359 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-pencil-square-o fa-fw "></i> 
+				Asistente de
+			<span>&gt; 
+				Inscripción
+			</span>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" ui-sref="root.inscripciones">
+		  Listar Inscripciones
+		</a>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" role="widget">
+			
+			<header role="heading">
+				<span class="widget-icon"> <i class="fa fa-check"></i> </span>
+				<h2>Proceso de Inscripción </h2>
+	
+			<span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
+	
+			<div role="content">
+	
+				<div class="jarviswidget-editbox">
+	
+				</div>
+
+				<div class="widget-body">	
+					<div class="row">
+						<form name="form" class="form-horizontal" role="form" novalidate>
+							<div id="bootstrap-wizard-1" class="col-sm-12">
+								<div class="form-bootstrapWizard">
+									<ul class="bootstrapWizard form-wizard">
+										<li class="active" data-target="#step1">
+											<a href="#tab1" data-toggle="tab"> <span class="step">1</span> <span class="title">Información Básica</span></a>
+										</li>
+										<li data-target="#step2">
+											<a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Información Académica</span></a>
+										</li>
+										<li data-target="#step3">
+											<a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Ubicar al Alumno</span></a>
+										</li>
+										<li data-target="#step4">
+											<a href="#tab4" data-toggle="tab"> <span class="step">4</span> <span class="title">Cobro</span></a>
+										</li>
+										<li data-target="#step5">
+											<a href="#tab5" data-toggle="tab"> <span class="step">5</span> <span class="title">Finalizar Inscripción</span></a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane active" id="tab1">
+										<br>
+										<h3><strong>Paso 1 </strong> - Información Básica</h3>
+										<div class="row">
+											<div class="col-sm-12">												
+										  	<div class="well">
+											    <div class="row">
+														<div class="col-sm-8" valida>
+															<label>Alumno *</label>												
+															<select name="alumno" class="form-control" placeholder="Seleccione" 
+																ng-model="ins.inscripcion.alumno_id" ng-change="ins.getAlumnoSeleccionado(ins.inscripcion.alumno_id)" required="">
+															  <option  value="{{alumno._id}}" ng-repeat="alumno in ins.alumnos">
+															  	{{alumno.nombre}} {{alumno.apPaterno}} {{alumno.apMaterno}}
+															  </option>
+															</select>
+															
+														</div>
+														<div class="col-sm-3">
+															<label for="fechaNac">Fecha de Inscripción</label>
+															<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="ins.inscripcion.fechaInscripcion"/>
+														</div>
+											    </div>
+											    <br/>
+											    <br/>
+											    <div class="row" ng-show="ins.alumnoSeleccionado.activo">
+											    	<div class="col-sm-2 profile-pic">
+															<img src="{{ins.alumnoSeleccionado.fotografia}}" >															
+														</div>
+														<div class="col-sm-6">
+															<h1>
+																{{ins.alumnoSeleccionado.nombre}} 
+																<span class="semi-bold">{{ins.alumnoSeleccionado.apPaterno}} {{ins.alumnoSeleccionado.apMaterno}}</span>
+																<br>
+															</h1>
+															<ul class="list-unstyled">
+																<li ng-show="ins.alumnoSeleccionado.tel1">
+																	<p class="text-muted">
+																		<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{ins.alumnoSeleccionado.tel1}}</span>
+																	</p>
+																</li>
+																<li ng-show="ins.alumnoSeleccionado.correo">
+																	<p class="text-muted">
+																		<i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{alumno.correo}}">{{ins.alumnoSeleccionado.correo}}</a>
+																	</p>
+																</li>
+																<li ng-show="ins.alumnoSeleccionado.fechaNac">
+																	<p class="text-muted">
+																		<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;
+																		<span class="txt-color-darken">{{ins.alumnoSeleccionado.fechaNac | date:"dd-MM-yyyy"}}</span>
+																	</p>
+																</li>
+															</ul>
+															<br>
+															<div ng-show="ins.alumnoSeleccionado.observacionesGenerales">
+																<p class="font-sm">
+																	<i>Un poco acerca de mi...</i>
+																</p>
+																<p class="font-xs">
+																	{{ins.alumnoSeleccionado.observacionesGenerales}}
+																</p>
+															</div>															
+														</div>
+											    </div>
+										  	</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="tab2">
+										<br>
+										<h3><strong>Paso 2</strong> - Información Académica</h3>
+	
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="well">												
+											    <div class="row">
+											    	<div class="col-sm-4" valida>
+															<label>Sección *</label>
+															<select name="seccion" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.seccion_id" ng-change="ins.getGrupos(ins.inscripcion.seccion_id, ins.inscripcion.alumno_id)" required="">
+															  <option value="{{seccion._id}}" ng-repeat="seccion in ins.secciones">
+															  	{{seccion.nombreseccion}}
+															  </option>
+															</select>
+														</div>
+														<div class="col-sm-4" valida>
+															<label >Ciclo Escolar *</label>
+															<select name="cicloescolar" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.ciclo_id">
+															  <option  value="{{ciclo._id}}" ng-repeat="ciclo in ins.ciclos">
+															  	{{ciclo.nombre}}
+															  </option>
+															</select>
+																
+										
+														</div>
+											    	<!--<div class="col-sm-6">
+												    	<label >Sección</label>
+															<select class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.seccion_id" ng-change="ins.getGrupos(ins.inscripcion.seccion_id, ins.inscripcion.alumno_id)">
+															  <option value="{{seccion._id}}" ng-repeat="seccion in ins.secciones">
+															  	{{seccion.descripcion}}
+															  </option>
+															</select>
+															
+														</div>-->
+														<div class="col-sm-4" valida>
+															<label >Tipo de Ingreso *</label>
+															<select name="tipoingreso" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.tiposIngreso_id" required="">
+															  <option  ng-repeat="tiposIngreso in ins.tiposIngresos">
+															  	{{tiposIngreso.nombre}}
+															  </option>
+															</select>
+															<!--<ui-select ng-model="inscripcion.tipoIngreso_id"
+														             theme="bootstrap"
+														             ng-disabled="disabled"
+														             reset-search-input="false">
+														    <ui-select-match placeholder="Seleccione">{{$select.selected.descripcion}}</ui-select-match>
+														    <ui-select-choices repeat="tipoIngreso._id as tipoIngreso in tiposIngresos | filter: $select.search">
+														      <div ng-bind-html="tipoIngreso.descripcion | highlight: $select.search"></div>
+														    </ui-select-choices>
+														  </ui-select>-->
+														</div>
+											    </div>
+											    
+										  	</div>	
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="tab3">
+										<br>
+										<h3><strong>Paso 3</strong> - Ubicar al Alumno</h3>
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="well">
+											    <div class="row">
+											  		<div class="col-sm-3" valida>												  		
+															<label >Grupo *</label>
+															<select name="grupo" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.grupo_id" ng-change="ins.hayCupo(ins.inscripcion.grupo_id)" required="">
+															  <option value="{{grupo._id}}" ng-repeat="grupo in ins.grupos">
+															  	{{grupo.identificador}}
+															  </option>
+															</select>
+											  		</div>														  
+													  <div class="col-sm-1" style="text-align: left">
+														  <div style="display: inline-block; vertical-align: auto; float: none;">
+														  	<h1 class="text-center text-{{ins.cupo == 'check' ? 'success' : 'danger'}}">
+															  	<strong><i class="fa fa-{{ins.cupo}} fa-lg"></i></strong>
+															  </h1>
+														  </div>															  
+														</div>
+														<div class="col-sm-8">
+															<label>Generación *</label>
+															<select name="generacion" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.generacion_id" required="">
+															  <option value="{{generacion._id}}" ng-repeat="generacion in ins.generaciones">
+															  	{{generacion.nombre}}
+															  </option>
+															</select>
+														</div>
+														
+											  	</div>
+										  	</div>	
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="tab4">
+										<br>
+										<h3><strong>Paso 4</strong> - Cobros Iniciales</h3>
+										<div class="well">	 
+									  		<div class="panel panel-default">
+												<div class="panel-heading">Tipo de inscripción</div>
+												<div class="panel-body">
+													<div ng-repeat="(nombre, plan) in ins.inscripcion.plan">
+														<label  ng-if="plan.tipoPlan=='inscripcion'"> 
+													  		<input type="radio" name="rbInscripcion" ng-model="ins.inscripcion.tipoInscripcion" ng-value="nombre">
+													  		{{nombre}}
+													  		<div class="row" ng-show="nombre==ins.inscripcion.tipoInscripcion" ng-repeat="concepto in plan.datos">
+													  			<div class="col-sm-12">
+													  				<label > 
+														  				<input type="checkbox" ng-model="concepto.activa" ng-change="ins.calcularImporte(concepto)">
+														  				{{concepto.nombre}}
+														  			</label>
+													  			</div>
+													  		</div>
+													  	</label>	  		
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">Tipo de Colegiatura</div>
+												<div class="panel-body">
+													<div  ng-repeat="(nombre, plan) in ins.inscripcion.plan" ng-if="plan.tipoPlan=='colegiatura' && ins.periodoVisible(plan)">
+													  	<label> 
+													  		<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.tipoColegiatura"  ng-value="nombre">
+													  		{{nombre}}
+													  		<div ng-show="nombre==ins.tipoColegiatura">
+													  			<p>Total de pagos: {{plan.planPago.length}} </p>
+													  			<p ng-repeat="concepto in plan.datos">Cuota de {{concepto.nombre}}: {{concepto.importe}} </p>
+													  												  			
+													  		</div>
+													  	</label>	  		
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<br>
+										<div class="row">
+											<div class="col-sm-4">
+												
+												<h4 class="text-center text-success">Total a pagar: {{ins.inscripcion.totalPagar | currency}}</h4>
+											</div>
+											<div class="col-sm-4">
+												<div class="row">
+													<div class="col-sm-12">
+														<label>Vendedor</label>
+														
+														<select class="form-control" ng-model="ins.inscripcion.vendedor_id">
+													    	<option value="{{vendedor._id}}" ng-repeat="vendedor in ins.vendedores">{{vendedor.profile.nombre}} {{vendedor.profile.apPaterno}}</option>
+												    	</select>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<label>Cuánto paga</label>
+														<input type="text" class="form-control" ng-model="ins.inscripcion.importePagado" ng-change="ins.cuantoPaga(ins.inscripcion.importePagado)"/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<label>Cambio</label>
+														<input type="text" class="form-control" ng-model="ins.inscripcion.cambio"/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-4">
+														<label>Quieres abonarlo?</label>
+														<input type="checkbox" class="form-control" ng-change="ins.dejoAbono()" ng-model="ins.inscripcion.quiereAbonar"/>
+													</div>
+													<div class="col-sm-8">
+														<label>Abono</label>
+														<input type="text" class="form-control" ng-model="ins.inscripcion.abono"/>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="tab5">
+										<div class="row">
+											<div class="col-sm-12">
+												<br>
+												<h3><strong>Paso 5</strong> - Guardar Inscripción</h3>
+												<br>
+												<div class="text-center">
+													<h4>Click en Inscribir para Finalizar</h4>
+													<br/>
+													<button ng-click="ins.guardar(ins.inscripcion)" class="btn btn-lg btn-primary">Inscribir</button>
+													<br>
+													<br>
+												</div>												
+											</div>
+										</div>										
+									</div>	
+									<div class="form-actions">
+										<div class="row">
+											<div class="col-sm-12">
+												<ul class="pager wizard no-margin">
+													<!--<li class="previous first disabled">
+													<a href="javascript:void(0);" class="btn btn-lg btn-default"> First </a>
+													</li>-->
+													<li class="previous disabled">
+														<a href="javascript:void(0);" class="btn btn-lg btn-default"> Atrás </a>
+													</li>
+													<!--<li class="next last">
+													<a href="javascript:void(0);" class="btn btn-lg btn-primary"> Last </a>
+													</li>-->
+													<li class="next">
+														<a href="javascript:void(0);" class="btn btn-lg txt-color-darken btn-primary"> Siguiente </a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$('#bootstrap-wizard-1').bootstrapWizard({
+    'tabClass': 'form-wizard',
+    'onNext': function (tab, navigation, index) {      
+      $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).addClass('complete');
+      $('#bootstrap-wizard-1').find('.form-wizard').children('li').eq(index - 1).find('.step').html('<i class="fa fa-check"></i>');
+    }
+  });
+</script>

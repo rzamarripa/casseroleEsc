@@ -1,0 +1,123 @@
+
+
+
+<h2>Tareas</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{tarea.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevotarea" ng-click="tarea.nuevoTarea()">
+		 {{tarea.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>		
+		<div class="collapse" id="collapseExample">
+			<form class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	 
+			    <div class="row">
+			    	<div class="col-sm-8">					    
+				    	<label>Titulo de la tarea</label>
+				    	<input type="text" class="form-control" placeholder="Escribe el tituo de la tarea" ng-model="tarea.tarea.titulo">
+			    	</div>
+			    	</div>
+			    	<div class="row">
+			    	<div class="col-sm-10">
+					    <label>Descripción</label>
+					    <textarea class="form-control" placeholder="Descripción" ng-model="tarea.tarea.descripcion"></textarea>
+			    	</div>
+			    	</div>
+			    	
+			    	<br/>
+			    	<div class="row">
+			    <div class="col-sm-2">
+				    		 <label>Permitir reenvio</label>
+					    <select ng-model="tarea.tarea.reenvio" class="form-control">
+							  <option value="si">Si</option>
+							  <option value="no">No</option>
+							</select>
+			    	</div>	
+			    	<div class="col-sm-2">					    
+				    	<label>Calificación</label>
+				    	<input type="text" class="form-control" placeholder="Calificación" ng-model="tarea.tarea.calificacion">
+			    	</div>
+			    	 <div class="col-sm-2">
+				    		 <label>Tamaño máximo</label>
+					    <select ng-model="tarea.tarea.tamano" class="form-control">
+							  <option value="1mb">1Mb</option>
+							  <option value="2mb">2Mb</option>
+							</select>
+			    	</div>	
+			    	<div class="col-sm-4">
+						<label for="fechaLimite">Fecha Limite</label>
+						<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="tarea.tarea.fechaLim"/>
+					</div>
+			    	 
+			    	 </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="tarea.guardar(tarea.tarea)" value="Guardar" class="btn btn-primary" ng-show="tarea.action">
+						<input type="submit" ng-click="tarea.actualizar(tarea.tarea)" value="Actualizar" class="btn btn-primary" ng-show="!tarea.action">				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered" >
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Titulo </div></th>
+					<th width="20%"><div class="text-center">Descripción</div></th>
+					<th width="10%"><div class="text-center">Calificación</div></th>
+					<th width="10%"><div class="text-center">Fecha limite</div></th>	
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="tarea in tarea.tareas">
+			    <td>{{tarea.titulo}}</td>
+			    <td>{{tarea.descripcion}}</td>
+			    <td>{{tarea.calificacion}} </td>
+			    <td>{{tarea.fechaLim | date:"dd-MM-yyyy"}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="tarea.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!tarea.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="tarea.editar(tarea._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="tarea.cambiarEstatus(tarea._id)"><i class="fa fa-trash"></i> Desactivar</a></li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

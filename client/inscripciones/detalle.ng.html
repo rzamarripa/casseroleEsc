@@ -1,0 +1,211 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">
+										<a href="javascript:void(0);" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-check"></i> Follow</a>&nbsp;
+										<a href="javascript:void(0);" class="btn txt-color-white bg-color-pinkDark btn-sm"><i class="fa fa-envelope-o"></i> Enviar Mensaje</a>
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{fechaActual | date:'dd-MM-yyyy'}}<small> <a class="btn btn-primary" href="alumnos/{{alumno._id}}" ng-show="elMismo(alumno._id)">Modificar</a></small></h4>
+									</div>
+									<ol class="carousel-indicators">
+										<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+										<li data-target="#myCarousel" data-slide-to="1" class=""></li>
+										<li data-target="#myCarousel" data-slide-to="2" class=""></li>
+									</ol>
+									<div class="carousel-inner">
+										<!-- Slide 1 -->
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+										<!-- Slide 2 -->
+										<div class="item">
+											<img src="img/demo/s2.jpg" alt="" style="width:100%">
+										</div>
+										<!-- Slide 3 -->
+										<div class="item">
+											<img src="img/demo/m3.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-3 profile-pic">
+										<img src="{{alumno.fotografia}}" >
+										<div class="padding-10">
+											<h4 class="font-md"><strong>1,543</strong>
+											<br>
+											<small>Seguidores</small></h4>
+											<br>
+											<h4 class="font-md"><strong>419</strong>
+											<br>
+											<small>Amigos</small></h4>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<h1>{{alumno.nombre}} <span class="semi-bold">{{alumno.apPaterno}} {{alumno.apMaterno}}</span>
+										<br>
+										<small> Alumno</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{alumno.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{alumno.correo}}">{{alumno.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{alumno.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+										<br>
+										<p class="font-sm">
+											<i>Un poco acerca de mi...</i>
+										</p>
+										<p class="font-xs">
+											{{alumno.observacionesGenerales}}
+										</p>
+										<br>
+										<ul class="nav nav-tabs ">
+											<li>
+												<a href="#masinfo" data-toggle="tab">Más Información</a>
+											</li>
+											<li>
+												<a href="#calificaciones" data-toggle="tab">Calificaciones</a>
+											</li>
+											<li>
+												<a href="#pagos" data-toggle="tab">Pagos</a>
+											</li>
+										</ul>
+										<div class="tab-content padding-top-10">
+											<div class="tab-pane" id="masinfo">
+												<div class="col-sm-6">
+													<ul class="list-unstyled">															
+														<li>
+															<address>
+															  <strong>Información de la Madre</strong><br>
+															  <strong>Nombre:</strong> {{alumno.madre}}<br>
+															  <strong>Ocupación:</strong> {{alumno.ocupacionMadre}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Dirección</strong><br>
+															  {{alumno.calleNum}}, {{alumno.colonia}}<br>
+															  {{alumno.ciudad}}, {{alumno.estado}} {{alumno.codigoPostal}}<br>
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Lugar de Nacimiento</strong><br>
+															  {{alumno.lugarNac}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Escolaridad</strong><br>
+															  {{alumno.escolaridad}}
+															</address>
+														</li>		
+														<li>
+															<address>
+															  <strong>Nivel Social</strong><br>
+															  {{alumno.nivelSocial}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Correo para Calificaciones</strong><br>
+															  {{alumno.correoCalificaciones}}
+															</address>
+														</li>											
+													</ul>	
+												</div>
+												<div class="col-sm-6">
+													<ul class="list-unstyled">
+														<li>
+															<address>
+															  <strong>Información del Padre</strong><br>
+															  <strong>Nombre:</strong> {{alumno.padreTutor}}<br>
+															  <strong>Ocupación:</strong> {{alumno.ocupacionPadreTutor}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Teléfono Secundario</strong><br>
+																{{alumno.tel2}}															  
+															</address>
+														</li>													
+														<li>
+															<address>
+															  <strong>Ocupación</strong><br>
+															  {{alumno.ocupacion}}
+															</address>
+														</li>													
+														<li>
+															<address>
+															  <strong>Cómo te enteraste de nosotros</strong><br>
+															  {{alumno.medio}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Talla</strong><br>
+																{{alumno.talla}}															  
+															</address>
+														</li>														
+													</ul>	
+												</div>
+																								
+											</div>
+											<div class="tab-pane" id="calificaciones">
+												<h3>Calificaciones</h3>
+											</div>
+											<div class="tab-pane" id="pagos">
+												<h3>Pagos</h3>
+											</div>											
+										</div>											
+										<br>
+										<br>
+									</div>										
+									<div class="col-sm-3">
+										<h1><small>Amigos</small></h1>
+										<ul class="list-inline friends-list">
+											<li><img src="img/avatars/1.png" alt="friend-1">
+											</li>
+											<li><img src="img/avatars/2.png" alt="friend-2">
+											</li>
+											<li><img src="img/avatars/3.png" alt="friend-3">
+											</li>
+											<li><img src="img/avatars/4.png" alt="friend-4">
+											</li>
+											<li><img src="img/avatars/5.png" alt="friend-5">
+											</li>
+											<li><img src="img/avatars/male.png" alt="friend-6">
+											</li>
+											<li>
+												<a href="javascript:void(0);">413 more</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

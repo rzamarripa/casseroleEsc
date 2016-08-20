@@ -1,0 +1,13 @@
+Upload on form submit or button click
+<form name="form" novalidate>
+  Single Image with validations
+  <div class="btn btn-info" ngf-select ng-model="ar.file" name="file" ngf-pattern="'image/*'"
+    ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" 
+    ngf-resize="{width: 200}">Seleccione</div>
+  <button type="submit" class="btn btn-primary" ng-click="ar.submit()">Subir</button>
+</form>
+
+
+Previsualización: <img ngf-thumbnail="ar.file || '/thumb.jpg'"><br/>
+Audio preview: <audio controls ngf-src="ar.file"></audio><br/>
+Video preview: <video controls ngf-src="ar.file"></video>

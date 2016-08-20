@@ -1,0 +1,116 @@
+<h2>SubCiclos</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{sub.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevosubCiclo" ng-click="sub.nuevoSubCiclo()">
+		  {{sub.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+				<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-4" valida>
+							<label >Ciclo Escolar *</label>
+							<select name="ciclo" class="form-control select2" placeholder="Seleccione" ng-model="sub.subCiclo.ciclo_id" required>
+								<option  value="{{ciclo._id}}" ng-repeat="ciclo in sub.ciclos">
+									{{ciclo.nombre}}
+								</option>
+							</select>
+						</div>
+				    <div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="sub.subCiclo.nombre" required="">
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Tipo de Subciclo *</label>
+				    	<select name="tiposubciclo" class="form-control select2" placeholder="Seleccione" ng-model="sub.subCiclo.tipo" required="">
+							  <option value="Administrativo">Administrativo </option>
+								<option value="Academico">Académico</option>
+						</select>
+					</div>
+			    	
+		    	<div class="col-sm-12">
+				    <label>Descripción</label>
+				    <textarea class="form-control" placeholder="Descripción" ng-model="sub.subCiclo.descripcion"></textarea>
+		    	</div>
+			     	   			    
+			    </div>
+				</div> 
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="sub.guardar(sub.subCiclo,form)" class="btn btn-primary" ng-show="sub.action" valida-form formulario="form">
+						<input type="submit" ng-click="sub.actualizar(sub.subCiclo,form)" value="Actualizar" class="btn btn-primary" ng-show="!sub.action" valida-form formulario="form">			
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Ciclo</div></th>
+					<th width="20%"><div class="text-center">Nombre</div></th>					
+					<th width="10%"><div class="text-center">Tipo de Subciclo</div></th>	
+					<th width="30%"><div class="text-center">Descripción</div></th>									
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="subCiclo in sub.subCiclos">
+			    <td>{{sub.getCiclo(subCiclo.ciclo_id)}}</td>
+			    <td>{{subCiclo.nombre}}</td>			    
+					<td>{{subCiclo.tipo}}</td>
+		      <td>{{subCiclo.descripcion}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="subCiclo.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!subCiclo.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="sub.editar(subCiclo._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="sub.cambiarEstatus(subCiclo._id)">
+							    				<i class="fa fa-{{subCiclo.estatus ? 'trash' : 'check' }}"></i> {{subCiclo.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

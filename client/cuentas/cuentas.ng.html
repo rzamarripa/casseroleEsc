@@ -1,0 +1,107 @@
+<h1>Cuentas</h1>
+<hr style="border-top:1px solid black">
+<h3 ng-if="cc.cuentas != undefined">Click para activar una cuenta...</h3>
+<div class="row">
+	<div ng-repeat="cuenta in cc.cuentas" class="col-xs-12 col-sm-6 col-md-3">
+		<div ng-click="cc.activarCuenta(cuenta._id)" style="cursor:pointer;" class="panel panel-{{cuenta.activo == true ? 'success':'danger'}} pricing-big">
+			<div class="panel-heading">
+			<h1 class="panel-title" style="font-size:50px;">{{cuenta.nombre}}</h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{cc.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevocuenta" ng-click="cc.nuevaCuenta()">
+		  {{cc.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="cc.cuenta.nombre" maxlength="11" required>
+			    	</div>
+			    </div>				  
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="cc.guardar(cc.cuenta,form)" class="btn btn-primary" ng-show="cc.action" valida-form formulario="form">
+						<input type="submit" ng-click="cc.actualizar(cc.cuenta,form)" value="Actualizar" class="btn btn-primary" ng-show="!cc.action" valida-form formulario="form">				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>									
+					<th width="10%">
+						<div class="text-center">
+							Activa
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Inscripción
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="cuenta in cc.cuentas">
+			    <td>{{cuenta.nombre}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="cuenta.activo" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!cuenta.activo" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+			    	<div class="text-center">
+				    	<span ng-if="cuenta.inscripcion" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!cuenta.inscripcion" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="cc.editar(cuenta._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="cc.cuentaInscripcion(cuenta._id)"><i class="fa fa-trash"></i>Inscripción</a></li>
+							    <li><a href="#" ng-click="cc.cambiarEstatus(cuenta._id)"><i class="fa fa-trash"></i> Eliminar</a></li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

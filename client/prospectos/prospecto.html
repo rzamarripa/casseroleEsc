@@ -1,0 +1,460 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm ">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">										
+										<a href="#llamadas" 
+											role="button" 
+											data-toggle="collapse" 
+											aria-expanded="false" 
+											aria-controls="collapseExample" 
+											class="btn btn-primary btn-circle btn-xl">
+												<i class="fa fa-phone"></i>
+										</a>
+										<a href="#reuniones" 
+											role="button" 
+											data-toggle="collapse" 
+											aria-expanded="false" 
+											aria-controls="collapseExample" 
+											class="btn btn-primary btn-circle btn-xl">
+												<i class="fa fa-calendar"></i>
+										</a>
+										<a href="#notas" 
+											role="button" 
+											data-toggle="collapse" 
+											aria-expanded="false" 
+											aria-controls="collapseExample" 
+											class="btn btn-primary btn-circle btn-xl">
+												<i class="fa fa-sticky-note-o"></i>
+										</a>
+										<a href="#formProspecto" 
+											role="button" 
+											data-toggle="collapse" 
+											aria-expanded="false" 
+											aria-controls="collapseExample" 
+											class="btn btn-primary btn-circle btn-xl">
+												<i class="fa fa-pencil"></i>
+										</a>
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{fa.prospecto.fecha | date:'dd-MM-yyyy'}}</h4>
+									</div>
+									<div class="carousel-inner">
+										<!-- Slide 1 -->
+										<div class="item active">											
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12 padding-20">
+								<div class="row">
+									<div class="col-sm-12">												
+										<div class="collapse collapseLlamada" id="llamadas">
+											<form class="form-horizontal" role="form" novalidate>
+										  	<div class="well">	    
+											    <div class="row">
+												    <div class="col-sm-12">
+												    	<h2>Nueva Llamada</h2>
+												    </div>
+											    	<div class="col-sm-4">					    
+												    	<label>Asunto</label>
+												    	<input type="text" class="form-control" placeholder="Asunto" ng-model="fa.llamada.asunto" >
+											    	</div>
+											    	<div class="col-sm-4">					    
+												    	<label>Fecha</label>
+												    	<input date-time class="form-control" view="year" max-view="year" min-view="minutes" ng-model="fa.llamada.fecha"/>
+											    	</div>
+											    	<div class="col-sm-4">
+											    		<label class="toggle">
+																<input type="checkbox" name="checkbox-toggle" ng-model="fa.llamada.estatus">
+																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
+																Estatus
+															</label>
+											    	</div>
+											    </div> 
+											    <div class="row">
+											    	<div class="col-sm-12">
+													    <label>Resultado</label>
+													    <textarea class="form-control" placeholder="Resultado" ng-model="fa.llamada.resultado"></textarea>
+											    	</div>
+											    </div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<input type="submit" ng-click="fa.guardarLlamada(fa.llamada)" value="Guardar" class="btn btn-primary" ng-show="fa.actionLlamada">
+														<input type="submit" ng-click="fa.actualizarLlamada(fa.llamada)" value="Actualizar" class="btn btn-primary" ng-show="!fa.actionLlamada">
+													</div>
+												</div>	  
+										  </form>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">												
+										<div class="collapse collapseReunion" id="reuniones">
+											<form class="form-horizontal" role="form" data-parsley-validate>
+										  	<div class="well">	    
+											    <div class="row">
+												    <div class="col-sm-12">
+												    	<h2>Nueva Reunión</h2>
+												    </div>
+											    	<div class="col-sm-4">					    
+												    	<label>Asunto</label>
+												    	<input type="text" class="form-control" placeholder="Asunto" ng-model="fa.reunion.asunto" >
+											    	</div>
+											    	<div class="col-sm-2">					    
+												    	<label>Fecha</label>
+												    	<input date-time class="form-control" view="year" max-view="year" min-view="minutes" ng-model="fa.reunion.fecha"/>
+											    	</div>
+											    	<div class="col-sm-4">					    
+												    	<label>Lugar</label>
+												    	<input type="text" class="form-control" placeholder="Lugar" ng-model="fa.reunion.lugar" >
+											    	</div>
+											    	<div class="col-sm-2">
+											    		<label class="toggle">
+																<input type="checkbox" name="checkbox-toggle" ng-model="fa.reunion.estatus">
+																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
+																Estatus
+															</label>
+											    	</div>
+											    </div> 
+											    <div class="row">
+											    	<div class="col-sm-12">
+													    <label>Resultado</label>
+													    <textarea class="form-control" placeholder="Resultado" ng-model="fa.reunion.resultado"></textarea>
+											    	</div>
+											    </div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<input type="submit" ng-click="fa.guardarReunion(fa.reunion)" value="Guardar" class="btn btn-primary" ng-show="fa.actionReunion">
+														<input type="submit" ng-click="fa.actualizarReunion(fa.reunion)" value="Actualizar" class="btn btn-primary" ng-show="!fa.actionReunion">
+													</div>
+												</div>	  
+										  </form>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">												
+										<div class="collapse collapseTarea" id="notas">
+											<form class="form-horizontal" role="form" data-parsley-validate>
+										  	<div class="well">	    
+											    <div class="row">
+												    <div class="col-sm-12">
+												    	<h2>Nueva Tarea</h2>
+												    </div>
+											    	<div class="col-sm-4">					    
+												    	<label>Asunto</label>
+												    	<input type="text" class="form-control" placeholder="Asunto" ng-model="fa.tarea.asunto" >
+											    	</div>
+											    	<div class="col-sm-4">					    
+												    	<label>Fecha</label>
+												    	<input date-time class="form-control" view="year" max-view="year" min-view="minutes" ng-model="fa.tarea.fecha"/>
+											    	</div>
+											    	<div class="col-sm-4">
+											    		<label class="toggle">
+																<input type="checkbox" name="checkbox-toggle" ng-model="fa.tarea.estatus">
+																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
+																Estatus
+															</label>
+											    	</div>
+											    </div> 
+											    <div class="row">
+											    	<div class="col-sm-12">
+													    <label>Resultado</label>
+													    <textarea class="form-control" placeholder="Resultado" ng-model="fa.tarea.resultado"></textarea>
+											    	</div>
+											    </div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<input type="submit" ng-click="fa.guardarTarea(fa.tarea)" value="Guardar" class="btn btn-primary" ng-show="fa.actionTarea">
+														<input type="submit" ng-click="fa.actualizarTarea(fa.tarea)" value="Actualizar" class="btn btn-primary" ng-show="!fa.actionTarea">
+													</div>
+												</div>	  
+										  </form>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="collapse" id="formProspecto">
+											<form id="checkout-form" class="smart-form" novalidate="novalidate">
+												<fieldset>
+													<h4>Información de Contacto</h4>
+													<div class="row">
+														<section class="col col-1">
+															<button class="btn btn-primary btn-sm" ng-click="fa.tomarFoto()"><i class="fa fa-camera"></i></button>
+															<img width="100px" ng-src="{{al.prospecto.fotografia}}" ng-class="{'img-thumbnail': !!al.prospecto.fotografia}" />
+														</section>
+														<section class="col col-6">								
+															<label class="input"> <i class="icon-prepend fa fa-user"></i>
+																<input type="text" name="fname" ng-model="fa.prospecto.nombre" placeholder="Nombre Completo">
+															</label>
+														</section>
+														<section class="col col-5">
+															<label class="input"> <i class="icon-prepend fa fa-calendar"></i>
+																<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="fa.prospecto.fechaNac" placeholder="Fecha Nacimiento"/>
+															</label>
+														</section>
+													</div>
+							
+													<div class="row">
+														<section class="col col-6">
+															<label class="input"> <i class="icon-prepend fa fa-envelope-o"></i>
+																<input type="email" name="email" ng-model="fa.prospecto.correo" placeholder="Correo">
+															</label>
+														</section>
+														<section class="col col-6">
+															<label class="input"> <i class="icon-prepend fa fa-phone"></i>
+																<input type="tel" name="phone" ng-model="fa.prospecto.telefono" placeholder="Teléfono" data-mask="(999) 999-9999">
+															</label>
+														</section>
+													</div>
+												</fieldset>
+												<fieldset>
+													<div class="row">
+														<section class="col col-6">
+															<h4>Quieres estudiar...</h4>
+															<div class="inline-group">
+																<label class="radio" ng-repeat="seccion in fa.secciones">
+																	<input type="radio" ng-click="fa.seleccionarSeccion(seccion);" name="radio-inline">
+																	<i></i>{{seccion.nombreseccion}}
+																</label>
+															</div>
+														</section>
+														<section class="col col-6">
+															<h4>Etapa de Venta</h4>
+															<select required ng-model="fa.prospecto.etapaVenta_id" class="form-control" ng-options="etapaVenta._id as etapaVenta.nombre for etapaVenta in fa.etapasVenta" ng-change="fa.cambiarEtapaVenta(fa.prospecto.etapaVenta_id)"></select>
+														</section>
+													</div>
+													<div class="row">
+														<section class="col col-sm-12">
+															<h4>Información adicional</h4>
+															<label class="textarea"> 										
+																<textarea rows="3" name="info" ng-model="fa.prospecto.informacion" placeholder="Información Adicional"></textarea> 
+															</label>
+														</section>
+													</div>
+												</fieldset>
+												<footer>
+													<button type="submit" class="btn btn-primary" ng-click="fa.actualizar(fa.prospecto)">
+														Actualizar
+													</button>
+												</footer>
+											</form>											
+										</div>
+									</div>
+								</div> 
+								<section id="widget-grid" data-widget-grid="data-widget-grid">
+								  <div class="row">
+									  <div class="col-sm-3 profile-pic" style="text-align: center;">
+											<img class="thumbnail" ng-if="fa.prospecto.fotografia" ng-src="{{fa.prospecto.fotografia}}" style="height: 150px; max-width: 150px; text-align: center;" alt="Foto Perfil">
+											<img class="thumbnail" ng-if="!fa.prospecto.fotografia" src="/img/avatars/male.png" style="height: 150px; max-width: 150px; text-align: center;" alt="Foto Perfil">
+											<div class="padding-10" style="text-align: left;">
+												<ul class="list-unstyled">
+													<li>
+														<p class="text-muted">
+															<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.telefono}}</span>
+														</p>
+													</li>
+													<li>
+														<p class="text-muted">
+															<i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{fa.prospecto.correo}}">{{fa.prospecto.correo}}</a>
+														</p>
+													</li>
+													<li>
+														<p class="text-muted">
+															<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.fechaNac | date:"dd-MM-yyyy"}}</span>
+														</p>
+													</li>
+													<li>
+														<p class="text-muted">
+															<i class="fa fa-book"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.estudioInteres}}</span>
+														</p>
+													</li>
+													<li>
+														<p class="text-muted">
+															<i class="fa fa-tasks"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.getEtapaVenta(fa.prospecto.etapaVenta_id)}}</span>
+														</p>
+													</li>
+												</ul>
+											</div>
+										</div>
+								    <div class="col-sm-9">
+								      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-jarvis-widget="data-jarvis-widget">
+								        <header>
+								          <h2><i class="fa fa-user"></i> Información del prospecto</h2>
+								        </header>
+								        <div>
+								          <div class="widget-body">
+								            <h1 class="text-muted">{{fa.prospecto.nombre}}</h1>
+														<ul class="list-unstyled">															
+															<li>
+																<ul class="list-unstyled" >
+																	<span class="txt-color-darken">Quiero estudiar en: </span><br/>
+																	<li class="text-muted fa fa-book" style="margin-left: 15px;" > {{fa.prospecto.estudioInteres}}</li>
+																	<br ng-repeat-end>
+																</ul>
+															</li>
+														</ul>
+														<br>
+														<p class="font-sm">
+															<i>Información Adicional</i>
+															<p class="font-xs">
+																{{fa.prospecto.informacion}}
+															</p>
+														</p>
+														
+								          </div>
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+								  <div class="row">
+								    <div class="col-sm-12">
+								      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-jarvis-widget="data-jarvis-widget">
+								        <header>
+								          <h2><i class="fa fa-phone"></i> Llamadas</h2>
+								        </header>
+								        <div>
+								          <div class="widget-body">
+									          <table class="table table-bordered table-striped table-hover">
+															<tr>
+																<th class="text-center" width="5%">No.</th>
+																<th width="20%">Asunto</th>
+																<th width="15%">Fecha</th>
+																<th>Resultado</th>
+																<th class="text-center" width="10%">Estatus</th>
+																<th class="text-center" width="15%">Acciones</th>
+															</tr>
+															<tr ng-repeat="llamada in fa.llamadas">
+																<td>{{$index+1}}</td>
+																<td>{{llamada.asunto}}</td>
+																<td>{{llamada.fecha | date: "dd-MM-yyyy"}}</td>
+																<td>{{llamada.resultado}}</td>
+																<td>
+																	<div class="text-center">
+															    	<span ng-if="llamada.estatus" class="label label-success">
+																		  Realizada
+																		</span>
+																		<span ng-if="!llamada.estatus" class="label label-warning">
+																		  Pendiente
+																		</span>
+															    </div>
+																</td>
+																<td class="text-center">																	
+																	<button class="btn btn-warning" ng-click="fa.editarLlamada(llamada)"><i class="fa fa-pencil white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarLlamada($index, llamada)"><i class="fa fa-trash white"></i></button>
+																</td>
+															</tr>
+														</table>
+								          </div>
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+								  <div class="row">
+								    <div class="col-sm-12">
+								      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-jarvis-widget="data-jarvis-widget">
+								        <header>
+								          <h2><i class="fa fa-calendar"></i> Reuniones</h2>
+								        </header>
+								        <div>
+								          <div class="widget-body">
+									          <table class="table table-bordered table-striped table-hover">
+															<tr>
+																<th width="5%">No.</th>
+																<th width="20%">Asunto</th>
+																<th width="15%">Fecha</th>
+																<th>Lugar</th>
+																<th>Resultado</th>
+																<th width="10%">Estatus</th>
+																<th class="text-center" width="15%">Acciones</th>
+															</tr>
+															<tr ng-repeat="reunion in fa.reuniones">
+																<td>{{$index+1}}</td>
+																<td>{{reunion.asunto}}</td>
+																<td>{{reunion.fecha | date: "dd-MM-yyyy"}}</td>
+																<td>{{reunion.lugar}}</td>
+																<td>{{reunion.resultado}}</td>
+																<td>
+																	<div class="text-center">
+															    	<span ng-if="reunion.estatus" class="label label-success">
+																		  Realizada
+																		</span>
+																		<span ng-if="!reunion.estatus" class="label label-warning">
+																		  Pendiente
+																		</span>
+															    </div>
+																</td>
+																<td class="text-center">
+																	<button class="btn btn-warning" ng-click="fa.editarReunion(reunion)"><i class="fa fa-pencil white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarReunion($index, reunion)"><i class="fa fa-trash white"></i></button>
+																</td>
+															</tr>
+														</table>
+								          </div>
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+								  <div class="row">
+								    <div class="col-sm-12">
+								      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-jarvis-widget="data-jarvis-widget">
+								        <header>
+								          <h2><i class="fa fa-sticky-note"></i> Tareas</h2>
+								        </header>
+								        <div>
+								          <div class="widget-body">
+									          <table class="table table-bordered table-striped table-hover">
+															<tr>
+																<th width="5%">No.</th>
+																<th width="20%">Asunto</th>
+																<th width="15%">Fecha</th>
+																<th>Resultado</th>
+																<th width="10%">Estatus</th>
+																<th class="text-center" width="15%">Acciones</th>
+															</tr>
+															<tr ng-repeat="tarea in fa.tareas">
+																<td>{{$index+1}}</td>
+																<td>{{tarea.asunto}}</td>
+																<td>{{tarea.fecha | date: "dd-MM-yyyy"}}</td> 
+																<td>{{tarea.resultado}}</td>
+																<td>
+																	<div class="text-center">
+															    	<span ng-if="tarea.estatus" class="label label-success">
+																		  Realizada
+																		</span>
+																		<span ng-if="!tarea.estatus" class="label label-warning">
+																		  Pendiente
+																		</span>
+															    </div>
+																</td>
+																<td class="text-center">
+																	<button class="btn btn-warning" ng-click="fa.editarTarea(tarea)"><i class="fa fa-pencil white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarTarea($index, tarea)"><i class="fa fa-trash white"></i></button>
+																</td>
+															</tr>
+														</table>
+								          </div>
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+								</section>								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>		

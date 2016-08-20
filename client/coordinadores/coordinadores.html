@@ -1,0 +1,153 @@
+<h2>Coordinadores</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{c.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="c.nuevoCoordinador()">
+			{{c.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>	
+				    	<label>Usuario *</label>
+				    	<div class="input-group">					    	
+								<input type="text" class="form-control" name="usuario" ng-model="c.coordinador.username" ng-change="c.validarUsuario(c.coordinador.username)" required>
+								<span class="input-group-addon">
+									<i class="fa fa-{{c.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
+								</span>
+							</div>				    				    
+			    	</div>
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Contraseña *</label>
+				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="c.coordinador.password" 
+				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)" required>
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="c.coordinador.confirmarContrasena" 
+				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)" required>
+					</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+			    		<label>Nombre *</label>
+				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="c.coordinador.profile.nombre" required>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+			    		<label>Apellido Paterno *</label>
+				    	<input name="apellidoPaterno" type="text" class="form-control" placeholder="Apellido Paterno" ng-model="c.coordinador.profile.apPaterno" required>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Apellido Materno</label>
+				    	<input type="text" class="form-control" placeholder="Apellido Materno" ng-model="c.coordinador.profile.apMaterno">
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4">
+			    		<label>Dirección</label>
+				    	<input type="text" class="form-control" placeholder="Dirección" ng-model="c.coordinador.profile.direccion">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Teléfono *</label>
+				    	<input name="telefono" type="text" class="form-control" placeholder="Teléfono" ng-model="c.coordinador.profile.telefono" required>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Correo *</label>
+				    	<input name="correo" type="email" class="form-control" placeholder="Correo" ng-model="c.coordinador.profile.correo" required>
+			    	</div>
+			    </div>
+			    <div class="row">
+				    <div class="col-sm-3" valida>					    
+				    	<label>Tipo de Usuario *</label>
+				    	<select name="gerente" class="form-control" ng-model="c.coordinador.profile.role" required>
+					    	<option value="coordinadorAcademico">Coordinador Académico</option>
+					    	<option value="coordinadorFinanciero">Coordinador Financiero</option>
+				    	</select>
+			    	</div>
+			    	<div class="col-sm-4">
+							<label for="talla">Fotografía</label>
+							<button class="btn btn-primary" ng-click="c.tomarFoto()"><i class="fa fa-camera"></i></button>
+							<img width="100px" ng-src="{{c.coordinador.profile.fotografia}}" ng-class="{'img-thumbnail': !c.coordinador.profile.fotografia}" />
+						</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="c.guardar(c.coordinador,form)" value="Guardar" class="btn btn-primary" ng-show="c.action" ng-disabled="!c.validaUsuario || !c.validaContrasena" valida-form formulario="form" />
+						<input type="submit" ng-click="c.actualizar(c.coordinador,form)" value="Actualizar" class="btn btn-primary" ng-show="!c.action" valida-form formulario="form" />				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Foto</div></th>
+					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="10%"><div class="text-center">Usuario </div></th>
+					<th width="10%"><div class="text-center">Rol </div></th>
+					<th width="10%"><div class="text-center">Teléfono</div></th>
+					<th width="10%"><div class="text-center">correo</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="7%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="coordinador in c.coordinadores">
+		    	<td><img width="100px" ng-src="{{coordinador.profile.fotografia}}" ng-class="{'img-thumbnail': !!coordinador.fotografia}"/> </td>
+			    <td>{{coordinador.profile.nombre}} {{coordinador.profile.apPaterno}} {{coordinador.profile.apMaterno}} </td>
+			    <td>{{coordinador.username}} </td>
+			    <td>{{coordinador.profile.role}} </td>
+			    <td>{{coordinador.profile.telefono}} </td>
+			    <td>{{coordinador.profile.correo}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="coordinador.profile.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!coordinador.profile.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="c.editar(coordinador._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="c.cambiarEstatus(coordinador._id)">
+							    				<i class="fa fa-{{coordinador.estatus ? 'trash' : 'check' }}"></i> {{coordinador.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

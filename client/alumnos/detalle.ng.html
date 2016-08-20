@@ -1,0 +1,309 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+								<!--
+									<div class="air air-bottom-right padding-10">
+										<a href="javascript:void(0);" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-check"></i> Follow</a>&nbsp;
+										<a href="javascript:void(0);" class="btn txt-color-white bg-color-pinkDark btn-sm"><i class="fa fa-envelope-o"></i> Enviar Mensaje</a>
+									</div>
+								-->
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{al.fechaActual | date:'dd-MM-yyyy'}}
+											<small> <a class="btn btn-primary" href="alumnos/{{al.alumno._id}}" ng-show="elMismo(alumno._id)">Modificar</a></small>
+										</h4>
+									</div>
+									<ol class="carousel-indicators">
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
+										<img style="max-width:200px;" src="{{al.tieneFoto(al.alumno.profile.sexo, al.alumno.profile.fotografia)}}" >
+										<div class="padding-10">
+											<h4 class="font-md"><strong>0</strong>
+											<br>
+											<small>Seguidores</small></h4>
+											<br>
+											<h4 class="font-md"><strong>0</strong>
+											<br>
+											<small>Amigos</small></h4>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<h1>{{al.alumno.profile.nombre}} <span class="semi-bold">{{al.alumno.profile.apPaterno}} {{al.alumno.profile.apMaterno}}</span>
+										
+										<small> (Alumno)</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{al.alumno.profile.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope fa-lg"></i>&nbsp;&nbsp;<a href="mailto:{{al.alumno.profile.correo}}">{{al.alumno.profile.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{al.alumno.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+										<br>
+										<p class="font-sm">
+											<i>Un poco acerca de mi...</i>
+										</p>
+										<p class="font-xs">
+											{{al.alumno.profile.observacionesGenerales}}
+										</p>
+										<br>
+									</div>
+									<!--																
+									<div class="col-sm-3">
+										<h1><small>Amigos</small></h1>
+										<ul class="list-inline friends-list">
+											<li><img src="img/avatars/1.png" alt="friend-1">
+											</li>
+											<li><img src="img/avatars/2.png" alt="friend-2">
+											</li>
+											<li><img src="img/avatars/3.png" alt="friend-3">
+											</li>
+											<li><img src="img/avatars/4.png" alt="friend-4">
+											</li>
+											<li><img src="img/avatars/5.png" alt="friend-5">
+											</li>
+											<li><img src="img/avatars/male.png" alt="friend-6">
+											</li>
+											<li>
+												<a href="javascript:void(0);">413 more</a>
+											</li>
+										</ul>
+									</div>
+									-->
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<ul class="nav nav-tabs">
+											<li class="pull-right">
+												<a ng-click="al.masInformacion()" role="button" data-toggle="collapse"
+			href="#masInformacion" aria-expanded="false" aria-controls="masInformacion"><i class="fa fa-{{al.masInfo == true ? 'plus':'minus'}} fa-lg"></i></a>
+											</li>
+										</ul>
+										<div class="collapse padding-10" id="masInformacion">
+											<div class="tab-pane">
+												<div class="col-sm-6">
+													<ul class="list-unstyled">															
+														<li>
+															<address>
+															  <strong>Información de la Madre</strong><br>
+															  <strong>Nombre:</strong> {{al.alumno.profile.madre}}<br>
+															  <strong>Teléfono:</strong> {{al.alumno.profile.telefonoMadre}}
+															  <strong>Correo:</strong> {{al.alumno.profile.correoMadre}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Dirección</strong><br>
+															  {{al.alumno.profile.calleNum}}, {{al.alumno.profile.colonia}}<br>
+															  {{al.alumno.profile.ciudad}}, {{al.alumno.profile.estado}} {{al.alumno.profile.codigoPostal}}<br>
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Lugar de Nacimiento</strong><br>
+															  {{al.alumno.profile.lugarNac}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Escolaridad</strong><br>
+															  {{al.alumno.profile.escolaridad}}
+															</address>
+														</li>		
+														<li>
+															<address>
+															  <strong>Nivel Social</strong><br>
+															  {{al.alumno.profile.nivelSocial}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Correo para Calificaciones</strong><br>
+															  {{al.alumno.profile.correoCalificaciones}}
+															</address>
+														</li>											
+													</ul>	
+												</div>
+												<div class="col-sm-6">
+													<ul class="list-unstyled">
+														<li>
+															<address>
+															  <strong>Información del Padre</strong><br>
+															  <strong>Nombre:</strong> {{al.alumno.profile.padreTutor}}<br>
+															  <strong>Teléfono:</strong> {{al.alumno.profile.telefonoPadre}}
+															  <strong>Correo:</strong> {{al.alumno.profile.correoPadre}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Teléfono Secundario</strong><br>
+																{{al.alumno.profile.tel2}}															  
+															</address>
+														</li>													
+														<li>
+															<address>
+															  <strong>Ocupación del Alumno</strong><br>
+															  {{al.getOcupacion(al.alumno.profile.ocupacion_id)}}
+															</address>
+														</li>													
+														<li>
+															<address>
+															  <strong>Cómo te enteraste de nosotros</strong><br>
+															  {{al.alumno.profile.medio}}
+															</address>
+														</li>
+														<li>
+															<address>
+															  <strong>Talla</strong><br>
+																{{al.alumno.profile.talla}}															  
+															</address>
+														</li>														
+													</ul>	
+												</div>
+																								
+											</div>											
+											<div class="tab-pane" id="pagos">												
+												<div class="row">
+													<section class="col col-sm-1 text-center padding-20" ng-repeat="semana in al.misSemanas" ng-click="al.seleccionarSemana(semana)" ng-class="al.obtenerEstatus(semana.pagada)">
+														<label class="input text-center">
+															<label type="text" class="text-center">{{semana.numero}} / {{semana.anio}} | {{semana.pagada}}</label>
+														</label>
+													</section>													
+												</div>																		
+											</div>											
+										</div>
+									</div>
+								</div>
+							</div>													
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row" ng-if="al.estaInscrito(al.alumno.profile._id)">
+	<div class="col col-sm-12">
+		<section id="widget-pagos" data-widget-grid="data-widget-grid">
+		  <div class="row">
+		    <div class="col-sm-12">
+		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
+		        <header>
+		          <h2>Pagos</h2>
+		        </header>
+		        <div>
+		          <div class="widget-body">
+		            <form class="smart-form" ng-repeat = "curso in al.inscripciones" novalidate> 
+									<header>
+
+										<h1>  {{al.grupo(curso.grupo_id).nombre}} </h1>
+	
+									</header>		
+									<div ng-repeat ="(idconcepto, concepto) in curso.plan" ng-if='al.periodoVisible(concepto) && (idconcepto==curso.tipoInscripcion || idconcepto==curso.tipoColegiatura)'>
+										<h2> {{idconcepto}} : </h2>	
+										<fieldset>
+											<div class="row">
+											<section class="col col-1"  ng-click="al.seleccionarSemana(cobro,concepto)" ng-repeat = "cobro in concepto.planPago" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input ng-class="al.obtenerEstatus(cobro,concepto)" type="text" value="{{cobro.numero}} / {{cobro.anio}}" disabled="">
+												</label>
+											</section>
+											</div>
+										</fieldset>
+
+									</div>
+									<fieldset>
+											<div class="row">
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Seleccionados" disabled="" class="bg-color-blue txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Recargos" disabled="" class="bg-color-orange txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Pagados" disabled="" class="bg-color-green txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Condonados" disabled="" class="bg-color-blueDark txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Abonados" disabled="" class="bg-color-greenLight txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Pendientes" disabled="" class="">
+												</label>
+											</section>
+
+											</div>
+									</fieldset>
+
+									
+								</form>
+								<div class="well well-sm  bg-color-darken txt-color-white no-border">
+									<div class="fa-lg">
+										Total a Pagar :
+										<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+									</div>														
+								</div>
+								<div class="pull-right" style="margin:20px;">
+									<button type="button" class="btn btn-primary btn-lg" ng-click="al.pagar()" ng-disabled="al.hayParaPagar">Pagar</button>
+								</div>
+								<div class="pull-right" style="margin:20px;">
+									<button type="button" class="btn btn-primary btn-lg" ng-click="al.imprimir()" ng-disabled="al.hayParaImprimir">Imprimir</button>
+								</div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="col-sm-12">
+		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
+		        <header>
+		          <h2>Calificaciones</h2>
+		        </header>
+		        <div>
+		          <div class="widget-body">
+		            
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</section>	
+	</div>
+</div>

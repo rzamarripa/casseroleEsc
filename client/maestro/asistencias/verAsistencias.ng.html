@@ -1,0 +1,24 @@
+<div class="row-fluid">
+	<div class="col-sm-12">		
+		<div class="table-responsive">	
+			<table class="table table-bordered" style="width: auto">
+		    <thead>
+		      <tr>
+		        <th class="col-sm-1">Matrícula</th>
+		        <th class="col-sm-2">Nombre</th>
+		        <th ng-repeat="asistencia in mast.asistencias"><div class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</div></th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr ng-repeat="alumno in mast.alumnosAsistidos" style="font-size: 10px;">
+						<td class="cell">{{alumno.matricula}}</td>
+						<td class="cell">{{alumno.nombre}}</td>
+					  <td class="cell text-center" ng-repeat="asistencia in alumno.dias track by $index">
+					    <input type="checkbox" ng-checked="asistencia" disabled>
+					  </td>
+					</tr>
+		    </tbody>
+			</table>
+		</div>
+	</div>
+</div>

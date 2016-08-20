@@ -1,0 +1,130 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark"><i class="fa fa-calendar fa-fw "></i> 
+			Calendario
+			<span>&gt;
+			De Horarios
+			</span>
+		</h1>
+	</div>
+</div>
+<form name="form1" novalidate>
+<div class="row" style="margin-bottom: 20px;">
+	<div class="col-sm-8" valida>
+		<input name="nombre" type="text" id="nombreHorario" class="form-control input-lg" ng-model="ho.horario.nombre" placeholder="Nombre del Horario" required=""/>
+	</div>
+	<div class="col-sm-4">
+		<input type="submit" ng-click="ho.guardarHorario(form1)" value="Guardar" class="btn btn-primary btn-block btn-lg" ng-show="ho.action" valida-form formulario="form1">
+		<input type="submit" ng-click="ho.modificarHorario(ho.horario,form1)" value="Actualizar" class="btn btn-primary btn-block btn-lg" ng-show="!ho.action" valida-form formulario="form1">
+	</div>
+</div>
+</form>
+
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-3" style="padding-right: 0px;">
+		<div class="jarviswidget jarviswidget-color-blueDark">
+			<header>
+				<span class="widget-icon"> <i class="fa fa-{{ho.actionAgregar ? 'plus' : 'pencil'}}"></i> </span>
+				<h2> Agrega Clases </h2>
+			</header>
+		<div>
+		<div class="widget-body">
+			<form name="form2" novalidate>
+				<fieldset>
+					<div class="form-group" valida>
+						<label for="materia">Materia *</label>
+						<select name="materia_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.materia_id" required="">
+							<option value=""></option>
+						  <option ng-repeat="materia in ho.materias" value="{{materia._id}}">
+						  	{{materia.nombreCorto}}
+						  </option>
+						</select>
+					</div>
+
+					<div class="form-group" valida>
+						<label >Maestro *</label>
+						<select name="maestro_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.maestro_id" required>
+							<option value=""></option>
+						  <option ng-repeat="maestro in ho.maestros" value="{{maestro._id}}">
+						  	{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}
+						  </option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Aulas</label>
+						<select name="aula_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.aula_id">
+							<option value=""></option>
+						  <option ng-repeat="aula in ho.aulas" value="{{aula._id}}">
+						  	{{aula.nombre}}
+						  </option>
+						</select>
+					</div>
+
+					<div class="form-group" valida>
+						<label for="fechaNac">Inicio *</label>
+						<input name="start" date-time class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ho.clase.start" required=""/>
+					</div>
+					
+					<div class="form-group" valida>
+						<label for="fechaNac">Fin *</label>
+						<input name="end" date-time class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ho.clase.end" required=""/>
+					</div>
+					
+					<div class="form-group">
+						<label>Seleccionar el color de la clase</label>
+						<div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
+							<label class="btn bg-color-darken" ng-click='ho.clase.className = "bg-color-darken";'>
+								<input  type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-blue" ng-click='ho.clase.className = "bg-color-blue";'>
+								<input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-pink" ng-click='ho.clase.className = "bg-color-pink";'>
+								<input type="radio" name="priority" id="option3" value="bg-color-pink txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-greenLight" ng-click='ho.clase.className = "bg-color-greenLight";'>
+								<input type="radio" name="priority" id="option4" value="bg-color-greenLight txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-blueLight" ng-click='ho.clase.className = "bg-color-blueLight";'>
+								<input type="radio" name="priority" id="option5" value="bg-color-blueLight txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-red active" ng-click='ho.clase.className = "bg-color-red";'>
+								<input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+						</div>
+					</div>
+
+				</fieldset>
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-sm-4">
+							<a href="#" ng-click="ho.agregarClase(ho.clase,form2);" class="btn btn-default pull-left" ng-show="ho.actionAgregar" valida-form formulario="form2"><i class="fa fa-plus fa-lg"></i></a>
+							<a href="#" ng-click="ho.modificarClase(ho.clase,form2);" class="btn btn-default pull-left" ng-show="!ho.actionAgregar" valida-form formulario="form2"><i class="fa fa-check fa-lg"></i></a>
+						</div>
+						<div class="col-sm-4 text-center">
+							<a href="#" ng-click="ho.cancelarClase();" class="btn btn-warning" ng-show="!ho.actionAgregar"><i class="fa fa-close fa-lg"></i></a>
+						</div>
+						<div class="col-sm-4">
+							<a href="#" ng-click="ho.eliminarClase();" class="btn btn-danger pull-right" ng-show="!ho.actionAgregar"><i class="fa fa-trash fa-lg"></i></a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		</div>
+		</div>
+	</div>
+	<div class="col-sm-12 col-md-12 col-lg-9">
+		<div class="jarviswidget jarviswidget-color-blueDark">
+			<header>
+				<span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+				<h2> Horario de Clases </h2>				
+			</header>
+			<div>
+				<div class="widget-body">
+					<div ui-calendar="ho.uiConfig.calendar" class="calendar" ng-model="ho.eventSources"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

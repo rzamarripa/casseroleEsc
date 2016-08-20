@@ -1,0 +1,58 @@
+<button class="btn {{gc.nuevo == false ? 'btn-primary':'btn-danger'}}" type="button" data-toggle="collapse" data-target="#admonForm" aria-expanded="false" style="margin-bottom:10px;" aria-controls="admonForm" ng-click="gc.boton()">
+  {{gc.nuevo == false ? 'Agregar':'Cancelar'}}
+</button>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="collapse" id="admonForm">
+			<div class="well col-sm-12">	
+				<div class="row">
+					<div class="form-group col-sm-4" valida>
+					  <label>Importe</label>
+				  	<input type="number" class="form-control"  ng-model="gc.gasto.importe" name="importe" required>
+					</div>
+					<div class="form-group col-sm-4" valida>
+						<label for="fechaLimite">Fecha Límite</label>
+						<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fechaLimite" name="fechaLimite" required/>
+					</div>
+					<div class="form-group col-sm-4" valida>
+						<label for="concepto">Concepto</label>
+						<select class="form-control select2" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" required>
+						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
+						  	{{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div ng-if="gc.descripcion(gc.gasto.concepto_id)" class="form-group col-sm-4" valida>
+					  <label>Descripción</label>
+				  	<input type="text" class="form-control"  ng-model="gc.gasto.descripcion" name="descripcion" required>
+					</div>
+				</div>
+				<a class="btn btn-primary pull-right" ng-click="gc.guardar(gc.gasto, form)" valida-form formulario="form">Guardar</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered table-list">
+	    <thead>
+	      <tr>
+	      	<th></th>
+	      	<th>Concepto</th>
+	        <th>Fecha Límite</th>
+	        <th class="hidden-xs">Importe</th>
+	      </tr> 
+	    </thead>
+	    <tbody>
+	      <tr ng-repeat="gasto in gc.gastos">
+	      	<td align="center"><a ng-click="gc.cambiarEstatus(gasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a></td>
+	        <td class="hidden-xs">{{gc.getConcepto(gasto.concepto_id)}}</td>
+	        <td>{{gasto.fechaLimite | date:'dd/MM/yyyy'}}</td>
+	        <td align="right">{{gasto.importe | currency}}</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	  <span class="pull-right">Total: {{gc.sum() | currency}}</span>
+	</div>
+</div>

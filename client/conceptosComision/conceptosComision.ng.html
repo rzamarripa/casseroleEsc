@@ -1,0 +1,121 @@
+<h2>Conceptos de Comisión</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{ccm.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoConcepto" ng-click="ccm.nuevoConcepto()">
+		  {{ccm.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-4">
+				    	<label>Prioridad *</label>
+					    <select name="prioridad" class="form-control" ng-model="ccm.conceptoComision.prioridad" required>
+				    		<option value="Baja">Baja</option>
+				    		<option value="Media">Media</option>
+				    		<option value="Alta">Alta</option>
+			    		</select>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="ccm.conceptoComision.nombre" required=""/>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Importe *</label>
+					    <input name="importe" type="number" class="form-control" ng-model="ccm.conceptoComision.importe" required=""/>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Módulo *</label>
+			    		<select name="modulo" class="form-control" ng-model="ccm.conceptoComision.modulo" required>
+				    		<option value="inscripcion">Inscripción</option>
+				    		<option value="colegiatura">Colegiatura</option>
+				    		<option value="otros">Otros</option>
+			    		</select>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Beneficiario</label>
+			    		<select class="form-control" ng-model="ccm.conceptoComision.beneficiario">
+				    		<option value="vendedor">Vendedor</option>
+				    		<option value="gerente">Gerente de Ventas</option>
+			    		</select>
+			    	</div>
+			    </div>				  
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="ccm.guardar(ccm.conceptoComision,form)" class="btn btn-primary" ng-show="ccm.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="ccm.actualizar(ccm.conceptoComision,form)" value="Actualizar" class="btn btn-primary" ng-show="!ccm.action" valida-form formulario="form" />				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="5%"><div class="text-center">Prioridad</div></th>
+					<th width="20%"><div class="text-center">Nombre</div></th>
+					<th width="20%"><div class="text-center">Beneficiario</div></th>
+					<th width="15%"><div class="text-center">Importe</div></th>
+					<th width="20%"><div class="text-center">Módulo</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="conceptoComision in ccm.conceptosComision">
+			    <td>{{$index + 1}}</td>
+			    <td>{{conceptoComision.prioridad}}</td>
+			    <td>{{conceptoComision.nombre}}</td>
+			    <td>{{conceptoComision.beneficiario}}</td>
+			    <td class="text-right">{{conceptoComision.importe | currency}} </td>
+			    <td>{{conceptoComision.modulo}}</td>
+ 			    <td>
+				    <div class="text-center">
+				    	<span ng-if="conceptoComision.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!conceptoComision.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="ccm.editar(conceptoComision._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="ccm.cambiarEstatus(conceptoComision._id)">
+							    				<i class="fa fa-{{conceptoComision.estatus ? 'trash' : 'check' }}"></i> {{conceptoComision.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

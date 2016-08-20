@@ -1,0 +1,98 @@
+<h2>Departamentos Académicos</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{da.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevodeptoAcademico" ng-click="da.nuevoDeptoAcademico()">
+		{{da.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Clave *</label>
+				    	<input name="clave" type="text" class="form-control" placeholder="Clave" ng-model="da.deptoAcademico.clave" required="">
+			    	</div>
+			    	<div class="col-sm-4" valida>
+			    		<label>Descripción Corta *</label>
+				    	<input name="descricpcioncorta" type="text" class="form-control" placeholder="Corta" ng-model="da.deptoAcademico.descripcionCorta" required="">
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-12">
+					    <label>Descripción</label>
+					    <textarea class="form-control" placeholder="Descripción" ng-model="da.deptoAcademico.descripcion"></textarea>
+			    	</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="da.guardar(da.deptoAcademico,form)" value="Guardar" class="btn btn-primary" ng-show="da.action" valida-form formulario="form">
+						<input type="submit" ng-click="da.actualizar(da.deptoAcademico,form)" value="Actualizar" class="btn btn-primary" ng-show="!da.action" valida-form formulario="form">		
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Clave</div></th>
+					<th width="20%"><div class="text-center">Descripción Corta</div></th>
+					<th width="50%"><div class="text-center">Descripción Larga</div></th>		
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="deptoAcademico in da.deptosAcademicos">
+			    <td>{{deptoAcademico.clave}}</td>
+			    <td>{{deptoAcademico.descripcionCorta}}</td>
+			    <td>{{deptoAcademico.descripcion}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="deptoAcademico.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!deptoAcademico.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="da.editar(deptoAcademico._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="da.cambiarEstatus(deptoAcademico._id)">
+							    				<i class="fa fa-{{deptoAcademico.estatus ? 'trash' : 'check' }}"></i> {{deptoAcademico.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

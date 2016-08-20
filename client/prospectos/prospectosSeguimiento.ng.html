@@ -1,0 +1,45 @@
+<div class="col-sm-12">
+	<h1 class="page-title txt-color-blue"><i class="fa fa-facebook fa-fw fa-2x well"></i> Prospectos de Facebook <span class="txt-color-blue">&gt;
+		Listado </span></h1>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" href="./nuevoProspectoFacebook">
+		  Nuevo
+		</a>
+		<label>Buscar: <input ng-model="fa.buscar.nombre" class="form-control"></label>
+	</div>
+</div>
+<br/>
+<!-- List -->
+<div class="row">
+  <div class="col-lg-12">
+    <h6 class="description">Nuestros Prospectos Facebook</h6>
+    <div class="row pt-md">
+      <div class="col-sm-12">
+        <table class="table table-bordered">
+	        <tr>
+		        <th>No.</th>
+		        <th>Nombre</th>		        
+		        <th>Teléfono</th>
+		        <th>Correo</th>
+		        <th>Interés</th>	        
+		        <th>Información Adicional</th>
+		        <th>Etapa Venta</th>
+		        <th>Vendedor</th>
+	        </tr>
+	        <tr ng-repeat="prospecto in fa.prospectosFacebook">
+		        <td>{{$index + 1}}</td>
+		        <td><a href="./prospectoFacebook/{{prospecto._id}}">{{prospecto.nombre}}</a></td>
+		        <td>{{prospecto.telefono}}</td>
+		        <td>{{prospecto.correo}}</td>
+		        <td>{{prospecto.estudioInteres}}</td>
+		        <td>{{prospecto.informacion}}</td>
+		        <td>{{fa.etapaVenta(prospecto.etapaVenta_id)}}</td>
+		        <td>{{fa.vendedor(prospecto.empleado_id)}}</td>
+	        </tr>
+        </table>
+      </div>            
+    </div>
+  </div>
+</div>

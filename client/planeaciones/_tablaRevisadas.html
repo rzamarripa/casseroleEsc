@@ -1,0 +1,56 @@
+<!-- Tabla de Revisadas -->
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th width="10%"><div class="text-center">No.</div></th>
+			<th width="10%"><div class="text-center">Periodo</div></th>
+			<th width="10%"><div class="text-center">Sesiones</div></th>
+			<th width="10%"><div class="text-center">Bloque</div></th>
+			<th width="10%"><div class="text-center">Grupo</div></th>	
+			
+			<th width="10%">
+				<div class="text-center">
+					Estatus
+				</div>
+			</th>
+			<th width="10%">
+				<div classq="text-center">
+					Acciones
+				</div>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+    <tr ng-repeat="planeacion in pc.planeacionesRevisadas">
+	    <td>{{ $index + 1}}</td>
+	    <td>{{planeacion.periodoAplicacion}}</td>
+	    <td>{{planeacion.totalSesionesYTiempo}}</td>
+	    <td>{{planeacion.nombreBloque}}</td>
+	    <td>{{pc.grupo.nombre}}</td>
+	    <td>
+		    <div class="text-center">							    	
+					<span ng-if="planeacion.estatus == 3" class="label label-success">
+					  Revisada
+					</span>
+		    </div>
+	    </td>
+	    <td>
+		    <div class="text-center">
+			    <div class="btn-group">
+					  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    <span class="caret"></span>
+					    <span class="sr-only">Toggle Dropdown</span>
+					  </button>
+					  <ul class="dropdown-menu text-left">
+					    <li><a href="#" ng-click="mat.editar(materia._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+					    <li><a href="#" ng-click="mat.cambiarEstatus(materia._id)">
+					    				<i class="fa fa-{{materia.estatus ? 'trash' : 'check' }}"></i> {{materia.estatus ? "Desactivar" : "Activar" }}
+					    		</a>
+					    </li>
+					  </ul>
+					</div>
+		    </div>				    
+	    </td>
+    </tr>
+	</tbody>
+</table>

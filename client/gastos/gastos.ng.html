@@ -1,0 +1,32 @@
+<div class="row">
+	<div class="col-md-12">
+    <div class="panel with-nav-tabs panel-default">
+      <div class="panel-heading">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tabcheques" data-toggle="tab" ng-click="gc.cambiar('cheques')">Cuenta de cheques</a></li>
+          <li><a href="#tabrelaciones" data-toggle="tab" ng-click="gc.cambiar('relaciones')">Comisiones de Relaciones Públicas</a></li>
+          <li><a href="#tabadmon" data-toggle="tab" ng-click="gc.cambiar('admon')">Comisiones Administrativas</a></li>
+          <li><a href="#tabdepositos" data-toggle="tab" ng-click="gc.cambiar('depositos')">Depósitos Realizados</a></li>
+        </ul>
+      </div>
+      <div class="panel-body">
+        <div class="tab-content">
+        <form name="form" novalidate>
+          <div class="tab-pane fade in active" id="tabcheques">
+          	<cheques ng-if="gc.tipoGasto == 'cheques'"></cheques>
+          </div>
+          <div class="tab-pane fade" id="tabrelaciones">
+						<relaciones ng-if="gc.tipoGasto == 'relaciones'"></relaciones>
+          </div>
+          <div class="tab-pane fade" id="tabadmon">
+						<admon ng-if="gc.tipoGasto == 'admon'"></admon>
+          </div>
+          <div class="tab-pane fade" id="tabdepositos">
+						<depositos ng-if="gc.tipoGasto == 'depositos'"></depositos>
+          </div>
+         </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

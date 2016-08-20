@@ -1,0 +1,102 @@
+<header id="header">
+	<div id="logo-group">
+		<span id="logo" style="margin-top: 0px !important;"> <img ng-if="ro.seccion.logo != undefined" ng-src="{{ro.seccion.logo}}" style="width: 110px;" alt="Escuelas"> </span>
+		<span ng-if="ro.usuarioActual.roles[0] == 'director'" id="activity" class="activity-dropdown" ng-click="ro.muestraAvisos()"> <i class="fa fa-user"></i> <b class="badge  bounceIn animated">{{ro.avisos.length}}</b> </span>
+		<div class="ajax-dropdown" style="display: {{ro.avisosVentana}} ">
+
+		<!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+		<div class="btn-group btn-group-justified" data-toggle="buttons">
+			<label class="btn btn-default">
+				<input type="radio" name="activity" id="ajax/notify/mail.html">
+				Avisos ({{ro.avisos.length}}) 
+			</label>
+		</div>
+
+		<!-- notification content -->
+		<div class="ajax-notifications custom-scroll">
+
+			<div class="alert alert-transparent">
+				<!--<h4>Aquí poner los avisos</h4>
+				Inventa una vista bonita, no pongas una tabla horrible
+				-->
+					<div ng-if="ro.usuarioActual.roles[0] == 'director'" class="row">
+						<div class="col-sm-11">
+						  <div class="class=ajax-notifications custom-scroll" style="opacity: 1;">
+						   <ul class="notification-body">
+					   		 <li ng-repeat="aviso in ro.avisos">
+					   		 		<span>
+					   		 			<a href="">
+												<span class="subject">{{aviso.titulo}}</span>
+												<span class="font-xs" style="color:#A0A0A0">{{aviso.descripcion}}</span>
+												<span class="date pull-right font-xs">{{aviso.fecha  | date:'dd-MM-yyyy hh:mm'}}</span>
+											</a>						   		 			
+					   		 		</span>
+					   		 </li>
+						   </ul>
+						  </div>
+						</div>
+					</div>
+			</div>
+
+			<i class="fa fa-lock fa-4x fa-border"></i>
+
+		</div>
+		<!-- end notification content -->
+
+		<!-- footer: refresh area -->
+		<span> Fecha: {{ro.hoy | date:'dd-MM-yyyy hh:mm'}}</span>
+		<!-- end footer -->
+		</div>
+	</div>
+	
+  <div class="pull-right">
+    <div id="hide-menu" class="btn-header pull-right">
+      <span>
+        <a toggle-menu title="Collapse Menu">
+          <i class="fa fa-reorder"></i>
+        </a>
+      </span>
+    </div>
+    
+    <div class="btn-header pull-right">
+      <span>
+        <a ui-sref="anon.logout" title="Cerrar Sesión">
+          <i class="fa fa-sign-{{ro.isLoggedIn() ? 'out' : 'in'}}"></i>
+        </a>
+      </span>
+    </div>
+
+    <div id="fullscreen" class="btn-header transparent pull-right">
+      <span>
+        <a full-screen title="Full Screen">
+          <i class="fa fa-arrows-alt"></i>
+        </a>
+      </span>
+    </div>
+  </div>
+</header>
+
+<aside id="left-panel">
+  <div class="login-info">
+		<span ng-if="ro.usuarioActual._id">
+			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+				<img ng-if="ro.usuarioActual.profile.fotografia" ng-src="{{ro.usuarioActual.profile.fotografia}}" alt="yo" class="online"> 
+				<img ng-if="!ro.usuarioActual.profile.fotografia" src="/img/avatars/male.png" alt="yo" class="online"> 
+				<span>
+					{{ro.usuarioActual.profile.nombre}} {{ro.usuarioActual.profile.apPaterno}} {{ro.usuarioActual.profile.apMaterno}}
+				</span>
+			</a>			
+		</span>
+	</div>
+  <div ng-include=" 'client/layouts/left-nav.ng.html' "></div>
+</aside>
+
+<div id="main" role="main">
+  <div id="ribbon">
+	  <ol class="breadcrumb pull-right">
+			<li>{{ro.campus.clave}} - {{ro.campus.descripcion}}</li>
+			<li>{{ro.seccion.descripcion}}</li>
+		</ol>
+  </div>
+  <div id="content" ui-view></div>
+</div>

@@ -1,0 +1,129 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-pencil-square-o fa-fw "></i> 
+				Planes de Estudio
+			<span>&gt; 
+				Nuevo
+			</span>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" href="./planEstudios">
+		  Listar Planes de Estudios
+		</a>
+	</div>
+</div>
+<br/>
+
+<div class="row">
+	<div class="col-sm-12">
+		<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>					    
+						<label for="clave">Clave *</label>
+					    <input name="clave" type="text" class="form-control" placeholder="Clave" ng-model="pl.plan.clave" required="">
+			    	</div>
+			    	<div class="col-sm-4" valida>
+					    <label for="descripcion">Descripción *</label>
+					    <input name="descripcion" type="text" class="form-control" placeholder="Descripción" ng-model="pl.plan.descripcion" required>
+			    	</div>
+			    	<div class="col-sm-4">
+							<label for="seccion_id">Rvoe</label>
+							<select class="form-control select2" placeholder="Seleccione" ng-model="pl.plan.rvoe_id">
+								<option ng-repeat="rvoe in pl.rvoes" value="{{rvoe._id}}">{{rvoe.nombre}}</option>
+							</select>
+						</div>	
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4">
+					    <label for="formulo">Formuló</label>
+					    <input type="text" class="form-control" ng-model="pl.plan.formulo">
+			    	</div>
+			    	<div class="col-sm-4" valida>
+							<label for="tipo">Tipo *</label><br/>
+					    	<select name="tipo" ng-model="pl.plan.tipo" class="form-control" required="">
+							  <option value="Baja">Interno</option>
+							  <option value="Media">Externo</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<label for="acuerdo">Acuerdo</label>
+						  <input type="text" class="form-control" ng-model="pl.plan.acuerdo">
+						</div>			    	
+			    </div>				  
+			    <div class="row">
+			    	<div class="col-sm-4">
+							<label for="fecha">Fecha</label>
+							<input name="fecha" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="pl.plan.fecha"/>
+						</div>
+			    	<div class="col-sm-4" valida>
+					    <label for="grado">Grados *</label>
+					    <input name="grados" type="number" class="form-control" min="0" ng-model="pl.plan.grado" required="">
+			    	</div>
+						<div class="col-sm-4">
+							<label for="seccion_id">Generación *</label>
+							<select class="form-control select2" placeholder="Seleccione" ng-model="pl.plan.generacion_id" required="">
+								<option ng-repeat="generacion in pl.generaciones" value="{{generacion._id}}">{{generacion.nombre}}</option>
+							</select>
+						</div>
+						
+						
+			    </div>
+			</div>
+			<div class="well">
+				<div class="row">
+					<div class="col-sm-4">
+						<label for="gradoNuevaMateria">Grado</label><br/>
+						<select ng-model="pl.nuevaMateria.grado" class="form-control">
+						 	<option ng-repeat="_grado in pl.getGrados()" value="{{_grado}}">{{_grado+1}}</option>
+						</select>
+					</div>
+					<div class="col-sm-4">
+					    <label>Materia</label>
+					    <select class="form-control" placeholder="Seleccione" 
+					    	    ng-options="option.nombre for option in pl.materias track by option._id" ng-model="pl.nuevaMateria.materia">							
+						</select>				     					
+					</div>	
+					<div class="col-sm-4">
+						<input type="button" ng-click="pl.agregarMateria(pl.nuevaMateria)" value="Agregar" class="btn btn-primary">
+					</div>
+			  </div>	  
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<table class="table table-bordered table-responsive">						
+						<tr ng-repeat="_grado in pl.getGrados()" >
+							<th width="5%"><div class="text-center">{{_grado+1}}</div></th>
+							<td ng-repeat="_materia in pl.plan.grados[_grado]">
+								<div class="row">
+									<div class="col-sm-8">
+										<strong>{{_materia.materia.clave}}</strong>
+									</div>
+									<div class="col-sm-2">
+										<input type="button" class="btn btn-danger btn-xs" ng-click="pl.quitarMateria(_materia)"  value="x">
+									</div>
+								</div>
+								<h6><small>{{_materia.materia.nombreCorto}}</small></h6>										
+							</td>
+						</tr>
+					</table>
+			  </div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<input type="submit" ng-click="pl.guardar(pl.plan,form)"  class="btn btn-primary" ng-show="pl.action" valida-form formulario="form">
+					<input type="submit" ng-click="pl.actualizar(pl.plan,form)"  class="btn btn-primary" ng-show="!pl.action" valida-form formulario="form">				
+				</div>
+			</div>	  
+		</form>
+		
+	</div>
+</div>
+
+
+

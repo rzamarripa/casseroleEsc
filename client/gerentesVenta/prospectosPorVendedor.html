@@ -1,0 +1,136 @@
+<h2>Vendedores</h2>
+<div class="row well">
+	<form name="form" class="form-horizontal" role="form" novalidate>
+		<div class="col-sm-4" valida>
+			<label for="fechaInicial">Fecha inicial *</label>
+			<input name="fechaInicial" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.buscar.fechaInicial" required="" />
+		</div>
+		<div class="col-sm-4" valida>
+			<label for="fechaFinal">Fecha final *</label>
+			<input name="fechaFinal" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.buscar.fechaFinal" required="" />
+		</div>
+		<div class="col-sm-3" style="padding-top: 20px;">
+			<input type="submit" ng-click="gv.buscarProspectos(gv.buscar,form)" value="Buscar" class="btn btn-primary" valida-form formulario="form">			
+		</div>
+	</form>
+</div>
+<div class="col-sm-12">
+
+	<div class="row" ng-if="gv.fechaInicial < gv.fechaFinal">
+
+		<div class="col-sm-12 col-md-12 col-lg-6" style="margin-top: 30px;" ng-repeat="vendedor in gv.vendedores">
+			<div class="well well-light well-sm no-margin no-padding">
+
+				<div class="row">
+
+					<div class="col-sm-12">
+
+						<div class="row">
+
+							<div class="col-sm-3 profile-pic">
+								<img style="max-width:100px;" src="{{gv.tieneFoto('masculino', vendedor.profile.fotografia)}}" >
+								<div class="padding-10">
+									<h4 class="font-md"><strong>{{gv.getCantidadProspectos(vendedor._id)}}</strong>
+									<br>
+									<small>Prospectados</small></h4>
+									<br>
+									<h4 class="font-md"><strong>{{gv.getInscritos(vendedor._id)}}</strong>
+									<br>
+									<small>Inscritos</small></h4>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<h1>{{vendedor.profile.nombre}} <span class="semi-bold"> {{vendedor.profile.apPaterno}}</span>
+								<br>
+								<small> Vendedor</small></h1>
+
+								<ul class="list-unstyled">
+									<li>
+										<p class="text-muted">
+											<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{vendedor.profile.telefono}}</span>
+										</p>
+									</li>
+									<li>
+										<p class="text-muted">
+											<i class="fa fa-envelope"></i>&nbsp;&nbsp;
+											<a href="mailto:{{vendedor.profile.correo}}">{{vendedor.profile.correo}}</a>
+										</p>
+									</li>
+								</ul>
+								<a class="btn btn-{{gv.mensajeNuevo == true ? 'default' : 'danger'}} btn-xs" role="button" data-toggle="collapse" 
+									href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevaMateria" 
+										ng-click="gv.nuevoMensaje(vendedor._id)">
+											<i class="fa fa-envelope-o"></i> {{gv.mensajeNuevo == true ? 'Enviar Mensaje' : 'Cancelar Mensaje'}}
+								</a>
+								<div class="collapse" id="collapseExample">
+									<form name="form1" class="form-horizontal" role="form" novalidate>		  		
+								    <div class="row">
+								    	<div class="col-sm-12">
+									    	<label>Escriba su mensaje</label>
+								    		<textarea class="form-control" rows="3" ng-model="gv.mensaje.descripcion"></textarea>
+								    	</div>
+								    </div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="submit" ng-click="gv.enviarMensaje(gv.mensaje,form1)" value="Guardar" class="btn btn-primary btn-xs pull-right" ng-show="gv.mensajeNuevo" valida-form formulario="form1"/>																
+											</div>
+										</div>	  
+								  </form>
+								</div>
+								<br>
+								<br>
+
+							</div>
+							<div class="col-sm-3">
+								<h1><small>Recientes</small></h1>
+								<ul class="list-inline friends-list" >									
+									<li>
+										<a href="javascript:void(0);">{{gv.getCantidadTotalDeProspectosPorVendedor(vendedor._id)}} Total</a>
+									</li>
+								</ul>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="row">
+
+					<div class="col-sm-12">
+
+						<div class="padding-10">
+
+							<div class="well padding-10">
+								<h5 class="margin-top-0"><i class="fa fa-list"></i> Etapas de Venta:</h5>
+								<div class="row">
+	
+									<div class="col-lg-12">
+	
+										<ul class="list-group no-margin">
+											<li class="list-group-item" ng-repeat="etapaVenta in gv.etapasVenta">
+												<a ui-sref="root.prospectosPorVendedor({vendedor_id : vendedor._id, etapaVenta_id : etapaVenta._id})"> <span class="badge pull-right">{{gv.getCantidadProspectosPorEtapaVenta(vendedor._id, etapaVenta._id)}}</span> {{etapaVenta.nombre}} </a>
+											</li>
+										</ul>
+	
+									</div>
+								</div>
+	
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				<!-- end row -->
+
+			</div>
+
+		</div>
+		
+	</div>
+
+</div>

@@ -1,0 +1,51 @@
+<!-- Vista Parcial de Tabla de Panel de Planeaciones -->
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th width="10%"><div class="text-center">No.</div></th>
+			<th width="15%"><div class="text-center">Materia</div></th>
+			<th ><div class="text-center">Maestro</div></th>	
+			<th width="10%"><div class="text-center">Grupo</div></th>	
+			<th width="70"><div class="text-center">Borrador</div></th>	
+			<th width="70"><div class="text-center">Liberadas</div></th>	
+			<th width="70"><div class="text-center">Revisadas</div></th>	
+			<th width="70"><div class="text-center">Publicadas</div></th>	
+			<th width="70"><div class="text-center">Total</div></th>
+		</tr>
+	</thead>
+	<tbody>
+    <tr ng-repeat="mmg in pc.resumen">
+	    <td class="text-center">{{ $index + 1 }}</td>
+	    <td class="text-center">
+		    <a ui-sref="root.revisarPlaneaciones({materia_id : mmg.materia._id, maestro_id : mmg.maestro._id, grupo_id : mmg.grupo._id})">{{mmg.materia.nombre}}</a>
+		  </td>
+	    <td class="text-center">{{mmg.maestro.nombre}} {{mmg.maestro.apPaterno}}</td>
+	    <td class="text-center">{{mmg.grupo.nombre}}</td>
+	    <td class="text-center">
+		    <span class="badge bg-color-red txt-color-white">
+		    	{{mmg.planeacionesBorrador}}
+		    </span>
+		  </td>
+	    <td class="text-center">
+		    <span class="badge bg-color-yellow txt-color-white">
+		    {{mmg.planeacionesLiberadas}}
+		   </span>
+		  </td>
+	    <td class="text-center">
+		    <span class="badge bg-color-green txt-color-white">
+		    {{mmg.planeacionesRevisadas}}
+		   </span>
+		  </td>
+	    <td class="text-center">
+		    <span class="badge bg-color-blue txt-color-white">
+		    {{mmg.planeacionesPublicadas}}
+		   </span>
+		  </td>
+	    <td class="text-center">
+		    <span class="badge bg-color-black txt-color-white">
+		    	{{mmg.planeacionesBorrador + mmg.planeacionesLiberadas + mmg.planeacionesRevisadas + mmg.planeacionesPublicadas}}
+		    </span>
+		  </td>
+    </tr>
+	</tbody>
+</table>

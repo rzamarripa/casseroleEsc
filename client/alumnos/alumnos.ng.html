@@ -1,0 +1,38 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+				Alumnos &gt; Buscar
+		</h1>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="input-group">
+			<div class="input-group-btn">
+				<a href="./nuevoAlumno" class="btn btn-default btn-primary">
+					<i class="fa fa-plus"></i> Nuevo
+				</a>
+			</div>
+			<input class="form-control" type="text" placeholder="Buscar..." ng-model="al.buscar.nombre">
+		</div>
+	</div>
+</div>
+<h6 class="description">Nuestros Alumnos</h6>
+<div class="row pt-md">
+  <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12 profile well-mini" ng-repeat="alumno in al.alumnos">
+	  <div class="row">
+	  	<div class="col-12">
+	  		<div class="img-box">
+		      <img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="img-responsive img-thumbnail">
+		      <ul class="text-center">
+		        <a href="/alumnos/{{alumno._id}}"><li><i class="fa fa-eye"></i></li></a>
+		        <a href="/editarAlumno/{{alumno._id}}"><li><i class="fa fa-pencil"></i></li></a>
+		      </ul>
+		    </div>
+		    <p class="lead font-sm text-center">{{alumno.profile.nombreCompleto}}</p>
+	  	</div>
+	  </div>
+  </div>
+</div>

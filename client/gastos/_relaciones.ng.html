@@ -1,0 +1,90 @@
+<button class="btn {{gc.nuevo == false ? 'btn-primary':'btn-danger'}}" type="button" data-toggle="collapse" data-target="#relacionesForm" aria-expanded="false" style="margin-bottom:10px;" aria-controls="relacionesForm" ng-click="gc.boton()">
+  {{gc.nuevo == false ? 'Agregar':'Cancelar'}}
+</button>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="collapse" id="relacionesForm">
+			<div class="well col-sm-12">	
+				<div class="row">
+					<div class="form-group col-sm-4" valida>					    
+					  <label>Registros</label>
+				  	<input type="text" class="form-control"  ng-model="gc.gasto.registros" name="registros" required>
+					</div>
+					<div class="form-group col-sm-4" valida>
+					  <label>Importe</label>
+				  	<input name="importe" type="number" class="form-control"  ng-model="gc.gasto.importe" required>
+					</div>
+					<div class="form-group col-sm-4" valida>
+						<label for="fechaLimite">Fecha Límite</label>
+						<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fechaLimite" name="fechaLimite" required/>
+					</div>
+					<div class="form-group col-sm-4" valida>
+						<label for="concepto">Concepto</label>
+						<select class="form-control select2" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" required>
+						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
+						  	{{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div ng-if="gc.descripcion(gc.gasto.concepto_id)" class="form-group col-sm-4" valida>
+					  <label>Descripción</label>
+				  	<input type="text" class="form-control"  ng-model="gc.gasto.descripcion" name="descripcion" required>
+					</div>
+				</div>
+				<a class="btn btn-primary pull-right" ng-click="gc.guardar(gc.gasto, form)" valida-form formulario="form">Guardar</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered table-list">
+	    <thead>
+	      <tr>
+	      	<th>Concepto</th>
+	        <th>Registros</th>
+	        <th>Cantidad</th>
+	      </tr> 
+	    </thead>
+	    <tbody>
+	    	<tr>
+	    		<td>Restos de inscripción</td>
+	    		<td></td>
+	    		<td align="right">{{gc.restosInscripcion(gc.cuentaInscripcion._id) | currency}}</td>
+	    	</tr>
+	      <tr>
+	        <td>Comisiones</td>
+	        <td></td>
+	        <td align="right">{{gc.comisiones(gc.cuentaInscripcion._id) | currency}}</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered table-list">
+	    <thead>
+	      <tr>
+	      	<th></th>
+	      	<th>Fecha Límite</th>
+	        <th class="hidden-xs">Registros</th>
+	        <th>Importe</th>
+	      </tr> 
+	    </thead>
+	    <tbody>
+	      <tr ng-repeat="gasto in gc.gastos">
+	      	<td align="center">
+	          <a ng-click="gc.cambiarEstatus(gasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
+	        </td>
+	        <td>{{gasto.fechaLimite | date:"dd/MM/yyyy"}}</td>
+	        <td class="hidden-xs">{{gasto.registros}}</td>
+	        <td align="right">{{gasto.importe | currency}}</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	  <span class="pull-right">Total: {{gc.sum() + gc.comisiones(gc.cuentaInscripcion._id) | currency}}</span>
+	</div>
+</div>

@@ -1,0 +1,143 @@
+<h2>Empleados</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{emp.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevotrabajador" ng-click="emp.nuevoTrabajador()">
+	 {{emp.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate >
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida> 					    
+				    	<label>Usuario *</label>
+				    	<input name="usuario" type="text" class="form-control" placeholder="Usuario" ng-model="emp.trabajador.usuario" required="">
+			    	</div>
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Contraseña *</label>
+				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" ng-model="emp.trabajador.contrasena" required="">
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" ng-model="emp.trabajador.confirmarContrasena" required="">
+					</div>
+			    	<div class="col-sm-4" valida>
+			    		<label>Nombre *</label>
+				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="emp.trabajador.nombre" required="">
+			    	</div>
+
+			    	<div class="col-sm-4" valida>
+			    		<label>Apellido Paterno *</label>
+				    	<input name="apellidoPaterno" type="text" class="form-control" placeholder="Apellido Paterno" ng-model="emp.trabajador.apPaterno" required="">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Apellido Materno</label>
+				    	<input type="text" class="form-control" placeholder="Apellido Materno" ng-model="emp.trabajador.apMaterno">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Dirección</label>
+				    	<input type="text" class="form-control" placeholder="Dirección" ng-model="emp.trabajador.direccion">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Teléfono</label>
+				    	<input type="text" class="form-control" placeholder="Teléfono" ng-model="emp.trabajador.telefono">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Correo</label>
+				    	<input type="text" class="form-control" placeholder="Correo" ng-model="emp.trabajador.correo">
+			    	</div>
+			    	<!--
+			    	<div class="col-sm-4">
+						<label >Departamento academico</label>
+						<ui-select ng-model="emp.trabajador.deptoAcademico_id"
+					             theme="bootstrap"
+					             ng-disabled="disabled"
+					             reset-search-input="false">
+					    <ui-select-match placeholder="Seleccione">{{$select.selected.descripcionCorta}}</ui-select-match>
+					    <ui-select-choices repeat="emp.deptoAcademico._id as deptoAcademico in deptosAcademicos | filter: $select.search">
+					      <div ng-bind-html="deptoAcademico.descripcionCorta | highlight: $select.search"></div>
+					    </ui-select-choices>
+					  </ui-select>
+					</div>-->
+			    	<div class="col-sm-4">
+						<label for="talla">Fotografía</label>
+						<button class="btn btn-primary" ng-click="emp.tomarFoto()"><i class="fa fa-camera"></i></button>
+						<img width="100px" ng-src="{{emp.trabajador.fotografia}}" ng-class="{'img-thumbnail': !!trabajador.fotografia}" />
+					</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="emp.guardar(emp.trabajador,form)" value="Guardar" class="btn btn-primary" ng-show="emp.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="emp.actualizar(emp.trabajador,form)" value="Actualizar" class="btn btn-primary" ng-show="!emp.action" valida-form formulario="form"/>				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="10%"><div class="text-center">Foto</div></th>
+					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Dirección </div></th>
+					<th width="10%"><div class="text-center">Teléfono</div></th>
+					<th width="10%"><div class="text-center">correo</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="7%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="trabajador in emp.trabajadores">
+		    	<td><img width="100px" ng-src="{{trabajador.fotografia}}" ng-class="{'img-thumbnail': !!trabajador.fotografia}"/> </td>
+			    <td>{{trabajador.nombre}} {{trabajador.apPaterno}} {{trabajador.apMaterno}}</td>
+			    <td>{{trabajador.direccion}} </td>
+			    <td>{{trabajador.telefono}} </td>
+			    <td>{{trabajador.correo}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="trabajador.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!trabajador.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="emp.editar(trabajador._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="emp.cambiarEstatus(trabajador._id)">
+							    				<i class="fa fa-{{trabajador.estatus ? 'trash' : 'check' }}"></i> {{trabajador.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

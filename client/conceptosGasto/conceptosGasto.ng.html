@@ -1,0 +1,63 @@
+<div class="row">
+	<form name="form" novalidate>
+		<div class="col-sm-12">
+			<div class="well col-sm-12">	
+				<div class="row">
+					<div class="form-group col-sm-3" valida>					    
+					  <label>Tipo Gasto</label>
+					  <select name="tipoGasto" class="form-control" ng-model="cgc.conceptoGasto.tipoGasto" required>
+					  	<option value="{{tipoGasto}}" ng-repeat="tipoGasto in cgc.tiposGasto track by $index">{{tipoGasto}}</option>
+					  </select>
+					</div>
+
+					<div class="form-group col-sm-3" valida>					    
+					  <label>Código</label>
+				  	<input type="text" class="form-control"  ng-model="cgc.conceptoGasto.codigo" name="codigo" required>
+					</div>
+					<div class="form-group col-sm-3" valida>
+					  <label>Nombre</label>
+				  	<input type="text" class="form-control"  ng-model="cgc.conceptoGasto.nombre" name="nombre" required>
+					</div>
+					<div class="checkbox">
+					  <label class="checkbox-inline">
+				  		<input type="checkbox" ng-model="cgc.conceptoGasto.campoDeDescripcion">
+				  	Agregar campo de descripción</label>
+					</div>
+				</div>
+				<input ng-if="!cgc.nuevo" value="Cancelar" class="btn btn-danger" ng-click="cgc.cancelar()">
+				<input ng-if="cgc.nuevo" value="Guardar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.guardar(cgc.conceptoGasto, form)" valida-form formulario="form">
+				<input ng-if="!cgc.nuevo" value="Actualizar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.actualizar(cgc.conceptoGasto, form)" valida-form formulario="form">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered table-list">
+	    <thead>
+	      <tr>
+	        <th class="hidden-xs">TipoGasto</th>
+	        <th>Código</th>
+	        <th>Nombre</th>
+	        <th>Campo de descripción</th>
+	        <th>Estatus</th>
+	        <th><em class="fa fa-cog"></em></th>
+	      </tr> 
+	    </thead>
+	    <tbody>
+	      <tr ng-repeat="conceptoGasto in cgc.conceptosGasto">
+	        <td class="hidden-xs">{{conceptoGasto.tipoGasto}}</td>
+	        <td>{{conceptoGasto.codigo}}</td>
+	        <td>{{conceptoGasto.nombre}}</td>
+	        <td>{{conceptoGasto.campoDeDescripcion}}</td>
+	        <td>{{conceptoGasto.estatus}}</td>
+	        <td align="center">
+	          <a ng-click="cgc.editar(conceptoGasto)" class="btn btn-default"><em class="fa fa-pencil"></em></a>
+	          <a ng-click="cgc.cambiarEstatus(conceptoGasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
+	        </td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</div>
+</div>

@@ -1,0 +1,100 @@
+<div class="row">
+	<article class="col-sm-12 col-md-12 col-lg-12">
+		
+		<!-- new widget -->
+		<div class="jarviswidget jarviswidget-color-blue" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false">
+
+			<!-- widget options:
+			usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+			data-widget-colorbutton="false"
+			data-widget-editbutton="false"
+			data-widget-togglebutton="false"
+			data-widget-deletebutton="false"
+			data-widget-fullscreenbutton="false"
+			data-widget-custombutton="false"
+			data-widget-collapsed="true"
+			data-widget-sortable="false"
+
+			-->
+
+			<header>
+				<span class="widget-icon"> <i class="fa fa-check txt-color-white"></i> </span>
+				<h2> Listado de Actividades Pendientes </h2>
+			</header>
+
+			<!-- widget div-->
+			<div>				
+
+				<div class="widget-body no-padding smart-form">
+					<!-- content goes here -->
+					<h5 class="todo-group-title"><i class="fa fa-phone"></i> Llamadas (<small class="num-of-tasks"><strong>{{ac.llamadas.length}}</strong></small>)</h5>
+					<ul id="sortable1" class="todo">
+						<li ng-repeat="llamada in ac.llamadas">
+							<span class="handle"> <label class="checkbox">
+								<input type="checkbox" ng-model="llamada.estatus">
+								<i></i></label> 
+							</span>
+							<p class="col-sm-8">
+								<strong><a href="/prospecto/{{llamada.prospecto_id}}">{{llamada.prospecto.nombre}}</a></strong> - {{llamada.asunto}}
+								<span class="text-muted">{{llamada.resultado}} </span>
+								<span class="date">{{llamada.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
+								<span ng-if="llamada.estatus == true" >
+									<label class="date pull-right"><strong>Escriba el resultado de la llamada</strong></label>
+									<input class="form-control" placeholder="Resultado" ng-model="llamada.resultado"/>
+									<button class="btn btn-primary" ng-click="ac.cambiarEstatus('llamada', llamada)"><i class="fa fa-check fa-lg"></i> Guardar</button>
+								</span>
+							</p>
+						</li>
+					</ul>
+					<h5 class="todo-group-title"><i class="fa fa-users"></i> Reuniones (<small class="num-of-tasks"><strong>{{ac.reuniones.length}}</strong></small>)</h5>
+					<ul id="sortable2" class="todo">
+						<li ng-repeat="reunion in ac.reuniones" bs-popover>
+							<span class="handle"> <label class="checkbox">
+									<input type="checkbox" ng-model="reunion.estatus">
+									<i></i> </label> </span>
+							<p class="col-sm-8">
+								<strong><a href="/prospecto/{{reunion.prospecto_id}}">{{reunion.prospecto.nombre}}</a></strong> - {{reunion.asunto}} 
+								<span class="text-muted">{{reunion.resultado}} </span>
+								<span class="date ">{{reunion.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
+								<span ng-if="reunion.estatus == true" >
+									<label class="date pull-right"><strong>Escriba el resultado de la reunión</strong></label>
+									<input class="form-control" placeholder="Resultado" ng-model="reunion.resultado"/>
+									<button class="btn btn-primary" ng-click="ac.cambiarEstatus('reunion', reunion)"><i class="fa fa-check fa-lg"></i> Guardar</button>
+								</span>
+							</p>
+							
+						</li>
+					</ul>
+
+					<h5 class="todo-group-title"><i class="fa fa-tasks"></i> Tareas (<small class="num-of-tasks"><strong>{{ac.tareas.length}}</strong></small>)</h5>
+					<ul id="sortable3" class="todo">
+						<li ng-repeat="tarea in ac.tareas" bs-popover>
+							<span class="handle"> <label class="checkbox">
+									<input type="checkbox" ng-model="tarea.estatus">
+									<i></i> </label> </span>
+							<p class="col-sm-8">
+								<strong><a href="/prospecto/{{tarea.prospecto_id}}">{{tarea.prospecto.nombre}}</a></strong> - {{tarea.asunto}} 
+								<span class="text-muted">{{tarea.resultado}} </span>
+								<span class="date ">{{tarea.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
+								<span ng-if="tarea.estatus == true" >
+									<label class="date pull-right"><strong>Escriba el resultado de la tarea</strong></label>
+									<input class="form-control" placeholder="Resultado" ng-model="tarea.resultado"/>
+									<button class="btn btn-primary" ng-click="ac.cambiarEstatus('tarea', tarea)"><i class="fa fa-check fa-lg"></i> Guardar</button>
+								</span>
+							</p>
+							
+						</li>
+					</ul>
+
+					<!-- end content -->
+				</div>
+
+			</div>
+			<!-- end widget div -->
+		</div>
+		<!-- end widget -->
+
+	</article>
+
+</div>

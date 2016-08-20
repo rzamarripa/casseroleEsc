@@ -1,0 +1,108 @@
+<h2>Conceptos de Pago</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{cp.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoConcepto" ng-click="cp.nuevoConcepto()">
+		  {{cp.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-4" valida>
+				    	<label>Orden *</label>
+					    <input name="orden" type="text" class="form-control" ng-model="cp.conceptoPago.orden" required=""/>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="cp.conceptoPago.nombre" required=""/>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Importe *</label>
+					    <input name="importe" type="number" class="form-control" ng-model="cp.conceptoPago.importe" required=""/>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+			    		<label>Módulo *</label>
+			    		<select name="modulo" class="form-control" ng-model="cp.conceptoPago.modulo" required>
+				    		<option value="inscripcion">Inscripción</option>
+				    		<option value="colegiatura">Colegiatura</option>
+				    		<option value="otros">Otros</option>
+			    		</select>
+			    	</div>
+			    </div>				  
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="cp.guardar(cp.conceptoPago,form)" class="btn btn-primary" ng-show="cp.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="cp.actualizar(cp.conceptoPago,form)" value="Actualizar" class="btn btn-primary" ng-show="!cp.action" valida-form formulario="form" />				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="5%"><div class="text-center">Orden</div></th>
+					<th width="40%"><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Importe</div></th>
+					<th width="20%"><div class="text-center">Módulo</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="conceptoPago in cp.conceptosPago">
+			    <td>{{$index + 1}}</td>
+			    <td>{{conceptoPago.orden}}</td>
+			    <td>{{conceptoPago.nombre}}</td>
+			    <td class="text-right">{{conceptoPago.importe | currency}} </td>
+			    <td>{{conceptoPago.modulo}}</td>
+ 			    <td>
+				    <div class="text-center">
+				    	<span ng-if="conceptoPago.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!conceptoPago.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="cp.editar(conceptoPago._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="cp.cambiarEstatus(conceptoPago._id)">
+							    				<i class="fa fa-{{conceptoPago.estatus ? 'trash' : 'check' }}"></i> {{conceptoPago.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

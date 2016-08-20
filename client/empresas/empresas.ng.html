@@ -1,0 +1,187 @@
+<h2>Empresas</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{emp.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoempresa" ng-click="emp.nuevoEmpresa()">
+		 {{emp.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate >
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4">					    
+					    <div class="col-sm-6" valida>
+						    <label>Clave *</label>
+					    	<input name="clave" type="text" class="form-control" placeholder="clave" ng-model="emp.empresa.clave" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Razón Social *</label>
+					    	<input name="razonsocial" type="text" class="form-control" placeholder="Razón Social" ng-model="emp.empresa.razonSocial" required>
+					    </div>
+			    	</div>
+
+			    	<div class="col-sm-4" valida>
+					    <label for="domicilio">Domicilio *</label>
+					    <input name="domicilio" type="text" class="form-control" placeholder="Domicilio" ng-model="emp.empresa.domicilio" required>
+			    	</div>
+			    	<div class="col-sm-4">				    	
+					    <div class="col-sm-6" valida>
+						    <label>No.Exterior *</label>
+					    	<input name="numeroext" type="text" class="form-control" placeholder="No.Exterior" ng-model="emp.empresa.nEx" required>
+					    </div>
+					    <div class="col-sm-6">
+						    <label>No.Interior</label>
+					    	<input type="text" class="form-control" placeholder="No.Interior" ng-model="emp.empresa.nInt">
+					    </div>
+					</div>
+			    </div>
+					 <div class="row">
+					    <div class="col-sm-6" valida>
+						    <label>Referencia Domicilio *</label>
+					    	<input name="referenciadom" type="text" class="form-control" placeholder="Referencia Domicilio" ng-model="emp.empresa.refDomicilio" required>
+					    </div>
+					     <div class="col-sm-6" valida>
+						    <label>CP *</label>
+					    	<input name="cp" type="number" class="form-control" placeholder="codigo postal" ng-model="emp.empresa.CP" min="0" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Colonia *</label>
+					    	<input name="colonia" type="text" class="form-control" placeholder="Colonia" ng-model="emp.empresa.colonia" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Municipio *</label>
+					    	<input name="municipio" type="text" class="form-control" placeholder="Municipio" ng-model="emp.empresa.municipio" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Ciudad *</label>
+					    	<input name="ciudad" type="text" class="form-control" placeholder="Ciudad" ng-model="emp.empresa.ciudad" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Estado *</label>
+					    	<input name="estado" type="text" class="form-control" placeholder="Estado" ng-model="emp.empresa.estado" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>País *</label>
+					    	<input name="pais" type="text" class="form-control" placeholder="Pais" ng-model="emp.empresa.pais" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Teléfonos *</label>
+					    	<input name="telefono" type="text" class="form-control" placeholder="Teléfonos" ng-model="emp.empresa.telefonos" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Fax *</label>
+					    	<input name="fax" type="text" class="form-control" placeholder="Fax" ng-model="emp.empresa.fax" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>RFC *</label>
+					    	<input name="rfc" type="text" class="form-control" placeholder="RFC" ng-model="emp.empresa.rfc" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Tipo Persona *</label>
+					    	<input name="tipopersona" type="text" class="form-control" placeholder="Tipo Persona" ng-model="emp.empresa.tipoPersona" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>E-mail *</label>
+					    	<input name="correo" type="text" class="form-control" placeholder="E-mail" ng-model="emp.empresa.email" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Titular *</label>
+					    	<input name="titular" tape="text" class="form-control" placeholder="Titular" ng-model="emp.empresa.titular" required>
+					    </div>
+					    <div class="col-sm-6" valida>
+						    <label>Puesto del titular *</label>
+					    	<input name="puestotitular" type="text" class="form-control" placeholder="Puesto del titular" ng-model="emp.empresa.puestoTitular" required>
+					    </div>
+			    	</div>
+			    </div>  
+			
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="emp.guardar(emp.empresa,form)" value="Guardar" class="btn btn-primary" ng-show="emp.action" valida-form formulario="form">
+						<input type="submit" ng-click="emp.actualizar(emp.empresa,form)" value="Actualizar" class="btn btn-primary" ng-show="!emp.action" valida-form formulario="form">
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+
+
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<!--<th width="10%"><div class="text-center">Clave</div></th>-->
+					    <th width="50%"><div class="text-center">Nombre</div></th>
+					<!--<th width="10%"><div class="text-center">Domicilio</div></th>-->
+					<!--<th width="10%"><div class="text-center">No.Exterior</div></th>-->
+					<!--<th width="10%"><div class="text-center">No.Interior</div></th>-->
+					<!--<th width="50%"><div class="text-center">Referencia domicilio</div></th>-->
+					<!--<th width="20%"><div class="text-center">CP</div></th>-->
+					<!--<th width="20%"><div class="text-center">Colonia</div></th>-->
+					<!--<th width="20%"><div class="text-center">Municipio</div></th>-->
+					<!--<th width="20%"><div class="text-center">Ciudad</div></th>-->
+					<!--<th width="10%"><div class="text-center">Estado</div></th>-->
+					<!--<th width="10%"><div class="text-center">Pais</div></th>-->
+					    <th width="10%"><div class="text-center">Teléfonos</div></th>
+					<!--<th width="10%"><div class="text-center">Fax</div></th>-->
+					<!--<th width="10%"><div class="text-center">RFC</div></th>-->
+					<!--<th width="10%"><div class="text-center">Tipo Persona</div></th>-->
+					    <th width="10%"><div class="text-center">Correo</div></th>
+					    <th width="10%"><div class="text-center">Contacto</div></th>
+					<!--<th width="10%"><div class="text-center">Titular</div></th>-->
+					<!--<th width="10%"><div class="text-center">Puesto del titular</div></th>-->
+			   <th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="empresa in emp.empresas">
+			    <td>{{empresa.razonSocial}} </td> 
+			    <td>{{empresa.telefonos}} </td>
+			    <td>{{empresa.email}} </td>
+			    <td>{{empresa.titular}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="empresa.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!empresa.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="emp.editar(empresa._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="emp.cambiarEstatus(empresa._id)">
+							    				<i class="fa fa-{{empresa.estatus ? 'trash' : 'check' }}"></i> {{empresa.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,249 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-pencil-square-o fa-fw "></i> 
+				Alumnos
+			<span>&gt; 
+				Nuevo
+			</span>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" ui-sref="root.alumnos">
+		  Listar Alumnos
+		</a>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<form name="form" class="form-horizontal" role="form" novalidate>
+			<h4>Datos de Usuario</h4>
+			<div class="well">
+				<div class="row">
+					<div class="col-sm-3">
+						<label>Fotografía</label>
+						<button class="btn btn-primary" ng-click="al.tomarFoto()"><i class="fa fa-camera"></i></button>
+						<img width="100px" ng-src="{{al.alumno.profile.fotografia}}" ng-class="{'img-thumbnail': !!al.alumno.profile.fotografia}" />
+					</div>
+				  <div class="col-sm-3" valida>
+				    <label for="username">Usuario *</label>
+				    <input name="username" type="text" class="form-control"  placeholder="Usuario" ng-model="al.alumno.username" required="" readonly="">
+					</div>
+					<div class="col-sm-3" valida>
+				    <label for="password">Contraseña *</label>
+				    <input name="password" type="password" class="form-control " placeholder="Contraseña" ng-model="al.alumno.password" required="">						
+					</div>
+					<div class="col-sm-3" valida>
+				    <label for="repeatPassword">Repetir Contraseña *</label>
+				    <input name="repeatPassword" type="password" class="form-control" placeholder="Repetir Contraseña" ng-model="al.alumno.profile.repeatPassword" required="">
+					</div>
+				</div>
+			</div>			
+	  	<h4>Datos Personales</h4>
+	  	<div class="well">		
+		  	<div class="row">
+			    <div class="col-sm-3"  valida>				    
+				    <label for="nombre">Matrícula *</label>
+				    <input name="matricula" type="text" class="form-control" placeholder="Matrícula" ng-model="al.alumno.profile.matricula" required="" readonly="">
+		    	</div>
+		    	<div class="col-sm-3" valida>				    
+				    <label for="nombre">Nombre *</label>
+				    <input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="al.alumno.profile.nombre" required="">						
+		    	</div>
+		    	<div class="col-sm-3" valida>
+				    <label for="apPaterno">Apellido Paterno *</label>
+				    <input name="apPaterno" type="text" class="form-control" id="apPaterno" placeholder="Apellido Paterno" ng-model="al.alumno.profile.apPaterno" required="">
+		    	</div>
+		    	<div class="col-sm-3">
+				    <label for="apMaterno">Apellido Materno</label>
+				    <input type="text" class="form-control" id="apMaterno" placeholder="Apellido Materno" ng-model="al.alumno.profile.apMaterno">
+		    	</div>
+		    </div>		 
+				<div class="row">						
+					<div class="col-sm-4">
+				    <label for="curp">Curp</label>
+				    <input type="text" class="form-control" id="curp" placeholder="CURP" ng-model="al.alumno.profile.curp">
+		    	</div>
+					<div class="col-sm-4">
+						<label for="fechaNac">Fecha de nacimiento *</label>
+						<input name="fechaNac" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="al.alumno.profile.fechaNac" />
+					</div>
+					<div class="col-sm-4">
+						<label for="lugarNac">Lugar de nacimiento</label>
+						<input type="text" class="form-control" id="lugarNac" placeholder="Lugar de Nacimiento" ng-model="al.alumno.profile.lugarNac">
+					</div>
+				</div>
+				<div class="row">						
+					<div class="col-sm-4" valida>
+				    <label for="sexo">Sexo *</label>
+				    <select name="sexo" ng-model="al.alumno.profile.sexo" data-placeholder="Seleccione" class="form-control" required>
+						    <option value=""></option>
+						    <option value="masculino">Masculino</option>
+						    <option value="femenino">Femenino</option>
+						</select>
+		    	</div>
+					<div class="col-sm-4" valida>
+						<label for="ocupacion">Ocupación *</label>
+						<select name="ocupacion" class="form-control" placeholder="Seleccione" ng-model="al.alumno.profile.ocupacion_id" required="">
+						  <option ng-repeat="ocupacion in al.ocupaciones" value="{{ocupacion._id}}">
+						  	{{ocupacion.nombre}}
+						  </option>
+						</select>
+					</div>	
+					<div class="col-sm-4">
+						<label for="escolaridad">Escolaridad</label>
+						<input name="escolaridad" type="text" class="form-control" id="escolaridad" placeholder="Escolaridad" ng-model="al.alumno.profile.escolaridad">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+				  	<label for="vivePadres" class="checkbox-inline"><input type="checkbox" id="vivePadres" ng-model="al.alumno.profile.vivePadres"> Vive con sus padres</label>					    
+			  	</div>
+					<div class="col-sm-4">
+						<label for="nivelSocial">Nivel social</label><br/>
+				    <select ng-model="al.alumno.profile.nivelSocial" class="form-control">
+						  <option value="Baja">Baja</option>
+						  <option value="Media">Media</option>
+						  <option value="Alta">Alta</option>
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<label for="medio">¿Cómo te enteraste de nosotros?</label>
+				    <select ng-model="al.alumno.profile.medio" class="form-control">
+						  <option value="Espectaculares">Espectaculares</option>
+						  <option value="Página Web">Página Web</option>
+						  <option value="Radio">Radio</option>
+						  <option value="TV">TV</option>
+						  <option value="Módulo">Módulo</option>
+						  <option value="Visita a casa">Visita a casa</option>
+						  <option value="Recomendación de Alumnos">Recomendación de Alumnos</option>
+						  <option value="Recomendación de Trabajadores">Recomendación de Trabajadores</option>
+						  <option value="Volantes">Volantes</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<label for="correo">Correo electrónico</label>
+						<input type="email" class="form-control" placeholder="Correo" ng-model="al.alumno.profile.correo">
+					</div>
+					<div class="col-sm-4" valida>
+						<label for="correoCalificaciones">Correo para calificaciones *</label>
+						<input name="correoCalificaciones" type="email" class="form-control" id="correoCalificaciones" placeholder="Correo calificaciones" ng-model="al.alumno.profile.correoCalificaciones" required="">
+					</div>
+					<div class="col-sm-4">
+						<label for="talla">Talla uniforme</label><br/>
+				    <select ng-model="al.alumno.profile.talla" class="form-control">
+					    <optgroup label="Femenino">
+					    	<option value="femsm">SM</option>
+							  <option value="femS">S</option>
+							  <option value="femM">M</option>
+							  <option value="femL">L</option>
+							  <option value="femXL">XL</option>
+							  <option value="femEspecial">Especial</option>
+					    </optgroup>
+					    <optgroup label="Masculino">
+					    	<option value="massm">SM</option>
+							  <option value="masS">S</option>
+							  <option value="masM">M</option>
+							  <option value="masL">L</option>
+							  <option value="masXL">XL</option>
+							  <option value="masEspecial">Especial</option>  
+					    </optgroup>					  
+						</select>
+					</div>
+				</div>
+	  	</div>
+		  <h4>Domicilio</h4>
+		  <div class="well">
+			  <div class="row">
+			  	<div class="col-sm-6" valida>
+			  		<label for="calleNum">Calle y número *</label>
+				    <input name="calleNum" type="text" class="form-control" id="calleNum" placeholder="Calle y Número" ng-model="al.alumno.profile.calleNum" required="">
+			  	</div>
+			  	<div class="col-sm-6" valida>
+						<label for="colonia">Colonia *</label>
+						<input name="colonia" type="text" class="form-control" id="colonia" placeholder="Colonia" ng-model="al.alumno.profile.colonia" required="">
+			  	</div>
+			  </div>
+			  <div class="row">
+			  	<div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
+			  		<label for="entreCalles">Entre calles</label>
+						<input type="text" class="form-control" id="entreCalles" placeholder="Entre calles" ng-model="al.alumno.profile.entreCalles">
+			  	</div>
+			  </div>	
+			  <div class="row">
+			  	<div class="col-sm-6">
+			  		<label for="tel1">Tel. 1</label>
+						<input type="text" class="form-control" id="tel1" placeholder="Teléfono 1" ng-model="al.alumno.profile.tel1">
+			  	</div>
+			  	<div class="col-sm-6">
+						<label for="tel2">Tel. 2</label>
+						<input type="text" class="form-control" id="tel2" placeholder="Teléfono 2" ng-model="al.alumno.profile.tel2">
+			  	</div>
+			  </div>
+			  <div class="row">
+			  	<div class="col-sm-4">
+			  		<label for="estado">Estado</label>
+						<input type="text" class="form-control" id="estado" placeholder="Estado" ng-model="al.alumno.profile.estado">
+			  	</div>
+			  	<div class="col-sm-4">
+				  	<label for="ciudad">Ciudad</label>
+				    <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" ng-model="al.alumno.profile.ciudad">
+			  	</div>
+			  	<div class="col-sm-4">
+						<label for="codigoPostal">Código Postal</label>
+				    <input type="text" class="form-control" id="codigoPostal" placeholder="Código Postal" ng-model="al.alumno.profile.codigoPostal">
+			  	</div>
+			  </div>	
+		  </div>
+			<h4>Información Familiar</h4>
+			<div class="well">  
+			  <div class="row">
+			  	<div class="col-sm-6" valida>
+			  		<label for="padreTutor">Padre o Tutor *</label>
+				    <input name="padreTutor" type="text" class="form-control" id="padreTutor" placeholder="Padre o Tutor" ng-model="al.alumno.profile.padreTutor" required="">
+			  	</div>
+			  	<div class="col-sm-3">
+						<label for="telefonoPadreTutor">Teléfono</label>
+						<input type="text" class="form-control" id="telefonoPadreTutor" placeholder="Teléfono del Padre" ng-model="al.alumno.profile.telefonoPadreTutor">
+			  	</div>
+			  	<div class="col-sm-3">
+						<label for="correoPadre">Correo</label>
+						<input type="email" class="form-control" id="correoPadre" placeholder="Correo del Padre" ng-model="al.alumno.profile.correoPadre">
+			  	</div>
+			  </div>
+			  <div class="row">
+			  	<div class="col-sm-6" valida>
+			  		<label for="madre">Madre *</label>
+						<input name="madre" type="text" class="form-control" id="madre" placeholder="Madre" ng-model="al.alumno.profile.madre" required="">
+			  	</div>
+			  	<div class="col-sm-3">
+						<label for="ocupacionMadre">Teléfono</label>
+						<input type="text" class="form-control" id="telefonoMadre" placeholder="Teléfono de la Madre" ng-model="al.alumno.profile.telefonoMadre">
+			  	</div>
+			  	<div class="col-sm-3">
+						<label for="correoMadre">Correo</label>
+						<input type="email" class="form-control" id="correoMadre" placeholder="Correo de la Madre" ng-model="al.alumno.profile.correoMadre">
+			  	</div>
+			  </div>
+			  <div class="row">
+			  	<div class="col-sm-12">
+						<label for="observacionesGenerales">Observaciones generales</label>
+						<textarea type="text" class="form-control" id="observacionesGenerales" placeholder="Observaciones Generales" 
+						ng-model="al.alumno.profile.observacionesGenerales"></textarea>
+			  	</div>
+			  </div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<input type="submit" ng-click="al.guardar(al.alumno,form)" value="Guardar" class="btn btn-primary" ng-show="al.action" valida-form formulario="form">
+					<input type="submit" ng-click="al.actualizar(al.alumno,form)" value="Actualizar" class="btn btn-primary" ng-show="!al.action" valida-form formulario="form">				
+				</div>
+			</div>	  
+	  </form>
+	</div>
+</div>

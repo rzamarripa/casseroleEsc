@@ -1,0 +1,130 @@
+<h2>Escuela de procedencia</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{escu.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoescuela" ng-click="escu.nuevoEscuelas()">
+		   {{escu.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate >
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-12">					    
+                    <div class="col-sm-4" valida>
+						    <label>Nombre *</label>
+					    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="escu.escuela.nombre" required>
+					    </div>
+					     <div class="col-sm-4" valida>
+						    <label> Nombre corto *</label>
+					    	<input name="nombrecorto" type="text" class="form-control" placeholder="Nombre corto" ng-model="escu.escuela.nombreCorto" required>
+					    </div>
+					     <div class="col-sm-4" valida>
+						    <label>Domicilio *</label>
+					    	<input name="domicilio" type="text" class="form-control" placeholder="Domicilio" ng-model="escu.escuela.domicilio" required>
+					    </div>
+					  </div>
+					 </div>
+					</div>
+					<div class="well">	    
+			    <div class="row">
+			    	      <div class="col-sm-12">	
+					     <div class="col-sm-4" valida>
+						    <label>Colonia *</label>
+					    	<input name="colonia" type="text" class="form-control" placeholder="Colonia" ng-model="escu.escuela.colonia" required>
+					    </div>
+					     <div class="col-sm-4" valida>
+						    <label>Código Postal</label>
+					    	<input name="cp" type="number" class="form-control" placeholder="Codigo Postal" ng-model="escu.escuela.cp" min="0">
+					    </div>
+					     <div class="col-sm-4" valida>
+						    <label>Ciudad *</label>
+					    	<input name="ciudad" type="text" class="form-control" placeholder="Ciudad" ng-model="escu.escuela.ciudad" required>
+					    </div>
+					     <div class="col-sm-4">
+						    <label>Teléfonos </label>
+					    	<input type="text" class="form-control" placeholder="Teléfonos " ng-model="escu.escuela.telefonos">
+					    </div>
+					    <div class="col-sm-4">
+						    <label>Director </label>
+					    	<input type="text" class="form-control" placeholder="Director " ng-model="escu.escuela.director">
+					    </div>
+					    <div class="col-sm-4">
+						    <label>Contacto </label>
+					    	<input type="text" class="form-control" placeholder="Contacto " ng-model="escu.escuela.contacto">
+					    </div>			    	
+			    	  </div>
+			        </div> 
+			      </div>  	
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="escu.guardar(escu.escuela,form)" value="Guardar" class="btn btn-primary" ng-show="escu.action" valida-form formulario="form">
+						<input type="submit" ng-click="escu.actualizar(escu.escuela,form)" value="Actualizar" class="btn btn-primary" ng-show="!escu.action" valida-form formulario="form">	
+
+					</div>
+				</div>
+					  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>
+					<th width="20%"><div class="text-center">Domicilio</div></th>
+					<th width="20%"><div class="text-center">Ciudad</div></th>
+										
+					
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="escuela in escu.escuelas">
+			    <td>{{escuela.nombre}}</td>
+			    <td>{{escuela.domicilio}}</td>
+			    <td>{{escuela.ciudad}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="escuela.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!escuela.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="escu.editar(escuela._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="escu.cambiarEstatus(escuela._id)">
+							    				<i class="fa fa-{{escuela.estatus ? 'trash' : 'check' }}"></i> {{escuela.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

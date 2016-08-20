@@ -1,0 +1,28 @@
+<h2>{{cd.campus.nombre}} - <small>Agregar Secciones</small></h2>
+<div class="col-xs-12 col-sm-4 col-md-4" ng-repeat="seccion in cd.secciones">
+  <div class="panel panel-blue">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{seccion.descripcion}}</h3>
+    </div>
+    <div class="panel-body no-padding text-align-center">
+        
+    </div>
+    <div class="panel-footer no-padding">
+        <a ui-sref="root.secciones({campus_id : cd.campus._id})" class="btn bg-color-blue txt-color-white btn-block" role="button">Entrar</a>
+    </div>
+  </div>
+</div>
+
+<div class="col-xs-12 col-sm-4 col-md-4">
+  <div class="panel panel-orange">
+    <div class="panel-heading">
+      <h3 class="panel-title">Nueva Sección</h3>
+    </div>
+    <div class="panel-body no-padding text-align-center">
+      
+    </div>
+    <div class="panel-footer no-padding">
+      <a ui-sref="root.secciones({ campus_id: cd.campus._id })" class="btn bg-color-orange txt-color-white btn-block" role="button"><i class="fa fa-plus fa-lg"></i> Agregar</a>
+    </div>
+  </div>
+</div>

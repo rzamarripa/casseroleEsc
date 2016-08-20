@@ -1,0 +1,158 @@
+<h2>{{pc.maestro.nombre}} {{pc.maestro.apPaterno}} - {{pc.materia.nombre}}</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{pc.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"	ng-click="pc.nuevaPlaneacion()">
+		  {{pc.nuevo == true ? 'Expandir' : 'Contraer'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<h2>Planeación de Clases</h2>
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">		  		
+			    <div class="row">
+			    	<div class="col-sm-4">
+				    	<label>Periodo de Aplicación</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.periodoAplicacion"></textarea>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label class="font-xs">Total de Sesiones Programadas y Tiempo Asignado</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.totalSesionesYTiempo"></textarea>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label>Grupos Atendidos</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.gruposAtendidos"></textarea>
+			    	</div>			    	
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<label>Competencias Genéricas</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.competenciasGenericas"></textarea>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<label>Competencias Disciplinares</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.competenciasDisciplinares"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<label>Nombre del Bloque</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.nombreBloque"></textarea>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<label>Objetos (Contenidos) de Aprendizaje</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.objetosDeAprendizaje"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4">
+				    	<label>Desempeños del Estudiante</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.desempeniosEstudiante"></textarea>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label>Actividades de Apertura</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.actividadesApertura"></textarea>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label>Evidencias de Aprendizaje</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.evidenciasAprendizaje"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-12">
+				    	<label>Actividades de Desarrollo (Comunes)</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.actividadesDesarrollo"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-12">
+				    	<label>Actividades de Cierre (Diferenciadas)</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.actividadesCierre"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<label>Instrumentos de la Evaluación</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.instrumentosEvaluacion"></textarea>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<label>Criterios de la Evaluación</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.criteriosEvaluacion"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<label>Recursos Didácticos</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.recursosDidacticos"></textarea>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<label>Fuentes de Información</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.fuentesInformacion"></textarea>
+			    	</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<label>Observaciones</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.observaciones"></textarea>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<label>Comentarios</label>
+			    		<textarea class="form-control" rows="3" ng-model="pc.planeacion.comentarios"></textarea>
+			    	</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="pc.guardar(pc.planeacion,form)" value="Guardar" class="btn btn-primary" ng-show="pc.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="pc.actualizar(pc.planeacion,form)" value="Actualizar" class="btn btn-primary" ng-show="!pc.action" valida-form formulario="form"/>				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<div class="jarviswidget jarviswidget-sortable" id="wid-id-11" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" role="widget">
+	<header role="heading">
+		<h2><strong>Planeaciones de </strong> <i>{{pc.materia.nombre}}</i></h2>	
+		<ul id="widget-tab-1" class="nav nav-tabs pull-right">
+			<li class="active">
+				<a data-toggle="tab" href="#hr2" aria-expanded="false"> <i class="fa fa-lg fa-paper-plane"></i> <span class="hidden-mobile hidden-tablet"> Por Revisar <span class="badge bg-color-yellow txt-color-white">{{pc.planeacionesEnviadas.length}}</span></span></a>
+			</li>
+			<li class="">
+				<a data-toggle="tab" href="#hr3" aria-expanded="false"> <i class="fa fa-lg fa-thumbs-o-up"></i> <span class="hidden-mobile hidden-tablet"> Revisados <span class="badge bg-color-green txt-color-white">{{pc.planeacionesRevisadas.length}}</span></span></a>
+			</li>
+			<li class="">
+				<a data-toggle="tab" href="#hr4" aria-expanded="false"> <i class="fa fa-lg fa-globe"></i> <span class="hidden-mobile hidden-tablet"> Publicados <span class="badge bg-color-blue txt-color-white">{{pc.planeacionesPublicadas.length}}</span></span></a>
+			</li>
+		</ul>	
+		<span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+	</header>
+	<div role="content">
+		<div class="jarviswidget-editbox">	
+		</div>
+		<div class="widget-body no-padding">
+			<div class="tab-content padding-10">				
+				<div class="tab-pane fade active in" id="hr2">
+					
+					<h4 class="alert alert-warning"> Planeaciones por Revisar: estás deben ser revisadas para autorizar la publicación. </h4>
+					<div ng-include="'client/planeaciones/_tablaCoordinadorEnviadas.html'"></div>
+					
+				</div>
+				<div class="tab-pane fade" id="hr3">
+					
+					<h4 class="alert alert-success"> Planeaciones revisadas: estas están autorizadas y listas para publicar. </h4>
+					<div ng-include="'client/planeaciones/_tablaCoordinadorRevisadas.html'"></div>
+					
+				</div>
+				<div class="tab-pane fade" id="hr4">
+					
+					<h4 class="alert alert-info"> Planeaciones publicadas: estas ya están visibles para los alumnos. </h4>
+					<div ng-include="'client/planeaciones/_tablaCoordinadorPublicadas.html'"></div>
+					
+				</div>
+			</div>
+			<div class="widget-footer text-right">
+				Método experimental de planeaciones
+			</div>
+		</div>
+	</div>	
+</div>

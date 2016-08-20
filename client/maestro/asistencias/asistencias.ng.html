@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-sm-12">
+		<div class="widget-body no-padding smart-form">
+			<!-- content goes here -->			
+			<h5 class="todo-group-title"><i class="fa fa-warning"></i> Lista de Asistencia 
+				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.asistencia.fechaAsistencia | date:'dd-MM-yyyy'}}</span>
+			</h5>
+			<ul id="sortable1" class="todo ui-sortable">
+				<li ng-repeat="alumno in masas.asistencia.alumnos">
+					<span class="handle"> 
+						<label class="checkbox">
+							<input type="checkbox" ng-model="alumno.checked" value="checked">
+							<i></i> 
+						</label> 
+					</span>
+					<p>
+						<strong>{{alumno.matricula}}</strong> - {{alumno.nombre}} {{alumno.apPaterno}} {{alumno.apMaterno}}
+						<span class="date">Fecha</span>
+					</p>
+				</li>		
+			</ul>
+			<input ng-click="masas.guardar(masas.asistencia)" value="Guardar" class="btn btn-primary" ng-show="!masas.existe">
+			<input ng-click="masas.actualizar(masas.asistencia)" value="Actualizar" class="btn btn-primary" ng-show="masas.existe">
+		</div>
+  </div>
+</div>
