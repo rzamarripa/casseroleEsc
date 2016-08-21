@@ -13,19 +13,21 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.buscar.nombre = '';
 	this.validation = false;
 	
+/*
 	this.subscribe('alumnos',()=>{
 		return [{"roles" : ["alumno"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.fechaCreacion":-1}}]
 	});
 	
-/*
+*/
 	this.subscribe('buscarAlumnos', () => {
     return [{
-	    options : { limit: 10 },
-	    where : { nombre : this.getReactively('buscar.nombre'), 
+	    options : { limit: 50 },
+	    where : { 
+		    nombreCompleto : this.getReactively('buscar.nombre'), 
  		    seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""  }
-    }] ;
+    	}
+    ];
   });
-*/
   
 /*
   this.subscribe('buscarUsuario', () => {
@@ -45,7 +47,7 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   
 	this.helpers({
 		alumnos : () => {
-			return Meteor.users.find({roles : ["alumno"]});
+			return Meteor.users.find({roles : ["alumno"]}, { sort : {"profile.nombreCompleto" : 1 }});
 		},
 	  ocupaciones : () => {
 		  return Ocupaciones.find();
@@ -58,21 +60,17 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  var matriculaAnterior = 0;
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
-			  console.log(rc.cantidad);
 			  if(this.getReactively("cantidad") > 0){
-				  var ultimoAlumno = Meteor.users.findOne({roles : ["alumno"]}, {sort: {fechaCreacion:-1}});
-				  console.log("ultimo",ultimoAlumno)
+				  var ultimoAlumno = Meteor.users.findOne({roles : ["alumno"]}, {sort: {username:-1}});
 				  if(ultimoAlumno != undefined){
-					  console.log("entré aquí");
 					  identificador = ultimoAlumno.profile.matricula.substring(1, ultimoAlumno.profile.matricula.length);
-					  console.log(identificador);
 					  matriculaAnterior = parseInt(identificador) + 1;
 					  matriculaAnterior = 'e' + matriculaAnterior;
+					  window.matricula = matriculaAnterior;
 					  rc.alumno.username = matriculaAnterior;
 				  	rc.alumno.profile.matricula = matriculaAnterior;
 				  }
 			  }else{
-				  console.log("entré acá");
 				  rc.alumno.username = "e" + anio + Meteor.user().profile.campus_clave + "0001";
 				  rc.alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
 			  }

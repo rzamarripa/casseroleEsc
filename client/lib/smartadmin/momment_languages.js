@@ -6290,19 +6290,19 @@
         },
         calendar : {
             sameDay : function () {
-                return '[hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             nextDay : function () {
-                return '[mañana a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Mañana a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             nextWeek : function () {
                 return 'dddd [a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             lastDay : function () {
-                return '[ayer a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Ayer a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             lastWeek : function () {
-                return '[el] dddd [pasado a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[El] dddd [pasado a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             sameElse : 'L'
         },
@@ -6357,19 +6357,19 @@
         },
         calendar : {
             sameDay : function () {
-                return '[hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             nextDay : function () {
-                return '[mañana a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Mañana a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             nextWeek : function () {
                 return 'dddd [a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             lastDay : function () {
-                return '[ayer a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[Ayer a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             lastWeek : function () {
-                return '[el] dddd [pasado a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
+                return '[El] dddd [pasado a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
             },
             sameElse : 'L'
         },

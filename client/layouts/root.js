@@ -4,9 +4,9 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	this.usuarioActual = {};
 	this.avisosVentana = "none";
 	this.hoy = new Date();
-	
-	if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] != "admin"){
-
+	// Director
+	if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "director"){
+		console.log("entré como admin");
 		this.subscribe('campus', function(){
 			return [{
 				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -36,6 +36,29 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			  return Avisos.find();
 			}
 		});
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "vendedor"){ // Vendedores
+
+		this.subscribe('campus', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
+		
+		this.subscribe('mensajesVendedores', function(){
+			return [{
+				estatus : true, destinatario_id : Meteor.userId()
+			}]
+		});
+		
+		this.helpers({
+			campus : () => {
+			  return Campus.findOne(Meteor.user().profile.campus_id);
+			},
+			avisos : () => {
+			  return MensajesVendedores.find().fetch();
+			}
+		});
+		
 	}
 	
 	this.autorun(function() {
@@ -53,4 +76,22 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 		  rc.avisosVentana = "none";
 	  }
   }
+  
+  this.fechaTitulo = function(date){
+		moment.locale("es");
+    return moment(date).calendar();
+	}
+	
+	this.cambiarEstatus = function(aviso_id){
+		var aviso = MensajesVendedores.findOne(aviso_id);
+		if(aviso){
+			MensajesVendedores.update({_id : aviso_id}, { $set : {estatus : !aviso.estatus}});
+			if(aviso.estatus){
+				toastr.success("Mensaje leído.");
+			}else{
+				toastr.info("Mensaje no leído");
+			}
+		}
+		
+	}
 };

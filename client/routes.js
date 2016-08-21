@@ -463,7 +463,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.tareas', {
-      url: '/tareas/:id/:maestros_id',
+      url: '/tareas/:id/:maestros_id/:materia_id/:grupo_id',
       templateUrl: 'client/maestro/tareas/tareas.ng.html',
       controller: 'TareasCtrl as tarea',
       resolve: {

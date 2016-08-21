@@ -116,7 +116,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
       toastr.error('Error al actualizar los datos.');
       return;
 		}
-
+		var nombre = alumno.profile.nombre != undefined ? alumno.profile.nombre + " " : "";
+		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
+		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
+		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
 		delete alumno.profile.repeatPassword;
 		Meteor.call('updateGerenteVenta', rc.alumno, "alumno");
 		toastr.success('Actualizado correctamente.');

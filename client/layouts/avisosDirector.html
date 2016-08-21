@@ -1,0 +1,47 @@
+<span ng-if="ro.usuarioActual.roles[0] == 'director'" id="activity" class="activity-dropdown" ng-click="ro.muestraAvisos()"> 
+	<i class="fa fa-user"></i> <b class="badge  bounceIn animated">{{ro.avisos.length}}</b> 
+</span>
+<div class="ajax-dropdown" style="display: {{ro.avisosVentana}} ">
+
+<div class="btn-group btn-group-justified" data-toggle="buttons">
+	<label class="btn btn-default">
+		<input type="radio" name="activity" id="ajax/notify/mail.html">
+		Avisos ({{ro.avisos.length}}) 
+	</label>
+</div>
+
+<!-- notification content -->
+<div class="ajax-notifications custom-scroll">
+
+	<div class="alert alert-transparent">
+		<!--<h4>Aquí poner los avisos</h4>
+		Inventa una vista bonita, no pongas una tabla horrible
+		-->
+			<div ng-if="ro.usuarioActual.roles[0] == 'director'" class="row">
+				<div class="col-sm-11">
+				  <div class="class=ajax-notifications custom-scroll" style="opacity: 1;">
+				   <ul class="notification-body">
+			   		 <li ng-repeat="aviso in ro.avisos">
+			   		 		<span>
+			   		 			<a href="">
+										<span class="subject">{{aviso.titulo}}</span>
+										<span class="font-xs" style="color:#A0A0A0">{{aviso.descripcion}}</span>
+										<span class="date pull-right font-xs">{{aviso.fecha  | date:'dd-MM-yyyy hh:mm'}}</span>
+									</a>						   		 			
+			   		 		</span>
+			   		 </li>
+				   </ul>
+				  </div>
+				</div>
+			</div>
+	</div>
+
+	<i class="fa fa-lock fa-4x fa-border"></i>
+
+</div>
+<!-- end notification content -->
+
+<!-- footer: refresh area -->
+<span> Fecha: {{ro.hoy | date:'dd-MM-yyyy hh:mm'}}</span>
+<!-- end footer -->
+</div>

@@ -67,8 +67,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 			  });
 		  }
 		  
-		  console.log("prueb",data);
-		  
 		  var datos = {
         chart: {
           type: 'column'
@@ -293,7 +291,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
             }]
         }
     	};
-    	console.log("datos",datos);
     	$('#container').highcharts(datos);
     	
 		  return datos;
@@ -324,7 +321,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   
   //Listado de prospectos por vendedor
   this.getProspectos = function(vendedor_id){
-	  console.log(vendedor_id);
 	  return Prospectos.find({vendedor_id : vendedor_id}).fetch();
   }
   
@@ -342,8 +338,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.buscarProspectos = function(buscar){
 	  rc.fechaInicial = buscar.fechaInicial;
 	  rc.fechaFinal = buscar.fechaFinal;
-	  
-	  console.log("grafica", rc.graficaVendedores);
   }
   
   //Actualizar el destinatario para enviar mensaje a un vendedor
@@ -361,6 +355,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  mensaje.estatus = true;
 		mensaje.campus_id = Meteor.user().profile.campus_id;
 		mensaje.usuarioInserto = Meteor.userId();
+		mensaje.fecha = new Date();
 		MensajesVendedores.insert(mensaje);
 		toastr.success('Enviado correctamente.');
 		this.mensaje = {};

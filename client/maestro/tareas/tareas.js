@@ -5,7 +5,7 @@ function TareasCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 $reactive(this).attach($scope);
   this.action = true;
 
-	
+	console.log($stateParams);
 
 	this.subscribe('grupos',()=>{
 		return [{estatus:true}]

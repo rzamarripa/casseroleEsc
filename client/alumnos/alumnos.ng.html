@@ -19,6 +19,7 @@
 		</div>
 	</div>
 </div>
+<!--
 <h6 class="description">Nuestros Alumnos</h6>
 <div class="row pt-md">
   <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12 profile well-mini" ng-repeat="alumno in al.alumnos">
@@ -35,4 +36,28 @@
 	  	</div>
 	  </div>
   </div>
+</div>
+-->
+
+
+<div class="row">
+
+	<!-- SuperBox -->
+	<div class="superbox col-sm-12">
+		<div class="superbox-list" ng-repeat="alumno in al.alumnos">
+			<div class="img-box">
+				<img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" data-img="img/superbox/superbox-full-1.jpg" alt="{{alumno.profile.nombreCompleto}}" title="{{alumno.profile.nombreCompleto" class="superbox-img">
+				<ul class="text-center">
+	        <a href="/alumnos/{{alumno._id}}"><li><i class="fa fa-eye"></i></li></a>
+	        <a href="/editarAlumno/{{alumno._id}}"><li><i class="fa fa-pencil"></i></li></a>
+	      </ul>
+			</div>
+			<p class="lead font-sm text-center">{{alumno.profile.nombre}} {{alumno.profile.apPaterno}}</p>
+		</div>
+		
+	</div>
+	<!-- /SuperBox -->
+	
+	<div class="superbox-show" style="height:300px; display: none"></div>
+
 </div>
