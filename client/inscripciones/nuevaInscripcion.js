@@ -5,29 +5,25 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 
 	this.inscripcion = {tipoInscripcion:""};
 	this.inscripcion.totalPagar = 0.00;
+	this.comisionObligada =0;
+	this.pagosRealizados = [];
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
+
+	this.subscribe('alumnos',()=>{
+		return [{"roles" : ["alumno"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.fechaCreacion":-1}}]
+	});
 	this.subscribe('vendedores');
-	this.subscribe('ciclos',()=>{
-		return [{estatus:true,
-		seccion_id : this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):""
-	}]
-	});
-	this.subscribe('cuentas', ()=>{
-		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
-	});
-	this.subscribe('generaciones',()=>{
-		return [{estatus:true, seccion_id : this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):"" }]
-	 });
 	this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
-	//this.subscribe("conceptosPago");
+	this.subscribe('ciclos',()=>{
+		return [{estatus:true,
+			seccion_id : this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):""
+		}];
+	});
 	this.subscribe("tiposingresos",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
-	this.subscribe('alumnos',()=>{
-		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
 	this.subscribe("grupos", () => {
 		return [{
@@ -40,37 +36,13 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		return [{
 			estatus:true,
 			seccion_id :  this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):""
-		
 		}]
 	});
-	this.subscribe('inscripciones',()=>{
-		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+	this.subscribe('cuentas', ()=>{
+		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
 
-	var quitarhk=function(obj){
-		if(Array.isArray(obj)){
-			for (var i = 0; i < obj.length; i++) {
-				obj[i] =quitarhk(obj[i]);
-			}
-		}
-		else if(obj !== null && typeof obj === 'object')
-		{
-			delete obj.$$hashKey;
-			for (var name in obj) {
-	  			obj[name] = quitarhk(obj[name]);
-			}
-
-		}
-		return obj;
-	}
-
-
-
-
 	this.helpers({
-		ciclos : () => {
-			return Ciclos.find();
-		},
 		cuentaActiva : () =>{
 			return Cuentas.findOne({activo: true});
 		},
@@ -78,61 +50,63 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			return Cuentas.findOne({inscripcion: true});
 		},
 		vendedores : () => {
-		  var usuarios = Meteor.users.find().fetch();
-		  var vendedores = [];
-		  _.each(usuarios, function(usuario){
-			  if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
-				  vendedores.push(usuario);
-			  }
-		  });
-		  return vendedores;
-	  	},
-	  	generaciones : () => {
-		  return Generaciones.find();
-	  },
-	  secciones : () => {
-		  return Secciones.find();
-	  },
-	  tiposIngresos : () => {
-		  return TiposIngresos.find();
-	  },
-	  alumnos : () => {
-		  return Alumnos.find();
-	  },
-	  grupos : () => {
-		  return Grupos.find();
-	  },
-	  planesEstudios : () => {
-		  return PlanesEstudios.find();
-	  },
-	  inscripciones : () => {
-		  return Inscripciones.find();
-	  }/*,
-	  conceptosPago : () => {
-		  return ConceptosPago.find();
-	  }*/
-  });
+		 var usuarios = Meteor.users.find().fetch();
+		 var vendedores = [];
+		 _.each(usuarios, function(usuario){
+				if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
+					vendedores.push(usuario);
+				}
+		 });
+		 console.log(vendedores);
+		 return vendedores;
+	 },
+		alumnos : () => {
+			return Meteor.users.find({roles : ["alumno"]});
+		},
+		grupos : () => {
+		 return Grupos.find();
+	 },
+		secciones : () => {
+		 return Secciones.find();
+	 },
+	 grupos : () => {
+		 return Grupos.find();
+	 },
+	 tiposIngresos : () => {
+		 return TiposIngresos.find();
+	 },
+	 ciclos : () => {
+			return Ciclos.find();
+		},
+	});
 
+	this.llenarComision = function(_comision,importe){
+		try{
+			var vendedor = Meteor.users.findOne({_id:this.inscripcion.vendedor_id});
+			console.log(_comision)
+			this.comisiones.push({
+				fechaPago 	: new Date(),
+				alumno_id 	: this.inscripcion.alumno_id,
+				grupo_id	: this.inscripcion.grupo_id,
+				seccion_id  : Meteor.user().profile.seccion_id,
+				campus_id 	: Meteor.user().profile.campus_id,
+				vendedor_id	: vendedor._id,
+				gerente_id	: vendedor.profile.gerenteVenta_id,
+				status		: 1,
+				beneficiario : _comision.beneficiario,
+				importe 	: importe,
+				modulo		: _comision.modulo,
+				comision_id : _comision._id,
+				cuenta_id : this.cuentaInscripcion._id,
+				weekday : this.diaActual,
+				semanaPago: this.semanaPago
+			});
+		}
+		catch(e){
 
-	
-	//this.inscripcion.fechaInscripcion = new Date();
-	//this.inscripcion.conceptosSeleccionados = [];
-	this.alumnoSeleccionado = {};
-	this.cupo = false;
-	this.inscripcion.abono = 0.00;
-	this.periodoVisible = function(periodo){
-	  	for (var i = 0; periodo && periodo.datos && i < periodo.datos.length; i++) {
-	  		if(periodo.datos[i] && periodo.datos[i].activa )
-	  			return true;
-	  	}
-	  	return false;
-
-	}
-	
-	this.pagosRealizados =[];
-	this.comisiones = []
-
-	this.llenarPago=function(concepto,plan,tipoPlan){
+		}
+	};
+	/*this.llenarPago=function(concepto,plan,tipoPlan){
 		this.pagosRealizados.push({
 						fechaPago 	: new Date(),
 						alumno_id 	: this.inscripcion.alumno_id,
@@ -151,230 +125,254 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 						weekday : this.diaActual,
 						semanaPago: this.semanaPago
 					});
-		var procedimientos= concepto.procedimientos;
-		var fechaActual = this.inscripcion.fechaInscripcion;
-		var fechaCobro = new Date(plan.fecha);
-
-		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
-		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24));
-		for (var procid in procedimientos) {
-			var procedimiento = procedimientos[procid];
-			if(procedimiento.tipoProcedimiento == 'Recargo' && tipoPlan=='inscripcion' && diasRecargo >=procedimiento.dias){
-					this.pagosRealizados.push({
-								fechaPago 	: new Date(),
-								alumno_id 	: this.inscripcion.alumno_id,
-								grupo_id	: this.inscripcion.grupo_id,
-								seccion_id  : this.inscripcion.seccion_id,
-								campus_id 	: Meteor.user().profile.campus_id,
-								numero 		: plan.no,
-								semana 		: plan.numero,
-								anio 		: plan.anio,
-								estatus 	: 1,
-								concepto 	: concepto.nombre+" - "+procedimiento.nombre,
-								tipo 		: "Recargo",
-								usuario_id 	: Meteor.userId(),
-								importe 	: procedimiento.monto,
-								cuenta_id : tipoPlan == 'inscripcion' ? this.cuentaInscripcion._id:this.cuentaActiva._id,
-								weekday : this.diaActual,
-								semanaPago: this.semanaPago
-							});
-			}
-			if(procedimiento.tipoProcedimiento == 'Descuento' && tipoPlan=='inscripcion' && diasDescuento >=procedimiento.dias){
-				this.pagosRealizados.push({
-								fechaPago 	: new Date(),
-								alumno_id 	: this.inscripcion.alumno_id,
-								grupo_id	: this.inscripcion.grupo_id,
-								seccion_id  : this.inscripcion.seccion_id,
-								campus_id 	: Meteor.user().profile.campus_id,
-								numero 		: plan.no,
-								semana 		: plan.numero,
-								anio 		: plan.anio,
-								estatus 	: 1,
-								concepto 	: concepto.nombre+" - "+procedimiento.nombre,
-								tipo 		: "Descuento",
-								usuario_id 	: Meteor.userId(),
-								importe 	: procedimiento.monto * -1,
-								cuenta_id : tipoPlan == 'inscripcion' ? this.cuentaInscripcion._id:this.cuentaActiva._id,
-								weekday : this.diaActual,
-								semanaPago: this.semanaPago
-							});
-			}	
+	}*/
+	this.planPagosSemana =function () {
+		var fechaIncial=this.inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = this.inscripcion.planPagos.colegiatura.Semanal.diaColegiatura;
+		var totalPagos = this.inscripcion.planPagos.colegiatura.Semanal.totalPagos;
+		var mfecha = moment(fechaIncial);
+		mfecha=mfecha.day(dia);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			mfecha = mfecha.day(8);
 		}
+		console.log(plan);
+		return plan;
 	}
-	this.llenarComision = function(_comision,importe){
-		var vendedor = Meteor.users.findOne({_id:this.inscripcion.vendedor_id});
-		console.log(_comision)
-		this.comisiones.push({
-			fechaPago 	: new Date(),
-			alumno_id 	: this.inscripcion.alumno_id,
-			grupo_id	: this.inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
-			vendedor_id	: vendedor._id,
-			gerente_id	: vendedor.profile.gerenteVenta_id,
-			status		: 1,
-			beneficiario : _comision.beneficiario,
-			importe 	: importe,
-			modulo		: _comision.modulo,
-			comision_id : _comision._id,
-			cuenta_id : this.cuentaInscripcion._id,
-			weekday : this.diaActual,
-			semanaPago: this.semanaPago
-		});
+	this.planPagosMensual=function() {
+		var fechaIncial=this.inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = this.inscripcion.planPagos.colegiatura.Mensual.diaColegiatura;
+		var totalPagos = this.inscripcion.planPagos.colegiatura.Mensual.totalPagos;
+		var mfecha = moment(fechaIncial);
+		mfecha=mfecha.date(dia);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		var dife=mfecha.diff(fechaIncial,'days');
+		if(Math.abs(dife)>15)
+			mfecha.add(1,'month');
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			mfecha.add(1,'month');
+		}
+		console.log(plan);
+		return plan;
 	}
-	
-	this.guardar = function(inscripcion)
-	{   
-		this.inscripcion.estatus = true;
-		/*_.each(inscripcion.conceptosSeleccionados, function(concepto){
-			delete concepto.$$hashKey;
-		})*/
-		console.log("hola")
-		quitarhk(inscripcion);
-		console.log(inscripcion);
-		this.pagosRealizados = [];
-		this.comisiones =[]
-
-		var grupo = Grupos.findOne(inscripcion.grupo_id);
-
-		//inscripcion.plan = grupo.plan;
-		var comisionColegiaturaObligatoria =0;
-		if(grupo.comisiones){
+	this.planPagosQuincenal=function() {
+		var fechaIncial=this.inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = this.inscripcion.planPagos.colegiatura.Quincenal.diaColegiatura;
+		var totalPagos = this.inscripcion.planPagos.colegiatura.Quincenal.totalPagos;
+		var mfecha = moment(fechaIncial);
+		var par =0;
+		mfecha=mfecha.date(dia[0]);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		var dife=mfecha.diff(fechaIncial,'days');
+		if(Math.abs(dife)>7){
+			mfecha=mfecha.date(dia[1]);
+			dife=mfecha.diff(fechaIncial,'days');
+			if(Math.abs(dife)>7)
+				mfecha.add(1,'month');
+			else
+				par=1;
+		}
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			if(par==1){
+				par = 0;
+				mfecha.add(1,'month');
+				mfecha.date(dia[par]);
+			}else{
+				par = 1;
+				//mfecha.add(1,'month');
+				mfecha.date(dia[par]);
+			}
+		}
+		console.log(plan);
+		return plan;
+	}
+	this.llenarPago=function(concepto,plan,tipoPlan){
+		this.pagosRealizados.push({
+						fechaPago 	: new Date(),
+						alumno_id 	: this.inscripcion.alumno_id,
+						grupo_id	: this.inscripcion.grupo_id,
+						seccion_id  : Meteor.user().profile.seccion_id,
+						campus_id 	: Meteor.user().profile.campus_id,
+						numero 		: plan.numeroPago,
+						semana 		: plan.semana,
+						anio 		: plan.anio,
+						estatus 	: 1,
+						concepto 	: concepto.nombre,
+						tipo 		: "Cobro",
+						usuario_id 	: Meteor.userId(),
+						importe 	: concepto.importe,
+						cuenta_id : tipoPlan == 'inscripcion' ? this.cuentaInscripcion._id:this.cuentaActiva._id,
+						weekday : this.diaActual,
+						semanaPago: this.semanaPago
+					});
+	}
+	this.calcularInscripcion=function(){
+		var tipo =this.inscripcion.planPagos.colegiatura.tipoColegiatura;
+		var conIns=this.inscripcion.planPagos.inscripcion;
+		this.inscripcion.totalPagar=0;
+		this.comisiones =[];
+		for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
+			var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
+			if(concepto.estatus)
+				this.inscripcion.totalPagar+=concepto.importe;
 			
-  			for(var ind in grupo.comisiones){
-  				var comision = grupo.comisiones[ind];
-  				console.log(comision);
-				if(comision && comision.activa && comision.prioridad=='Alta' && comision.modulo=='colegiatura'){
-	  				comisionColegiaturaObligatoria+=comision.importe;
-	  				console.log(comisionColegiaturaObligatoria)
-	  				this.llenarComision(comision,comision.importe);
-				}
-	  		}
-	  		
-	  		var rPagoInscripcion= parseFloat(inscripcion.importePagado)-comisionColegiaturaObligatoria;
-	  		for(var ind in grupo.comisiones){
-  				var comision = grupo.comisiones[ind];
-				if(comision && comision.activa && comision.prioridad=='Alta' && comision.modulo=='inscripcion'){
-	  				var rfPago =0;
-	  				if(rPagoInscripcion>=comision.importe){
-	  					rfPago=comision.importe;
-	  					rPagoInscripcion-=comision.importe;
-	  				}else{
-	  					rfPago= rPagoInscripcion;
-	  					rPagoInscripcion=0;
-	  				}
-	  				this.llenarComision(comision,rfPago);
-				}
-	  		}
-	  		for(var ind in grupo.comisiones){
-  				var comision = grupo.comisiones[ind];
-				if(comision && comision.activa && comision.prioridad=='Media' && comision.modulo=='inscripcion'){
-	  				var rfPago =0;
-	  				if(rPagoInscripcion>=comision.importe){
-	  					rfPago=comision.importe;
-	  					rPagoInscripcion-=comision.importe;
-	  				}else{
-	  					rfPago= rPagoInscripcion;
-	  					rPagoInscripcion=0;
-	  				}
-	  				this.llenarComision(comision,rfPago);
-				}
-	  		}
-	  		for(var ind in grupo.comisiones){
-  				var comision = grupo.comisiones[ind];
-				if(comision && comision.activa && comision.prioridad=='Baja' && comision.modulo=='inscripcion'){
-	  				var rfPago =0;
-	  				if(rPagoInscripcion>=comision.importe){
-	  					rfPago=comision.importe;
-	  					rPagoInscripcion-=comision.importe;
-	  				}else{
-	  					rfPago= rPagoInscripcion;
-	  					rPagoInscripcion=0;
-	  				}
-	  				this.llenarComision(comision,rfPago);
-				}
-	  		}
-	  	}
-
-
-		inscripcion.campus_id=Meteor.user().profile.campus_id;
-		//inscripcion.seccion_id = Meteor.user().profile.seccion_id;
-
-		
-		for (var i in inscripcion.plan) {
-			var _periodo = inscripcion.plan[i];
-			var totIns =inscripcion.totalPagar-comisionColegiaturaObligatoria;
-			var abonon = (parseFloat(inscripcion.importePagado)-inscripcion.totalPagar )>0? (parseFloat(inscripcion.importePagado)-inscripcion.totalPagar ):0;
-			abonon = this.inscripcion.quiereAbonar? abonon:0;
-
-			//console.log(_periodo);
-			if(_periodo.tipoPlan=='inscripcion' && this.periodoVisible(_periodo)==true){
-				_periodo.pago= parseFloat(inscripcion.importePagado)-comisionColegiaturaObligatoria;	
-				//console.log(_periodo.pago)
-				if(totIns<=_periodo.pago
-					&& _periodo.planPago && _periodo.planPago instanceof Array){
-					_periodo.planPago[0].pago= totIns;	
-					_periodo.planPago[0].pagada =1;
-					for (var conceptoid in  _periodo.datos) {
-						var concepto = _periodo.datos[conceptoid]
-						console.log(concepto.nombre)
-						this.llenarPago(concepto,_periodo.planPago[0],_periodo.tipoPlan);
-						
-					}
-
-				}
-				else if( _periodo.planPago && _periodo.planPago instanceof Array){
-					_periodo.planPago[0].pago= _periodo.pago	
-					_periodo.planPago[0].faltante= inscripcion.totalPagar-_periodo.pago	
-					_periodo.planPago[0].pagada =6;
-					this.llenarPago({nombre:'Abono a inscripcion',importe:_periodo.pago,procedimientos:[]},_periodo.planPago[0],_periodo.tipoPlan);
-
-
-				}
-				//break;
-			}
-			if((comisionColegiaturaObligatoria+abonon)>0 && _periodo.tipoPlan=='colegiatura' && this.periodoVisible(_periodo)==true){
-				var resta = comisionColegiaturaObligatoria+abonon;
-				var valorColegiatura =0;
-				for(var j in _periodo.datos){
-					var datoColegiatura = _periodo.datos[j];
-					if (datoColegiatura.activa && datoColegiatura.estatus==1) {
-						valorColegiatura+=datoColegiatura.importe;
-					}
-				}
-				for (var j = 0; resta>0 && j < _periodo.planPago.length; j++) {
-					var pago = _periodo.planPago[j];
-					var fechaPago = new Date(pago.fecha);
-					
-					if(fechaPago>this.inscripcion.fechaInscripcion){
-						pago.pagada= (valorColegiatura<=resta)? 1:6;
-						pago.faltante = (valorColegiatura<=resta)? 0: valorColegiatura-resta;
-						pago.pago = (valorColegiatura>=resta)? valorColegiatura: resta;
-						for(var k in _periodo.datos){
-							var concepto = _periodo.datos[k];
-							this.llenarPago(concepto,pago,_periodo.tipoPlan);
-						}
-						if(resta>valorColegiatura){
-							resta-=valorColegiatura;
-						}
-						else{
-							resta =0;
-						}
-
-					}
-					else{
-						pago.pagada=5;
-					}
-					//console.log()
-				}
+		}
+		this.comisionObligada=0;
+		for(var conceptoid in this.inscripcion.planPagos.conceptosComision){
+			var concepto = this.inscripcion.planPagos.conceptosComision[conceptoid];
+			if(concepto.estatus && concepto.prioridad=='Alta'){
+				this.inscripcion.totalPagar+=concepto.importe;
+				this.comisionObligada+=concepto.importe;
+				this.llenarComision(concepto,concepto.importe);
 			}
 		}
+		var resto = this.inscripcion.totalPagar- this.comisionObligada;
+		for(var i=0;resto>0,i<this.inscripcion.planPagos.conceptosComision.length;i++){
+			var concepto = this.inscripcion.planPagos.conceptosComision[i];
+			if(concepto.status && concepto.prioridad!='Alta'){
+				if(concepto.importe>resto)
+					this.llenarComision(concepto,resto);
+				else
+					this.llenarComision(concepto,concepto.importe);
+				resto-=concepto.importe;
+			}
+		}
+		var comisionO = this.comisionObligada;
+		this.pagosRealizados=[];
+		for (var i =0;comisionO>0 && i<this.inscripcion.planPagos.fechas.length;i++) {
+			var pago = this.inscripcion.planPagos.fechas[i];
+			var concepto = this.inscripcion.planPagos.colegiatura[this.inscripcion.planPagos.colegiatura.tipoColegiatura];
+			if(concepto.importeRegular<=comisionO){
+				pago.pagada=1;
+				pago.pago=concepto.importeRegular;
+				for(var j in concepto.conceptos){
+					this.llenarPago(concepto.conceptos[j],pago,'colegiatura');
+				}
+				comisionO-=concepto.importeRegular;
+			}
+			else{
+				pago.pagada=3;
+				pago.pago=comisionO;
+				this.llenarPago({nombre:'Abono Colegiatura',importe:comisionO},pago,'colegiatura');
+				comisionO=0;
+			}
+		};
+		if((this.inscripcion.importePagado-this.comisionObligada)>=this.inscripcion.planPagos.inscripcion.importeRegular)
+		{
+			this.inscripcion.planPagos.inscripcion.pagada=1;
+			this.inscripcion.planPagos.inscripcion.pago=this.inscripcion.planPagos.inscripcion.importeRegular;
+			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaIncial);
+			this.llenarPago({nombre:'inscripcion',importe:this.inscripcion.planPagos.inscripcion.importeRegular},
+				{numeroPago:1,semana:frg.isoWeek(),anio:frg.get("year")},'inscripcion');
+		}else{
+			this.inscripcion.planPagos.inscripcion.pagada=3;
+			this.inscripcion.planPagos.inscripcion.pago=(this.inscripcion.importePagado-this.comisionObligada);
+			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaIncial);
+			this.llenarPago({nombre:'Abono de inscripcion',importe:this.inscripcion.planPagos.inscripcion.pago},
+				{numeroPago:1,semana:frg.isoWeek(),anio:frg.get("year")},'inscripcion');
+		}		
+		console.log(this.inscripcion);
+	}
 
-		//inscripcion.planPagoInscripcion.pago = parseFloat(inscripcion.importePagado);
+	this.hayCupo = function(grupo_id){
+		var grupo = Grupos.findOne(grupo_id);
+		var planEstudios = PlanesEstudios.findOne(grupo.planEstudios_id);
 
+		this.inscripcion.planPagos={inscripcion:grupo.inscripcion,colegiatura:grupo.colegiatura};
+		this.inscripcion.planPagos.colegiatura.fechaIncial=grupo.fecha;
+		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos=planEstudios.semanas;
+		var _inscripcion = this.inscripcion.planPagos.inscripcion;
+		_inscripcion.importeRegular =0;
+		for(var sid in _inscripcion.conceptos){
+
+			var _concepto = _inscripcion.conceptos[sid];
+			//console.log('inscripcion',_concepto)
+			if(_concepto.estatus){
+				//console.log('inscripcion',_concepto)
+				_inscripcion.importeRegular += _concepto.importe;
+			}
+		}
+		console.log(_inscripcion);
+
+		var semanal = this.inscripcion.planPagos.colegiatura.Semanal;
+		semanal.importeRegular =0;
+		for(var sid in semanal.conceptos){
+			var concepto = semanal.conceptos[sid];
+			if(concepto.estatus)
+				semanal.importeRegular += concepto.importe;
+		}
+		this.inscripcion.planPagos.colegiatura.Quincenal.totalPagos=planEstudios.quincenas;
+		var quincenal = this.inscripcion.planPagos.colegiatura.Quincenal;
+		quincenal.importeRegular =0;
+		for(var sid in quincenal.conceptos){
+			var concepto = quincenal.conceptos[sid];
+			if(concepto.estatus)
+				quincenal.importeRegular += concepto.importe;
+		}
+		this.inscripcion.planPagos.colegiatura.Mensual.totalPagos=planEstudios.meses;
+		var mensual = this.inscripcion.planPagos.colegiatura.Mensual;
+		mensual.importeRegular =0;
+		for(var sid in mensual.conceptos){
+			var concepto = mensual.conceptos[sid];
+			if(concepto.estatus)
+				mensual.importeRegular += concepto.importe;
+		}
+		this.inscripcion.planPagos.conceptosComision = grupo.conceptosComision;
 		
-		
 
+		console.log(this.inscripcion);
+		if(grupo.inscritos < grupo.cupo){
+			this.cupo = "check";
+		}else{
+			this.cupo = "remove";
+		}
+	}
+	this.cuantoPaga = function(importe){
+		if(importe>this.inscripcion.totalPagar)
+			this.inscripcion.cambio = parseFloat(importe) - parseFloat(this.inscripcion.totalPagar);
+		else 
+			this.inscripcion.cambio =0;
+		this.calcularInscripcion();
+	}
+
+	this.cambioTipoColegiatura = function  (value) {
+		console.log(value);
+		
+		if(value=='Semanal')
+			this.inscripcion.planPagos.fechas=this.planPagosSemana()
+		if(value=='Quincenal')
+			this.inscripcion.planPagos.fechas=this.planPagosQuincenal()
+		if(value=='Mensual')
+			this.inscripcion.planPagos.fechas=this.planPagosMensual()
+		this.calcularInscripcion();
+		console.log(this.inscripcion);
+	}
+	this.guardar=function  (inscripcion) {
+		var grupo = Grupos.findOne(inscripcion.grupo_id);
 		Inscripciones.insert(inscripcion);
 		//var grupo = Grupos.findOne(inscripcion.grupo_id);
 		console.log(grupo);
@@ -382,160 +380,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		delete grupo._id;
 		Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
 		toastr.success('Alumno Inscrito');
-		$state.go("root.inscripciones");
+		
 		for (var i = 0; i < this.pagosRealizados.length; i++) {
 			Pagos.insert(this.pagosRealizados[i]);
 		}
 		for (var i = 0; i < this.comisiones.length; i++) {
 			Comisiones.insert(this.comisiones[i]);
 		}
+		$state.go("root.inscripciones");
 		console.log(this.inscripcion);
 		console.log(this.pagosRealizados)
 		console.log(this.comisiones)
-	};
-
-	this.calcularImporteU= function(datos,pago,tipoPlan){
-		//console.log(datos,pago)
-		//console.log(this.inscripcion);
-		if(datos && datos.activa==false)
-			return 0;
-		var fechaActual = this.inscripcion.fechaInscripcion;
-  		var fechaCobro = new Date(pago.fecha);
-  		//console.log(fechaActual,fechaCobro);
-  		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
-  		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24)); 
-  		var importe = datos.importe;
-  		//console.log(diasRecargo,diasDescuento);
-  		for (var i = 0; datos.procedimientos && i < datos.procedimientos.length; i++) {
-  			console.log(importe);
-  			if(datos.procedimientos[i].tipoProcedimiento == 'Recargo' && tipoPlan=='inscripcion' && diasRecargo >=datos.procedimientos[i].dias ){
-  			//	console.log('Recargo');
-  				importe+=datos.procedimientos[i].monto;
-  			}
-  			if(datos.procedimientos[i].tipoProcedimiento == 'Descuento' && tipoPlan=='inscripcion' && diasDescuento >=datos.procedimientos[i].dias){
-  			//	console.log('Descuento');
-  				importe-=datos.procedimientos[i].monto;
-  			}
-  		};
-  		return importe
-	}	
-
-	this.calcularImporte=function(concepto){
-		console.log("calcular importe");
-		console.log(concepto);
-		var grupoid = this.getReactively("inscripcion.grupo_id");
-	  	var tipoInsc = this.getReactively("inscripcion.tipoInscripcion");
-	  	var grupo = undefined;
-	  	if(grupoid)
-			grupo = Grupos.findOne(grupoid);
-		//console.log(grupo);
-	  	if(grupo && grupo.plan ){
-	  		this.inscripcion.totalPagar = 0;
-	  		if(!this.inscripcion.plan || this.inscripcion.plan.grupo_id!=grupo._id){
-	  			this.inscripcion.plan = grupo.plan;
-	  			this.inscripcion.plan.grupo_id=grupo._id
-	  		}
-	  		
-	  		var _periodo = null;
-	  		for(var ind in this.inscripcion.plan){
-	  			if(this.inscripcion.plan[ind] && ind == tipoInsc){
-	  				_periodo = this.inscripcion.plan[ind];
-	  				break;
-	  			}
-	  		}
-	  		if(grupo.comisiones){
-	  			for(var ind in grupo.comisiones){
-	  				var comision = grupo.comisiones[ind];
-	  				if(comision && comision.activa && comision.prioridad=='Alta' && comision.modulo=='colegiatura')
-	  					this.inscripcion.totalPagar+=comision.importe;
-	  			}
-	  		}
-	  		 
-	  		//console.log(_periodo);
-	  		for (var j = 0; _periodo && j < _periodo.datos.length; j++) {
-	  			this.inscripcion.totalPagar+=this.calcularImporteU(_periodo.datos[j],_periodo.planPago[0],_periodo.tipoPlan);
-
-	  		}
-	  		/*if(_periodo.tipoPlan=='inscripcion'){
-	  				for (var j = 0; j < _periodo.datos.length; j++) {
-	  					this.inscripcion.totalPagar+=_periodo.datos[j].importe
-	  				}
-	  				break;
-	  		}*/
-
-	  	}
-	}
-
-	this.autorun(() => {
-	  	this.calcularImporte();
-			
-		
-  	});
-	
-	//Conceptos de cobro
-  
-  /*this.seleccionarConcepto = function(concepto) {	  
-	  var idx = this.inscripcion.conceptosSeleccionados.indexOf(concepto);
-  
-    if (idx > -1) {
-	    this.inscripcion.totalPagar -= parseFloat(concepto.importe);
-      this.inscripcion.conceptosSeleccionados.splice(idx, 1);
-    }
-    else {
-	    this.inscripcion.totalPagar += parseFloat(concepto.importe);
-      this.inscripcion.conceptosSeleccionados.push(concepto);
-    }
-  };*/
-
-	this.cuantoPaga = function(importe){
-		if(importe>this.inscripcion.totalPagar)
-			this.inscripcion.cambio = parseFloat(importe) - parseFloat(this.inscripcion.totalPagar);
-		else 
-			this.inscripcion.cambio =0;
-	}
-	
-  	this.getAlumnoSeleccionado= function(id)
-	{
-		var alumno = Alumnos.findOne(id);
-		if(alumno){
-			this.alumnoSeleccionado = alumno;
-			this.alumnoSeleccionado.activo = true;
-		}
-	};	
-	
-	this.getCiclo= function(ciclo_id)
-	{
-		var ciclo = Ciclos.findOne(ciclo_id);
-		if(ciclo)
-		return ciclo.descripcion;
-	};	
-	
-	this.hayCupo = function(grupo_id){
-		var grupo = Grupos.findOne(grupo_id);
-		if(grupo.inscritos <= grupo.cupo){
-			this.cupo = "check";
-		}else{
-			this.cupo = "remove";
-		}
-	}
-	
-	this.getGrupos = function(seccion_id, alumno_id){
-		var inscrito = Inscripciones.findOne({seccion_id : seccion_id, alumno_id : alumno_id});
-		if(!inscrito){
-			toastr.success('El alumno puede inscribirse');
-			rc.grupos = Grupos.find({seccion_id : seccion_id, estatus : true}).fetch();
-		}else{
-			toastr.error('Este alumno ya está inscrito en esta Sección');
-		}
-	}	
-	
-	this.dejoAbono = function(){
-		if(this.inscripcion.quiereAbonar){
-			rc.inscripcion.abono = rc.inscripcion.cambio;
-			rc.inscripcion.cambio = 0.00;
-		}else{
-			rc.inscripcion.cambio = rc.inscripcion.abono;
-			rc.inscripcion.abono = 0.00;
-		}
 	}
 };

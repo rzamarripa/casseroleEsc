@@ -40,9 +40,6 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 		  estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 	  }]
   });
-  rc.subscribe('generaciones',()=>{
-		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
-	 });
 
 
   
@@ -62,9 +59,7 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	  ciclos : () => {
 		  return Ciclos.find();
 	  },
-	  generaciones : () => {
-		  return Generaciones.find();
-	  },
+	  
 	  rvoes : () => {
 		  return Rvoe.find();
 	  },
