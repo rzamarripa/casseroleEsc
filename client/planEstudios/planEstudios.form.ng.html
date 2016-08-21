@@ -64,15 +64,23 @@
 					    <label for="grado">Grados *</label>
 					    <input name="grados" type="number" class="form-control" min="0" ng-model="pl.plan.grado" required="">
 			    	</div>
-						<div class="col-sm-4">
-							<label for="seccion_id">Generación *</label>
-							<select class="form-control select2" placeholder="Seleccione" ng-model="pl.plan.generacion_id" required="">
-								<option ng-repeat="generacion in pl.generaciones" value="{{generacion._id}}">{{generacion.nombre}}</option>
-							</select>
-						</div>
 						
+					<div class="col-sm-4" valida>
+					    <label for="semanas">Semanas de Duracion *</label>
+					    <input name="semanas" type="number" class="form-control" min="0" ng-model="pl.plan.semanas" required="">
+			    	</div>
 						
 			    </div>
+			     <div class="row">
+			     	<div class="col-sm-4" valida>
+					    	<label for="quincenas">Quincenas de Duracion *</label>
+					    	<input name="quincenas" type="number" class="form-control" min="0" ng-model="pl.plan.quincenas" required="">
+			    		</div>
+			    		<div class="col-sm-4" valida>
+					    	<label for="meses">Meses de Duracion *</label>
+					    	<input name="meses" type="number" class="form-control" min="0" ng-model="pl.plan.meses" required="">
+			    		</div>
+			     </div>
 			</div>
 			<div class="well">
 				<div class="row">
@@ -116,8 +124,8 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
-					<input type="submit" ng-click="pl.guardar(pl.plan,form)"  class="btn btn-primary" ng-show="pl.action" valida-form formulario="form">
-					<input type="submit" ng-click="pl.actualizar(pl.plan,form)"  class="btn btn-primary" ng-show="!pl.action" valida-form formulario="form">				
+					<input type="submit" ng-click="pl.guardar(pl.plan,form)"  class="btn btn-primary" ng-show="pl.action" value="Guardar" valida-form formulario="form">
+					<input type="submit" ng-click="pl.actualizar(pl.plan,form)"  class="btn btn-primary" ng-show="!pl.action" value="Actualizar" valida-form formulario="form">				
 				</div>
 			</div>	  
 		</form>

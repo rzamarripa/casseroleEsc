@@ -42,6 +42,10 @@ angular.module("casserole")
 			subCiclo_id : {$in : this.getCollectionReactively('subCiclos_ids')},seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
 	});
+
+	rc.subscribe('planesEstudios',function(){
+  		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
+	});
 	
 	this.subscribe('ciclos',()=>{
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
@@ -59,6 +63,9 @@ angular.module("casserole")
 		grupo : () => {
 			return Grupos.findOne($stateParams.id);
 		},
+		planes : () => {
+		  	return PlanesEstudios.find();
+	  	},
 	  grupos : () => {
 		  _grupos = Grupos.find().fetch();
 		  if(_grupos != undefined){

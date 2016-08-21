@@ -70,7 +70,7 @@
 															<select name="alumno" class="form-control" placeholder="Seleccione" 
 																ng-model="ins.inscripcion.alumno_id" ng-change="ins.getAlumnoSeleccionado(ins.inscripcion.alumno_id)" required="">
 															  <option  value="{{alumno._id}}" ng-repeat="alumno in ins.alumnos">
-															  	{{alumno.nombre}} {{alumno.apPaterno}} {{alumno.apMaterno}}
+															  	{{alumno.profile.nombre}} {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}
 															  </option>
 															</select>
 															
@@ -205,14 +205,7 @@
 															  </h1>
 														  </div>															  
 														</div>
-														<div class="col-sm-8">
-															<label>Generación *</label>
-															<select name="generacion" class="form-control" placeholder="Seleccione" ng-model="ins.inscripcion.generacion_id" required="">
-															  <option value="{{generacion._id}}" ng-repeat="generacion in ins.generaciones">
-															  	{{generacion.nombre}}
-															  </option>
-															</select>
-														</div>
+														
 														
 											  	</div>
 										  	</div>	
@@ -223,35 +216,39 @@
 										<br>
 										<h3><strong>Paso 4</strong> - Cobros Iniciales</h3>
 										<div class="well">	 
-									  		<div class="panel panel-default">
-												<div class="panel-heading">Tipo de inscripción</div>
-												<div class="panel-body">
-													<div ng-repeat="(nombre, plan) in ins.inscripcion.plan">
-														<label  ng-if="plan.tipoPlan=='inscripcion'"> 
-													  		<input type="radio" name="rbInscripcion" ng-model="ins.inscripcion.tipoInscripcion" ng-value="nombre">
-													  		{{nombre}}
-													  		<div class="row" ng-show="nombre==ins.inscripcion.tipoInscripcion" ng-repeat="concepto in plan.datos">
-													  			<div class="col-sm-12">
-													  				<label > 
-														  				<input type="checkbox" ng-model="concepto.activa" ng-change="ins.calcularImporte(concepto)">
-														  				{{concepto.nombre}}
-														  			</label>
-													  			</div>
-													  		</div>
-													  	</label>	  		
-													</div>
-												</div>
-											</div>
+									  		
 											<div class="panel panel-default">
 												<div class="panel-heading">Tipo de Colegiatura</div>
 												<div class="panel-body">
-													<div  ng-repeat="(nombre, plan) in ins.inscripcion.plan" ng-if="plan.tipoPlan=='colegiatura' && ins.periodoVisible(plan)">
+													<div  >
 													  	<label> 
-													  		<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.tipoColegiatura"  ng-value="nombre">
-													  		{{nombre}}
-													  		<div ng-show="nombre==ins.tipoColegiatura">
-													  			<p>Total de pagos: {{plan.planPago.length}} </p>
-													  			<p ng-repeat="concepto in plan.datos">Cuota de {{concepto.nombre}}: {{concepto.importe}} </p>
+													  		<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.planPagos.colegiatura.tipoColegiatura"  value="Semanal"  ng-change='ins.cambioTipoColegiatura("Semanal")'>
+													  		Semanal
+													  		<div >
+													  			<p>Total de pagos: {{ins.inscripcion.planPagos.colegiatura.Semanal.totalPagos}} </p>
+													  			<p ng-repeat="concepto in ins.inscripcion.planPagos.colegiatura.Semanal.conceptos">Cuota de {{concepto.nombre}}: {{concepto.importe}} </p>
+													  												  			
+													  		</div>
+													  	</label>	  		
+													</div>
+													<div  >
+													  	<label> 
+													  		<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.planPagos.colegiatura.tipoColegiatura"  value="Quincenal"  ng-change='ins.cambioTipoColegiatura("Quincenal")'>
+													  		Quincenal
+													  		<div >
+													  			<p>Total de pagos: {{ins.inscripcion.planPagos.colegiatura.Quincenal.totalPagos}} </p>
+													  			<p ng-repeat="concepto in ins.inscripcion.planPagos.colegiatura.Quincenal.conceptos">Cuota de {{concepto.nombre}}: {{concepto.importe}} </p>
+													  												  			
+													  		</div>
+													  	</label>	  		
+													</div>
+													<div  >
+													  	<label> 
+													  		<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.planPagos.colegiatura.tipoColegiatura"  value="Mensual"  ng-change='ins.cambioTipoColegiatura("Mensual")'>
+													  		Mensual
+													  		<div >
+													  			<p>Total de pagos: {{ins.inscripcion.planPagos.colegiatura.Mensual.totalPagos}} </p>
+													  			<p ng-repeat="concepto in ins.inscripcion.planPagos.colegiatura.Mensual.conceptos">Cuota de {{concepto.nombre}}: {{concepto.importe}} </p>
 													  												  			
 													  		</div>
 													  	</label>	  		
@@ -279,23 +276,13 @@
 												<div class="row">
 													<div class="col-sm-12">
 														<label>Cuánto paga</label>
-														<input type="text" class="form-control" ng-model="ins.inscripcion.importePagado" ng-change="ins.cuantoPaga(ins.inscripcion.importePagado)"/>
+														<input type="number" class="form-control" ng-model="ins.inscripcion.importePagado" ng-change="ins.cuantoPaga(ins.inscripcion.importePagado)" min="{{ ins.comisionObligada }}"/>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-12">
 														<label>Cambio</label>
-														<input type="text" class="form-control" ng-model="ins.inscripcion.cambio"/>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-sm-4">
-														<label>Quieres abonarlo?</label>
-														<input type="checkbox" class="form-control" ng-change="ins.dejoAbono()" ng-model="ins.inscripcion.quiereAbonar"/>
-													</div>
-													<div class="col-sm-8">
-														<label>Abono</label>
-														<input type="text" class="form-control" ng-model="ins.inscripcion.abono"/>
+														<input type="number" class="form-control" ng-model="ins.inscripcion.cambio"/>
 													</div>
 												</div>
 												
