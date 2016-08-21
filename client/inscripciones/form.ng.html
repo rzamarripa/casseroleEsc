@@ -216,7 +216,18 @@
 										<br>
 										<h3><strong>Paso 4</strong> - Cobros Iniciales</h3>
 										<div class="well">	 
-									  		
+									  <div class="panel panel-default">
+												<div class="panel-heading">Conceptos de Inscripcion</div>
+												<div class="panel-body">
+													<label ng-repeat="concepto in ins.inscripcion.planPagos.inscripcion.conceptos">
+														
+														<input type="checkbox" ng-model="concepto.estatus" ng-change="ins.cambiarConceptosInscripcion()" >
+														{{concepto.nombre}}: {{concepto.importe}}
+													</label>
+												</div>
+											</div>
+
+													
 											<div class="panel panel-default">
 												<div class="panel-heading">Tipo de Colegiatura</div>
 												<div class="panel-body">

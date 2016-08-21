@@ -373,6 +373,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 	this.guardar=function  (inscripcion) {
 		var grupo = Grupos.findOne(inscripcion.grupo_id);
+		inscripcion.planEstudios_id=grupo.planEstudios_id;
 		Inscripciones.insert(inscripcion);
 		//var grupo = Grupos.findOne(inscripcion.grupo_id);
 		console.log(grupo);
@@ -391,5 +392,12 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		console.log(this.inscripcion);
 		console.log(this.pagosRealizados)
 		console.log(this.comisiones)
+	}
+	this.cambiarConceptosInscripcion=function  (argument) {
+		try{
+			this.calcularInscripcion();
+		}catch(e){
+
+		}
 	}
 };
