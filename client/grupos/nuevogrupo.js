@@ -65,10 +65,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 					this.grupo.inscripcion={
 						recargo : 0,
 						importeRecargo : 0,
-						diasRecargo : 5,
+						diasRecargo : 7,
 						descuento : 0,
 						importeDescuento : 0,
-						diasDescuento : 5
+						diasDescuento : 7
 					}
 				if(!this.grupo.inscripcion.conceptos)
 					this.grupo.inscripcion.conceptos={};
@@ -82,10 +82,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 						this.grupo.colegiatura[col]={
 							recargo : 0,
 							importeRecargo : 0,
-							diasRecargo : 5,
+							diasRecargo : 7,
 							descuento : 0,
 							importeDescuento : 0,
-							diasDescuento : 5,
+							diasDescuento : 7,
 							conceptos : {}
 						}
 					}
@@ -121,7 +121,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 
 					}
 				}
-				console.log(this.grupo);
+				console.log("grupo", this.grupo);
 			}
 		}
 	);	

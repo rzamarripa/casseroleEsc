@@ -16,7 +16,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	this.subscribe('alumnos',()=>{
-		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+		return [{"profile.estatus":true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
 	this.subscribe("grupos", () => {
 		return [{
@@ -66,7 +66,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    }
 	  	var a=Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
-	  	var alumnos 	= Alumnos.find().fetch();
+	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
 	    var grupos 		= Grupos.find().fetch();
 	    var secciones = Secciones.find().fetch();
 	    var ciclos	 	= Ciclos.find().fetch();
@@ -76,7 +76,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
 	      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);
 	      inscripcion.ciclo = findInCollection(ciclos, inscripcion.ciclo_id);
-	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.planEstudio_id);
+	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.grupo.planEstudios_id);
 	    });
 	    console.log(_inscripciones);
 	    

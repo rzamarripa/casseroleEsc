@@ -33,10 +33,9 @@
 			</thead>
 			<tbody>				
 				<tr ng-repeat="_inscripcion in ins.inscripciones" >
-					
-					<td>{{_inscripcion.alumno.matricula}}</td>
-					<td><a href="./alumnos/{{_inscripcion.alumno_id}}">{{_inscripcion.alumno.nombre}} {{_inscripcion.alumno.apPaterno}} {{_inscripcion.alumno.apMaterno}}</a></td>
-					<td>{{_inscripcion.ciclo.descripcion}}</td>
+					<td>{{_inscripcion.alumno.profile.matricula}}</td>
+					<td><a href="./alumnos/{{_inscripcion.alumno_id}}">{{_inscripcion.alumno.profile.nombreCompleto}}</a></td>
+					<td>{{_inscripcion.ciclo.nombre}}</td>
 					<td>{{_inscripcion.seccion.descripcion}}</td>
 					<td><a href="./gruposDetalle/{{_inscripcion.grupo_id}}">{{_inscripcion.grupo.nombre}}</a></td>
 					<td>{{_inscripcion.planEstudio.descripcion}}</td>
