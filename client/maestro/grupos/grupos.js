@@ -72,7 +72,7 @@ angular
 	       	else
 	       		rc.alumnos_id = alumnos_id;
 			     	_.each(inscripciones,function(inscripcion){
-			        var alumno = Alumnos.findOne({_id:inscripcion.alumno_id});
+			        var alumno = Meteor.users.findOne({_id:inscripcion.alumno_id});
 			        mmg.alumnos.push(alumno);
 			      });
 				});

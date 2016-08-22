@@ -26,7 +26,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }];
 	 });
   this.subscribe("horarios",()=>{
-		return [{_id : $stateParams.id}];
+		return [{estatus : true}];
 	 });
   this.subscribe("aulas",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
@@ -78,7 +78,8 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 		clase.end 		= moment(clase.end).format("YYYY-MM-DD HH:mm");
 	  rc.horario.clases.push(clase);
 	  rc.horario.semana = moment(clase.start).isoWeek();
-	  rc.clase 	= {};
+	  rc.clase = angular.copy(rc.clase);
+	  rc.clase._id += 1;
   }
   
   this.cancelarClase = function(){
@@ -94,15 +95,12 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   }
 
   this.modificarClase = function(clase,form2){
-	  console.log(clase);
-	  console.log(this.horario.clases);
-	  
 	  _.each(this.horario.clases, function(claseActual){
 		  console.log("entre", clase);
 		  if(claseActual._id == clase._id){
-			  var materia = $meteor.object(Materias, clase.materia_id, false);
-				var maestro = $meteor.object(Maestros, clase.maestro_id, false);
-				var aula 		= $meteor.object(Aulas, clase.aula_id, false);
+			  var materia = Materias.findOne(Materias, clase.materia_id);
+				var maestro = Maestros.findOne(Maestros, clase.maestro_id);
+				var aula 		= Aulas.findOne(Aulas, clase.aula_id);
 			  clase.materia = materia.nombreCorto;
 			  clase.title = maestro.nombre + " " + maestro.apPaterno + "\n" + materia.nombreCorto + "\n" + aula.nombre;
 			  clase.maestro = maestro.nombre + " " + maestro.apPaterno;
@@ -113,7 +111,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 			  claseCopy 	= clase;				
 				claseCopy 	= angular.copy(clase);
 				claseActual.title 	= claseCopy.title;
-				claseActual.id 			= claseCopy.id;
+				claseActual._id 			= claseCopy._id;
 				claseActual.materia_id = claseCopy.materia_id;
 				claseActual.maestro_id = claseCopy.maestro_id;
 				claseActual.className = claseCopy.className;
@@ -126,7 +124,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 			  claseActual.estatus = true;
 		  }
 	  });
-	  rc.clase = {};
+	  rc.clase = angular.copy(rc.clase);
 	  rc.actionAgregar = true;
 	  eliminarTemporalesOcupados();
   }
@@ -181,6 +179,8 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   }
   
   this.alertOnEventClick = function(date, jsEvent, view){
+	  console.log("date", date);
+	  console.log("clases", rc.horario.clases);
 	  
 	  eliminarTemporalesOcupados();
 	  rc.clase = angular.copy(date);

@@ -30,12 +30,12 @@
 	            <div class="card hovercard">
 	                <div class="cardheader"></div>
 	                <div class="avatar">
-	                  <img ng-src="{{masgrupo.tieneFoto(alumno.sexo, alumno.fotografia)}}" class="img-responsive img-thumbnail">
+	                  <img ng-src="{{masgrupo.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="img-responsive img-thumbnail">
 	                </div>
 	                <div class="info">
-	                  <h3>
-	                    <a target="_blank" href="/alumno/{{alumno._id}}">{{alumno.nombre}} {{alumno.apPaterno}}</a>
-	                  </h3>
+	                  <p>
+	                    <a target="_blank" href="/alumno/{{alumno._id}}">{{alumno.profile.nombre}} {{alumno.profile.apPaterno}}</a>
+	                  </p>
 	                </div>
 	            </div>			
 						</div>	

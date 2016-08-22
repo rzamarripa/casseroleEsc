@@ -17,38 +17,38 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 
 
 	this.subscribe('grupos', () => 
-		{
-			return [{
-				_id : $stateParams.id,
-				estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
-			}];
-		}, 
-		{
-			onReady:function(){
-				rc.grupo = Grupos.findOne({_id:$stateParams.id});
-			}
-		});
+	{
+		return [{
+			_id : $stateParams.id,
+			estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+		}];
+	}, 
+	{
+		onReady:function(){
+			rc.grupo = Grupos.findOne({_id:$stateParams.id});
+		}
+	});
 			
-
+	this.subscribe('horarios',()=>{
+			return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+		}
+	);
 			
-			
-			
-			 
-			
-			 
-		
 	this.subscribe('planesEstudios',function(){
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
-	});	
+	});
+	
 	this.subscribe('ciclos', () => {
 		return [{
 			estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}];
 	});
+	
 	this.subscribe('conceptosComision',()=>{
 			return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 		}
 	);
+	
 	this.subscribe('conceptosPago', () => {
 			return [{
 				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
@@ -124,75 +124,75 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 				console.log("grupo", this.grupo);
 			}
 		}
-	);	
+	);
+	
 	this.subscribe('turnos',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	 });
+	});
 	
 	this.subscribe('maestros',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	 });
+	});
 
 	this.helpers({
-	subCiclosAcademicos : () => {
-		return SubCiclos.find({ciclo_id : this.getReactively("grupo.ciclo_id"), tipo : "Academico"});
-	},
-	subCiclosAdministrativos : () => {
-		return SubCiclos.find({ciclo_id : this.getReactively("grupo.ciclo_id"), tipo : "Administrativo"});
-	},
-	periodosAcademicos : () => {
-		return Periodos.find({subCiclo_id : this.getReactively("grupo.subCicloAcademico_id")});
-	},
-	periodosAdministrativos : () => {
-		return Periodos.find({subCiclo_id : this.getReactively("grupo.subCicloAdministrativo_id")});
-	},
-	planes : () => {
-			return PlanesEstudios.find();
+		subCiclosAcademicos : () => {
+			return SubCiclos.find({ciclo_id : this.getReactively("grupo.ciclo_id"), tipo : "Academico"});
 		},
-	grupos : () => {
-		return Grupos.findOne();
-	},
-	secciones : () => {
-		rc.grados = [];
-			var seccionSeleccionada = Secciones.findOne();
-			for(var i = 1; seccionSeleccionada && i <= seccionSeleccionada.grados; i++ ){
-				rc.grados.push(i);
-			}
-		return Secciones.findOne();
-	},
-	ciclos : () => {
-		return Ciclos.find();
-	},
-	tiposColegiatura : () =>{
-		return ['Semanal','Quincenal','Mensual'];
-	},
-	conceptosInscripcion : () => {
+		subCiclosAdministrativos : () => {
+			return SubCiclos.find({ciclo_id : this.getReactively("grupo.ciclo_id"), tipo : "Administrativo"});
+		},
+		periodosAcademicos : () => {
+			return Periodos.find({subCiclo_id : this.getReactively("grupo.subCicloAcademico_id")});
+		},
+		periodosAdministrativos : () => {
+			return Periodos.find({subCiclo_id : this.getReactively("grupo.subCicloAdministrativo_id")});
+		},
+		planes : () => {
+				return PlanesEstudios.find();
+			},
+		grupos : () => {
+			return Grupos.findOne();
+		},
+		secciones : () => {
+			rc.grados = [];
+				var seccionSeleccionada = Secciones.findOne();
+				for(var i = 1; seccionSeleccionada && i <= seccionSeleccionada.grados; i++ ){
+					rc.grados.push(i);
+				}
+			return Secciones.findOne();
+		},
+		ciclos : () => {
+			return Ciclos.find();
+		},
+		tiposColegiatura : () =>{
+			return ['Semanal','Quincenal','Mensual'];
+		},
+		conceptosInscripcion : () => {
+	
+			return ConceptosPago.find({modulo:'inscripcion'});
+		},
+		turnos : () => {
+			return Turnos.find();
+		},
+		horarios : ()=>{
+			return Horarios.find();
+		},
+		maestros : () => {
+			return Maestros.find();
+		}
+	});
 
-
-		return ConceptosPago.find({modulo:'inscripcion'});
-	},
-	turnos : () => {
-		return Turnos.find();
-	},
-	horarios : ()=>{
-		return Horarios.find();
-	},
-	maestros : () => {
-		return Maestros.find();
-	}
-});
-
-if($stateParams.id)
-	this.action = false; 
-else
-	this.action = true;
+	if($stateParams.id)
+		this.action = false; 
+	else
+		this.action = true;
 
 	this.guardar = function(grupo,form)
 	{
 		if(form.$invalid){
-toastr.error('Error al guardar los datos del Grupo.');
-return;
-	}
+			toastr.error('Error al guardar los datos del Grupo.');
+			return;
+		}
 		this.grupo.estatus = true;
 		var conceptosComision =ConceptosComision.find().fetch();
 		this.grupo.conceptosComision = conceptosComision;
@@ -202,18 +202,18 @@ return;
 		horario = Horarios.findOne(grupo.horario_id);
 		//_grupo =quitarhk(grupo)
 		__grupo_id = Grupos.insert(grupo);
-		/* Esta parte se hace en otro lado
+
 		var clases = _.uniq(horario.clases, function(clase){
 			return clase.materia_id;
 		});
 		$meteor.call("insertMaestrosMateriasGrupos", clases, __grupo_id);
-		*/
+
 		toastr.success('Grupo guardado.');
 		this.grupo = {}; 
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 		form.$setPristine();
-	form.$setUntouched();
+		form.$setUntouched();
 		$state.go('root.grupos');
 	};
 	
@@ -235,14 +235,14 @@ return;
 		delete grupo._id;	
 		
 		Grupos.update({_id:$stateParams.id}, {$set : grupo});
-		/*Esto va en otro lado
+
 		$meteor.call("deleteMaestrosMateriasGrupos", $stateParams.id);
 		horario = Horarios.findOne(grupo.horario_id);
 		var clases = _.uniq(horario.clases, function(clase){
 			return clase.materia_id;
 		});
 		$meteor.call("insertMaestrosMateriasGrupos", clases, $stateParams.id);
-		*/
+
 		toastr.success('Grupo guardado.');
 		$state.go("root.grupos",{"id":$stateParams.id});
 		form.$setPristine();

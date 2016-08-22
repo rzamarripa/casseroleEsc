@@ -11,15 +11,13 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.buscar.fechaInicial = new Date();
   this.buscar.fechaFinal = new Date();
   this.vendeores_id = [];
-  this.fechaInicial = new Date();
-  this.fechaFinal = new Date();
+  this.fechaInicial = moment(new Date()).format("DD-MM-YYYY");
+  this.fechaFinal = moment(new Date()).format("DD-MM-YYYY");
   this.mensajeNuevo = true;
   this.mensaje = {};
-  this.datosGrafica = {};
-  this.objeto = {};
   moment.locale("es");
 	
-	let vend = this.subscribe('vendedores',()=>{
+	this.subscribe('vendedores',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 
@@ -41,124 +39,91 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  vendedores : () => {
 		  if(Meteor.user()){
 			  var usuarios = Meteor.users.find({roles : ["vendedor"]}).fetch();
+			  console.log("usuario",usuarios);
 			  var vendedoresDelGerente = [];
 			  _.each(usuarios, function(usuario){
 					  vendedoresDelGerente.push(usuario);
 			  });
 			  rc.vendedores_id = _.pluck(vendedoresDelGerente, "_id");
-			  
+				console.log("vdg", vendedoresDelGerente)
 			  return vendedoresDelGerente;
 		  }
 	  },
 	  ultimosProspectos : () => {
-		  
-		  return Prospectos.find({vendedor_id : this.getReactively("vendedor_id")}).fetch();		  
+		  return Prospectos.find({vendedor_id : this.getReactively("vendedor_id")}).fetch();
 	  },
 	  etapasVenta : () => {
-		  
 		  return EtapasVenta.find();
-	  },
-	  cantidadProspectosPorVendedor : () => {
-		  
-		  var arreglo = [];
-		  if(vend.ready()){
-			  _.each(rc.vendedores, function(vendedor){
-				  arreglo.push(Prospectos.find({vendedor_id : vendedor._id, 
-					fecha : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
-			  });
-		  }
-		  		  
-		  return arreglo;
-	  },
-	  cantidadInscritosPorVendedor : () => {		  
-		  var cantidadInscritos = [];
-		  if(vend.ready()){
-			  _.each(rc.vendedores, function(vendedor){
-				  cantidadInscritos.push(Inscripciones.find({vendedor_id : vendedor._id, 
-					fechaInscripcion : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
-			  });
-		  }
-		  
-		  return cantidadInscritos;
-	  },
-	  vendedoresNombres : () => {
-		  vendedoresNombre = [];
-		  if(vend.ready()){
-			  _.each(this.vendedores, function(vendedor){
-				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno;
-				  vendedoresNombre.push(nombre);
-			  });
-		  }
-		  
-		  return vendedoresNombre;
 	  },
 	  graficaVendedores : () => {
 		  data = [];
+			
+		  if(this.vendedores){
+			  _.each(this.getReactively("vendedores"), function(vendedor){
+				  var primerdato = {name : vendedor.profile.nombre + " " + vendedor.profile.apPaterno + " " 
+					  + vendedor.profile.apMaterno, y : rc.getCantidadProspectos(vendedor._id), 
+					  drilldown : vendedor.profile.nombre + " " + vendedor.profile.apPaterno + " " + vendedor.profile.apMaterno};
+				  data.push(primerdato);
+			  });
+		  }
 		  
-		  if(vend.ready()){
-				data.push({
-				  name: "Prospectos",
-				  data: rc.cantidadProspectosPorVendedor
-				});
-				
-				data.push({
-					name: "Inscritos",
-					data: rc.cantidadInscritosPorVendedor
-				});
-			}
-			$('#container').highcharts( {
-			    chart: { type: 'column' },
-			    title: { text: 'Resumen de productividad de ventas' },
-			    subtitle: {
-		        text: 'Del ' + moment(rc.fechaInicial).format('LL') + 
-		        			' al ' + moment(rc.fechaFinal).format('LL')
-			    },
-			    xAxis: {
-		        categories: rc.vendedoresNombres,
-		        crosshair: true
-			    },
-			    yAxis: {
-		        min: 0,
-		        title: {
-		          text: 'Prospectos e Inscritos'
-		        }
-			    },
-			    tooltip: {
-		        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-		        pointFormat:  '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-		            					'<td style="color:{series.color};padding:0"><b>{point.y:.0f} </b></td></tr>',
-		        footerFormat: '</table>',
-		        shared: true,
-		        useHTML: true
-			    },
-			    plotOptions: {
-		        column: {
-		          pointPadding: 0.2,
-		          borderWidth: 0
-		        }
-			    },
-			    series: data
-				}
-			);
-			return data;
+		  console.log("data",data);
+		  var datos = {
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Prospectos por Vendedor '
+        },
+        subtitle: {
+          text:  "Del " + moment(rc.fechaInicial).format('LL') + ' al ' + moment(rc.fechaInicial).format('LL')
+        },
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+	        title: {
+	          text: 'Prospectos'
+	        }
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              format: '{point.y:.0f} P'
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> prospectos<br/>'
+        },
+        series: [{
+          name: 'Prospectos',
+          colorByPoint: true,
+          data: data
+        }]
+    	};
+    	$('#container').highcharts(datos);
+    	
+		  return datos;
 	  }
   });
-  
-  
   
   //Cantidad de prospectos por vendedor y por fecha
   this.getCantidadProspectos = function(vendedor_id){
 	  rc.vendedor_id = vendedor_id;
-	  var query = {vendedor_id : this.getReactively("vendedor_id"), 
-		fecha : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
-	  
+	  var query = {vendedor_id : this.getReactively("vendedor_id"), fecha : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
 	  return Prospectos.find(query).count();;
   };
   
   //Cantidad de inscritos por vendedor y por fecha
   this.getCantidadInscritos = function(vendedor_id){
-	  return Inscripciones.find({vendedor_id : vendedor_id, 
-		fechaInscripcion : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}}).count();
+	  return Inscripciones.find({vendedor_id : vendedor_id, fechaInscripcion : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}}).count();
   }
   
   //Cantidad total de prospectos por vendedor
@@ -188,8 +153,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   
   //Buscar prospectos entre fechas
   this.buscarProspectos = function(buscar){
-	  //rc.fechaInicial = buscar.fechaInicial;
-	  //rc.fechaFinal = buscar.fechaFinal;
+	  rc.fechaInicial = buscar.fechaInicial;
+	  rc.fechaFinal = buscar.fechaFinal;
   }
   
   //Actualizar el destinatario para enviar mensaje a un vendedor
