@@ -138,6 +138,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			plan.push({
 				semana:mfecha.isoWeek(),
 				fecha:mfecha.toDate(),
+				tipoPlan:'Semanal',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
 				anio:mfecha.get('year')
@@ -162,6 +163,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			plan.push({
 				semana:mfecha.isoWeek(),
 				fecha:mfecha.toDate(),
+				tipoPlan:'Mensual',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
 				anio:mfecha.get('year')
@@ -193,6 +195,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			plan.push({
 				semana:mfecha.isoWeek(),
 				fecha:mfecha.toDate(),
+				tipoPlan:'Quincenal',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
 				anio:mfecha.get('year')
@@ -275,7 +278,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				comisionO-=concepto.importeRegular;
 			}
 			else{
-				pago.pagada=3;
+				pago.pagada=6;
 				pago.pago=comisionO;
 				this.llenarPago({nombre:'Abono Colegiatura',importe:comisionO},pago,'colegiatura');
 				comisionO=0;
@@ -289,7 +292,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			this.llenarPago({nombre:'inscripcion',importe:this.inscripcion.planPagos.inscripcion.importeRegular},
 				{numeroPago:1,semana:frg.isoWeek(),anio:frg.get("year")},'inscripcion');
 		}else{
-			this.inscripcion.planPagos.inscripcion.pagada=3;
+			this.inscripcion.planPagos.inscripcion.pagada=6;
 			this.inscripcion.planPagos.inscripcion.pago=(this.inscripcion.importePagado-this.comisionObligada);
 			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaIncial);
 			this.llenarPago({nombre:'Abono de inscripcion',importe:this.inscripcion.planPagos.inscripcion.pago},

@@ -213,7 +213,7 @@
 		</div>
 	</div>
 </div>
-<div class="row" ng-if="al.estaInscrito(al.alumno.profile._id)">
+<div class="row" ng-if="al.estaInscrito(al.alumno._id)">
 	<div class="col col-sm-12">
 		<section id="widget-pagos" data-widget-grid="data-widget-grid">
 		  <div class="row">
@@ -230,13 +230,13 @@
 										<h1>  {{al.grupo(curso.grupo_id).nombre}} </h1>
 	
 									</header>		
-									<div ng-repeat ="(idconcepto, concepto) in curso.plan" ng-if='al.periodoVisible(concepto) && (idconcepto==curso.tipoInscripcion || idconcepto==curso.tipoColegiatura)'>
-										<h2> {{idconcepto}} : </h2>	
+									<div >
+										<h2> Colegiatura : </h2>	
 										<fieldset>
 											<div class="row">
-											<section class="col col-1"  ng-click="al.seleccionarSemana(cobro,concepto)" ng-repeat = "cobro in concepto.planPago" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+											<section class="col col-1"  ng-click="al.seleccionarSemana(cobro)" ng-repeat = "cobro in curso.planPagos.fechas" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input ng-class="al.obtenerEstatus(cobro,concepto)" type="text" value="{{cobro.numero}} / {{cobro.anio}}" disabled="">
+													<input ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="">
 												</label>
 											</section>
 											</div>

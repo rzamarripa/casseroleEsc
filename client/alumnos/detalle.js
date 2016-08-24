@@ -1,27 +1,12 @@
 angular
-  .module('casserole')
-  .controller('AlumnosDetalleCtrl', AlumnosDetalleCtrl);
+	.module('casserole')
+	.controller('AlumnosDetalleCtrl', AlumnosDetalleCtrl);
  
 function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	rc = $reactive(this).attach($scope);
 	
-	var quitarhk=function(obj){
-		if(Array.isArray(obj)){
-			for (var i = 0; i < obj.length; i++) {
-				obj[i] =quitarhk(obj[i]);
-			}
-		}
-		else if(obj !== null && typeof obj === 'object')
-		{
-			delete obj.$$hashKey;
-			for (var name in obj) {
-	  			obj[name] = quitarhk(obj[name]);
-			}
-
-		}
-		return obj;
-	}
+	
 		
 	this.masInfo = true;
 	this.totalPagar = 0.00;
@@ -36,62 +21,62 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe('inscripciones', () => {
-    return [{
-	    alumno_id : $stateParams.id,
-	    campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-    }];
-  });
-  
+		return [{
+			alumno_id : $stateParams.id,
+			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+		}];
+	});
+	
 	this.subscribe('alumno', () => {
-    return [{
-	    id : $stateParams.id,
-	    campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-    }];
-  });
+		return [{
+			id : $stateParams.id,
+			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+		}];
+	});
 
 	this.subscribe("cuentas",()=>{
 		return [{activo:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
 
 	this.subscribe("grupos",() => {
-	    return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
-	  });
-  
-  this.subscribe('pagosAlumno', () => {
-    return [{
-	    alumno_id : $stateParams.id
-    }];
-  });
-    
+			return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
+		});
+	
+	this.subscribe('pagosAlumno', () => {
+		return [{
+			alumno_id : $stateParams.id
+		}];
+	});
+		
 	this.helpers({
 		alumno : () => {
 			return Meteor.users.findOne({_id : $stateParams.id});
 		},
-	  ocupaciones : () => {
-		  return Ocupaciones.find();
-	  },
-	  misPagos : () => {
-		  return Pagos.find();
-	  },
-	  inscripciones : () =>{
-	  	return Inscripciones.find();
-	  },
-	  cuenta : () =>{
-	  	return Cuentas.findOne();
-	  }
+		ocupaciones : () => {
+			return Ocupaciones.find();
+		},
+		misPagos : () => {
+			return Pagos.find();
+		},
+		inscripciones : () =>{
+			return Inscripciones.find();
+		},
+		cuenta : () =>{
+			return Cuentas.findOne();
+		}
 
 	 /* misSemanas : () => {
-		  var inscripcion = moment("2013-01-03");
-		  var hoy = moment();
-		  var cantSemanas = hoy.diff(inscripcion, 'week');
-		  semanas = [];
-		  for(var j=0; j<= cantSemanas; j++){
-			  var elAnio = inscripcion.year();
-			  semanas.push({semana: j, numero : moment(inscripcion).week(), pagada : 0, anio : elAnio });
+			var inscripcion = moment("2013-01-03");
+			var hoy = moment();
+			var cantSemanas = hoy.diff(inscripcion, 'week');
+			semanas = [];
+			for(var j=0; j<= cantSemanas; j++){
+				var elAnio = inscripcion.year();
+				semanas.push({semana: j, numero : moment(inscripcion).week(), pagada : 0, anio : elAnio });
 				inscripcion.add(1, 'weeks');
-		  }
-		  
-		  _.each(this.getReactively('misPagos'), function(pago){
+			}
+			
+			_.each(this.getReactively('misPagos'), function(pago){
 				_.each(semanas, function(semana){
 					if(semana.numero == pago.semana && semana.anio == pago.anio){
 						semana.pagada = 1;
@@ -100,21 +85,21 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				});
 			});
 			
-		  return semanas;
-	  }*/
-  });
+			return semanas;
+		}*/
+	});
 
 	this.grupo = function (grupoId){
 		var _grupo = Grupos.findOne(grupoId);
 		return _grupo;
 	}
 
-  
+	
 	this.actualizar = function(alumno,form)
 	{
 		if(form.$invalid){
-      toastr.error('Error al actualizar los datos.');
-      return;
+			toastr.error('Error al actualizar los datos.');
+			return;
 		}
 		var nombre = alumno.profile.nombre != undefined ? alumno.profile.nombre + " " : "";
 		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
@@ -137,133 +122,133 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	};
 	
 	this.totalPagado = function(){
-	  var temp = 0.00;
-	  _.each(this.misPagos, function(pago){	
-		  temp += parseFloat(pago.importe);		
-	  });
-	  return temp;
-  }
-  this.masInformacion = function(){
-  	this.masInfo = !this.masInfo;
-  	console.log(this.masInfo);
-  }
-  this.estaInscrito = function(alumno_id){
+		var temp = 0.00;
+		_.each(this.misPagos, function(pago){	
+			temp += parseFloat(pago.importe);		
+		});
+		return temp;
+	}
+	this.masInformacion = function(){
+		this.masInfo = !this.masInfo;
+		console.log(this.masInfo);
+	}
+	this.estaInscrito = function(alumno_id){
 		inscrito = Inscripciones.findOne({alumno_id: alumno_id});
 		if(inscrito != undefined)
 			return true
 		else
 			return false
-  }
-  this.periodoVisible = function(periodo){
-  	for (var i = 0; periodo && periodo.datos && i < periodo.datos.length; i++) {
-  		if(periodo.datos[i] && periodo.datos[i].activa )
-  			return true;
-  	}
-  	return false;
-  }
-  
-  this.calcularImporteU= function(datos,pago){
+	}
+	this.periodoVisible = function(periodo){
+		for (var i = 0; periodo && periodo.datos && i < periodo.datos.length; i++) {
+			if(periodo.datos[i] && periodo.datos[i].activa )
+				return true;
+		}
+		return false;
+	}
+	
+	this.calcularImporteU= function(datos,pago){
 		//console.log(datos,pago)
 		if(datos && datos.activa==false)
 			return 0;
 		//console.log(this.inscripcion);
 
 		var fechaActual = new Date();
-  		var fechaCobro = new Date(pago.fecha);
-  		//console.log(fechaActual,fechaCobro);
-  		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
-  		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24)); 
-  		var importe = datos.importe;
-  		//console.log(diasRecargo,diasDescuento);
-  		for (var i = 0; datos.procedimientos && i < datos.procedimientos.length; i++) {
-  			
-  			if(datos.procedimientos[i].tipoProcedimiento == 'Recargo' && diasRecargo >=datos.procedimientos[i].dias){
-  			//	console.log('Recargo');
-  				importe+=datos.procedimientos[i].monto;
-  			}
-  			if(datos.procedimientos[i].tipoProcedimiento == 'Descuento' && diasDescuento >=datos.procedimientos[i].dias){
-  			//	console.log('Descuento');
-  				importe-=datos.procedimientos[i].monto;
-  			}
-  		};
-  		//console.log(importe);
-  		return importe
+		var fechaCobro = new Date(pago.fecha);
+			//console.log(fechaActual,fechaCobro);
+		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
+		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24)); 
+		var importe = datos.importe;
+			//console.log(diasRecargo,diasDescuento);
+		/*for (var i = 0; datos.procedimientos && i < datos.procedimientos.length; i++) {
+				
+				if(datos.procedimientos[i].tipoProcedimiento == 'Recargo' && diasRecargo >=datos.procedimientos[i].dias){
+				//	console.log('Recargo');
+					importe+=datos.procedimientos[i].monto;
+				}
+				if(datos.procedimientos[i].tipoProcedimiento == 'Descuento' && diasDescuento >=datos.procedimientos[i].dias){
+				//	console.log('Descuento');
+					importe-=datos.procedimientos[i].monto;
+				}
+			};*/
+			//console.log(importe);
+		return importe
 	}	
 	this.tieneFoto = function(sexo, foto){
-	  if(foto === undefined){
-		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+		if(foto === undefined){
+			if(sexo === "masculino")
+				return "img/badmenprofile.jpeg";
 			else if(sexo === "femenino"){
 				return "img/badgirlprofile.jpeg";
 			}else{
 				return "img/badprofile.jpeg";
 			}
-			  
-	  }else{
-		  return foto;
-	  }
-  }  
-  this.semanasSeleccionada=[];
+				
+		}else{
+			return foto;
+		}
+	}	
+	this.semanasSeleccionada=[];
 
-  
+	
 
-  this.seleccionarSemana = function(cobro,plan){
-	  //console.log(cobro);
-	  //var semSel = cobro.anio + cobro.numero;	
-	  rc.hayParaPagar = true;
-	  rc.totalPagar=0;
-	  this.semanasSeleccionada=[]
-	  for (var i = 0; i < cobro.no; i++) {
-	  		if(plan.planPago[i].pagada!=1 && plan.planPago[i].pagada!=5 ){
-	  			rc.hayParaPagar = false;
-	  			
-	  			
-	  			if(plan.planPago[i].pagada==6 || plan.planPago[i].faltante>0)
-	  				rc.totalPagar+=plan.planPago[i].faltante;
-	  			else
-  					for (var j = 0; j < plan.datos.length; j++) {
-	  					rc.totalPagar +=this.calcularImporteU( plan.datos[j],plan.planPago[i]);
-	  					//console.log(rc.totalPagar);
-	  				}
-	  			plan.planPago[i].pagada =2;
+	this.seleccionarSemana = function(cobro,plan){
+		//console.log(cobro);
+		//var semSel = cobro.anio + cobro.numero;	
+		rc.hayParaPagar = true;
+		rc.totalPagar=0;
+		this.semanasSeleccionada=[]
+		for (var i = 0; i < cobro.no; i++) {
+				if(plan.planPago[i].pagada!=1 && plan.planPago[i].pagada!=5 ){
+					rc.hayParaPagar = false;
+					
+					
+					if(plan.planPago[i].pagada==6 || plan.planPago[i].faltante>0)
+						rc.totalPagar+=plan.planPago[i].faltante;
+					else
+						for (var j = 0; j < plan.datos.length; j++) {
+							rc.totalPagar +=this.calcularImporteU( plan.datos[j],plan.planPago[i]);
+							//console.log(rc.totalPagar);
+						}
+					plan.planPago[i].pagada =2;
 
-	  			this.semanasSeleccionada.push(plan.planPago[i]);
+					this.semanasSeleccionada.push(plan.planPago[i]);
 
-	  		}
-	  };
-	  //console.log(rc.totalPagar);
-	  for (var i = cobro.no; i < plan.planPago.length; i++) {
-	  	if(plan.planPago[i].pagada!=1 && plan.planPago[i].pagada!=5 && plan.planPago[i].pagada!=6){
-	  		plan.planPago[i].pagada=0;
-	  	}
-	  }
-	  
-	  /*_.each(rc.misSemanas, function(semana){
-		  var semAct = semana.anio + semana.numero;
-		  if(semana.semana <= semanaSeleccionada.semana && semana.pagada == 0){
-			  rc.totalPagar += 350.00;
-			  semana.pagada = 2;
-		  }else if(semana.semana >= semanaSeleccionada.semana && semana.pagada == 2){
-			  rc.totalPagar -= 350.00;
-			  semana.pagada = 0;
-		  }else if(semanaSeleccionada.pagada == 1 && semana.semana == semanaSeleccionada.semana){
-			  semana.pagada = 3;
-		  }else if(semanaSeleccionada.pagada == 3 && semana.semana == semanaSeleccionada.semana){
-			  semana.pagada = 1;
-		  }
-	  });
-	  
-	  _.each(rc.misSemanas, function(semana){
-		  if(semana.pagada == 2){
-			  rc.hayParaPagar = false;
-			  return;
-		  }
-	  });*/
-  }
-  
-  this.imprimir = function(semanaSeleccionada){
-	  var semanasImprimir = [];
-	  _.each(rc.misSemanas, function(semana){
+				}
+		};
+		//console.log(rc.totalPagar);
+		for (var i = cobro.no; i < plan.planPago.length; i++) {
+			if(plan.planPago[i].pagada!=1 && plan.planPago[i].pagada!=5 && plan.planPago[i].pagada!=6){
+				plan.planPago[i].pagada=0;
+			}
+		}
+		
+		/*_.each(rc.misSemanas, function(semana){
+			var semAct = semana.anio + semana.numero;
+			if(semana.semana <= semanaSeleccionada.semana && semana.pagada == 0){
+				rc.totalPagar += 350.00;
+				semana.pagada = 2;
+			}else if(semana.semana >= semanaSeleccionada.semana && semana.pagada == 2){
+				rc.totalPagar -= 350.00;
+				semana.pagada = 0;
+			}else if(semanaSeleccionada.pagada == 1 && semana.semana == semanaSeleccionada.semana){
+				semana.pagada = 3;
+			}else if(semanaSeleccionada.pagada == 3 && semana.semana == semanaSeleccionada.semana){
+				semana.pagada = 1;
+			}
+		});
+		
+		_.each(rc.misSemanas, function(semana){
+			if(semana.pagada == 2){
+				rc.hayParaPagar = false;
+				return;
+			}
+		});*/
+	}
+	
+	this.imprimir = function(semanaSeleccionada){
+		var semanasImprimir = [];
+		_.each(rc.misSemanas, function(semana){
 			if(semana.pagada == 3){
 				semanasImprimir.push(semana);
 			}
@@ -271,21 +256,19 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		//console.log(semanasImprimir);
 		$state.go("anon.pagosImprimir",{semanas : semanasImprimir, id : $stateParams.id},{newTab : true});
 		
-  }
+	}
 
-  
-  	this.obtenerEstatus = function(cobro,concepto){
-  		
-  		var fechaActual = new Date();
-  		var fechaCobro = new Date(cobro.fecha);
-  		var dias = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
-  		//console.log(dias,concepto)
-  		//console.log(recargos);
-  		//if(!recargos) recargos =[];
-	  	if(cobro.pagada==1){
-		  	return "bg-color-green txt-color-white";
+	
+	this.obtenerEstatus = function(cobro){
+			
+		var fechaActual = new Date();
+		var fechaCobro = new Date(cobro.fecha);
+		var dias = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
+		console.log(cobro);
+		if(cobro.pagada==1){
+			return "bg-color-green txt-color-white";
 	 	}
-	 	else  if(cobro.pagada==2){
+	 	else if(cobro.pagada==2){
 	 		return "bg-color-blue txt-color-white";
 	 	}
 	 	else if(cobro.pagada==5){
@@ -295,29 +278,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	 		return "bg-color-greenLight txt-color-white";
 	 	}
 	 	else {
-	  		for (var i = 0; concepto && concepto.datos && i < concepto.datos.length; i++) {
-	  			var procedimientos = concepto.datos[i].procedimientos;
-	  			procedimientos = procedimientos? procedimientos:[];
-	  			//console.log('procedimientos',procedimientos,dias,concepto.datos[i].activa);
-	  			for (var j = 0;concepto.datos[i].activa && j < procedimientos.length; j++) {
-	  				var procedimiento = procedimientos[j];
-	  				//console.log(procedimientos,procedimiento,dias)
-	  				if(procedimiento && procedimiento.dias<=dias && procedimiento.tipoProcedimiento=='Recargo'){
-	  					//console.log('si entroe?')
-	  					return "bg-color-orange txt-color-white";
-	  				}
-	  			}
-	  		}
-	  			//console.log(dias,recargos[i].dias,cobro);
-	  		//	if(recargos[i].dias<dias)
-	  		//		return "bg-color-orange txt-color-white";
-	  		//};
-
-		  return "";
+			
 		}
-  	}
-  
-  this.pagar = function(){
+		return "";
+	}
+	
+	this.pagar = function(){
 		if (confirm("Está seguro de realizar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasPagadas = [];
 			for (var i = 0; i < rc.inscripciones.length; i++) {
@@ -368,12 +334,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 									});
 							}
 							else{
-								for (var k = 0; k < concepto.datos.length  ; k++) {
+								for (var k = 0; k < concepto.datos.length	; k++) {
 									if(concepto.datos[k].activa){
 
-					  					cobro.pago +=this.calcularImporteU( concepto.datos[k],cobro);
-					  					console.log(cobro);
-						  				Pagos.insert({
+											cobro.pago +=this.calcularImporteU( concepto.datos[k],cobro);
+											console.log(cobro);
+											Pagos.insert({
 											fechaPago 	: new Date(),
 											alumno_id 	: $stateParams.id,
 											campus_id 	:Meteor.user().profile.campus_id,
@@ -407,14 +373,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 										});
 										var procedimientos= concepto.datos[k].procedimientos;
 										var fechaActual = new Date();
-								  		var fechaCobro = new Date(cobro.fecha);
-								  		//console.log(fechaActual,fechaCobro);
-								  		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
-								  		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24));
+											var fechaCobro = new Date(cobro.fecha);
+											//console.log(fechaActual,fechaCobro);
+											var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
+											var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24));
 										for (var l = 0; procedimientos && l < procedimientos.length; l++) {
 											var procedimiento = procedimientos[l]
 											if(procedimiento.tipoProcedimiento == 'Recargo' && diasRecargo >=procedimiento.dias){
-		  										Pagos.insert({
+													Pagos.insert({
 													fechaPago 	: new Date(),
 													alumno_id 	: $stateParams.id,
 													numero 		: cobro.no,
@@ -446,9 +412,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 													weekday : this.diaActual,
 													semanaPago: this.semanaPago
 												});
-		  									}
-								  			if(procedimiento.tipoProcedimiento == 'Descuento' && diasDescuento >=procedimiento.dias){
-								  				Pagos.insert({
+												}
+												if(procedimiento.tipoProcedimiento == 'Descuento' && diasDescuento >=procedimiento.dias){
+													Pagos.insert({
 													fechaPago 	: new Date(),
 													alumno_id 	: $stateParams.id,
 													campus_id 	:Meteor.user().profile.campus_id,
@@ -480,12 +446,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 													weekday : this.diaActual,
 													semanaPago: this.semanaPago
 												});
-								  			}
+												}
 
 										}
 									}
-				  				}
-			  				}
+									}
+								}
 						}
 					}
 				}
@@ -498,8 +464,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				Inscripciones.update({_id:inscripcion_id},{$set:_inscripcion});
 
 
-			};		  
-			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.id});  
+			};			
+			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.id});	
 		};
 		rc.totalPagar = 0.00;
 	}
@@ -509,5 +475,5 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(ocupacion)
 			return ocupacion.nombre;
 	}
-  
+	
 }
