@@ -280,6 +280,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			else{
 				pago.pagada=6;
 				pago.pago=comisionO;
+				pago.faltante = concepto.importeRegular-comisionO;
 				this.llenarPago({nombre:'Abono Colegiatura',importe:comisionO},pago,'colegiatura');
 				comisionO=0;
 			}
@@ -294,6 +295,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}else{
 			this.inscripcion.planPagos.inscripcion.pagada=6;
 			this.inscripcion.planPagos.inscripcion.pago=(this.inscripcion.importePagado-this.comisionObligada);
+			this.inscripcion.planPagos.inscripcion.faltante=this.inscripcion.planPagos.inscripcion.importeRegular-
+																																																			this.inscripcion.planPagos.inscripcion.pago;
 			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaIncial);
 			this.llenarPago({nombre:'Abono de inscripcion',importe:this.inscripcion.planPagos.inscripcion.pago},
 				{numeroPago:1,semana:frg.isoWeek(),anio:frg.get("year")},'inscripcion');
