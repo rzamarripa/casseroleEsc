@@ -228,6 +228,12 @@
 									<header>
 
 										<h1>  {{al.grupo(curso.grupo_id).nombre}} </h1>
+										<div class="text-right" >
+											Tipo de Plan de Pago:
+											<select name="repeatSelect" id="repeatSelect" ng-model="curso.planPagos.colegiatura.tipoColegiatura" ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}',curso)" >
+												<option ng-repeat="plan in al.tipoPlanes" value="{{plan}}">{{plan}}</option>
+											</select>
+										</div>
 	
 									</header>		
 									<div >
@@ -236,7 +242,7 @@
 											<div class="row">
 											<section class="col col-1"  ng-click="al.seleccionarSemana(cobro,curso.planPagos)" ng-repeat = "cobro in curso.planPagos.fechas" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input ng-class="al.obtenerEstatus(cobro,curso.planPagos)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="">
+													<input ng-class="al.obtenerEstatus(cobro,curso.planPagos)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
 												</label>
 											</section>
 											</div>
@@ -280,6 +286,7 @@
 									</fieldset>
 
 									
+									
 								</form>
 								<div class="well well-sm  bg-color-darken txt-color-white no-border">
 									<div class="fa-lg">
@@ -290,6 +297,7 @@
 								<div class="pull-left" style="margin:20px;">
 									<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar()" ng-disabled="al.hayParaPagar">Condonar</button>
 								</div>
+								
 								<div class="pull-right" style="margin:20px;">
 									<button type="button" class="btn btn-primary btn-lg" ng-click="al.pagar()" ng-disabled="al.hayParaPagar">Pagar</button>
 								</div>

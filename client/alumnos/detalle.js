@@ -15,6 +15,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.hayParaPagar = true;
+	this.tipoPlanes=["hora de xuxa","Semanal","Quincenal","Mensual"];
 	
 	this.subscribe("ocupaciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -430,7 +431,15 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.id}); 
 		}
 	}
-	
+
+	this.cambioTipoColegiatura=function(selected, oldValue,curso){
+		console.log(selected,oldValue);
+		if (confirm("Está seguro de desea cambiar el Plan de Pagos")) {
+		}
+		else{
+			curso.planPagos.colegiatura.tipoColegiatura=oldValue;
+		}
+	}
 	this.getOcupacion = function(ocupacion_id){
 		var ocupacion = Ocupaciones.findOne(ocupacion_id);
 		if(ocupacion)
