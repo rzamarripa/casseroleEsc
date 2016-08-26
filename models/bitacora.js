@@ -144,6 +144,8 @@ Mongo.Collection.prototype.update = function update(selector, modifier, ...optio
   if(this._name=='bitacora') return false;
 
   try{
+    selector = quitarhk(selector);
+    modifier = quitarhk(modifier);
   	var docset = modifier["$set"]? modifier["$set"]:{};
     var docunset = modifier["$unset"]? modifier["$unset"]:{};
     var docaddToSet = modifier["$addToSet"]? modifier["$addToSet"]:{};
