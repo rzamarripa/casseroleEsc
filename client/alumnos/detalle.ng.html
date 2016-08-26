@@ -287,6 +287,9 @@
 										<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
 									</div>														
 								</div>
+								<div class="pull-left" style="margin:20px;">
+									<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar()" ng-disabled="al.hayParaPagar">Condonar</button>
+								</div>
 								<div class="pull-right" style="margin:20px;">
 									<button type="button" class="btn btn-primary btn-lg" ng-click="al.pagar()" ng-disabled="al.hayParaPagar">Pagar</button>
 								</div>

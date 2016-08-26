@@ -195,7 +195,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						rc.totalPagar+= this.calcularImporteU(plan,i);
 					}
 					plan.fechas[i].pagada = 2;
-					plan.fechas[i].pago = this.calcularImporteU(plan,i)
+					//plan.fechas[i].pago = this.calcularImporteU(plan,i)
 				}
 		};
 		//console.log(rc.totalPagar);
@@ -352,11 +352,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var inscripcion=rc.inscripciones[i];
 				for (var j=0;j<inscripcion.planPagos.fechas.length;j++) {
 						var pago = inscripcion.planPagos.fechas[j];
-						
-						
 						if(pago.pagada==2 && pago.faltante){
 							this.pagarLiquidacion(inscripcion.planPagos,j,semanasPagadas);
-							pago.pago = this.calcularImporteU(inscripcion.planPagos,j) + pago.faltante;
+							pago.pago = pago.pago? pago.pago:0 + pago.faltante;
 							pago.pagada = 1;
 							pago.faltante = 0;
 						}
@@ -375,9 +373,61 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var semana = semanasPagadas[i];
 				Pagos.insert(semana);
 			}
-			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.id});  
+			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.id});  			
+		}
+	}
+	this.condonarPago=function(plan,i,semanasCondonadas){
+		var cobro=plan.fechas[i];
+		semanasCondonadas.push({
+									fechaPago 	: new Date(),
+									alumno_id 	: $stateParams.id,
+									campus_id 	:Meteor.user().profile.campus_id,
+									numero 		: cobro.numeroPago,
+									semana 		: cobro.semana,
+									anio 		: cobro.anio,
+									estatus 	: 1,
+									concepto 	: 'Colegiatura #'+cobro.numeroPago+': Condonacion',
+									tipo 		: "Condonacion",
+									usuario_id 	: Meteor.userId(),
+									condonado : cobro.condonado,
+									importe 	: 0,
+									cuenta_id : this.cuenta._id,
+									weekday : this.diaActual,
+									semanaPago: this.semanaPago
+		});
+	}
+	this.condonar = function(){
+		if (confirm("Está seguro de desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
+			var semanasCondonadas = [];
+			for (var i = 0; i < rc.inscripciones.length; i++) {
+				var inscripcion=rc.inscripciones[i];
+				for (var j=0;j<inscripcion.planPagos.fechas.length;j++) {
+					var pago = inscripcion.planPagos.fechas[j];
+					if(pago.pagada==2){
+						if(pago.faltante){
+							pago.condonado = pago.faltante;
 
-				
+						}
+						else{
+							pago.condonado = this.calcularImporteU(inscripcion.planPagos,j);
+							pago.pago = 0;
+						}
+						pago.pagada = 5;
+						
+						pago.faltante = 0;
+						this.condonarPago(inscripcion.planPagos,j,semanasCondonadas);
+					}
+				}
+				var inscripcion_id = inscripcion._id
+				delete inscripcion._id;
+				Inscripciones.update({_id:inscripcion_id},{$set:inscripcion});
+			}
+			console.log(semanasCondonadas);
+			for(var i in semanasCondonadas){
+				var semana = semanasCondonadas[i];
+				Pagos.insert(semana);
+			}
+			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.id}); 
 		}
 	}
 	
