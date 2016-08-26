@@ -15,9 +15,7 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
   };
 
   this.login = function () {
-	  var usuario = Meteor.users.find({username : this.credentials.username}).count();
-	  if(usuario == 1){
-		  if(this.credentials.username)
+
 	    $meteor.loginWithPassword(this.credentials.username, this.credentials.password).then(
 	      function () {
 		      toastr.success("Bienvenido al Sistema");
@@ -33,9 +31,7 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 		      }        
 	      }
 	    )
-	  }else{
-		  toastr.error("No tiene permiso para entrar al sistema");
-	  }
+	  
 	  
   }
   

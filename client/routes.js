@@ -721,7 +721,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('root.asistenciaGrupo', {
-      url: '/asistenciaGrupo/:id/:materia_id',
+      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:horario_id',
       templateUrl: 'client/maestro/asistencias/asistencias.ng.html',
       controller: 'MaestroAsistenciasCtrl as masas',
       resolve: {
@@ -737,7 +737,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })       
     .state('root.verAsistencias', {
-      url: '/verAsistencias/:id/:materia_id',
+      url: '/verAsistencias/:grupo_id/:materia_id/:maestro_id',
       templateUrl: 'client/maestro/asistencias/verAsistencias.ng.html',
       controller: 'MaestroVerAsistenciasCtrl as mast',
       resolve: {
@@ -879,13 +879,8 @@ angular.module('casserole').config(['$injector', function ($injector) {
          });
        }]
     	}
-    })
-    
+    })    
     ; 
     
     
-}]);     
-
-
-
-//TODO ver mensaje de vendedores
+}]);

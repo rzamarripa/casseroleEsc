@@ -11,10 +11,23 @@
 			
 <div class="row">
 	<div class="col-sm-12">
-		<a class="btn btn-{{pc.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
-			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"	ng-click="pc.nuevaPlaneacion()">
-		  {{pc.nuevo == true ? 'Nuevo' : 'Cancelar'}}
-		</a>
+		<div class="row">
+			<div class="col-sm-1">
+				<a style="margin-top: 13px;" class="btn btn-{{pc.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+					href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"	ng-click="pc.nuevaPlaneacion()">
+				  {{pc.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+				</a>
+			</div>
+			<div class="col-sm-3">
+				<label for="fechaInicial">Fecha Inicial</label>
+				<input name="fechaInicial" ng-model="pc.buscar.fechaInicial" format="dd-MM-yyyy" class="form-control" date-time view="year" max-view="year" min-view="date"/>
+			</div>
+			<div class="col-sm-3">
+				<label for="fechaFinal">Fecha Final</label>
+				<input name="fechaFinal" ng-model="pc.buscar.fechaFinal" format="dd-MM-yyyy" class="form-control" date-time view="year" max-view="year" min-view="date"/>
+			</div>
+		</div>
+		
 		<div class="collapse" id="collapseExample">
 			<h2>Planeación de Clases</h2>
 			<form name="form" class="form-horizontal" role="form" novalidate>
@@ -190,7 +203,7 @@
 				</div>
 				<div class="tab-pane fade" id="hr2">
 					
-					<h4 class="alert alert-warning"> Planeaciones Enviadas: estás serán revisadas para autorizar la publicación. </h4>
+					<h4 class="alert alert-warning"> Planeaciones enviadas: estás serán revisadas para autorizar la publicación. </h4>
 					<div ng-include="'client/planeaciones/_tablaEnviadas.html'"></div>
 					
 				</div>

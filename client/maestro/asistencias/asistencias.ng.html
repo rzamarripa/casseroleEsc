@@ -1,26 +1,36 @@
 <div class="row">
   <div class="col-sm-12">
-		<div class="widget-body no-padding smart-form">
+		<div class="widget-body no-padding smart-form" ng-if="masas.sePuede">
 			<!-- content goes here -->			
-			<h5 class="todo-group-title"><i class="fa fa-warning"></i> Lista de Asistencia 
-				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.asistencia.fechaAsistencia | date:'dd-MM-yyyy'}}</span>
+			<h5 class="todo-group-title"><i class="fa fa-list"></i> Lista de Asistencia - Grupo : {{masas.grupo.nombre}} - Materia : {{masas.materia.nombre}}
+				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.listaAsistencia.fechaInicio | date:'dd-MM-yyyy HH:mm:ss'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
-				<li ng-repeat="alumno in masas.asistencia.alumnos">
+				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="alumno.estatus = !alumno.estatus" ng-class="alumno.estatus == true ? 'success !important' : 'danger !important'">
 					<span class="handle"> 
 						<label class="checkbox">
-							<input type="checkbox" ng-model="alumno.checked" value="checked">
+							<input type="checkbox" ng-model="alumno.estatus" value="checked">
 							<i></i> 
 						</label> 
 					</span>
-					<p>
-						<strong>{{alumno.matricula}}</strong> - {{alumno.nombre}} {{alumno.apPaterno}} {{alumno.apMaterno}}
-						<span class="date">Fecha</span>
+					<p class="project-members">
+						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.estatus == true ? 'online' : 'busy'">
+						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>
 				</li>		
 			</ul>
-			<input ng-click="masas.guardar(masas.asistencia)" value="Guardar" class="btn btn-primary" ng-show="!masas.existe">
-			<input ng-click="masas.actualizar(masas.asistencia)" value="Actualizar" class="btn btn-primary" ng-show="masas.existe">
+			<footer ng-if="masas.sePuede">
+				<button ng-click="masas.guardar(masas.listaAsistencia)" class="btn btn-primary btn-lg" ng-if="!masas.existe">Guardar</button>
+				<button ng-click="masas.actualizar(masas.listaAsistencia)" class="btn btn-primary btn-lg" ng-if="masas.existe">Actualizar</button>
+			</footer>
+		</div>
+		<div class="widget-body no-padding smart-form" ng-if="!masas.sePuede">
+			<h4 class="alert alert-danger"> Actualmente no puede tomar Asistencia por los siguientes motivos.</h4>
+			<ol>
+				<li>El día de hoy no tiene clase con este grupo</li>
+				<li>La hora de inicio de clase no ha llegado</li>
+				<li></li>
+			</ol>
 		</div>
   </div>
 </div>

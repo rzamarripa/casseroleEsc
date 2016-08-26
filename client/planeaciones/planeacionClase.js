@@ -7,7 +7,10 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 	this.planeacion.fechaCreacion = new Date();
 	this.action = true;
 	this.nuevo = true;
-	console.log($stateParams);
+	this.buscar = {};
+	this.buscar.fechaInicial = new Date();
+	this.buscar.fechaFinal = new Date();
+
 	this.subscribe('planeaciones',()=>{
 		return [{maestro_id : $stateParams.maestro_id, materia_id : $stateParams.materia_id, grupo_id : $stateParams.grupo_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});

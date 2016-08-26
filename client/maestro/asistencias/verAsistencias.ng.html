@@ -1,12 +1,18 @@
 <div class="row-fluid">
+	<div class="col-sm-12">
+		<h2>{{mast.grupo.nombre}} - {{mast.materia.nombre}}</h2>
+	</div>
+</div>
+<div class="row">
 	<div class="col-sm-12">		
-		<div class="table-responsive">	
-			<table class="table table-bordered" style="width: auto">
+			<table class="table table-bordered">
 		    <thead>
 		      <tr>
 		        <th class="col-sm-1">Matrícula</th>
 		        <th class="col-sm-2">Nombre</th>
-		        <th ng-repeat="asistencia in mast.asistencias"><div class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</div></th>
+		        <th ng-repeat="clase in mast.horario.clases">
+			        <div class="text-center" style="font-size: 10px;">{{clase.start | date:"dd-MM-yyyy"}}</div>
+			      </th>
 		      </tr>
 		    </thead>
 		    <tbody>
@@ -19,6 +25,5 @@
 					</tr>
 		    </tbody>
 			</table>
-		</div>
 	</div>
 </div>

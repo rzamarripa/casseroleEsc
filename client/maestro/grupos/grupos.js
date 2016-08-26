@@ -2,20 +2,14 @@ angular
 .module("casserole")
 .controller("MaestroGruposCtrl", MaestroGruposCtrl);
  function MaestroGruposCtrl($scope, $meteor, $reactive , $state, $stateParams){
+
  	let rc = $reactive(this).attach($scope);
- 	this.hoy = new Date();
-	//this.grupos = [];
-	/*
-	this.mmgs = [];
-	$meteor.call("getGrupos").then(function (data) {
-    rc.mmgs = data;
-  });
-	*/
 	this.grupos_id = [];
 	this.maestros_id = [];
 	this.materias_id = [];
 	this.alumnos_id = [];
 	this.hoy = new Date();
+	
 	this.subscribe('grupos', () => {		
 		return [{
 			_id : {$in:this.getCollectionReactively('grupos_id')}

@@ -34,8 +34,6 @@ let rc = $reactive(this).attach($scope);
 		        toastr.error('Error al guardar los datos.');
 		        return;
 		  }
-	
-		
 			Accounts.createUser({
 				username: this.trabajador.nombreUsuario,
 				password: this.trabajador.contrasena,

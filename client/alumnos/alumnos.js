@@ -61,7 +61,7 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
 			  if(this.getReactively("cantidad") > 0){
-				  var ultimoAlumno = Meteor.users.findOne({roles : ["alumno"]}, {sort: {username:-1}});
+				  var ultimoAlumno = Meteor.users.findOne({roles : ["alumno"]}, {sort: {createdAt:-1}});
 				  if(ultimoAlumno != undefined){
 					  identificador = ultimoAlumno.profile.matricula.substring(1, ultimoAlumno.profile.matricula.length);
 					  matriculaAnterior = parseInt(identificador) + 1;
