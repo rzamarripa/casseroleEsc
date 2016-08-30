@@ -8,14 +8,19 @@ angular
 	this.maestros_id = [];
 	this.materias_id = [];
 	this.alumnos_id = [];
+	moment.locale('es');
+		
+	this.subscribe('secciones', () => {		
+		return [{	_id : this.seccion_id }]
+	});
 	this.hoy = new Date();
 	
 	this.subscribe('grupos', () => {		
 		return [{
-			_id : {$in:this.getCollectionReactively('grupos_id')}
+			_id : {$in:this.getCollectionReactively('grupos_id')}, estatus : true
 		}]
 	});
-	this.subscribe('maestros', () => {		
+	this.subscribe('maestros', () => {
 		return [{
 			_id : Meteor.user().profile.maestro_id
 		}]
@@ -40,20 +45,20 @@ angular
 
 	this.subscribe('maestrosMateriasGrupos', () => {		
 		return [{
-			maestro_id: Meteor.user().profile.maestro_id
+			maestro_id: Meteor.user().profile.maestro_id, estatus : true
 		}]
 	});
 
 	this.helpers({		
-		grupo : () => {
+		grupo : () => {			
 			return Grupos.findOne($stateParams.id);
 		},
 		mmgs : ()=>{
 			var mmgs = MaestrosMateriasGrupos.find().fetch();
 			if(mmgs != undefined){
-				this.grupos_id = _.pluck(mmgs, 'grupo_id')
-				this.materias_id = _.pluck(mmgs, 'materia_id')
-				this.maestros_id = _.pluck(mmgs, 'maestro_id')
+				this.grupos_id = _.pluck(mmgs, 'grupo_id');
+				this.materias_id = _.pluck(mmgs, 'materia_id');
+				this.maestros_id = _.pluck(mmgs, 'maestro_id');
 				_.each(mmgs, function(mmg){
 					mmg.alumnos = [];
 					mmg.maestro = Maestros.findOne(mmg.maestro_id);
@@ -89,5 +94,15 @@ angular
 	  }else{
 		  return foto;
 	  }
-  }  
+  }
+  
+  this.abrirCalificaciones = function(seccion_id){
+	  var seccion = Secciones.findOne(seccion_id);
+	  console.log(seccion_id);
+	  if(seccion){
+		  console.log(seccion.abrirCalificaciones)
+		  return seccion.abrirCalificacaciones;
+	  }
+		  
+  }
 };

@@ -123,7 +123,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.alumnoDetalle', {
-      url: '/alumnos/:id',
+      url: '/alumnos/:alumno_id',
       templateUrl: 'client/alumnos/detalle.ng.html',
       controller: 'AlumnosDetalleCtrl as al',
       resolve: {
@@ -313,7 +313,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.grupoDetalle', {
-      url: '/gruposDetalle/:id',
+      url: '/gruposDetalle/:grupo_id',
       templateUrl: 'client/grupos/gruposDetalle.ng.html',
       controller: 'GruposDetalleCtrl as gp',
       resolve: {
@@ -752,8 +752,8 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
-    .state('root.maestroGrupos', {
-      url: '/gruposMaestro/:_id',
+    .state('root.gruposMaestro', {
+      url: '/gruposMaestro/:grupo_id',
       templateUrl: 'client/maestro/grupos/grupos.ng.html',
       controller: 'MaestroGruposCtrl as masgrupo',
       resolve: {
@@ -784,9 +784,41 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
+    .state('root.capturarCalificaciones', {
+      url: '/capturarCalificaciones/:grupo_id/:materia_id/:maestro_id',
+      templateUrl: 'client/maestro/calificaciones/calificar.html',
+      controller: 'CalificarCtrl as ca',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
+    .state('root.verCalificaciones', {
+      url: '/verCalificaciones/:grupo_id/:materia_id/:maestro_id',
+      templateUrl: 'client/maestro/calificaciones/verCalificaciones.html',
+      controller: 'VerCalificacionesCtrl as vercal',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.alumnoCalificaciones', {
       url: '/alumnoCalificaciones',
-      templateUrl: 'client/alumno/calificaciones/calificaciones.ng.html',
+      templateUrl: 'client/alumno/calificaciones/calificaciones.html',
       controller: 'AlumnoCalificacionesCtrl',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){

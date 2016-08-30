@@ -3,6 +3,7 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	let rc = $reactive(this).attach($scope); 
 	this.usuarioActual = {};
 	this.avisosVentana = "none";
+	this.grupos_id = [];
 	this.hoy = new Date();
 	// Director
 	if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "director"){
@@ -36,7 +37,8 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			  return Avisos.find();
 			}
 		});
-	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "vendedor"){ // Vendedores
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "vendedor"){ 
+		// Vendedores
 
 		this.subscribe('campus', function(){
 			return [{
@@ -59,6 +61,51 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			}
 		});
 		
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "maestro"){ 
+		// Maestros
+		
+		this.subscribe('campus', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
+		
+		this.subscribe('maestrosMateriasGrupos', () => {		
+			return [{
+				maestro_id : Meteor.user().profile.maestro_id, estatus : true
+			}]
+		});
+		
+		this.subscribe('grupos', () => {		
+			return [{
+				_id : { $in : this.getCollectionReactively('grupos_id')}
+			}]
+		});
+		
+		this.helpers({
+			campus : () => {
+			  return Campus.findOne(Meteor.user().profile.campus_id);
+			},
+			avisos : () => {
+			  return MensajesVendedores.find().fetch();
+			},
+			mmgs : () => {
+				return MaestrosMateriasGrupos.find().fetch();
+			},
+			grupos : () => {
+				if(this.mmgs){
+					rc.grupos_id = _.pluck(MaestrosMateriasGrupos.find().fetch(), "grupo_id");
+					return Grupos.find().fetch()
+				}
+			}
+			
+		});
+		
+		this.getNombreGrupo = function(grupo_id){
+			var grupo = Grupos.findOne(grupo_id);
+			if(grupo)
+				return grupo.nombre;
+		}
 	}
 	
 	this.autorun(function() {

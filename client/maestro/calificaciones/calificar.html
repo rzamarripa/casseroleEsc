@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-sm-12">				
+		<div class="widget-body no-padding smart-form" ng-if="ca.sePuede">
+			<div class="alert alert-info fade in">
+				<button class="close" data-dismiss="alert">
+					×
+				</button>
+				<i class="fa-fw fa fa-info"></i>
+				<strong>Calificaciones abiertas,</strong> Coordinación Académica abrió el periodo de captura de calificaciones.
+			</div>
+			<!-- content goes here -->			
+			<h5 class="todo-group-title"><i class="fa fa-list"></i> Captura de Calificaciones - Grupo : {{ca.grupo.nombre}} - Materia : {{ca.materia.nombre}}
+				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{ca.hoy | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+			</h5>
+			<ul id="sortable1" class="todo ui-sortable">
+				<li ng-repeat="alumno in ca.capturaCalificaciones.alumnos">
+					<span style="width: 50px;" > 
+						<label >
+							<input type="number" min="0" max="100" class="form-control text-center" ng-model="alumno.calificacion" ng-change="masas.validaCalificacion(alumno.calificacion)">
+						</label> 
+					</span>
+					<p class="project-members" style="margin-left: 77px;">
+						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion > 0 ? 'online' : 'busy'">
+						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
+					</p>
+				</li>
+			</ul>
+			<footer ng-if="ca.sePuede">
+				<button ng-click="ca.guardar(ca.capturaCalificaciones)" class="btn btn-primary btn-lg" ng-if="!ca.existe">Guardar</button>
+				<button ng-click="ca.actualizar(ca.capturaCalificaciones)" class="btn btn-primary btn-lg" ng-if="ca.existe">Actualizar</button>
+			</footer>
+		</div>
+		<div class="row" ng-if="!ca.sePuede">
+			<article class="col-sm-12">				
+				<div class="alert alert-warning fade in">
+					<button class="close" data-dismiss="alert">
+						×
+					</button>
+					<i class="fa-fw fa fa-warning"></i>
+					<strong>Calificaciones cerradas,</strong> espere a que Coordinación Académica abra Calificaciones.
+				</div>	
+			</article>
+		</div>
+  </div>
+</div>

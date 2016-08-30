@@ -7,24 +7,34 @@ angular
 
  	this.grupo = {};
   this.action = true;
+  this.alumnos_id = [];
+  
+  console.log($stateParams)
+  console.log(this.getCollectionReactively("alumnos_id"))
 
 	this.subscribe('inscripciones', () => {
 	  return [{
-		  grupo_id : $stateParams.id
+		  grupo_id : $stateParams.grupo_id
 	  }];
   });
   
-  this.subscribe('alumnos', () => {
-	  return [{estatus:true}]
-  });
+  this.subscribe('alumnos', () => {		
+		return [{
+			_id : { $in : this.getCollectionReactively('alumnos_id')}
+		}]
+	});
   
-  this.subscribe('grupos');
+  this.subscribe('grupos', () => {
+	  return [{_id : $stateParams.grupo_id }]
+  });
 	
 	this.helpers({
 	  inscripciones : () => {
 			return Inscripciones.find();
 	  },
 	  alumnos : () => {
+		  if(this.inscripciones)
+			  rc.alumnos_id = _.pluck(this.inscripciones, "alumno_id");
 			return Alumnos.find();
 	  },
 	  grupo : () => {

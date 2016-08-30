@@ -12,9 +12,9 @@
 			      <li><a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">Tomar asistencia</a></li>
 			      <li><a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Ver asistencia</a></li>
 			      <li><a href="/pizarron/{{mmg.grupo_id}}">Pizarrón compartido</a></li>
-			      <li><a href="/calificacionesGrupo/{{mmg.grupo_id}}">Capturar calificaciones</a></li>
-			      <li><a href="root.tareas({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Tareas</a></li>
-			      <li><a href="/calificacionesGrupo/{{mmg.grupo_id}}">Exámenes</a></li>
+			      
+			      <li><a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})" >Capturar calificaciones</a></li>
+			      <li><a ui-sref="root.verCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Ver calificaciones</a></li>
 			      <li><a ui-sref="root.planeacionClase({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Planear la Clase</a></li>
 			    </ul>
 			    <div class="offer">
@@ -33,7 +33,7 @@
 	                </div>
 	                <div class="info">
 	                  <p>
-	                    <a target="_blank" href="/alumno/{{alumno._id}}">{{alumno.profile.nombre}} {{alumno.profile.apPaterno}}</a>
+	                    <a target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})">{{alumno.profile.nombre}} {{alumno.profile.apPaterno}}</a>
 	                  </p>
 	                </div>
 	            </div>			

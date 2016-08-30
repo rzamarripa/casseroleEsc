@@ -6,8 +6,6 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	var alumnos_id = [];
 	this.asistencia = {};
 	this.horario_id = "";
-	
-	console.log($stateParams)
  
 	this.subscribe('grupos',()=>{
 		return [{_id : $stateParams.grupo_id, estatus:true}]
@@ -45,32 +43,60 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  asistencias : () => {
 	  	return Asistencias.find();
 	  },
+	  horarios : () => {
+		  return Horarios.find();
+	  },
 	  horario : () => {
 		  return Horarios.findOne();
 	  },
 	  alumnosAsistidos : () => {
 		  var transmutar = {};
-		  if(this.horario){
-			  _.each(rc.horario.clases, function(clase){
-				  console.log(clase);
-			  })
+		  var arregloCoincidencias = [];
+		  if(this.horarios && this.asistencias){
+			  var horariosOrdenados = Horarios.find({},{ sort : {fechaIncio : 1}}).fetch();
+			  console.log(horariosOrdenados);
+			  _.each(rc.getReactively("horarios"), function(horario){
+					_.each(horario.clases, function(clase){
+						var coincidencias = _.filter(rc.getReactively("asistencias"), function(asistencia){
+							return moment(asistencia.fechaAsistencia).isSame(clase.start, "day");
+						});
+						if(coincidencias[0] == undefined ){
+							arregloCoincidencias.push({});
+						}else{
+							arregloCoincidencias.push(coincidencias[0]);
+						}
+						
+				  })
+			  });
+			  
+			  _.each(arregloCoincidencias, function(coincidencia){
+				  if(coincidencia.alumnos == undefined){
+					  coincidencia.alumnos = [];
+					  _.each(rc.asistencias[0].alumnos, function(alumno){
+						  coincidencia.alumnos.push({
+								estatus : false,
+								profile : alumno.profile
+							});
+					  })
+					  
+				  }
+				  _.each(coincidencia.alumnos, function(alumno){											  
+						if("undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
+							transmutar[alumno.profile.nombreCompleto]={};
+							transmutar[alumno.profile.nombreCompleto].nombre = alumno.profile.nombreCompleto; 
+							transmutar[alumno.profile.nombreCompleto].matricula = alumno.profile.matricula; 
+							transmutar[alumno.profile.nombreCompleto].fotografia = alumno.profile.fotografia; 
+							transmutar[alumno.profile.nombreCompleto].dias = [];
+						}
+						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
+					})
+			  });
 		  }
-		  
-		  _.each(this.getReactively("asistencias"), function(asistencia){
-				_.each(asistencia.alumnos, function(alumno){					
-					if("undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
-						transmutar[alumno.profile.nombreCompleto]={};
-						transmutar[alumno.profile.nombreCompleto].nombre = alumno.profile.nombreCompleto; 
-						transmutar[alumno.profile.nombreCompleto].matricula = alumno.profile.matricula; 
-						transmutar[alumno.profile.nombreCompleto].fotografia = alumno.profile.fotografia; 
-						transmutar[alumno.profile.nombreCompleto].dias = [];
-					}
-					transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
-				})
-			});
-			console.log(transmutar)
+		  console.log("transmutar",arregloCoincidencias)
 			return _.toArray(transmutar);
 
 	  }
   });
+  
+  
 };
