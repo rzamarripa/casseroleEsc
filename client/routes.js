@@ -912,6 +912,11 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })    
+    .state('root.tipoPublicidad', {
+      url: '/tipoPublicidad',
+      templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
+      controller: 'TipoPublicidadCtrl as tp'
+    }) 
     ; 
     
     

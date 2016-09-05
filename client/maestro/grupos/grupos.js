@@ -89,8 +89,7 @@ angular
 				return "img/badgirlprofile.jpeg";
 			}else{
 				return "img/badprofile.jpeg";
-			}
-			  
+			}			  
 	  }else{
 		  return foto;
 	  }
@@ -98,9 +97,7 @@ angular
   
   this.abrirCalificaciones = function(seccion_id){
 	  var seccion = Secciones.findOne(seccion_id);
-	  console.log(seccion_id);
 	  if(seccion){
-		  console.log(seccion.abrirCalificaciones)
 		  return seccion.abrirCalificacaciones;
 	  }
 		  

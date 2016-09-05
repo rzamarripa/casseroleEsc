@@ -106,6 +106,12 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			if(grupo)
 				return grupo.nombre;
 		}
+		
+		this.getHorarioGrupo = function(grupo_id){
+			var grupo = Grupos.findOne(grupo_id);
+			if(grupo)
+				return grupo.horario_id;
+		}
 	}
 	
 	this.autorun(function() {

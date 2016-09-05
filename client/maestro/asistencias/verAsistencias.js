@@ -53,10 +53,13 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 		  var transmutar = {};
 		  var arregloCoincidencias = [];
 		  if(this.horarios && this.asistencias){
+			  console.log("entre");
 			  var horariosOrdenados = Horarios.find({},{ sort : {fechaIncio : 1}}).fetch();
 			  console.log(horariosOrdenados);
 			  _.each(rc.getReactively("horarios"), function(horario){
+				  console.log("horarios");
 					_.each(horario.clases, function(clase){
+						console.log("clases");
 						var coincidencias = _.filter(rc.getReactively("asistencias"), function(asistencia){
 							return moment(asistencia.fechaAsistencia).isSame(clase.start, "day");
 						});

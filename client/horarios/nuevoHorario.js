@@ -13,7 +13,8 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   var aulasTotales = [];
   this.horario 	= {};
 	this.horario.clases = [];
-  
+	moment.locale('es');
+  moment.lang('es');
   var date = new Date();
   var d = date.getDate();
   var m = date.getMonth();
@@ -42,9 +43,16 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 		aulas : () => {
 			return Aulas.find();
 		},
-		ultimoHorario : () => {
-			return Horarios.findOne();
+		horario : () => {
+			var horario = Horarios.findOne();
+			if(horario){				
+				return Horarios.findOne();
+			}
+			
 		},
+		horarios : () => {
+			return Horarios.find();
+		}
 	});
 		
 	if($stateParams.id != ""){
@@ -57,7 +65,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  rc.action 	= true;	  
 	}
 	
-	window.rc = rc.horario;
+	window.horario = rc.horario;
 	
   this.agregarClase = function(clase, form){
   	if(form.$invalid){
@@ -72,7 +80,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  clase.title 	= maestro.nombre + " " + maestro.apPaterno + "\n"+ materia.nombreCorto + "\n" + aula.nombre;
 	  clase.maestro = maestro.nombre + " " + maestro.apPaterno;
 	  clase.aula 		= aula.nombre;
-	  clase.className = ["event", rc.clase.className];
+	  clase.className = rc.colorSeleccionado;
 	  clase.estatus = true;
 	  clase.start 	= moment(clase.start).format("YYYY-MM-DD HH:mm");
 		clase.end 		= moment(clase.end).format("YYYY-MM-DD HH:mm");
@@ -98,9 +106,9 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  _.each(this.horario.clases, function(claseActual){
 		  console.log("entre", clase);
 		  if(claseActual._id == clase._id){
-			  var materia = Materias.findOne(Materias, clase.materia_id);
-				var maestro = Maestros.findOne(Maestros, clase.maestro_id);
-				var aula 		= Aulas.findOne(Aulas, clase.aula_id);
+			  var materia = Materias.findOne(clase.materia_id);
+				var maestro = Maestros.findOne(clase.maestro_id);
+				var aula 		= Aulas.findOne(clase.aula_id);
 			  clase.materia = materia.nombreCorto;
 			  clase.title = maestro.nombre + " " + maestro.apPaterno + "\n" + materia.nombreCorto + "\n" + aula.nombre;
 			  clase.maestro = maestro.nombre + " " + maestro.apPaterno;
@@ -129,6 +137,34 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  eliminarTemporalesOcupados();
   }
   
+  //TODO 
+  this.duplicarClase = function(clase){
+	  var nuevaClase = {}; 
+	  nuevaClase.title 	= clase.title;
+		nuevaClase._id 			= clase._id;
+		nuevaClase.materia_id = clase.materia_id;
+		nuevaClase.maestro_id = clase.maestro_id;
+		nuevaClase.className = clase.className;
+		nuevaClase.aula_id = clase.aula_id;
+	  nuevaClase.materia = clase.materia;
+	  nuevaClase.maestro = clase.maestro;
+	  nuevaClase.aula 		= clase.aula;			  
+	  nuevaClase.start 	= moment(clase.start).format("YYYY-MM-DD HH:mm");
+	  nuevaClase.end 		= moment(clase.end).format("YYYY-MM-DD HH:mm");
+	  nuevaClase.estatus = true;
+
+	  var mayor = 0;
+	  _.each(this.horario.clases, function(clase){		  
+		  if(clase._id > mayor){
+			  mayor = clase._id;
+		  }
+	  });
+	  nuevaClase._id = mayor + 1;
+	  
+	  this.horario.clases.push(nuevaClase);
+	  console.log("todas", this.horario.clases);
+  }
+  
   this.modificarHorario = function(horario,form){
   	if(form.$invalid){
 	    toastr.error('Error al guardar los datos del Horario.');
@@ -143,16 +179,17 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   }
    
   this.muestraMateriasMaestro = function(maestro_id){
+	  console.log(maestro_id);
 	  var horariosTotales = angular.copy(this.horarios);
 	  while(clasesTotales.length>0)clasesTotales.pop();
 	  _.each(horariosTotales, function(horario){
 		  if(horario._id != $stateParams.id){
 			  for(i = 0; i < horario.clases.length; i++){
 				  if(horario.clases[i].maestro_id == maestro_id){
-					  horario.clases[i]._id 	= i;
+					  horario.clases[i]._id 	= 10000 + i;
 					  horario.clases[i].start 		= moment(horario.clases[i].start).format("YYYY-MM-DD HH:mm");
 					  horario.clases[i].end 			= moment(horario.clases[i].end).format("YYYY-MM-DD HH:mm");
-					  horario.clases[i].className = ["event", "bg-color-magenta"];
+					  horario.clases[i].className = "bg-color-magenta";
 					  clasesTotales.push(angular.copy(horario.clases[i]));
 				  }
 			  }		
@@ -167,10 +204,10 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 		  if(horario._id != $stateParams.id){
 			  for(i = 0; i < horario.clases.length; i++){
 				  if(horario.clases[i].aula_id == aula_id){
-					  horario.clases[i]._id 	= Math.random();
+					  horario.clases[i]._id 	= 100000 + i;
 					  horario.clases[i].start 		= moment(horario.clases[i].start).format("YYYY-MM-DD HH:mm");
 					  horario.clases[i].end 			= moment(horario.clases[i].end).format("YYYY-MM-DD HH:mm");
-					  horario.clases[i].className = ["event", "bg-color-grayDark"];
+					  horario.clases[i].className = "bg-color-grayDark";
 					  aulasTotales.push(angular.copy(horario.clases[i]));
 				  }
 			  }
@@ -179,6 +216,13 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   }
   
   this.alertOnEventClick = function(date, jsEvent, view){
+	  _.each(rc.horario.clases, function(clase){
+		  console.log("className", clase.className);
+		  if(clase.className == "bg-color-orange"){
+			  console.log("entre aquí y es naranja");
+			  clase.className = rc.colorSeleccionado;
+		  }
+	  })
 	  console.log("date", date);
 	  console.log("clases", rc.horario.clases);
 	  
@@ -191,7 +235,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 
 	  for(i = 0; i < rc.horario.clases.length; i++){
 		  if(rc.horario.clases[i]._id == rc.clase._id){
-			  rc.horario.clases[i].className = ["event", "bg-color-orange"];
+			  rc.horario.clases[i].className = "bg-color-orange";
 			}else{
 				//rc.horario.clases[i].className = rc.clase.className;
 			}
@@ -201,15 +245,24 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	this.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
 		console.log(delta);
 		console.log(event);
-		this.clase = event;
-		rc.clase.start 	= moment(event.start).add(delta).format("YYYY-MM-DD HH:mm");
-		rc.clase.end 		= moment(event.end).add(delta).format("YYYY-MM-DD HH:mm");
-		rc.actionAgregar = false;
-		//this.alertOnEventClick(event, jsEvent, view);
+		_.each(rc.horario.clases, function(clase){
+			if(event._id == clase._id){
+				clase.start 	= moment(event.start).format("YYYY-MM-DD HH:mm");
+				clase.end 		= moment(event.end).format("YYYY-MM-DD HH:mm");
+			}
+		});
+		console.log(rc.horario.clases)
+		
   };
   
   this.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
      this.alertMessage = ('Event Resized to make dayDelta ' + delta);
+     _.each(rc.horario.clases, function(clase){
+			if(event._id == clase._id){
+				clase.start 	= moment(event.start).format("YYYY-MM-DD HH:mm");
+				clase.end 		= moment(event.end).format("YYYY-MM-DD HH:mm");
+			}
+		});
   };
   
   this.guardarHorario = function(form) {
@@ -217,12 +270,17 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	    toastr.error('Error al guardar los datos.');
 	    return;
     }
+    console.log("horario", this.horario);
 		eliminarTemporalesOcupados();
+		console.log("1");
 		this.horario.fechaCreacion = new Date();
 		this.horario.campus_id = Meteor.user().profile.campus_id;
 		this.horario.seccion_id = Meteor.user().profile.seccion_id;
 		this.horario.usuarioInserto = Meteor.userId();
+		console.log(this.horario);
+		console.log("2");
     Horarios.insert(this.horario);
+    console.log("1");
     toastr.success('Guardado correctamente.');
 		$state.go("root.listarHorarios");
   };
@@ -254,7 +312,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   this.uiConfig = {
     calendar:{
       height: 500,
-      editable: false,
+      editable: true,
       lang:'es',
       defaultView:'agendaWeek',
       defaultDate: this.getReactively("horario.fechaCreacion"),
@@ -283,10 +341,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
       eventRender: this.eventRender
     }
   };
-
+  
   this.eventSources = [rc.horario.clases, clasesTotales, aulasTotales];
-  var fechaInicioConfig = moment().subtract(10, 'days');
-  var d2 = new Date("2011/02/01")
-  console.log(d2);
-  var view = $('#calendar').fullCalendar('getView');
+  
 };

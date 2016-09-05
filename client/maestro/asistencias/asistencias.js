@@ -13,6 +13,8 @@ angular
 	this.sePuede = false;
 	this.existe = false;
 	
+	console.log($stateParams)
+	
 	this.subscribe('secciones', () => {		
 		return [{	_id : this.getReactively("seccion_id") }]
 	});

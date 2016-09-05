@@ -15,7 +15,7 @@
 	    </a>
 	    <ul>
 		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		      <a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id, horario_id : ro.getHorarioGrupo(mmg.grupo_id)})" tilte="Calificaciones">
 		        <i class="fa fa-lg fa-fw fa-calendar-check-o"></i>
 		        <span class="menu-item-parent">Tomar asistencia</span>
 		      </a>
