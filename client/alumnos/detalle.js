@@ -23,14 +23,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 	this.subscribe('inscripciones', () => {
 		return [{
-			alumno_id : $stateParams.id,
+			alumno_id : $stateParams.alumno_id,
 			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
 		}];
 	});
 	
 	this.subscribe('alumno', () => {
 		return [{
-			id : $stateParams.id,
+			id : $stateParams.alumno_id,
 			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
 		}];
 	});
@@ -45,13 +45,13 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.subscribe('pagosAlumno', () => {
 		return [{
-			alumno_id : $stateParams.id
+			alumno_id : $stateParams.alumno_id
 		}];
 	});
 		
 	this.helpers({
 		alumno : () => {
-			return Meteor.users.findOne({_id : $stateParams.id});
+			return Meteor.users.findOne({_id : $stateParams.alumno_id});
 		},
 		ocupaciones : () => {
 			return Ocupaciones.find();
@@ -218,7 +218,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		});
 		//console.log(semanasImprimir);
-		$state.go("anon.pagosImprimir",{semanas : semanasImprimir, id : $stateParams.id},{newTab : true});
+		$state.go("anon.pagosImprimir",{semanas : semanasImprimir, id : $stateParams.alumno_id},{newTab : true});
 		
 	}
 
@@ -251,7 +251,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var cobro=plan.fechas[i];
 		semanasPagadas.push({
 									fechaPago 	: new Date(),
-									alumno_id 	: $stateParams.id,
+									alumno_id 	: $stateParams.alumno_id,
 									campus_id 	:Meteor.user().profile.campus_id,
 									numero 		: cobro.numeroPago,
 									semana 		: cobro.semana,
@@ -274,7 +274,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			if(concepto.estatus){
 				semanasPagadas.push({
 									fechaPago 	: new Date(),
-									alumno_id 	: $stateParams.id,
+									alumno_id 	: $stateParams.alumno_id,
 									campus_id 	:Meteor.user().profile.campus_id,
 									numero 		: cobro.numeroPago,
 									semana 		: cobro.semana,
@@ -304,7 +304,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(diasRecargo>concepto.diasRecargo){	
 			semanasPagadas.push({
 										fechaPago 	: new Date(),
-										alumno_id 	: $stateParams.id,
+										alumno_id 	: $stateParams.alumno_id,
 										campus_id 	:Meteor.user().profile.campus_id,
 										numero 		: cobro.numeroPago,
 										semana 		: cobro.semana,
@@ -330,7 +330,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(diasDescuento>concepto.diasDescuento){	
 			semanasPagadas.push({
 										fechaPago 	: new Date(),
-										alumno_id 	: $stateParams.id,
+										alumno_id 	: $stateParams.alumno_id,
 										campus_id 	:Meteor.user().profile.campus_id,
 										numero 		: cobro.numeroPago,
 										semana 		: cobro.semana,
@@ -374,14 +374,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var semana = semanasPagadas[i];
 				Pagos.insert(semana);
 			}
-			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.id});  			
+			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});  			
 		}
 	}
 	this.condonarPago=function(plan,i,semanasCondonadas){
 		var cobro=plan.fechas[i];
 		semanasCondonadas.push({
 									fechaPago 	: new Date(),
-									alumno_id 	: $stateParams.id,
+									alumno_id 	: $stateParams.alumno_id,
 									campus_id 	:Meteor.user().profile.campus_id,
 									numero 		: cobro.numeroPago,
 									semana 		: cobro.semana,
@@ -428,7 +428,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var semana = semanasCondonadas[i];
 				Pagos.insert(semana);
 			}
-			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.id}); 
+			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.alumno_id}); 
 		}
 	}
 

@@ -1,0 +1,50 @@
+<nav>
+	<ul data-smart-menu >
+    <li data-ui-sref-active="active">
+      <a ui-sref="root.home" tilte="Home">
+        <i class="fa fa-lg fa-fw fa-home"></i>
+        <span class="menu-item-parent">Panel de Control</span>
+      </a>
+    </li>
+	</ul>
+	<ul data-smart-menu ng-repeat="mmg in ro.mmgs">
+    <li data-menu-collapse data-ui-sref-active="active">
+	    <a href="#">
+	      <i class="fa fa-lg fa-fw fa-group"></i>
+	      <span class="menu-item-parent">{{ro.getNombreGrupo(mmg.grupo_id)}}</span>
+	    </a>
+	    <ul>
+		    <li data-ui-sref-active="active">
+		      <a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id, horario_id : ro.getHorarioGrupo(mmg.grupo_id)})" tilte="Calificaciones">
+		        <i class="fa fa-lg fa-fw fa-calendar-check-o"></i>
+		        <span class="menu-item-parent">Tomar asistencia</span>
+		      </a>
+		    </li>
+		    <li data-ui-sref-active="active">
+		      <a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		        <i class="fa fa-lg fa-fw fa-eye"></i>
+		        <span class="menu-item-parent">Ver asistencia</span>
+		      </a>
+		    </li>
+	      <li data-ui-sref-active="active">
+		      <a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		        <i class="fa fa-lg fa-fw fa-check"></i>
+		        <span class="menu-item-parent">Calificar</span>
+		      </a>
+		    </li>
+		    <li data-ui-sref-active="active">
+		      <a ui-sref="root.verCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		        <i class="fa fa-lg fa-fw fa-eye"></i>
+		        <span class="menu-item-parent">Ver calificaciones</span>
+		      </a>
+		    </li>
+		    <li data-ui-sref-active="active">
+		      <a ui-sref="root.planeacionClase({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		        <i class="fa fa-lg fa-fw fa-bookmark"></i>
+		        <span class="menu-item-parent">Planear la clase</span>
+		      </a>
+		    </li>
+	    </ul>
+    </li>   
+	</ul>
+</nav>

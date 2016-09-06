@@ -6,7 +6,7 @@
 				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.listaAsistencia.fechaInicio | date:'dd-MM-yyyy HH:mm:ss'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
-				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="alumno.estatus = !alumno.estatus" ng-class="alumno.estatus == true ? 'success !important' : 'danger !important'">
+				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="alumno.estatus = !alumno.estatus" ng-class="alumno.estatus == true ? '' : 'danger !important'">
 					<span class="handle"> 
 						<label class="checkbox">
 							<input type="checkbox" ng-model="alumno.estatus" value="checked">

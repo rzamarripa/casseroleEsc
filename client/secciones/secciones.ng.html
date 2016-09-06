@@ -124,33 +124,42 @@
 				        <div>
 				          <div class="widget-body">							
 								    <div class="row">
-								    	<div class="col-sm-2" valida>					    
-									    	<label>Semanas *</label>
+								    	<div class="col-sm-4" valida>					    
+									    	<label>Semamans *</label>
 									    	<input name="semanas" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.semanas" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-2" valida>					    										
+								    	</div>	
+								    	<div class="col-sm-4" valida>					    										
+									    	<label>Quincenas *</label>																	
+									    	<input name="quincenas" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.quincenas" min="0" required>
+								    	</div>																								
+								    	<div class="col-sm-4" valida>					    										
 									    	<label>Meses *</label>																	
 									    	<input name="meses" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.meses" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-2" valida>					    										
-									    	<label>Bimestres *</label>															
-									    	<input name="bimestres" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.bimestres" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-2" valida>					    										
-									    	<label>Trimestres *</label>															
-									    	<input name="trimestres" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.trimestres" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-2" valida>					    										
-									    	<label>Tetramestres *</label>														
-									    	<input name="tetramestres" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.tetramestres" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-1" valida>					    										
-									    	<label>Semestres *</label>															
-									    	<input name="semestres" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.semestres" min="0" required>
-								    	</div>																									
-								    	<div class="col-sm-1" valida>					    										
-									    	<label>Años *</label>																		
-									    	<input name="anios" type="number" class="form-control" placeholder="Cantidad" ng-model="sec.seccion.anios" min="0" required>
+								    	</div>
+								    </div>
+				          </div>
+				        </div>
+				      </div>
+				    </div>
+				  </div>
+				  <div class="row">
+				    <div class="col-sm-12">
+				      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget3">
+				        <header>
+				          <h2>Configuración Académica</h2>
+				        </header>
+				        <div>
+				          <div class="widget-body">							
+								    <div class="row">
+								    	<div class="col-sm-4" valida>					    
+									    	<label>Minutos para Tomar Asistencia *</label>
+									    	<input name="minAsistencia" type="number" class="form-control" placeholder="Minutos para tomar asistencia" ng-model="sec.seccion.minutosAsistencia" min="0" required>
+								    	</div>	
+								    	<div class="col-sm-4 smart-form">					    										
+									    	<label class="toggle">
+													<input type="checkbox" checked="checked" name="abrirCalificaciones" class="onoffswitch-checkbox" ng-model="sec.seccion.abrirCalificaciones">
+													<i data-swchon-text="Si" data-swchoff-text="No"></i>Abrir Calificaciones
+												</label>
 								    	</div>
 								    </div>
 				          </div>
@@ -166,12 +175,23 @@
 				        </header>
 			          <div class="widget-body">
 							    <div class='row'>
+<!--
 							    	<div class="col-sm-4">
 											<label >Departamento académico</label>
 											<select name="deptoAcademico" class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.deptoAcademico_id">
 												<option ng-repeat="deptoAcademico in sec.deptosAcademicos" value="{{deptoAcademico._id}}">{{deptoAcademico.descripcionCorta}}</option>
 											</select>
 										</div>
+-->
+										<div class="col-sm-4" valida>
+							    		<label>Nivel educativo *</label>
+									    <select name="nivelEdu" ng-model="sec.seccion.nivelEdu" class="form-control" required="">
+											  <option value="Bachillerato">Bachillerato</option>
+										    <option value="Carrera">Carrera</option>
+										    <option value="Curso">Curso</option>
+									  	  <option value="Profesional">Profesional</option>
+											</select>
+							    	</div>
 							    	<div class="col-sm-4">
 									    <label> Orden</label>
 									    <input  name="ordenoman" type="text" class="form-control" placeholder="Orden" ng-model="sec.seccion.orden">
@@ -190,15 +210,12 @@
 									    <label>Servicio </label>
 									    <input type="text" class="form-control" placeholder="Servicio" ng-model="sec.seccion.servicio">
 							    	</div>
-							    	<div class="col-sm-4" valida>
-							    		<label>Nivel educativo *</label>
-									    <select name="nivelEdu" ng-model="sec.seccion.nivelEdu" class="form-control" required="">
-											  <option value="Bachillerato">Bachillerato</option>
-										    <option value="Carrera">Carrera</option>
-										    <option value="Curso">Curso</option>
-									  	  <option value="Profesional">Profesional</option>
+							    	<div class="col-sm-4">
+											<label >Turno</label>
+											<select class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.turno_id">
+												<option ng-repeat="turno in sec.turnos" value="{{turno._id}}">{{turno.nombre}}</option>
 											</select>
-							    	</div>
+										</div>
 							    </div>
 							    <div class="row">
 							    	<div class="col-sm-4">
@@ -208,13 +225,7 @@
 							    	<div class="col-sm-4">
 									    <label>Clave de incorporación  </label>
 									    <input type="text" class="form-control" placeholder="Clave de incorporación " ng-model="sec.seccion.claveIncor">
-							    	</div>		    	
-										<div class="col-sm-4">
-											<label >Turno</label>
-											<select class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.turno_id">
-												<option ng-repeat="turno in sec.turnos" value="{{turno._id}}">{{turno.nombre}}</option>
-											</select>
-										</div>
+							    	</div>										
 							    </div>
 			          </div>
 				      </div>

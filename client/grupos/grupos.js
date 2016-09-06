@@ -161,50 +161,48 @@ angular.module("casserole")
 
   this.guardar = function(grupo,form)
 	{
-			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		    }
-			grupo.estatus = true;
-			grupo.campus_id = Meteor.user().profile.campus_id;
-			grupo.seccion_id = Meteor.user().profile.seccion_id;
-			grupo.usuarioInserto = Meteor.userId();
-			grupo.inscritos = 0;
-			Grupos.insert(this.grupo);
-			toastr.success('Guardado correctamente.');
-			this.grupo = {}; 
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
-			$state.go('root.grupos');
+		if(form.$invalid){
+      toastr.error('Error al guardar los datos.');
+      return;
+    }
+		grupo.estatus = true;
+		grupo.campus_id = Meteor.user().profile.campus_id;
+		grupo.seccion_id = Meteor.user().profile.seccion_id;
+		grupo.usuarioInserto = Meteor.userId();
+		grupo.inscritos = 0;
+		Grupos.insert(this.grupo);
+		toastr.success('Guardado correctamente.');
+		this.grupo = {}; 
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();
+		$state.go('root.grupos');
 	};
 
-	
   this.actualizar = function(grupo){
-	    if(form.$invalid){
-		        toastr.error('Error al actualizar los datos.');
-		        return;
-		  }
-	    var idTemp = grupo._id;
-			delete grupo._id;		
-			grupo.usuarioActualizo = Meteor.userId(); 
-			Grupos.update({_id:$stateParams.id}, {$set : grupo});
-			toastr.success('Actualizado correctamente.');
-			$state.go("root.grupos",{"id":$stateParams.id});
-			form.$setPristine();
-	        form.$setUntouched();
+    if(form.$invalid){
+      toastr.error('Error al actualizar los datos.');
+      return;
+	  }
+    var idTemp = grupo._id;
+		delete grupo._id;		
+		grupo.usuarioActualizo = Meteor.userId(); 
+		Grupos.update({_id:$stateParams.id}, {$set : grupo});
+		toastr.success('Actualizado correctamente.');
+		$state.go("root.grupos",{"id":$stateParams.id});
+		form.$setPristine();
+    form.$setUntouched();
 	};
 
 	this.cambiarEstatus = function(id)
 	{
-			var grupo = Grupos.findOne({_id:id});
-			if(grupo.estatus == true)
-				grupo.estatus = false;
-			else
-				grupo.estatus = true;		
-			Grupos.update({_id:id},  {$set : {estatus: grupo.estatus}});
-		//Grupos.remove(id);
+		var grupo = Grupos.findOne({_id:id});
+		if(grupo.estatus == true)
+			grupo.estatus = false;
+		else
+			grupo.estatus = true;		
+		Grupos.update({_id:id},  {$set : {estatus: grupo.estatus}});
 	};
 
 	this.getSeccion = function(seccion_id)

@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-sm-12">
+		<div class="widget-body no-padding smart-form" >		
+			<h5 class="todo-group-title"><i class="fa fa-list"></i> Captura de Calificaciones - Grupo : {{vercal.grupo.nombre}} - Materia : {{vercal.materia.nombre}}
+				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{vercal.hoy | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+			</h5>
+			<ul id="sortable1" class="todo ui-sortable">
+				<li>
+					<label class="text-center" style="width: 50px;">
+						<strong>Calif.</strong>
+					</label> 
+					<p class="project-members" style="margin-left: 77px;">
+						<strong>Alumno</strong>
+					</p>
+				</li>
+				<li ng-repeat="alumno in vercal.capturaCalificaciones.alumnos">
+					<label class="text-center" style="width: 50px;">
+						<strong>{{alumno.calificacion | number:2}}</strong>
+					</label> 
+					<p class="project-members" style="margin-left: 77px;">
+						<img src="{{alumno.profile.fotografia}}" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion > 0 ? 'online' : 'busy'">
+						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
+					</p>
+				</li>
+			</ul>
+		</div>
+  </div>
+</div>

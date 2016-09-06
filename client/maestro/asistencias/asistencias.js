@@ -13,6 +13,8 @@ angular
 	this.sePuede = false;
 	this.existe = false;
 	
+	console.log($stateParams)
+	
 	this.subscribe('secciones', () => {		
 		return [{	_id : this.getReactively("seccion_id") }]
 	});
@@ -21,7 +23,7 @@ angular
 		return [{ grupo_id : $stateParams.grupo_id }]
 	})
 	
-	var hor = this.subscribe('horarios', () => {		
+	this.subscribe('horarios', () => {		
 		return [{
 			_id : $stateParams.horario_id
 		}]
@@ -145,16 +147,7 @@ angular
 																																					"profile.fotografia" : 1,
 																																					_id : 1
 																																			}}).fetch();
-							}else if(ms >= 900000){
-								esTarde = true;
-								rc.sePuede = false;
-							}else if(ms <= 0){
-								esTarde = false;
-								rc.sePuede = false;
 							}
-						}else{
-							hayClase = false;
-							rc.sePuede = false;
 						}
 					})
 				}

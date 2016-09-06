@@ -1,3 +1,11 @@
+<nav>
+	<div ng-include="'client/layouts/_admin.html'" ng-if="currentUser.roles[0] == 'admin'"></div>
+	<div ng-include="'client/layouts/_director.html'" ng-if="currentUser.roles[0] == 'director'"></div>
+	<div ng-include="'client/layouts/_coordinadorAcademico.html'" ng-if="currentUser.roles[0] == 'coordinadorAcademico'"></div>
+	<div ng-include="'client/layouts/_coordinadorFinanciero.html'" ng-if="currentUser.roles[0] == 'coordinadorFinanciero'"></div>	
+	<div ng-include="'client/layouts/_maestro.html'" ng-if="currentUser.roles[0] == 'maestro'"></div>
+</nav>
+
 <!--
 EJEMPLO DE COMO AGREGAR ELEMENTOS
 A LA BARRA LATERAL
@@ -25,7 +33,7 @@ A LA BARRA LATERAL
   </li>
 </ul>
 -->
-
+<!--
 <nav>
 	<ul data-smart-menu>
     <li data-ui-sref-active="active">
@@ -34,7 +42,7 @@ A LA BARRA LATERAL
         <span class="menu-item-parent">Panel de Control</span>
       </a>
     </li>
-<!--
+
     <li data-menu-collapse data-ui-sref-active="active">
 	    <a href="#">
 	      <i class="fa fa-lg fa-fw fa-bar-chart-o"></i>
@@ -245,6 +253,7 @@ A LA BARRA LATERAL
 		    </li>	     
 	    </ul>
 	  </li>
--->
+
   </ul>
 </nav>
+-->

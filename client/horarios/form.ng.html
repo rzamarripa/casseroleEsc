@@ -3,7 +3,7 @@
 		<h1 class="page-title txt-color-blueDark"><i class="fa fa-calendar fa-fw "></i> 
 			Calendario
 			<span>&gt;
-			De Horarios
+			De Horarios {{ho.colorSeleccionado}}
 			</span>
 		</h1>
 	</div>
@@ -43,7 +43,7 @@
 
 					<div class="form-group" valida>
 						<label >Maestro *</label>
-						<select name="maestro_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.maestro_id" required>
+						<select name="maestro_id" ng-change="ho.muestraMateriasMaestro(ho.clase.maestro_id)" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.maestro_id" required>
 							<option value=""></option>
 						  <option ng-repeat="maestro in ho.maestros" value="{{maestro._id}}">
 						  	{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}
@@ -52,7 +52,7 @@
 					</div>
 					<div class="form-group">
 						<label>Aulas</label>
-						<select name="aula_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.aula_id">
+						<select name="aula_id" ng-change="ho.muestraAulasMaestro(ho.clase.aula_id)" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.aula_id">
 							<option value=""></option>
 						  <option ng-repeat="aula in ho.aulas" value="{{aula._id}}">
 						  	{{aula.nombre}}
@@ -67,7 +67,7 @@
 					
 					<div class="form-group" valida>
 						<label for="fechaNac">Fin *</label>
-						<input name="end" date-time class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ho.clase.end" required=""/>
+						<input name="end" date-time date-format="dd-mm-yyyy" class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ho.clase.end" required=""/>
 					</div>
 					
 					<div class="form-group">
@@ -92,23 +92,45 @@
 								<input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
 								<i class="fa fa-check txt-color-white"></i> </label>
 						</div>
+						<div class="btn-toolbar" style="margin-top:20px;">
+							<div class="btn-group">
+								<button type="button" 
+									ng-click="ho.agregarClase(ho.clase,form2);" 
+									class="btn btn-default" ng-show="ho.actionAgregar" 
+									valida-form formulario="form2">
+									<i class="fa fa-plus fa-lg"></i>
+								</button>																	
+							</div>
+							<div class="btn-group">
+								<button type="button"
+									ng-click="ho.modificarClase(ho.clase,form2);" 
+									class="btn btn-default" ng-show="!ho.actionAgregar" 
+									valida-form formulario="form2">
+										<i class="fa fa-check fa-lg"></i>
+								</button>
+								<button type="button" 
+									ng-click="ho.cancelarClase();" 
+									class="btn btn-warning text-center" 
+									ng-show="!ho.actionAgregar">
+										<i class="fa fa-close fa-lg"></i>
+								</button>
+								<button type="button" 
+									ng-click="ho.eliminarClase();" 
+									class="btn btn-danger" ng-show="!ho.actionAgregar">
+										<i class="fa fa-trash fa-lg"></i>
+								</button>
+							</div>
+							<div class="btn-group pull-right">
+								<button type="button" 
+									ng-click="ho.duplicarClase(ho.clase);" 
+									class="btn btn-info" 
+									ng-show="!ho.actionAgregar">
+										<i class="fa fa-files-o fa-lg"></i>
+								</button>
+							</div>
+						</div>
 					</div>
-
 				</fieldset>
-				<div class="form-actions">
-					<div class="row">
-						<div class="col-sm-4">
-							<a href="#" ng-click="ho.agregarClase(ho.clase,form2);" class="btn btn-default pull-left" ng-show="ho.actionAgregar" valida-form formulario="form2"><i class="fa fa-plus fa-lg"></i></a>
-							<a href="#" ng-click="ho.modificarClase(ho.clase,form2);" class="btn btn-default pull-left" ng-show="!ho.actionAgregar" valida-form formulario="form2"><i class="fa fa-check fa-lg"></i></a>
-						</div>
-						<div class="col-sm-4 text-center">
-							<a href="#" ng-click="ho.cancelarClase();" class="btn btn-warning" ng-show="!ho.actionAgregar"><i class="fa fa-close fa-lg"></i></a>
-						</div>
-						<div class="col-sm-4">
-							<a href="#" ng-click="ho.eliminarClase();" class="btn btn-danger pull-right" ng-show="!ho.actionAgregar"><i class="fa fa-trash fa-lg"></i></a>
-						</div>
-					</div>
-				</div>
 			</form>
 		</div>
 		</div>

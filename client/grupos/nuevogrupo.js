@@ -206,6 +206,53 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		var clases = _.uniq(horario.clases, function(clase){
 			return clase.materia_id;
 		});
+		
+		
+		
+		[
+			{
+				partidaNombre : "Preliminares",
+				costos : [
+					{nombre : "C1",
+						valor : 230498
+					},
+					{nombre : "C2",
+						valor : 20398
+					},
+					{
+						nombre : "C3",
+						valor : 20398
+					},
+					{
+						nombre : "C4",
+						valor : 20398
+					}
+				]
+			},
+			{
+				partidaNombre : "Cimentación",
+				costos : [
+					{
+						nombre : "C1",
+						valor : 230498
+					},
+					{
+						nombre : "C2",
+						valor : 20398
+					},
+					{
+						nombre : "C3",
+						valor : 20398
+					},
+					{
+						nombre : "C4",
+						valor : 20398
+					}
+				]
+			}
+		]
+		
+		console.log(clases);
 		$meteor.call("insertMaestrosMateriasGrupos", clases, __grupo_id);
 
 		toastr.success('Grupo guardado.');

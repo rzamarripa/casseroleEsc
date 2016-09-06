@@ -29,6 +29,8 @@ Meteor.methods({
       mmg.materia_id = clase.materia_id; 
       mmg.maestro_id = clase.maestro_id;
       mmg.grupo_id = grupo_id;
+      mmg.estatus = true;
+      mmg.fechaCreacion = new Date();
       MaestrosMateriasGrupos.insert(mmg);
     });
     return

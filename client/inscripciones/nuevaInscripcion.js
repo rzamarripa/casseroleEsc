@@ -377,13 +377,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		this.calcularInscripcion();
 		console.log(this.inscripcion);
 	}
+	
 	this.guardar=function  (inscripcion) {
 		var grupo = Grupos.findOne(inscripcion.grupo_id);
 		inscripcion.planEstudios_id=grupo.planEstudios_id;
 		inscripcion.campus_id = Meteor.user().profile.campus_id;
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
+		inscripcion.estatus = 1;
 		Inscripciones.insert(inscripcion);
-		//var grupo = Grupos.findOne(inscripcion.grupo_id);
 		console.log(grupo);
 		grupo.inscritos = parseInt(grupo.inscritos) + 1;
 		delete grupo._id;
