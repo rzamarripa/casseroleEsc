@@ -33,11 +33,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		}
 	});
 			
-	this.subscribe('horarios',()=>{
-			return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
-		}
-	);
-			
 	this.subscribe('planesEstudios',function(){
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
 	});
@@ -175,9 +170,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		turnos : () => {
 			return Turnos.find();
 		},
-		horarios : ()=>{
-			return Horarios.find();
-		},
 		maestros : () => {
 			return Maestros.find();
 		}
@@ -200,16 +192,21 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		this.grupo.campus_id = Meteor.user().profile.campus_id;
 		this.grupo.seccion_id = Meteor.user().profile.seccion_id;
 		grupo.inscritos = 0;
-		horario = Horarios.findOne(grupo.horario_id);
+		grupo.fechaCreacion = new Date();
+		
 		//_grupo =quitarhk(grupo)
 		__grupo_id = Grupos.insert(grupo);
 
+/*
+		horario = Horarios.findOne(grupo.horario_id);
+		
 		var clases = _.uniq(horario.clases, function(clase){
 			return clase.materia_id;
 		});
 				
 		console.log(clases);
 		$meteor.call("insertMaestrosMateriasGrupos", clases, __grupo_id);
+*/
 
 		toastr.success('Grupo guardado.');
 		this.grupo = {}; 
@@ -244,16 +241,17 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		Grupos.update({_id:$stateParams.id}, {$set : grupo});
 
 		$meteor.call("deleteMaestrosMateriasGrupos", $stateParams.id);
-		
-		horario = Horarios.findOne(grupo.horario_id);
-		
+/*		
+		horario = Horarios.findOne(grupo.horario_id);		
+
 		var clases = _.uniq(horario.clases, function(clase){
 			return clase.materia_id;
 		});
 		
 		$meteor.call("insertMaestrosMateriasGrupos", clases, $stateParams.id);
+*/
 
-		toastr.success('Grupo guardado.');
+		toastr.success('Grupo modificado.');
 		$state.go("root.grupos",{"id":$stateParams.id});
 		form.$setPristine();
 		form.$setUntouched();

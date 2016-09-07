@@ -1,4 +1,4 @@
 Meteor.publish("maestros",function(params){
-  		return Maestros.find(params);
-
+	console.log(params);
+	return Maestros.find(params);
 });

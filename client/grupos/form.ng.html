@@ -74,14 +74,6 @@
 						</select>
 					</div>					
 				</div>
-				<div class="row">
-					<div class="col-sm-12" valida>
-						<label>Horario *</label>
-						<select name="horario" class="form-control select2" placeholder="Seleccione" ng-model="gp.grupo.horario_id" required="">
-							<option ng-repeat="horario in gp.horarios" value="{{horario._id}}">{{horario.nombre}}</option>
-						</select>
-					</div>
-				</div>
 	  	</div>
 	  	<div class="well">
 	  		<div class="row">
@@ -98,16 +90,16 @@
 							<option ng-repeat="plan in gp.planes" value="{{plan._id}}">{{plan.descripcion}}</option>
 						</select>
 					</div>
-					<div class="col-sm-1" valida>
+					<div class="col-sm-1">
 						<label>Grado*</label>
-						<select name="grados" class="form-control" ng-model="gp.asignacion.grado" required="" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
+						<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
 							<option value=""></option>
 							<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
 						</select>
 					</div>
-					<div class="col-sm-3" valida>
+					<div class="col-sm-3">
 						<label>Materia *</label>
-						<select name="materia" class="form-control" ng-model="gp.asignacion.materia" required="">
+						<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
 							<option value=""></option>
 							<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
 						</select>

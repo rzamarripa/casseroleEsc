@@ -816,6 +816,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.resumenAcademico', {
+      url: '/resumenAcademico',
+      templateUrl: 'client/resumenAcademico/resumenAcademico.html',
+      controller: 'ResumenAcademicoCtrl as ra',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.alumnoCalificaciones', {
       url: '/alumnoCalificaciones',
       templateUrl: 'client/alumno/calificaciones/calificaciones.html',
