@@ -727,7 +727,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -743,7 +743,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -791,7 +791,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -807,7 +807,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -912,6 +912,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })    
+    .state('root.gruposActivos', {
+      url: '/gruposActivos',
+      templateUrl: 'client/gruposActivos/gruposActivos.html',
+      controller: 'GruposActivosCtrl as ga',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.tipoPublicidad', {
       url: '/tipoPublicidad',
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',

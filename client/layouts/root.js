@@ -7,7 +7,6 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	this.hoy = new Date();
 	// Director
 	if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "director"){
-		console.log("entré como admin");
 		this.subscribe('campus', function(){
 			return [{
 				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""

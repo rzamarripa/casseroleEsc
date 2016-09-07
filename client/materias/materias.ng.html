@@ -9,11 +9,7 @@
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form" novalidate>
 		  	<div class="well">		  		
-			    <div class="row">
-			    	<div class="col-sm-2" valida>					    
-						  <label>Clave *</label>
-				    	<input name="clave" type="text" class="form-control"  ng-model="mat.materia.clave" required="">
-			    	</div>
+			    <div class="row">			    	
 			    	<div class="col-sm-3" valida>
 						  <label>Nombre *</label>
 				    	<input name="nombre" type="text" class="form-control"  ng-model="mat.materia.nombre" required="">
@@ -21,6 +17,10 @@
 			    	<div class="col-sm-2" valida>
 						  <label>Nombre Corto *</label>
 				    	<input name="nombreCorto" type="text" class="form-control"  ng-model="mat.materia.nombreCorto" required="" maxlength="6">
+			    	</div>
+			    	<div class="col-sm-2" valida>					    
+						  <label>Semanas Duración *</label>
+				    	<input name="semanas" type="number" class="form-control"  ng-model="mat.materia.semanas" required="">
 			    	</div>
 			    	<div class="col-sm-5" valida>
 							<label>Departamento Académico *</label>
@@ -52,10 +52,10 @@
 	<div class="col-sm-12">
 		<table class="table table-bordered">
 			<thead>
-				<tr>
-					<th width="10%"><div class="text-center">Clave</div></th>
+				<tr>					
 					<th ><div class="text-center">Nombre</div></th>
 					<th width="10%"><div class="text-center">Nombre Corto</div></th>	
+					<th width="10%"><div class="text-center">Cant. Semanas</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -70,9 +70,9 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="materia in mat.materias">
-			    <td>{{materia.clave}}</td>
 			    <td>{{materia.nombre}}</td>
 			    <td>{{materia.nombreCorto}}</td>
+			    <td>{{materia.semanas}}</td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="materia.estatus" class="label label-success">

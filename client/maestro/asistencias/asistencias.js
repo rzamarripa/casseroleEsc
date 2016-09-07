@@ -115,16 +115,23 @@ angular
 				console.log("se cargaron");
 				_.each(rc.asistencias, function(asistencia){
 					if(moment(asistencia.fechaAsistencia).isSame(new Date(), "day")){
-						console.log("mismo día");
-						var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(asistencia.fechaInicio,"YYYY/MM/DD HH:mm:ss"));
+						console.log("mismo día", asistencia.fechaAsistencia);
+						
 						rc.existe = true;
 						console.log("ms si existe", ms);
-						if(ms <= 900000 && ms >= 0){
+						if(Meteor.user().roles[0] == "maestro"){
+							if(ms <= 900000 && ms >= 0){
+								var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(asistencia.fechaInicio,"YYYY/MM/DD HH:mm:ss"));
+								console.log("se puede tomar asistencia");								
+								rc.sePuede = true;
+								resultado = asistencia;
+							}else{
+								console.log('Ya no es tiempo para actualizar la asistencia');
+							}
+						}else{
 							console.log("se puede tomar asistencia");								
 							rc.sePuede = true;
 							resultado = asistencia;
-						}else{
-							console.log('Ya no es tiempo para actualizar la asistencia');
 						}
 					}
 				})
@@ -135,10 +142,22 @@ angular
 						if(moment(clase.start).isSame(new Date(), "day")){
 							console.log("hay Clase hoy");
 							hayClase = true;
-							var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(clase.start,"YYYY/MM/DD HH:mm:ss"));	
-							console.log("ms",ms);					
-							if(ms <= 900000 && ms >= 0){
-								console.log("se puede");
+								
+							console.log("ms",ms);
+							if(Meteor.user().roles[0] == "maestro"){
+								var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(clase.start,"YYYY/MM/DD HH:mm:ss"));
+								if(ms <= 900000 && ms >= 0){
+									console.log("se puede");
+									rc.sePuede = true;
+									resultado.fechaInicio = clase.start;
+									resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
+																																						"profile.nombreCompleto" : 1,
+																																						"profile.matricula" : 1,
+																																						"profile.fotografia" : 1,
+																																						_id : 1
+																																				}}).fetch();
+								}
+							}else{
 								rc.sePuede = true;
 								resultado.fechaInicio = clase.start;
 								resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
@@ -148,6 +167,7 @@ angular
 																																					_id : 1
 																																			}}).fetch();
 							}
+							
 						}
 					})
 				}

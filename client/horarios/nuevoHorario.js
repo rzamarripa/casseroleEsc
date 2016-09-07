@@ -104,7 +104,6 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 
   this.modificarClase = function(clase,form2){
 	  _.each(this.horario.clases, function(claseActual){
-		  console.log("entre", clase);
 		  if(claseActual._id == clase._id){
 			  var materia = Materias.findOne(clase.materia_id);
 				var maestro = Maestros.findOne(clase.maestro_id);
@@ -152,9 +151,13 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  nuevaClase.start 	= moment(clase.start).format("YYYY-MM-DD HH:mm");
 	  nuevaClase.end 		= moment(clase.end).format("YYYY-MM-DD HH:mm");
 	  nuevaClase.estatus = true;
+	  
 
 	  var mayor = 0;
-	  _.each(this.horario.clases, function(clase){		  
+	  _.each(this.horario.clases, function(clase){
+		  if(mayor == 0){
+			  rc.horario.semana = moment(clase.start).isoWeek();
+		  }
 		  if(clase._id > mayor){
 			  mayor = clase._id;
 		  }
@@ -162,7 +165,6 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	  nuevaClase._id = mayor + 1;
 	  
 	  this.horario.clases.push(nuevaClase);
-	  console.log("todas", this.horario.clases);
   }
   
   this.modificarHorario = function(horario,form){
@@ -170,6 +172,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	    toastr.error('Error al guardar los datos del Horario.');
 	    return;
     }
+    
 	  this.horario.semana = horario.semana;
 	  var idTemp = horario._id;
 	  delete horario._id;
@@ -179,7 +182,6 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   }
    
   this.muestraMateriasMaestro = function(maestro_id){
-	  console.log(maestro_id);
 	  var horariosTotales = angular.copy(this.horarios);
 	  while(clasesTotales.length>0)clasesTotales.pop();
 	  _.each(horariosTotales, function(horario){
@@ -217,14 +219,10 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   
   this.alertOnEventClick = function(date, jsEvent, view){
 	  _.each(rc.horario.clases, function(clase){
-		  console.log("className", clase.className);
 		  if(clase.className == "bg-color-orange"){
-			  console.log("entre aquí y es naranja");
 			  clase.className = rc.colorSeleccionado;
 		  }
 	  })
-	  console.log("date", date);
-	  console.log("clases", rc.horario.clases);
 	  
 	  eliminarTemporalesOcupados();
 	  rc.clase = angular.copy(date);
@@ -243,16 +241,12 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
   };
   
 	this.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-		console.log(delta);
-		console.log(event);
 		_.each(rc.horario.clases, function(clase){
 			if(event._id == clase._id){
 				clase.start 	= moment(event.start).format("YYYY-MM-DD HH:mm");
 				clase.end 		= moment(event.end).format("YYYY-MM-DD HH:mm");
 			}
-		});
-		console.log(rc.horario.clases)
-		
+		});		
   };
   
   this.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
@@ -270,17 +264,12 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	    toastr.error('Error al guardar los datos.');
 	    return;
     }
-    console.log("horario", this.horario);
 		eliminarTemporalesOcupados();
-		console.log("1");
 		this.horario.fechaCreacion = new Date();
 		this.horario.campus_id = Meteor.user().profile.campus_id;
 		this.horario.seccion_id = Meteor.user().profile.seccion_id;
 		this.horario.usuarioInserto = Meteor.userId();
-		console.log(this.horario);
-		console.log("2");
     Horarios.insert(this.horario);
-    console.log("1");
     toastr.success('Guardado correctamente.');
 		$state.go("root.listarHorarios");
   };

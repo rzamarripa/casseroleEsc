@@ -13,6 +13,10 @@
 				    <label>Turno *</label>
 			    	<input name="turno" type="text" class="form-control" placeholder="Turno" ng-model="tn.turno.nombre" required="">
 			    </div>
+			    <div class="col-sm-4" valida>
+				    <label>Cant. Asistencias *</label>
+			    	<input name="asistsencias" type="text" class="form-control" placeholder="Asistencias" ng-model="tn.turno.asistencias" required="">
+			    </div>
 				</div>
 			</div>
 				<div class="row">
@@ -33,6 +37,7 @@
 			<thead>
 				<tr>
 					<th width="10%"><div class="text-center">Turno</div></th>
+					<th width="10%"><div class="text-center">Asistencias</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -48,6 +53,7 @@
 			<tbody>
 		    <tr ng-repeat="turno in tn.turnos">
 			    <td>{{turno.nombre}}</td>
+			    <td>{{turno.asistencias}}</td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="turno.estatus" class="label label-success">

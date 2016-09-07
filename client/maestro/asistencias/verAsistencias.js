@@ -53,13 +53,9 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 		  var transmutar = {};
 		  var arregloCoincidencias = [];
 		  if(this.horarios && this.asistencias){
-			  console.log("entre");
 			  var horariosOrdenados = Horarios.find({},{ sort : {fechaIncio : 1}}).fetch();
-			  console.log(horariosOrdenados);
 			  _.each(rc.getReactively("horarios"), function(horario){
-				  console.log("horarios");
 					_.each(horario.clases, function(clase){
-						console.log("clases");
 						var coincidencias = _.filter(rc.getReactively("asistencias"), function(asistencia){
 							return moment(asistencia.fechaAsistencia).isSame(clase.start, "day");
 						});
@@ -75,11 +71,13 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 			  _.each(arregloCoincidencias, function(coincidencia){
 				  if(coincidencia.alumnos == undefined){
 					  coincidencia.alumnos = [];
-					  _.each(rc.asistencias[0].alumnos, function(alumno){
-						  coincidencia.alumnos.push({
-								estatus : false,
-								profile : alumno.profile
-							});
+					  _.each(rc.alumnos, function(alumno){
+						  if(alumno.roles == ["alumno"]){
+							  coincidencia.alumnos.push({
+									estatus : false,
+									profile : alumno.profile
+								});
+						  }						  
 					  })
 					  
 				  }
@@ -95,7 +93,6 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 					})
 			  });
 		  }
-		  console.log("transmutar",arregloCoincidencias)
 			return _.toArray(transmutar);
 
 	  }

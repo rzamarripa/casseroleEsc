@@ -1,0 +1,39 @@
+<h2>Grupos Activos</h2>
+<div class="tree">
+	<ul role="tree" ng-repeat="(maestro, mmgs) in ga.gruposActivos">
+		<li class="parent_li" role="treeitem">
+			<span title="Collapse this branch">
+				<i class="fa fa-lg fa-group"></i> {{ga.getMaestro(maestro)}}</span>
+			<ul role="group">
+				<li class="parent_li" role="treeitem" ng-repeat="mmg in mmgs">
+					<span class="label bg-color-orange" title="Collapse this branch">
+						<i class="fa fa-lg fa-minus-circle"></i> {{mmg.grupo.nombre}}
+					</span>
+					<ul role="group" >
+						<li>
+							<a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})" >
+								<span><i class="fa fa-check"></i> Calificaciones</span>
+							</a>
+						</li>
+						<li role="treeitem">
+							<span>
+								<a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">
+									<i class="fa fa-lg fa-list"></i> Asistencias
+								</a>
+							</span>
+							<ul role="group">
+								<li ng-repeat="clase in mmg.horario.clases">
+									<span>
+										<a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">
+											<i class="fa fa-list"> {{clase.start | date : 'dd-MMMM-yyyy HH:ss' }}</i>
+										</a>
+									</span>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>				
+			</ul>
+		</li>
+	</ul>
+</div>
