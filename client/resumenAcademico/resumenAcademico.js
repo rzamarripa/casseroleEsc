@@ -20,7 +20,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 	  grupos : () => {
 		  return Grupos.find();
 	  }
-  });  
+  });
   
   this.getMaestro = function(maestro_id){
 		var maestro = Maestros.findOne(maestro_id);
