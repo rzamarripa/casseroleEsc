@@ -15,7 +15,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.hayParaPagar = true;
-	this.tipoPlanes=["hora de xuxa","Semanal","Quincenal","Mensual"];
+	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	
 	this.subscribe("ocupaciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -152,7 +152,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
 		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24)); 
 		var concepto = plan.colegiatura[plan.fechas[i].tipoPlan];
-		var importe = concepto.importeRegular;
+		var importe = concepto.importeRegular+(plan.fechas[i].remanente? plan.fechas[i].remanente:0);
 		
 		if(diasDescuento>concepto.diasDescuento){
 			importe-=concepto.importeDescuento;
@@ -289,6 +289,24 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 									semanaPago: this.semanaPago
 				});
 			}
+		}
+		if(plan.fechas[i].remanente){
+			semanasPagadas.push({
+									fechaPago 	: new Date(),
+									alumno_id 	: $stateParams.alumno_id,
+									campus_id 	:Meteor.user().profile.campus_id,
+									numero 		: cobro.numeroPago,
+									semana 		: cobro.semana,
+									anio 		: cobro.anio,
+									estatus 	: 1,
+									concepto 	: 'Colegiatura #'+cobro.numeroPago+': Ajuste por cambio de plan de pagos',
+									tipo 		: "Cobro",
+									usuario_id 	: Meteor.userId(),
+									importe 	: concepto.importe,
+									cuenta_id : this.cuenta._id,
+									weekday : this.diaActual,
+									semanaPago: this.semanaPago
+				});
 		}
 		this.pagarRecargo(plan,i,semanasPagadas);
 		this.pagarDescuento(plan,i,semanasPagadas);
@@ -431,15 +449,152 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.alumno_id}); 
 		}
 	}
+	this.planPagosSemana =function (inscripcion) {
+		var fechaIncial=inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = inscripcion.planPagos.colegiatura.Semanal.diaColegiatura;
+		var totalPagos = inscripcion.planPagos.colegiatura.Semanal.totalPagos;
+		var mfecha = moment(fechaIncial);
+		mfecha=mfecha.day(dia);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				tipoPlan:'Semanal',
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			mfecha = mfecha.day(8);
+		}
+		console.log(plan);
+		return plan;
+	}
+
+	this.planPagosQuincenal=function(inscripcion) {
+		var fechaIncial=inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = inscripcion.planPagos.colegiatura.Quincenal.diaColegiatura;
+		var totalPagos = inscripcion.planPagos.colegiatura.Quincenal.totalPagos;
+		var mfecha = moment(fechaIncial);
+		var par =0;
+		mfecha=mfecha.date(dia[0]);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		var dife=mfecha.diff(fechaIncial,'days');
+		if(Math.abs(dife)>7){
+			mfecha=mfecha.date(dia[1]);
+			dife=mfecha.diff(fechaIncial,'days');
+			if(Math.abs(dife)>7)
+				mfecha.add(1,'month');
+			else
+				par=1;
+		}
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				tipoPlan:'Quincenal',
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			if(par==1){
+				par = 0;
+				mfecha.add(1,'month');
+				mfecha.date(dia[par]);
+			}else{
+				par = 1;
+				//mfecha.add(1,'month');
+				mfecha.date(dia[par]);
+			}
+		}
+		console.log(plan);
+		return plan;
+	}
+
+	this.planPagosMensual=function(inscripcion) {
+		var fechaIncial=inscripcion.planPagos.colegiatura.fechaIncial;
+		var dia = inscripcion.planPagos.colegiatura.Mensual.diaColegiatura;
+		var totalPagos = inscripcion.planPagos.colegiatura.Mensual.totalPagos;
+		var mfecha = moment(fechaIncial);
+		mfecha=mfecha.date(dia);
+		var inicio =  mfecha.toDate();
+		var plan =[]
+		var dife=mfecha.diff(fechaIncial,'days');
+		if(Math.abs(dife)>15)
+			mfecha.add(1,'month');
+		for (var i = 0; i <totalPagos; i++) {
+			plan.push({
+				semana:mfecha.isoWeek(),
+				fecha:mfecha.toDate(),
+				tipoPlan:'Mensual',
+				numeroPago:i+1,
+				mes:mfecha.get('month')+1,
+				anio:mfecha.get('year')
+			});
+			mfecha.add(1,'month');
+		}
+		console.log(plan);
+		return plan;
+	}
 
 	this.cambioTipoColegiatura=function(selected, oldValue,curso){
-		console.log(selected,oldValue);
+		//console.log(selected,oldValue);
 		if (confirm("Está seguro de desea cambiar el Plan de Pagos")) {
+			//console.log(curso);
+			var fechas = curso.planPagos.fechas;
+			
+			var fechaActual = new Date()
+			var fechaUltima = null
+			
+			while(fechas.length>0 && fechas[fechas.length-1].fecha>fechaActual && (!fechas[fechas.length-1].pagada || fechas[fechas.length-1].pagada==0)){
+				
+				fechaUltima = fechas.pop();
+			}
+			var plan = [];
+			var r =0;
+			switch(selected){
+				case 'Mensual':
+					plan= this.planPagosMensual(curso);
+					r =30;
+					break;
+				case 'Quincenal':
+					plan= this.planPagosQuincenal(curso);
+					r=15;
+					break;
+				case 'Semanal':
+					plan= this.planPagosSemana(curso);
+					r=7;
+					break;
+			}
+
+			var mfechaUltima =moment(fechaUltima.fecha);
+
+			for(var i=0;i<plan.length;i++){
+				//console.log(fechaUltima.fecha,plan[i].fecha,fechaUltima.fecha<plan[i].fecha)
+				if(fechaUltima.fecha<=plan[i].fecha){
+					plan[i].numeroPago = fechas[fechas.length-1].numeroPago+1
+					if(fechaUltima.numeroPago == plan[i].numeroPago){
+						var x = mfechaUltima.diff(plan[i].fecha, 'days') *-1;
+						var importe = curso.planPagos.colegiatura[selected].importeRegular;
+						var remanente = (x/r)*importe;
+						plan[i].remanente = remanente;
+
+
+					}
+					
+					fechas.push(plan[i]);
+				}
+			}
+			console.log(curso);
+
 		}
 		else{
 			curso.planPagos.colegiatura.tipoColegiatura=oldValue;
 		}
 	}
+
 	this.getOcupacion = function(ocupacion_id){
 		var ocupacion = Ocupaciones.findOne(ocupacion_id);
 		if(ocupacion)
