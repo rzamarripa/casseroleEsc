@@ -386,6 +386,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.estatus = 1;
 		Inscripciones.insert(inscripcion);
 		console.log(grupo);
+		if(!grupo.alumnos)
+			grupo.alumnos=[];
+		grupo.alumnos.push(inscripcion.alumno_id);
 		grupo.inscritos = parseInt(grupo.inscritos) + 1;
 		delete grupo._id;
 		Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
