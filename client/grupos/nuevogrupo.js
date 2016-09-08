@@ -30,6 +30,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	{
 		onReady:function(){
 			rc.grupo = Grupos.findOne({_id:$stateParams.id});
+			rc.grupo.planEstudios_id = "";
 		}
 	});
 			
@@ -56,14 +57,13 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		{
 			onReady:function (argument) {
 				var conceptos = ConceptosPago.find().fetch();
-				
-				
+								
 				if(!this.grupo){
 					this.grupo={};
 					this.grupo.asignaciones = [];
 					this.grupo.fechaInicio = new Date();
 					this.grupo.semanaInicio = moment().isoWeek();
-					this.grupo.semanaFin = 52;
+					this.grupo.semanaFin = 52;					
 				}
 					
 				if(!this.grupo.inscripcion)
@@ -163,8 +163,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		tiposColegiatura : () =>{
 			return ['Semanal','Quincenal','Mensual'];
 		},
-		conceptosInscripcion : () => {
-	
+		conceptosInscripcion : () => {	
 			return ConceptosPago.find({modulo:'inscripcion'});
 		},
 		turnos : () => {
@@ -194,19 +193,18 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		grupo.inscritos = 0;
 		grupo.fechaCreacion = new Date();
 		
-		//_grupo =quitarhk(grupo)
 		__grupo_id = Grupos.insert(grupo);
-
-/*
-		horario = Horarios.findOne(grupo.horario_id);
-		
-		var clases = _.uniq(horario.clases, function(clase){
-			return clase.materia_id;
-		});
-				
-		console.log(clases);
-		$meteor.call("insertMaestrosMateriasGrupos", clases, __grupo_id);
-*/
+		_.each(grupo.asignaciones, function(asignacion){
+			var relacion = {
+				maestro_id : asignacion.maestro_id,
+				materia_id : asignacion.materia_id,
+				grupo_id : __grupo_id,
+				turno_id : grupo.turno_id,
+				fechaCreacion : new Date(),
+				estatus : true
+			}
+			MaestrosMateriasGrupos.insert(relacion);
+		})
 
 		toastr.success('Grupo guardado.');
 		this.grupo = {}; 
@@ -220,11 +218,11 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	
 	this.editarGrupo = function(id)
 	{
-	rc.grupo = Grupos.findOne({_id:$stateParams.id});
-	rc.grupo.asignaciones = [];
-	this.action = false;
-	$('.collapse').collapse("show");
-	this.nuevo = false;
+		rc.grupo = Grupos.findOne({_id:$stateParams.id});
+		rc.grupo.asignaciones = [];
+		this.action = false;
+		$('.collapse').collapse("show");
+		this.nuevo = false;
 	};
 	
 	this.actualizar = function(grupo,form)
@@ -235,21 +233,9 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		}
 		
 		var idTemp = grupo._id;
-		
 		delete grupo._id;	
 		
 		Grupos.update({_id:$stateParams.id}, {$set : grupo});
-
-		$meteor.call("deleteMaestrosMateriasGrupos", $stateParams.id);
-/*		
-		horario = Horarios.findOne(grupo.horario_id);		
-
-		var clases = _.uniq(horario.clases, function(clase){
-			return clase.materia_id;
-		});
-		
-		$meteor.call("insertMaestrosMateriasGrupos", clases, $stateParams.id);
-*/
 
 		toastr.success('Grupo modificado.');
 		$state.go("root.grupos",{"id":$stateParams.id});
@@ -258,30 +244,46 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	};	
 	
 	this.getGrados = function(planEstudio_id){
-		var plan = PlanesEstudios.findOne(planEstudio_id);
-		rc.grados = [];
-		for(var i = 1; i <= plan.grado; i++ ){
-			rc.grados.push(i);
-		}
+		if(planEstudio_id != undefined){
+			var plan = PlanesEstudios.findOne(planEstudio_id);
+			rc.grados = [];
+			for(var i = 1; i <= plan.grado; i++ ){
+				rc.grados.push(i);
+			}
+		}		
 	}
 	
 	this.getMaterias = function(planEstudio_id, grado){
-		var plan = PlanesEstudios.findOne(planEstudio_id);
-		grado--;
-		rc.materias = [];
-		_.each(plan.grados, function(val, key){
-			if(key == grado){
-				_.each(val, function(materia){
-					rc.materias.push(materia.materia);
-				});				
-			}
-		})
+		if(planEstudio_id != undefined && grado != undefined){
+			var plan = PlanesEstudios.findOne(planEstudio_id);
+			grado--;
+			rc.materias = [];
+			_.each(plan.grados, function(val, key){
+				if(key == grado){
+					_.each(val, function(materia){
+						rc.materias.push(materia.materia);
+					});				
+				}
+			})
+		}
 	};
 
-	this.agregarAsignacion = function(asignacion){
+	this.agregarAsignacion = function(asignacion, form2){
 		
-		
+		//TODO me quedé validando la asignación
+		console.log(asignacion);
+		if(asignacion == undefined || asignacion.maestro_id == undefined || asignacion.materia == undefined || asignacion.grado == undefined){
+			toastr.error('Por favor seleccione maestro, plan de estudios, grado y materia para agregar una asignación.');
+			return
+		}
 		var materia = JSON.parse(asignacion.materia);
+		
+		var x = !!_.where(rc.grupo.asignaciones, {materia_id:materia._id}).length;
+		if(x == true){
+			toastr.warning('Esta materia ya está agregada.');
+			return
+		}
+				
 		asignacion.materia_id = materia._id;
 		asignacion.materia = materia;
 		asignacion.semanas = [];
@@ -299,7 +301,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		rc.grupo.asignaciones.push(asignacion);
 		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
 		rc.asignacion = {};
-		console.log("objeto general", rc.grupo);
+		rc.materias = [];
 	}
 	
 	this.getMaestro = function(maestro_id){
@@ -315,8 +317,19 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	}
 	
 	this.getNumeroSemana = function(fecha){
-		console.log(fecha);
 		rc.grupo.semanaInicio = moment(fecha).isoWeek();
+	}
+	
+	this.quitarAsignacion = function(index){
+		rc.grupo.asignaciones.splice(index, 1);
+	}
+	
+	this.cambiarEstatus = function(asignacionCambio){
+		_.each(rc.grupo.asignaciones, function(asignacionActual){
+			if(asignacionCambio.estatus == true && asignacionCambio.materia_id != asignacionActual.materia_id){
+				asignacionActual.estatus = false;
+			}
+		});
 	}
 
 };

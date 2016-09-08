@@ -30,10 +30,7 @@
 		  			<label for="identificador">Identificador *</label>
 					<input name="identificador" type="text" class="form-control" id="identificador" placeholder="Identificador" ng-model="gp.grupo.identificador" required="">
 		  		</div>
-		  	</div>
-	  	</div>
-	  	
-	  	<div class="well">				 
+		  	</div>			 
 				<div class="row">						
 					<div class="col-sm-4" valida>
 				    <label for="tipo">Tipo *</label>
@@ -75,70 +72,84 @@
 					</div>					
 				</div>
 	  	</div>
-	  	<div class="well">
-	  		<div class="row">
-		  		<div class="col-sm-4">
-						<label >Maestro *</label>
-						<select class="form-control select2" ng-model="gp.asignacion.maestro_id">
-							<option ng-repeat="maestro in gp.maestros" value="{{maestro._id}}">{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}</option>
-						</select>
+	  	<div class="row">
+				<div class="col-sm-12">
+					<div class="well">
+						<form name="form2" class="form-horizontal" role="form" novalidate >
+							<div class="row">
+					  		<div class="col-sm-4" valida>
+									<label >Maestro *</label>
+									<select name="maestro" class="form-control select2" ng-model="gp.asignacion.maestro_id">
+										<option ng-repeat="maestro in gp.maestros" value="{{maestro._id}}">{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}</option>
+									</select>
+								</div>
+					    	<div class="col-sm-3" valida>
+									<label>Plan de Estudios *</label>
+									<select name="planestudios" class="form-control" ng-model="gp.grupo.planEstudios_id" required="" ng-change="gp.getGrados(gp.grupo.planEstudios_id)">
+										<option value=""></option>
+										<option ng-repeat="plan in gp.planes" value="{{plan._id}}">{{plan.descripcion}}</option>
+									</select>
+								</div>
+								<div class="col-sm-1" valida>
+									<label>Grado*</label>
+									<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
+										<option value=""></option>
+										<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
+									</select>
+								</div>
+								<div class="col-sm-3" valida>
+									<label>Materia *</label>
+									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
+										<option value=""></option>
+										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
+									</select>
+								</div>
+								<div class="col-sm-1 col-md-1 col-lg-1 text-center">
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<button class="btn btn-primary" ng-click="gp.agregarAsignacion(gp.asignacion, form2)">
+										<i class="fa fa-plus fa-lg"></i>
+									</button>
+								</div>
+							</div>
+						</form>
 					</div>
-		    	<div class="col-sm-3" valida>
-						<label>Plan de Estudios *</label>
-						<select name="planestudios" class="form-control" ng-model="gp.grupo.planEstudios_id" required="" ng-change="gp.getGrados(gp.grupo.planEstudios_id)">
-							<option value=""></option>
-							<option ng-repeat="plan in gp.planes" value="{{plan._id}}">{{plan.descripcion}}</option>
-						</select>
-					</div>
-					<div class="col-sm-1">
-						<label>Grado*</label>
-						<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
-							<option value=""></option>
-							<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
-						</select>
-					</div>
-					<div class="col-sm-3">
-						<label>Materia *</label>
-						<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
-							<option value=""></option>
-							<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
-						</select>
-					</div>
-					<div class="col-sm-1">
-						<label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-						<button class="btn btn-primary" ng-click="gp.agregarAsignacion(gp.asignacion)">
-							<i class="fa fa-plus fa-lg"></i>
-						</button>
+					<div class="well">
+						<div class="row">
+							<table class="table table-bordered">
+					  		<tbody>
+						  		<tr>
+							  		<th ng-repeat="asignacion in gp.grupo.asignaciones" class="no-padding">
+								  		<table class="table no-padding" style="border-top: 0px;">
+									  		<tr>
+										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana}}</td>
+									  		</tr>
+								  		</table>
+								  	</th>
+						  		</tr>
+						  		<tr>
+							  		<th class="text-center bg-color-blue txt-color-white smart-form" ng-repeat="asignacion in gp.grupo.asignaciones">
+								  		<label class="toggle">						  			
+									  		<span class="txt-color-white">{{asignacion.materia.nombre}}</span>
+												<input type="checkbox" ng-change="gp.cambiarEstatus(asignacion)" name="estatus" class="onoffswitch-checkbox txt-color-white" ng-model="asignacion.estatus">
+												<i data-swchon-text="Activa" data-swchoff-text="Inactiva"></i>
+												
+											</label>
+								  	</th>
+						  		</tr>
+						  		<tr>
+							  		<th class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
+								  		<button ng-click="gp.quitarAsignacion($index)" class="btn btn-xs btn-danger pull-left">
+							  				<i class="fa fa-times fa-xs"></i>
+							  			</button>
+								  		{{gp.getMaestro(asignacion.maestro_id)}}
+								  	</th>
+						  		</tr>
+					  		</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
-	  	</div>
-	  	<div class="well">
-	  		<div class="row">
-		  		<table class="table table-bordered">
-			  		<tbody>
-				  		<tr>
-					  		<th ng-repeat="asignacion in gp.grupo.asignaciones" class="no-padding">
-						  		<table class="table no-padding" style="border-top: 0px;">
-							  		<tr>
-								  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana}}</td>
-							  		</tr>
-						  		</table>
-						  	</th>
-				  		</tr>
-				  		<tr>
-					  		<th class="text-center bg-color-blue txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
-						  		{{asignacion.materia.nombre}}
-						  	</th>
-				  		</tr>
-				  		<tr>
-					  		<th class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
-						  		{{gp.getMaestro(asignacion.maestro_id)}}
-						  	</th>
-				  		</tr>
-			  		</tbody>
-		  		</table>
-	  		</div>
-	  	</div>
+			</div>
 	  	<div class="well">
 	  		<div class="row">
 	  			<div class="panel panel-default">

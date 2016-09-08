@@ -1,3 +1,4 @@
+/*
 Meteor.startup(function() {   
   return Meteor.methods({
 		removeAllCursos: function() {
@@ -50,3 +51,4 @@ Meteor.startup(function() {
 		}
 	});
 });
+*/

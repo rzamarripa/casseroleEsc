@@ -21,12 +21,6 @@ angular
 	
 	this.subscribe('asistencias', ()  => {
 		return [{ grupo_id : $stateParams.grupo_id }]
-	})
-	
-	this.subscribe('horarios', () => {		
-		return [{
-			_id : $stateParams.horario_id
-		}]
 	});
 	
 	this.subscribe('grupos', () => {		
@@ -75,9 +69,6 @@ angular
 		materia : () => {
 			return Materias.findOne($stateParams.materia_id);
 		},
-		horario : () => {
-			return Horarios.findOne($stateParams.horario_id);
-		},
 		seccion : () => {
 			return Secciones.findOne();
 		},
@@ -111,7 +102,7 @@ angular
 			var resultado = {};
 			var esTarde = true;
 			var hayClase = false;
-			if(this.getReactively("horario") && this.getReactively("asistencias")){
+			if(this.getReactively("asistencias")){
 				console.log("se cargaron");
 				_.each(rc.asistencias, function(asistencia){
 					if(moment(asistencia.fechaAsistencia).isSame(new Date(), "day")){
@@ -177,8 +168,6 @@ angular
 			return resultado;
 		}
   });
-  
-  this.horario = Horarios.findOne($stateParams.horario_id);
   
   this.guardar = function(asistencia){
 	  asistencia.fechaAsistencia = new Date();
