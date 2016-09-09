@@ -1,23 +1,24 @@
 <h2>Grupos Activos</h2>
 <div class="tree">
-	<ul role="tree" ng-repeat="(maestro, mmgs) in ga.gruposActivos">
+	<ul role="tree" ng-repeat="grupo in ga.gruposActivos">
+		
 		<li class="parent_li" role="treeitem">
 			<span title="Collapse this branch">
-				<i class="fa fa-lg fa-group"></i> {{ga.getMaestro(maestro)}}</span>
+				<i class="fa fa-lg fa-group"></i> {{ga.getMaestro(grupo.asignacion.maestro_id)}}</span>
 			<ul role="group">
-				<li class="parent_li" role="treeitem" ng-repeat="mmg in mmgs">
+				<li class="parent_li" role="treeitem" >
 					<span class="label bg-color-orange" title="Collapse this branch">
-						<i class="fa fa-lg fa-minus-circle"></i> {{mmg.grupo.nombre}}
+						<i class="fa fa-lg fa-minus-circle"></i> {{grupo.grupo.nombre}}
 					</span>
 					<ul role="group" >
 						<li>
-							<a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})" >
+							<a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" >
 								<span><i class="fa fa-check"></i> Calificaciones</span>
 							</a>
 						</li>
 						<li role="treeitem">
 							<span>
-								<a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">
+								<a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">
 									<i class="fa fa-lg fa-list"></i> Asistencias
 								</a>
 							</span>

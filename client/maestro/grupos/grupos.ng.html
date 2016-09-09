@@ -1,31 +1,31 @@
-<div class="row" ng-repeat="mmg in masgrupo.mmgs">	
+<div class="row" ng-repeat="grupo in masgrupo.gruposMaestro">	
   <div class="col-sm-12 col-md-12">
     <div class="panel panel-default coupon">
       <div class="panel-heading" id="head">
         <div class="panel-title" id="title">
-            <h4>{{mmg.materia.clave}} - {{mmg.materia.nombre}}<span class="pull-right">{{mmg.grupo.identificador}} - {{mmg.grupo.nombre}}</span></h4>
+            <h4>{{grupo.asignacion.materia.nombre}}<span class="pull-right">{{grupo.grupo.identificador}} - {{grupo.grupo.nombre}}</span></h4>
         </div>
       </div>
       <div class="panel-body">
 	      <div class="col-sm-12 col-md-3">
 					<ul class="items">
-			      <li><a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">Tomar asistencia</a></li>
-			      <li><a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Ver asistencia</a></li>
-			      <li><a href="/pizarron/{{mmg.grupo_id}}">Pizarrón compartido</a></li>
+			      <li><a ui-sref="root.asistenciaGrupo({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Tomar asistencia</a></li>
+			      <li><a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Ver asistencia</a></li>
+			      <li><a href="/pizarron/{{grupo.grupo._id}}">Pizarrón compartido</a></li>
 			      
-			      <li><a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})" >Capturar calificaciones</a></li>
-			      <li><a ui-sref="root.verCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Ver calificaciones</a></li>
-			      <li><a ui-sref="root.planeacionClase({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id})">Planear la Clase</a></li>
+			      <li><a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" >Capturar calificaciones</a></li>
+			      <li><a ui-sref="root.verCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Ver calificaciones</a></li>
+			      <li><a ui-sref="root.planeacionClase({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Planear la Clase</a></li>
 			    </ul>
 			    <div class="offer">
 			      <span class="usd"><sup>#</sup></span>
-			      <span class="number">{{mmg.alumnos.length}}</span>
+			      <span class="number">{{grupo.alumnos.length}}</span>
 			      <span class="cents"><sup>Alumnos</sup></span>
 			    </div>
 				</div>				
 				<div class="col-sm-12 col-md-9">
 					<div class="row-alumnos-fluid" style="overflow: auto;">
-						<div class="col-lg-alumnos-3" ng-repeat="alumno in mmg.alumnos track by $index">			
+						<div class="col-lg-alumnos-3" ng-repeat="alumno in grupo.alumnos track by $index">
 	            <a target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})"><div class="card hovercard">
 	                <div class="cardheader"></div>
 	                <div class="avatar">
@@ -33,7 +33,7 @@
 	                </div>
 	                <div class="info">
 	                  <p>
-	                    {{alumno.profile.nombre}} {{alumno.profile.apPaterno}}
+	                    {{alumno.profile.nombreCompleto}}
 	                  </p>
 	                </div>
 	            </div>
@@ -45,12 +45,8 @@
       </div>
       <div class="panel-footer">
         <div class="coupon-code">
-            Día: {{masgrupo.hoy | date:'EEEE'}}
-            <span class="print">
-                <a href="#" class="btn btn-link"><i class="fa fa-lg fa-print"></i> Imprimir</a>
-            </span>
-        </div>
-        <div class="exp">Fecha:{{ masgrupo.hoy | date:'dd-MM-yyyy'}}</div>
+            Hoy es: {{masgrupo.hoy}}            
+        </div>        
       </div>
     </div>
 	</div>

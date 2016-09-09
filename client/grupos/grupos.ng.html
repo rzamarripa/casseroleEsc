@@ -44,7 +44,7 @@
 			<tbody>
 				<tr ng-repeat="grupo in gp.grupos">
 			    <td class="text-center">{{gp.getCiclo(grupo.ciclo_id)}}</td>
-			    <td class="text-center">{{grupo.identificador}} </td>
+			    <td class="text-center"><a ui-sref="root.grupoDetalle({grupo_id : grupo._id})">{{grupo.identificador}}</a></td>
 			    <td class="text-center">{{grupo.tipo}}</td>
 			    <td class="text-center">
 				    <div class="progress right">

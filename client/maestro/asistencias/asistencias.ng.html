@@ -3,7 +3,7 @@
 		<div class="widget-body no-padding smart-form" ng-if="masas.sePuede">
 			<!-- content goes here -->			
 			<h5 class="todo-group-title"><i class="fa fa-list"></i> Lista de Asistencia - Grupo : {{masas.grupo.nombre}} - Materia : {{masas.materia.nombre}}
-				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.listaAsistencia.fechaInicio | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.hoy | date:'dd-MM-yyyy HH:mm'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
 				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="alumno.estatus = !alumno.estatus" ng-class="alumno.estatus == true ? '' : 'danger !important'">
@@ -25,12 +25,27 @@
 			</footer>
 		</div>
 		<div class="widget-body no-padding smart-form" ng-if="!masas.sePuede">
-			<h4 class="alert alert-danger"> Actualmente no puede tomar Asistencia por los siguientes motivos.</h4>
-			<ol>
-				<li>El día de hoy no tiene clase con este grupo</li>
-				<li>La hora de inicio de clase no ha llegado</li>
-				<li></li>
-			</ol>
+			<div class="row" style="margin-top: 100px;">
+				<div class="col-sm-12">
+					<div class="text-center error-box">
+						<h1 class="error-text tada animated"><i class="fa fa-warning text-warning"></i> Aviso</h1>
+						<h2 class="font-xl"><strong>No se puede tomar asistencia!</strong></h2>
+						<br>
+						<p class="lead semi-bold">
+							<strong>Ya se han tomado ({{masas.cantidadAsistenciasRealizadas}}) asistencias de ({{masas.asistenciasPermitidas}}) permitidas en la semana. </strong><br><br>
+							<small>
+								Si esto fuera alguna confusión, por favor revisarlo con Coordinación Académica.
+							</small>
+						</p>
+						<ul class="error-search text-left font-md">
+	            
+	            <li><a ui-sref="root.verAsistencias({grupo_id : masas.grupo._id, materia_id : masas.materia._id, maestro_id : Meteor.userId()})"><small><i class="fa fa-list"></i> Ver Asistencias </small></a></li>
+	            <li><a ui-sref="root.gruposMaestro"><small><i class="fa fa-group"></i> Volver al Grupo </small></a></li>
+	            <li><a href="javascript:void(0);"><small><i class="fa fa-home"></i> Pánel de Control </small></a></li>
+		        </ul>
+					</div>	
+				</div>	
+			</div>
 		</div>
   </div>
 </div>

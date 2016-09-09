@@ -14,12 +14,6 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.buscar.nombre = '';
 	this.validation = false;
 	
-/*
-	this.subscribe('alumnos',()=>{
-		return [{"roles" : ["alumno"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.fechaCreacion":-1}}]
-	});
-	
-*/
 	this.subscribe('buscarAlumnos', () => {
     return [{
 	    options : { limit: 51 },
@@ -32,14 +26,6 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
     	}
     ];
   });
-  
-/*
-  this.subscribe('buscarUsuario', () => {
-    return [{
-	    where : { nombreUsuario : this.getReactively('alumno.nombreUsuario')}
-    }] ;
-  });
-*/
   
   this.subscribe('ocupaciones',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]

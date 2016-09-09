@@ -5,22 +5,25 @@ angular
 
  	let rc = $reactive(this).attach($scope);
  	
+ 	window.rc = rc;
+ 	
+ 	
  	this.hoy = new Date();
 	this.asistencia = {};
-	this.asistencia.alumnos = this.getReactively("alumnos");
-	this.alumnos_id = [];
-	this.seccion_id = "";
 	this.sePuede = false;
-	this.existe = false;
+	this.grupo = {};
+	this.semana = moment().isoWeek();
+	this.turno_id = "";
+	this.fechaInicio = new Date();
+	this.fechaInicio.setHours(0,0,0,0);
+	this.fechaFin = new Date();
+	this.fechaFin.setHours(24,0,0,0);
+	this.alumnos_id = [];
 	
-	console.log($stateParams)
-	
-	this.subscribe('secciones', () => {		
-		return [{	_id : this.getReactively("seccion_id") }]
-	});
+	console.log(this.semana);
 	
 	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : $stateParams.grupo_id }]
+		return [{ grupo_id : $stateParams.grupo_id, semana : this.semana }]
 	});
 	
 	this.subscribe('grupos', () => {		
@@ -29,9 +32,15 @@ angular
 		}]
 	});
 	
+	this.subscribe('alumnos', () => {		
+		return [{
+			_id : { $in : this.getCollectionReactively("alumnos_id")}
+		}]
+	});
+	
 	this.subscribe('maestros', () => {		
 		return [{
-			_id : Meteor.user().profile.maestro_id
+			_id : $stateParams.maestro_id
 		}]
 	});
 	
@@ -40,28 +49,16 @@ angular
 			_id : $stateParams.materia_id
 		}]
 	});
-
-	this.subscribe('inscripciones', () => {		
+	
+	this.subscribe('turnos', () => {		
 		return [{
-			grupo_id : $stateParams.grupo_id, estatus : 1
-		}]
-	});
-
-	this.subscribe('alumnos', () => {		
-		return [{
-			_id : { $in : this.getCollectionReactively('alumnos_id')}
-		}]
-	});
-
-	this.subscribe('maestrosMateriasGrupos', () => {
-		return [{
-			grupo_id: $stateParams.grupo_id
+			_id : this.getReactively("turno_id")
 		}]
 	});
 
 	this.helpers({		
 		grupo : () => {
-			return Grupos.findOne($stateParams.grupo_id);
+			return Grupos.findOne();
 		},
 		maestro : () => {
 			return Maestros.findOne($stateParams.maestro_id);
@@ -69,112 +66,80 @@ angular
 		materia : () => {
 			return Materias.findOne($stateParams.materia_id);
 		},
-		seccion : () => {
-			return Secciones.findOne();
-		},
-		alumnosGrupo : () => {
-			var grupo = Grupos.findOne($stateParams.grupo_id);
-			rc.alumnos_id = _.pluck(Inscripciones.find().fetch(), "alumno_id");
-			rc.seccion_id = this.getReactively("grupo.seccion_id");
-			return Meteor.users.find({roles : ["alumno"]}).fetch();
-		},
 		alumnos : () => {
-			if(this.alumnosGrupo){
-				var alumnos = [];
-				_.each(this.getReactively("alumnosGrupo"), function(al){
-					alumnos.push({alumno_id : al._id, 
-												matricula : al.profile.matricula, 
-												nombreCompleto : al.profile.nombreCompleto, 
-												matricula : al.profile.matricula, 
-												estatus : true });
-				});
-				
-				return alumnos;
+			if(this.getReactively("grupo")){
+				rc.turno_id = rc.grupo.turno_id;
+				rc.alumnos_id = rc.grupo.alumnos;
+				var grupo = Grupos.findOne({},{ fields : { alumnos : 1 }});
+				return grupo.alumnos;
 			}
 		},
-		mmg : () => {
-			return MaestrosMateriasGrupos.findOne({grupo_id : $stateParams.grupo_id})
+		turno : () => {
+			return Turnos.findOne();
 		},
-		asistencias : () => {
-			return Asistencias.find().fetch();
+		existeAsistencia : () => {
+			return Asistencias.findOne({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}});
+		},
+		cantidadAsistenciasRealizadas : () => {
+			return Asistencias.find().count();
+		},
+		asistenciasPermitidas : () => {
+			var asistenciasP = Turnos.findOne({},{fields : { asistencias : 1 }});
+			if(asistenciasP){
+				console.log(asistenciasP);
+				return asistenciasP.asistencias;
+			}			
 		},
 		listaAsistencia : () => {
 			var resultado = {};
-			var esTarde = true;
-			var hayClase = false;
-			if(this.getReactively("asistencias")){
-				console.log("se cargaron");
-				_.each(rc.asistencias, function(asistencia){
-					if(moment(asistencia.fechaAsistencia).isSame(new Date(), "day")){
-						console.log("mismo día", asistencia.fechaAsistencia);
-						
-						rc.existe = true;
-						console.log("ms si existe", ms);
-						if(Meteor.user().roles[0] == "maestro"){
-							if(ms <= 900000 && ms >= 0){
-								var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(asistencia.fechaInicio,"YYYY/MM/DD HH:mm:ss"));
-								console.log("se puede tomar asistencia");								
-								rc.sePuede = true;
-								resultado = asistencia;
-							}else{
-								console.log('Ya no es tiempo para actualizar la asistencia');
-							}
-						}else{
-							console.log("se puede tomar asistencia");								
-							rc.sePuede = true;
-							resultado = asistencia;
-						}
-					}
-				})
-				console.log(rc.existe);
-				if(!rc.existe){
-					console.log("no existe asistencia")
-					_.each(rc.horario.clases, function(clase){
-						if(moment(clase.start).isSame(new Date(), "day")){
-							console.log("hay Clase hoy");
-							hayClase = true;
-								
-							console.log("ms",ms);
-							if(Meteor.user().roles[0] == "maestro"){
-								var ms = moment(new Date(),"YYYY/MM/DD HH:mm:ss").diff(moment(clase.start,"YYYY/MM/DD HH:mm:ss"));
-								if(ms <= 900000 && ms >= 0){
-									console.log("se puede");
-									rc.sePuede = true;
-									resultado.fechaInicio = clase.start;
-									resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
+			
+			if(this.getReactively("existeAsistencia") != undefined && this.getReactively("alumnos")){
+				rc.sePuede = true;
+				rc.existe = true;
+				_.each(rc.existeAsistencia.alumnos, function(alumno){
+					var al = Meteor.users.findOne(alumno._id);
+					if(al)
+						alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
+				});
+				console.log("asistencia actualizar", rc.existeAsistencia);
+				return rc.existeAsistencia;				
+			}else{
+				rc.existe = false;
+				console.log("no existe");
+				if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
+					console.log("Si se puede");
+					resultado.alumnos = [];
+					resultado.fechaCreacion = new Date();
+					var alumnosGrupo = 
+					_.each(rc.grupo.alumnos, function(alumno){
+						resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
 																																						"profile.nombreCompleto" : 1,
 																																						"profile.matricula" : 1,
 																																						"profile.fotografia" : 1,
 																																						_id : 1
 																																				}}).fetch();
-								}
-							}else{
-								rc.sePuede = true;
-								resultado.fechaInicio = clase.start;
-								resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
-																																					"profile.nombreCompleto" : 1,
-																																					"profile.matricula" : 1,
-																																					"profile.fotografia" : 1,
-																																					_id : 1
-																																			}}).fetch();
-							}
-							
-						}
-					})
+					});
+					rc.sePuede = true;
+				}else{
+					console.log("No se puede");
+					rc.sePuede = false;
 				}
 			}
 			
-			console.log(resultado);
+			console.log("nueva asistencia", resultado);
 			return resultado;
 		}
   });
   
   this.guardar = function(asistencia){
+	  _.each(asistencia.alumnos, function(alumno){
+		  delete alumno.profile.fotografia;
+	  });
 	  asistencia.fechaAsistencia = new Date();
 	  asistencia.materia_id = rc.materia._id;
 	  asistencia.maestro_id = rc.maestro._id;
 	  asistencia.grupo_id = rc.grupo._id;
-	  asistencia.maestroMateriaGrupo_id = rc.mmg._id;
+	  asistencia.semana = rc.semana;
 	  Asistencias.insert(asistencia);
 	  toastr.success('Ha tomado asistencia correctamente.');
   }
@@ -182,6 +147,9 @@ angular
   this.actualizar = function(asistencia){
 	  var tempId = asistencia._id;
 	  delete asistencia._id;
+	  _.each(asistencia.alumnos, function(alumno){
+		  delete alumno.profile.fotografia;
+	  });
 	  asistencia.fechaActualizacionAsistencia = new Date();
 	  Asistencias.update({_id : tempId}, { $set : asistencia });
 	  toastr.success('Ha actualizado la asistencia correctamente.');

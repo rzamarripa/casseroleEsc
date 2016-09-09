@@ -27,16 +27,20 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];
 	});
 	
-	this.subscribe('maestrosMateriasGrupos', () => {		
-		return [{maestro_id : { $in : this.getCollectionReactively("maestrosReactivos") }}]
-	});
-	
 	this.helpers({
 		resumen : () => {
-			var mmgs = MaestrosMateriasGrupos.find().fetch();
-			console.log(mmgs)
-			if(mmgs != undefined){
-				_.each(mmgs, function(mmg){
+			var asignaciones = [];
+			_.each(this.getReactively("grupos"), function(grupo){
+				_.each(grupo.asignaciones, function(asignacion){
+					if(asignacion.estatus == true){
+						asignacion.grupo_id = grupo._id;
+						asignaciones.push(asignacion);
+					}
+				})
+			});
+			console.log(asignaciones)
+			if(asignaciones != undefined){
+				_.each(asignaciones, function(mmg){
 					mmg.alumnos = [];
 					mmg.maestro = Maestros.findOne(mmg.maestro_id);
 		      mmg.materia = Materias.findOne(mmg.materia_id);
@@ -47,7 +51,7 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 		      mmg.planeacionesPublicadas = Planeaciones.find({estatus : 4, maestro_id : mmg.maestro_id, grupo_id : mmg.grupo_id, materia_id : mmg.materia_id}).count();
 				});
 			}
-			return mmgs;
+			return asignaciones;
 		},
 		planeaciones : () => {
 			return Planeaciones.find();

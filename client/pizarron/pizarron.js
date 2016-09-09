@@ -42,7 +42,7 @@ function PizarronCtrl($scope, $meteor, $reactive, $stateParams, $state, toastr) 
 	  }
   })
   
-  window.onload = function() {
+  $(document).ready(function() {
 		
 	    
     // Fill Window Width and Height
@@ -119,7 +119,7 @@ function PizarronCtrl($scope, $meteor, $reactive, $stateParams, $state, toastr) 
 				
 			}
 		};
-		
+		console.log("entre aquí");
 		// Touch Events
 		myCanvas.addEventListener('touchstart', draw.start, false);
 		myCanvas.addEventListener('touchend', draw.end, false);
@@ -129,6 +129,6 @@ function PizarronCtrl($scope, $meteor, $reactive, $stateParams, $state, toastr) 
 		document.body.addEventListener('touchmove',function(evt){
 			evt.preventDefault();
 		},false);
-	};
+	});
 	
 }
