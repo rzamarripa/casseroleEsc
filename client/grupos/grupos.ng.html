@@ -24,11 +24,10 @@
 				<tr>
 					<th width="10%"><div class="text-center">Ciclo</div></th>
 					<th width="10%"><div class="text-center">Grupo</div></th>
-					<th width="10%"><div class="text-center">Tipo</div></th>
+					<th width="5%"><div class="text-center">Alumnos</div></th>
 					<th width="30%"><div class="text-center">Cupo</div></th>
 					<th width="10%"><div class="text-center">Turno</div></th>
-					<th width="15%"><div class="text-center">Sección</div></th>
-					<th width="5%"><div class="text-center">Grado</div></th>
+					<th><div class="text-center">Asignaciones</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -45,7 +44,7 @@
 				<tr ng-repeat="grupo in gp.grupos">
 			    <td class="text-center">{{gp.getCiclo(grupo.ciclo_id)}}</td>
 			    <td class="text-center"><a ui-sref="root.grupoDetalle({grupo_id : grupo._id})">{{grupo.identificador}}</a></td>
-			    <td class="text-center">{{grupo.tipo}}</td>
+			    <td class="text-center"><strong>{{grupo.alumnos.length}} / {{grupo.cupo}}</strong></td>
 			    <td class="text-center">
 				    <div class="progress right">
 							<div class="progress-bar bg-color-blue" aria-valuetransitiongoal="75" aria-valuenow="75" style="width: {{gp.getInscritos(grupo._id)/grupo.cupo*100}}%;">
@@ -54,16 +53,42 @@
 						</div>
 					</td>
 			    <td class="text-center">{{gp.getTurno(grupo.turno_id)}}</td>
-			    <td>{{gp.getSeccion(grupo.seccion_id)[0]}}</td>
-			    <td>{{grupo.grado}}</td>
+			    <td style="overflow: auto;">
+				    <div class="row" >
+							<table class="table table-bordered font-xs">
+					  		<tbody>
+						  		<tr>
+							  		<th ng-repeat="asignacion in grupo.asignaciones" class="no-padding">
+								  		<table class="table no-padding" style="border-top: 0px;">
+									  		<tr>
+										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana}}</td>
+									  		</tr>
+								  		</table>
+								  	</th>
+						  		</tr>
+						  		<tr>
+							  		<td class="text-center bg-color-blue txt-color-white font-xs no-padding" ng-repeat="asignacion in grupo.asignaciones">
+								  		{{asignacion.materia.nombre}}
+								  	</td>
+						  		</tr>
+						  		<tr>
+							  		<td class="text-center bg-color-blueDark txt-color-white font-xs no-padding" ng-repeat="asignacion in grupo.asignaciones">
+								  		{{gp.getMaestro(asignacion.maestro_id)}}							  		
+								  	</td>
+						  		</tr>
+					  		</tbody>
+							</table>
+						</div>
+			    </td>
 			    <td>
 				    <div class="text-center">
-				    	<span ng-if="grupo.estatus" class="label label-success">
-							  Activo
-							</span>
-							<span ng-if="!grupo.estatus" class="label label-danger">
-							  Inactivo
-							</span>
+					    <span class="onoffswitch">
+					    	<input type="checkbox" ng-model="grupo.estatus" ng-click="gp.cambiarEstatus(grupo._id)" name="start_interval" class="onoffswitch-checkbox" id="{{grupo._id}}">
+					    	<label class="onoffswitch-label" for="{{grupo._id}}">
+					    		<span class="onoffswitch-inner" data-swchon-text="Activo" data-swchoff-text="Inactivo"></span>
+					    		<span class="onoffswitch-switch"></span>
+					    	</label>
+					    </span>				    	
 				    </div>
 			    </td>
 			    <td>

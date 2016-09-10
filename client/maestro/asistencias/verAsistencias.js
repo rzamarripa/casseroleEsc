@@ -5,13 +5,15 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	let rc=$reactive(this).attach($scope);
 	var alumnos_id = [];
 	window.rc = rc;
+	this.materia_id = "";
+	this.grupo_id = "";
  
 	this.subscribe('grupos',()=>{
-		return [{_id : $stateParams.grupo_id, estatus:true}]
+		return [{_id : this.getReactively("grupo_id"), estatus:true}]
 	});
 	
 	this.subscribe('materias',()=>{
-		return [{_id : $stateParams.materia_id, estatus:true}]
+		return [{_id : this.getReactively("materia_id"), estatus:true}]
 	});
 	
 	this.subscribe('alumnos', () => {		
@@ -19,14 +21,24 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	});
 	
 	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : $stateParams.grupo_id }]
+		return [{ grupo_id : this.getReactively("grupo_id"), materia_id : this.getReactively("materia_id") }]
 	});
 
 	this.helpers({
 	  grupo : () => {
 		  var grupo = Grupos.findOne();
-		  if(grupo)
-				rc.alumnos_id = grupo.alumnos;
+		  if(grupo){
+			  rc.alumnos_id = grupo.alumnos;
+			  rc.grupo_id = grupo._id;
+			  _.each(grupo.asignaciones, function(asignacion){
+				  if(asignacion.estatus == true){
+					  console.log(asignacion);
+					  rc.materia_id = asignacion.materia_id;
+				  }
+			  })
+			  
+		  }
+				
 		  return Grupos.findOne();
 	  },
 	  materia : () => {

@@ -52,7 +52,7 @@ angular.module("casserole")
 	 });
 
 	this.subscribe('maestros',()=>{
-		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
+		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	 });
 	
 	this.subscribe('turnos',()=>{
@@ -238,5 +238,9 @@ angular.module("casserole")
 		return inscritos;
 	}
 	
-	
+	this.getMaestro = function(maestro_id){
+		var maestro = Maestros.findOne(maestro_id);
+		if(maestro)
+			return maestro.nombre;
+	}
 };

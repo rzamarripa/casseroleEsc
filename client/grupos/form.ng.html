@@ -22,24 +22,29 @@
 		<form name="form" class="form-horizontal" role="form" novalidate >
 	  	<div class="well">	 
 		  	<div class="row">
-		  		<div class="col-sm-6" valida>
+		  		<div class="col-sm-4" valida>
 		  			<label for="grupo">Grupo *</label>
 				    <input name="grupo" type="text" class="form-control" placeholder="Grupo" ng-model="gp.grupo.nombre" required="">
 		  		</div>
-		  		<div class="col-sm-6" valida>
+		  		<div class="col-sm-4" valida>
 		  			<label for="identificador">Identificador *</label>
 					<input name="identificador" type="text" class="form-control" id="identificador" placeholder="Identificador" ng-model="gp.grupo.identificador" required="">
 		  		</div>
+		  		<div class="col-sm-4" valida>
+						<label>Ciclo Escolar *</label>
+						<select name="cicloescolar" class="form-control" placeholder="Seleccione" ng-model="gp.grupo.ciclo_id" required="">
+							<option ng-repeat="ciclo in gp.ciclos" value="{{ciclo._id}}">{{ciclo.nombre}}</option>
+						</select>
+					</div>	
 		  	</div>			 
 				<div class="row">						
 					<div class="col-sm-4" valida>
-				    <label for="tipo">Tipo *</label>
-				    <select name="tipo" ng-model="gp.grupo.tipo" data-placeholder="Seleccione" class="form-control" required="">
-						    <option value=""></option>
-						    <option value="Cerrado">Cerrado</option>
-						    <option value="Abierto">Abierto</option>
+						<label>Plan de Estudios *</label>
+						<select name="planestudios" class="form-control" ng-model="gp.grupo.planEstudios_id" required="" ng-change="gp.getGrados(gp.grupo.planEstudios_id)">
+							<option value=""></option>
+							<option ng-repeat="plan in gp.planes" value="{{plan._id}}">{{plan.descripcion}}</option>
 						</select>
-		    	</div>
+					</div>
 		    	<div class="col-sm-4" valida>
 				    <label for="cupo">Cupo *</label>
 				    <input name="cupo" type="number" class="form-control" id="cupo" min="0" placeholder="Cupo" ng-model="gp.grupo.cupo" required="">
@@ -58,18 +63,17 @@
 					</div>
 					<div class="col-sm-2" valida>
 				    <label for="semanaInicio">Semana Inicio *</label>
-				    <input name="semanaInicio" type="number" class="form-control" id="cupo" min="0" placeholder="Cupo" ng-model="gp.grupo.semanaInicio" required="">
+				    <input name="semanaInicio" type="number" class="form-control" id="semanaInicio" min="0" ng-model="gp.grupo.semanaInicio" required="">
 		    	</div>
 		    	<div class="col-sm-2" valida>
 				    <label for="semanaFin">Semana Fin *</label>
-				    <input name="semanaFin" type="number" class="form-control" id="cupo" min="0" placeholder="Cupo" ng-model="gp.grupo.semanaFin" required="">
+				    <input name="semanaFin" type="number" class="form-control" id="semanaFin" min="0" ng-model="gp.grupo.semanaFin" required="">
 		    	</div>
-					<div class="col-sm-4" valida>
-						<label>Ciclo Escolar *</label>
-						<select name="cicloescolar" class="form-control" placeholder="Seleccione" ng-model="gp.grupo.ciclo_id" required="">
-							<option ng-repeat="ciclo in gp.ciclos" value="{{ciclo._id}}">{{ciclo.nombre}}</option>
-						</select>
-					</div>					
+		    	<div class="col-sm-4" valida>
+				    <label for="anio">Año *</label>
+				    <input name="anio" type="number" class="form-control" id="anio" min="0" ng-model="gp.grupo.anio" required="">
+		    	</div>
+									
 				</div>
 	  	</div>
 	  	<div class="row">
@@ -83,25 +87,17 @@
 										<option ng-repeat="maestro in gp.maestros" value="{{maestro._id}}">{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}</option>
 									</select>
 								</div>
-					    	<div class="col-sm-3" valida>
-									<label>Plan de Estudios *</label>
-									<select name="planestudios" class="form-control" ng-model="gp.grupo.planEstudios_id" required="" ng-change="gp.getGrados(gp.grupo.planEstudios_id)">
-										<option value=""></option>
-										<option ng-repeat="plan in gp.planes" value="{{plan._id}}">{{plan.descripcion}}</option>
-									</select>
-								</div>
+					    	
 								<div class="col-sm-1" valida>
 									<label>Grado*</label>
 									<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
-										<option value=""></option>
 										<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
 									</select>
 								</div>
 								<div class="col-sm-3" valida>
 									<label>Materia *</label>
 									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
-										<option value=""></option>
-										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
+										<option ng-repeat="materia in gp.materias | filter : gp.asignacion.grado" value="{{materia}}">{{materia.nombre}}</option>
 									</select>
 								</div>
 								<div class="col-sm-1 col-md-1 col-lg-1 text-center">
@@ -127,21 +123,31 @@
 								  	</th>
 						  		</tr>
 						  		<tr>
-							  		<th class="text-center bg-color-blue txt-color-white smart-form" ng-repeat="asignacion in gp.grupo.asignaciones">
+							  		<td class="text-center bg-color-blue txt-color-white smart-form" ng-repeat="asignacion in gp.grupo.asignaciones">
 								  		<label class="toggle">						  			
 									  		<span class="txt-color-white">{{asignacion.materia.nombre}}</span>
 												<input type="checkbox" ng-change="gp.cambiarEstatus(asignacion)" name="estatus" class="onoffswitch-checkbox txt-color-white" ng-model="asignacion.estatus">
 												<i data-swchon-text="Activa" data-swchoff-text="Inactiva"></i>
 												
 											</label>
-								  	</th>
+								  	</td>
 						  		</tr>
 						  		<tr>
 							  		<th class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
-								  		<button ng-click="gp.quitarAsignacion($index)" class="btn btn-xs btn-danger pull-left">
-							  				<i class="fa fa-times fa-xs"></i>
-							  			</button>
-								  		{{gp.getMaestro(asignacion.maestro_id)}}
+								  		<div class="input-group">
+												
+												<div class="input-group-btn">
+													<button class="btn btn-danger btn-xs" type="button" ng-click="gp.quitarAsignacion($index)">
+														<i class="fa fa-times fa-xs"></i>
+													</button>
+												</div>
+												<span class="bg-color-blueDark txt-color-white font-xs">{{gp.getMaestro(asignacion.maestro_id)}}</span>
+												<div class="input-group-btn">
+													<button class="btn btn-warning btn-xs" type="button" ng-click="gp.editarAsignacion(asignacion)">
+														<i class="fa fa-pencil fa-xs"></i>
+													</button>
+												</div>
+											</div>								  		
 								  	</th>
 						  		</tr>
 					  		</tbody>

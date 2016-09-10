@@ -65,7 +65,7 @@ angular
 					}
 				});
 			});
-			
+			console.log(misAsignaciones);
 			return misAsignaciones;
 		}		
 	});

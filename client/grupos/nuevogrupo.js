@@ -15,6 +15,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	this.subCiclosAdministrativos = [];
 	this.periodosAcademicos = [];
 	this.periodosAdministrativos = [];
+	this.plan = {};
 	
 	window.objeto = this.grupo;
 
@@ -30,11 +31,12 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	{
 		onReady:function(){
 			rc.grupo = Grupos.findOne({_id:$stateParams.id});
-			rc.grupo.planEstudios_id = "";
+			rc.getGrados(rc.grupo.planEstudios_id);
 		}
 	});
 			
-	this.subscribe('planesEstudios',function(){
+	this.subscribe('planesEstudios', () => 
+	{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
 	});
 	
@@ -171,11 +173,22 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		},
 		maestros : () => {
 			return Maestros.find();
+		},
+		grados : () => {
+			var grados = [];
+			rc.plan = PlanesEstudios.findOne(rc.grupo.planEstudios_id);
+			if(this.getReactively("plan")){
+				rc.grados = [];
+				for(var i = 1; i <= rc.plan.grado; i++ ){
+					rc.grados.push(i);
+				}
+			}
+			return rc.grados;
 		}
 	});
 
 	if($stateParams.id)
-		this.action = false; 
+		this.action = false;
 	else
 		this.action = true;
 
@@ -245,14 +258,18 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	
 	this.getGrados = function(planEstudio_id){
 		if(planEstudio_id != undefined){
-			var plan = PlanesEstudios.findOne(planEstudio_id);
-			rc.grados = [];
-			for(var i = 1; i <= plan.grado; i++ ){
-				rc.grados.push(i);
+			rc.plan = PlanesEstudios.findOne(planEstudio_id);
+			if(this.getReactively("plan")){
+				console.log(rc.plan)
+				rc.grados = [];
+				for(var i = 1; i <= rc.plan.grado; i++ ){
+					rc.grados.push(i);
+				}
 			}
+			
 		}		
 	}
-	
+
 	this.getMaterias = function(planEstudio_id, grado){
 		if(planEstudio_id != undefined && grado != undefined){
 			var plan = PlanesEstudios.findOne(planEstudio_id);
@@ -302,6 +319,11 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
 		rc.asignacion = {};
 		rc.materias = [];
+	}
+	
+	this.editarAsignacion = function(asignacionCambio){
+		console.log(asignacionCambio);
+		rc.asignacion = asignacionCambio;
 	}
 	
 	this.getMaestro = function(maestro_id){
