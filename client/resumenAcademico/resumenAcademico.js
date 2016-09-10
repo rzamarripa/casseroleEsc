@@ -77,18 +77,18 @@ this.subscribe('maestros',()=>{
 		var semanas = this.semanal(0);
 		cola.push({texto:grupo.nombre,
 																		colspan:1,
-																		bgcolor:'#cccc00',
+																		bgcolor:'bg-color-greenLight',
 																		rowspan:2,th:true});
-		colc.push({texto:'',
+		colc.push({texto:'Alumnos: '+ grupo.inscritos,
 																		colspan:1,
-																		bgcolor:'#ffffff',
+																		bgcolor:'',
 																		rowspan:1,th:true});
 		
 		for(var i=0;i<semanas.length;i++){
 			var materia = undefined;
 			for(var j=0; !materia && j<grupo.asignaciones.length;j++){
 				console.log(grupo.asignaciones[j].semanas);
-				if(grupo.asignaciones[j].estatus == true && grupo.asignaciones[j].semanas[0]==semanas[i].numero)
+				if(grupo.asignaciones[j].estatus && grupo.asignaciones[j].semanas[0]==semanas[i].numero)
 					materia=grupo.asignaciones[j]
 			}
 			console.log("materia",materia,semanas[i]);
@@ -96,28 +96,28 @@ this.subscribe('maestros',()=>{
 				i+=(materia.semanas.length-1);
 				cola.push({texto:materia.materia.nombre,
 																rowspan:1,
-																bgcolor:'#cccc00',
+																bgcolor:'bg-color-greenLight',
 																colspan:materia.semanas.length,th:false})
 				colb.push({texto:this.getMaestro(materia.maestro_id),
 																rowspan:1,
-																bgcolor:'#00ff00',
+																bgcolor:'bg-color-blueLight',
 																colspan:materia.semanas.length,th:false})
 				colc.push({texto:'',
 																rowspan:1,
-																bgcolor:'#ffffff',
+																bgcolor:'',
 																colspan:materia.semanas.length,th:false})
 			}else{
 				cola.push({texto:'',
 																rowspan:1,
-																bgcolor:'#cccc00',
+																bgcolor:'bg-color-greenLight',
 																colspan:1,th:false})
 				colb.push({texto:'',
 																rowspan:1,
-																bgcolor:'#00ff00',
+																bgcolor:'bg-color-blueLight',
 																colspan:1,th:false})
 				colc.push({texto:'',
 																rowspan:1,
-																bgcolor:'#ffffff',
+																bgcolor:'',
 																colspan:1,th:false})
 
 			}
@@ -134,7 +134,7 @@ this.subscribe('maestros',()=>{
 		 //	var columnasb = [];
 			columnas.push({texto:datos.horaInicio+"-"+datos.horaFin,
 																		colspan:1,
-																		bgcolor:'#ffffff',
+																		bgcolor:'',
 																		rowspan:grupos.length>0? grupos.length*3:1,th:true});
 			if(grupos.length>0){
 			
@@ -155,12 +155,12 @@ this.subscribe('maestros',()=>{
 				var colc=[];
 				colc.push({texto:'',
 																rowspan:1,
-																bgcolor:'#ffffff',
+																bgcolor:'',
 																colspan:1,th:false})
 				for(var i=0;i<semanas.length;i++){
 					colc.push({texto:'',
 																rowspan:1,
-																bgcolor:'#ffffff',
+																bgcolor:'',
 																colspan:1,th:false})
 				}
 				filas.push(columnas.concat(colc));

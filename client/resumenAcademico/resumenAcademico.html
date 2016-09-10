@@ -17,7 +17,7 @@
 			</thead>
   	<tbody>	
   		<tr ng-repeat= "hora in ra.horarios()">
-  			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" bgcolor="{{col.bgcolor}}">
+  			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" class="{{col.bgcolor}}">
   			{{col.texto}}
   			</td>
   		</tr>
