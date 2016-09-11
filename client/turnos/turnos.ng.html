@@ -17,6 +17,14 @@
 				    <label>Cant. Asistencias *</label>
 			    	<input name="asistsencias" type="text" class="form-control" placeholder="Asistencias" ng-model="tn.turno.asistencias" required="">
 			    </div>
+			    <div class="col-sm-2" valida>
+				    <label>Hora Inicio *</label>
+			    	<input name="inicio" type="number" min="0" max="23" class="form-control"  ng-model="tn.turno.horaInicio" required="">
+			    </div>
+			    <div class="col-sm-2" valida>
+				    <label>Hora Fin *</label>
+			    	<input name="final" type="number" min="{{tn.turno.horaInicio}}" max="23" class="form-control"  ng-model="tn.turno.horaFin" required="">
+			    </div>
 				</div>
 			</div>
 				<div class="row">
@@ -38,6 +46,8 @@
 				<tr>
 					<th width="10%"><div class="text-center">Turno</div></th>
 					<th width="10%"><div class="text-center">Asistencias</div></th>
+					<th width="10%"><div class="text-center">Hora Inicio</div></th>
+					<th width="10%"><div class="text-center">Hora Final</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -54,6 +64,8 @@
 		    <tr ng-repeat="turno in tn.turnos">
 			    <td>{{turno.nombre}}</td>
 			    <td>{{turno.asistencias}}</td>
+			    <td>{{turno.horaInicio}}</td>
+			    <td>{{turno.horaFin}}</td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="turno.estatus" class="label label-success">

@@ -2,33 +2,26 @@
 <div class="well">
 	<div class="row">
 		<table class="table table-bordered">
-  		<tbody>
-	  		<tr ng-repeat="grupo in ra.grupos">
-		  		<th class="no-padding">
-			  		<table class="table no-padding" style="border-top: 0px;">
-				  		<tr>
-					  		<td class="text-center" ng-repeat="asignacion in grupo.asignaciones">
-						  		<table class="table no-padding" style="border-top: 0px;">
-							  		<tr>
-								  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana}}</td>
-							  		</tr>
-						  		</table>
-					  		</td>
-				  		</tr>
-			  		</table>
-			  	</th>
-	  		</tr>
-	  		<tr ng-repeat="grupo in ra.grupos">
-		  		<th class="text-center bg-color-blue txt-color-white" ng-repeat="asignacion in grupo.asignaciones">
-			  		{{asignacion.materia.nombre}}
-			  	</th>
-	  		</tr>
-	  		<tr ng-repeat="grupo in ra.grupos">
-		  		<th class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in grupo.asignaciones">
-			  		{{ra.getMaestro(asignacion.maestro_id)}}
-			  	</th>
-	  		</tr>
-  		</tbody>
+			<thead>
+				<tr >
+					<th>
+						 Horario
+					</th>
+					<th>
+						Grupo
+					</th>
+					<th ng-repeat ="sm in ra.semanal(0) " >
+						{{sm.numero}}
+					</th>
+				</tr>
+			</thead>
+  	<tbody>	
+  		<tr ng-repeat= "hora in ra.horarios()">
+  			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" bgcolor="{{col.bgcolor}}">
+  			{{col.texto}}
+  			</td>
+  		</tr>
+  	</tbody>
 		</table>
 	</div>
 </div>
