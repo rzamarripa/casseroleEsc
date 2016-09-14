@@ -21,10 +21,19 @@ angular
 	this.alumnos_id = [];
 	
 	console.log(this.semana);
+	console.log($stateParams);
 	
-	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : $stateParams.grupo_id, semana : this.semana }]
-	});
+	if($stateParams.id){
+		this.subscribe('asistencias', ()  => {
+			return [{ _id : $stateParams.id }]
+		});
+	}else{
+		this.subscribe('asistencias', ()  => {
+			return [{ grupo_id : $stateParams.grupo_id, semana : this.semana }]
+		});
+	}
+		
+	
 	
 	this.subscribe('grupos', () => {		
 		return [{
@@ -78,7 +87,13 @@ angular
 			return Turnos.findOne();
 		},
 		existeAsistencia : () => {
-			return Asistencias.findOne({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}});
+			if($stateParams.id != ""){
+				console.log("gorety");
+				return Asistencias.findOne();
+			}else{
+				console.log("soy maestro");
+				return Asistencias.findOne({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}});
+			}			
 		},
 		cantidadAsistenciasRealizadas : () => {
 			return Asistencias.find().count();
@@ -86,7 +101,6 @@ angular
 		asistenciasPermitidas : () => {
 			var asistenciasP = Turnos.findOne({},{fields : { asistencias : 1 }});
 			if(asistenciasP){
-				console.log(asistenciasP);
 				return asistenciasP.asistencias;
 			}			
 		},
@@ -96,11 +110,26 @@ angular
 			if(this.getReactively("existeAsistencia") != undefined && this.getReactively("alumnos")){
 				rc.sePuede = true;
 				rc.existe = true;
-				_.each(rc.existeAsistencia.alumnos, function(alumno){
-					var al = Meteor.users.findOne(alumno._id);
-					if(al)
-						alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
-				});
+				console.log(rc.existeAsistencia);
+				if(rc.existeAsistencia.alumnos.length > 0){
+					_.each(rc.existeAsistencia.alumnos, function(alumno){
+						var al = Meteor.users.findOne(alumno._id);
+						if(al){
+							if(al.profile.fotografia === undefined){
+								console.log("undefined")
+							  if(al.profile.sexo === "masculino")
+								  al.profile.fotografia = "img/badmenprofile.jpeg";
+								else if(al.profile.sexo === "femenino"){
+									al.profile.fotografia = "img/badgirlprofile.jpeg";
+								}else{
+									al.profile.fotografia = "img/badprofile.jpeg";
+								}			  
+						  }else{
+							  alumno.profile.fotografia = al.profile.fotografia;
+							}					}
+							//alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
+					});
+				}				
 				console.log("asistencia actualizar", rc.existeAsistencia);
 				return rc.existeAsistencia;				
 			}else{
@@ -163,10 +192,9 @@ angular
 				return "img/badgirlprofile.jpeg";
 			}else{
 				return "img/badprofile.jpeg";
-			}
-			  
+			}			  
 	  }else{
 		  return foto;
 	  }
-  }  
+  } 
 };

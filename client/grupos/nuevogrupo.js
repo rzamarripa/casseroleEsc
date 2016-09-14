@@ -31,7 +31,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	{
 		onReady:function(){
 			rc.grupo = Grupos.findOne({_id:$stateParams.id});
-			rc.getGrados(rc.grupo.planEstudios_id);
 		}
 	});
 			
@@ -271,15 +270,22 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	}
 
 	this.getMaterias = function(planEstudio_id, grado){
+		console.log(planEstudio_id, grado);
 		if(planEstudio_id != undefined && grado != undefined){
 			var plan = PlanesEstudios.findOne(planEstudio_id);
+			console.log("plan", plan);
 			grado--;
 			rc.materias = [];
 			_.each(plan.grados, function(val, key){
+				console.log(key, " == ", grado, " val ", val);
 				if(key == grado){
+					console.log("entré al grado ", grado);
+					console.log("mi val es ", val);
 					_.each(val, function(materia){
+						
 						rc.materias.push(materia.materia);
 					});				
+					console.log("arreglo de materias", rc.materias);
 				}
 			})
 		}

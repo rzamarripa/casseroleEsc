@@ -69,9 +69,11 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 							transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
 						})
 			  })
-		  }else{
+		  }/*
+else{
 			  toastr.success('No hay asistencias que mostrar.');
 		  }
+*/
 		  
 		  
 		  console.log("transmutar", transmutar)

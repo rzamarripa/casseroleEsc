@@ -97,7 +97,7 @@
 								<div class="col-sm-3" valida>
 									<label>Materia *</label>
 									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
-										<option ng-repeat="materia in gp.materias | filter : gp.asignacion.grado" value="{{materia}}">{{materia.nombre}}</option>
+										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
 									</select>
 								</div>
 								<div class="col-sm-1 col-md-1 col-lg-1 text-center">

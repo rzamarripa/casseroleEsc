@@ -721,7 +721,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('root.asistenciaGrupo', {
-      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id',
+      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:id',
       templateUrl: 'client/maestro/asistencias/asistencias.ng.html',
       controller: 'MaestroAsistenciasCtrl as masas',
       resolve: {
