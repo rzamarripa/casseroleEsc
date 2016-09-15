@@ -111,7 +111,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 				i+=(materia.semanas.length-1);
 
 
-				var cantidadAsistencias = Asistencias.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
+				
 				var calificaciones = Calificaciones.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
 				var _asistencias = Asistencias.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).fetch();
 				var faltas ={};
@@ -158,12 +158,25 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 					rowspan:1,
 					bgcolor:(grupo.semanaFin<hoy.isoWeek() && calificaciones==0)? "bg-color-red":'bg-color-blueLight',
 					colspan:materia.semanas.length,th:false})
-				colc.push({texto: parseInt((cantidadAsistencias/turno.asistencias)*100),
-																isBar:true,
-																class:clase,
+				for(var idsem in materia.semanas){
+					var _semana = materia.semanas[idsem];
+					var cantidadAsistencias = Asistencias.find({maestro_id:materia.maestro_id,
+																																																	materia_id:materia.materia_id,
+																																																	grupo_id:grupo._id,
+																																																 semana:_semana}).count();
+						console.log(cantidadAsistencias,turno.asistencias, _semana,hoy.isoWeek());
+				
+					colc.push({texto: cantidadAsistencias,
+																
 																rowspan:1,
-																bgcolor:(parseInt((cantidadAsistencias/turno.asistencias)*100)<100 && materia.semanas[materia.semanas.length-1]<=hoy.isoWeek())? "bg-color-yellow":"" ,
-																colspan:materia.semanas.length,th:false})
+																bgcolor:cantidadAsistencias<turno.asistencias?  
+																								(_semana<hoy.isoWeek()? "bg-color-red":(_semana==hoy.isoWeek()? "bg-color-yellow":"bg-color-lighten")):"bg-color-greenLight" ,
+																colspan:1,th:false})
+
+				}
+
+				
+		
 				cold.push({texto: 'Inasistencias: '+faltasTotales,
 																
 																rowspan:1,
