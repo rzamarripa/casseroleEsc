@@ -6,21 +6,31 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 	let rc = $reactive(this).attach($scope);
 	
 	this.maestros_id = [];
+	this.subscribe('asistenciasr', ()  => {
+			return [{},{maestro_id:1,grupo_id:1,semana:1}]
+		});
+	this.subscribe('calificaciones', () => {		
+		return [{
+			
+		}]
+	});
   
 	this.subscribe('gruposResumen',()=>{
 		return [{ where : {seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""},
 							fields : { fields : { inscripcion : 0, colegiatura : 0, conceptosComision : 0 }}}]
 	});
-this.subscribe('maestros',()=>{
+	this.subscribe('maestros',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	this.subscribe('ciclos',()=>{
-		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
+		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",estatus:true}]
 	});
 
 	this.subscribe('turnos',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+
+	
 	
 	
 	
@@ -74,6 +84,9 @@ this.subscribe('maestros',()=>{
 		var cola =[];
 		var colb =[];
 		var colc =[];
+		var hoy = moment(new Date());
+
+		//console.log(hoy.isoWeek(),hoy.year())
 		var semanas = this.semanal(0);
 		cola.push({texto:grupo.nombre,
 																		colspan:1,
@@ -87,24 +100,49 @@ this.subscribe('maestros',()=>{
 		for(var i=0;i<semanas.length;i++){
 			var materia = undefined;
 			for(var j=0; !materia && j<grupo.asignaciones.length;j++){
-				console.log(grupo.asignaciones[j].semanas);
-				if(grupo.asignaciones[j].semanas[0]==semanas[i].numero)
+				//console.log('asd',grupo.anio,semanas[i].anio);
+				if(grupo.asignaciones[j].estatus && grupo.asignaciones[j].semanas[0]==semanas[i].numero && grupo.anio==semanas[i].anio)
 					materia=grupo.asignaciones[j]
 			}
-			console.log("materia",materia,semanas[i]);
+			
 			if(materia){
+				//console.log("materia",materia,semanas[i]);
 				i+=(materia.semanas.length-1);
+
+
+				var cantidadAsistencias = Asistencias.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
+				var calificaciones = Calificaciones.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
+				//console.log({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id});
+
+				var turno = Turnos.findOne({_id:grupo.turno_id});
+				//console.log('asistencias',cantidadAsistencias,turno)
+
+				var clase = "progress-bar bg-color-greenLight"
+				if(parseInt((cantidadAsistencias/turno.asistencias)*100)<50)
+					clase ="progress-bar bg-color-redLight"
+				else if(parseInt((cantidadAsistencias/turno.asistencias)*100)<100)
+					clase ="progress-bar bg-color-blue"
+
+				if(parseInt((cantidadAsistencias/turno.asistencias)*100)<100 && materia.semanas[materia.semanas.length-1]<=hoy.isoWeek())
+					clase ="progress-bar bg-color-redLight"
+
+				
+
+				
+
 				cola.push({texto:materia.materia.nombre,
-																rowspan:1,
-																bgcolor:'bg-color-greenLight',
-																colspan:materia.semanas.length,th:false})
+					rowspan:1,
+					bgcolor:'bg-color-greenLight',
+					colspan:materia.semanas.length,th:false})
 				colb.push({texto:this.getMaestro(materia.maestro_id),
+					rowspan:1,
+					bgcolor:(grupo.semanaFin<hoy.isoWeek() && calificaciones==0)? "bg-color-red":'bg-color-blueLight',
+					colspan:materia.semanas.length,th:false})
+				colc.push({texto: parseInt((cantidadAsistencias/turno.asistencias)*100),
+																isBar:true,
+																class:clase,
 																rowspan:1,
-																bgcolor:'bg-color-blueLight',
-																colspan:materia.semanas.length,th:false})
-				colc.push({texto:'',
-																rowspan:1,
-																bgcolor:'',
+																bgcolor:(parseInt((cantidadAsistencias/turno.asistencias)*100)<100 && materia.semanas[materia.semanas.length-1]<=hoy.isoWeek())? "bg-color-yellow":"" ,
 																colspan:materia.semanas.length,th:false})
 			}else{
 				cola.push({texto:'',
@@ -127,20 +165,21 @@ this.subscribe('maestros',()=>{
 	}
 	this.generarHorario =function(datos){
 			var grupos =this.gruposPorHorario(datos);
-			console.log('grupos',grupos);
+			//console.log('grupos',grupos);
 			var filas = [];
 			var columnas= [];
 			var semanas = this.semanal(0);
 		 //	var columnasb = [];
+
 			columnas.push({texto:datos.horaInicio+"-"+datos.horaFin,
 																		colspan:1,
 																		bgcolor:'',
 																		rowspan:grupos.length>0? grupos.length*3:1,th:true});
 			if(grupos.length>0){
 			
-				console.log("si entre");
+				//console.log("si entre");
 				var x =	this.generarRowGrupo(grupos[0]);
-				console.log("row",x);
+				//console.log("row",x);
 				filas.push(columnas.concat(x.cola));
 				filas.push(x.colb);
 				filas.push(x.colc);
@@ -165,7 +204,7 @@ this.subscribe('maestros',()=>{
 				}
 				filas.push(columnas.concat(colc));
 			}
-			console.log("filas",filas)
+			//console.log("filas",filas)
 
 			return filas;
 
@@ -190,7 +229,7 @@ this.subscribe('maestros',()=>{
 		catch(ex){ 
 			console.log(ex,ex.stack)
 		}
-		console.log('1',_ret)
+		//console.log('1',_ret)
 		if (angular.equals($scope.prevHorarios, _ret)) {
     return $scope.prevHorarios;
   }
