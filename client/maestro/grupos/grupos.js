@@ -11,7 +11,6 @@ angular
 	this.hoy = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
 	this.fechaHoy = moment().format("dd - MM - yyyy");
 
-		
 	this.subscribe('campus', function(){
 		return [{
 			_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -53,7 +52,7 @@ angular
 						
 						misAsignaciones.push({"grupo" : grupo,
 																	"asignacion" : asignacion,
-																	"alumnos" : Meteor.users.find({
+																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos }, 
 																		roles : ["alumno"]},{ fields : { 
 																				"profile.nombreCompleto" : 1,
 																				"profile.matricula" : 1,

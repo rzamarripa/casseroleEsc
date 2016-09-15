@@ -698,8 +698,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
           return $meteor.requireUser();
         }]
       }
-    })
-    
+    })    
     .state('root.agregarGasto', {
       url: '/agregarGasto/:tipoGasto',
       templateUrl: 'client/gastos/agregarGasto.ng.html',

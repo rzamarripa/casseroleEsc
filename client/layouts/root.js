@@ -5,8 +5,9 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	this.avisosVentana = "none";
 	this.grupos_id = [];
 	this.hoy = new Date();
-	// Director
+	
 	if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "director"){
+		// Director
 		this.subscribe('campus', function(){
 			return [{
 				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -63,7 +64,38 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "maestro"){ 
 		// Maestros
 		
+		this.subscribe("grupos", function(){
+			return [{
+				estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
 		
+		this.helpers({
+			grupos : () => {
+				return Grupos.find();
+			},
+			gruposMaestro : () => {
+				var gruposMaestros = [];
+				if(this.getReactively("grupos")){
+					_.each(rc.grupos, function(grupo){
+						console.log("grupo", grupo)
+						_.each(grupo.asignaciones, function(asignacion){
+							console.log("asignacion", asignacion);
+							if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
+								console.log("ya entré");
+								gruposMaestros.push({
+									grupo : grupo,
+									asignacion : asignacion
+								})
+							}
+						})
+					})
+					console.log("gruposMaestro", gruposMaestros)
+					return gruposMaestros;
+				}
+				
+			}
+		})
 	}
 	
 	this.autorun(function() {

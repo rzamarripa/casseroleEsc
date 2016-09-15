@@ -15,31 +15,31 @@
 	    </a>
 	    <ul>
 		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.asistenciaGrupo({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id})" tilte="Calificaciones">
+		      <a ui-sref="root.asistenciaGrupo({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Tomar Asistencias">
 		        <i class="fa fa-lg fa-fw fa-calendar-check-o"></i>
 		        <span class="menu-item-parent">Tomar asistencia</span>
 		      </a>
 		    </li>
 		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.verAsistencias({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		      <a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Ver Asistencias">
 		        <i class="fa fa-lg fa-fw fa-eye"></i>
 		        <span class="menu-item-parent">Ver asistencia</span>
 		      </a>
 		    </li>
 	      <li data-ui-sref-active="active">
-		      <a ui-sref="root.capturarCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		      <a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Calificaciones">
 		        <i class="fa fa-lg fa-fw fa-check"></i>
 		        <span class="menu-item-parent">Calificar</span>
 		      </a>
 		    </li>
 		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.verCalificaciones({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		      <a ui-sref="root.verCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Ver Califiaciones">
 		        <i class="fa fa-lg fa-fw fa-eye"></i>
 		        <span class="menu-item-parent">Ver calificaciones</span>
 		      </a>
 		    </li>
 		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.planeacionClase({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.maestro_id})" tilte="Calificaciones">
+		      <a ui-sref="root.planeacionClase({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Planear la Clase">
 		        <i class="fa fa-lg fa-fw fa-bookmark"></i>
 		        <span class="menu-item-parent">Planear la clase</span>
 		      </a>
