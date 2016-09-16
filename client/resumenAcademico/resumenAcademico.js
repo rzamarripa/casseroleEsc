@@ -84,6 +84,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		var cola =[];
 		var colb =[];
 		var colc =[];
+		var cold =[];
 		var hoy = moment(new Date());
 
 		//console.log(hoy.isoWeek(),hoy.year())
@@ -95,7 +96,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		colc.push({texto:'Alumnos: '+ grupo.inscritos,
 																		colspan:1,
 																		bgcolor:'',
-																		rowspan:1,th:true});
+																		rowspan:2,th:true});
 		
 		for(var i=0;i<semanas.length;i++){
 			var materia = undefined;
@@ -112,11 +113,30 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 
 				var cantidadAsistencias = Asistencias.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
 				var calificaciones = Calificaciones.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).count();
+				var _asistencias = Asistencias.find({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id}).fetch();
+				var faltas ={};
+				for(var aid in _asistencias){
+					var asistencia = _asistencias[aid];
+					for(var alid in asistencia.alumnos){
+						var alm = asistencia.alumnos[alid];
+						if(!alm.estatus){
+							if(!faltas[alm._id])
+								faltas[alm._id]=1;
+							else
+								faltas[alm._id]++;
+						}
+					}
+				}
+				
 				//console.log({maestro_id:materia.maestro_id,materia_id:materia.materia_id,grupo_id:grupo._id});
 
 				var turno = Turnos.findOne({_id:grupo.turno_id});
 				//console.log('asistencias',cantidadAsistencias,turno)
-
+				var faltasTotales=0
+				for(var xds in faltas){
+					if(faltas[xds]>=turno.inasistencias)
+						faltasTotales++;
+				}
 				var clase = "progress-bar bg-color-greenLight"
 				if(parseInt((cantidadAsistencias/turno.asistencias)*100)<50)
 					clase ="progress-bar bg-color-redLight"
@@ -144,6 +164,11 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 																rowspan:1,
 																bgcolor:(parseInt((cantidadAsistencias/turno.asistencias)*100)<100 && materia.semanas[materia.semanas.length-1]<=hoy.isoWeek())? "bg-color-yellow":"" ,
 																colspan:materia.semanas.length,th:false})
+				cold.push({texto: 'Inasistencias: '+faltasTotales,
+																
+																rowspan:1,
+																bgcolor:faltasTotales>0 ? "bg-color-red":"" ,
+																colspan:materia.semanas.length,th:false})
 			}else{
 				cola.push({texto:'',
 																rowspan:1,
@@ -157,10 +182,14 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 																rowspan:1,
 																bgcolor:'',
 																colspan:1,th:false})
+				cold.push({texto:'',
+																rowspan:1,
+																bgcolor:'',
+																colspan:1,th:false})
 
 			}
 		}
-		return {cola:cola,colb:colb,colc:colc};
+		return {cola:cola,colb:colb,colc:colc,cold:cold};
 
 	}
 	this.generarHorario =function(datos){
@@ -174,7 +203,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 			columnas.push({texto:datos.horaInicio+"-"+datos.horaFin,
 																		colspan:1,
 																		bgcolor:'',
-																		rowspan:grupos.length>0? grupos.length*3:1,th:true});
+																		rowspan:grupos.length>0? grupos.length*4:1,th:true});
 			if(grupos.length>0){
 			
 				//console.log("si entre");
@@ -183,11 +212,13 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 				filas.push(columnas.concat(x.cola));
 				filas.push(x.colb);
 				filas.push(x.colc);
+				filas.push(x.cold);
 				for(var i =1;i<grupos.length;i++){
 					x= this.generarRowGrupo(grupos[i]);
 					filas.push(x.cola);
 					filas.push(x.colb);
 					filas.push(x.colc);
+					filas.push(x.cold);
 				}
 			}
 			else{
