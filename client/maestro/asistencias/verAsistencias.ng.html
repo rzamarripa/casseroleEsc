@@ -11,7 +11,9 @@
 		        <th class="col-sm-1">Matrícula</th>
 		        <th class="col-sm-2">Nombre</th>
 		        <th ng-repeat="asistencia in mast.asistencias">
-			        <div class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</div>
+			        <a ui-sref="root.asistenciaGrupo({
+				        		grupo_id : asistencia.grupo_id, materia_id : asistencia.materia_id, maestro_id : asistencia.maestro_id, id : asistencia._id
+					        })" class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</a>
 			      </th>
 		      </tr>
 		    </thead>

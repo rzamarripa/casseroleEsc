@@ -9,13 +9,17 @@
 			<form name="form" class="form-horizontal" role="form" novalidate>
 		  	<div class="well">	    
 			    <div class="row">
-			    <div class="col-sm-4" valida>
+			    <div class="col-sm-2" valida>
 				    <label>Turno *</label>
 			    	<input name="turno" type="text" class="form-control" placeholder="Turno" ng-model="tn.turno.nombre" required="">
 			    </div>
-			    <div class="col-sm-4" valida>
+			    <div class="col-sm-3" valida>
 				    <label>Cant. Asistencias *</label>
 			    	<input name="asistsencias" type="number" class="form-control" placeholder="Asistencias" ng-model="tn.turno.asistencias" required="">
+			    </div>
+			    <div class="col-sm-3" valida>
+				    <label>Cant. Inasistencias *</label>
+			    	<input name="inasistsencias" type="number" class="form-control" placeholder="Inasistencias" ng-model="tn.turno.inasistencias" required="">
 			    </div>
 			    <div class="col-sm-2" valida>
 				    <label>Hora Inicio *</label>
@@ -46,6 +50,7 @@
 				<tr>
 					<th width="10%"><div class="text-center">Turno</div></th>
 					<th width="10%"><div class="text-center">Asistencias</div></th>
+					<th width="10%"><div class="text-center">Inasistencias</div></th>
 					<th width="10%"><div class="text-center">Hora Inicio</div></th>
 					<th width="10%"><div class="text-center">Hora Final</div></th>
 					<th width="10%">
@@ -64,6 +69,7 @@
 		    <tr ng-repeat="turno in tn.turnos">
 			    <td>{{turno.nombre}}</td>
 			    <td>{{turno.asistencias}}</td>
+			    <td>{{turno.inasistencias}}</td>
 			    <td>{{turno.horaInicio}}</td>
 			    <td>{{turno.horaFin}}</td>
 			    <td>
