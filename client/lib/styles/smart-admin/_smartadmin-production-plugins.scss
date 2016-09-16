@@ -7018,6 +7018,9 @@ a.editable-click.editable-disabled:hover {
 /* Mobile Phones */
 @media screen and (max-width: 450px) and (max-width: 767px) {
   /* SmallBox Responsive */
+  .fuenteChica {
+	  font-size: 8pt !important;
+  }
   #divSmallBoxes {
     position: fixed;
     width: 90%;

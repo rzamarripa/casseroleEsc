@@ -88,7 +88,7 @@ this.subscribe('maestros',()=>{
 			var materia = undefined;
 			for(var j=0; !materia && j<grupo.asignaciones.length;j++){
 				console.log(grupo.asignaciones[j].semanas);
-				if(grupo.asignaciones[j].estatus && grupo.asignaciones[j].semanas[0]==semanas[i].numero)
+				if(grupo.asignaciones[j].semanas[0]==semanas[i].numero)
 					materia=grupo.asignaciones[j]
 			}
 			console.log("materia",materia,semanas[i]);
