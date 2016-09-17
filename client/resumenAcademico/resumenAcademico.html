@@ -17,8 +17,18 @@
 			</thead>
   	<tbody>	
   		<tr ng-repeat= "hora in ra.horarios()">
-  			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" class="{{col.bgcolor}}">
+  			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" class="{{col.bgcolor}}" >
+  			<p ng-if="!col.isBar">
   			{{col.texto}}
+  			</p>
+  			<div ng-if="col.isBar">
+  				Asistencias
+	  			
+					<div class="progress-striped" >
+						<div class="{{col.class}}" aria-valuetransitiongoal="{{col.texto}}" aria-valuenow="{{col.texto}}" style="min-width: 2em;width: {{col.texto}}%;">{{col.texto}}%</div>
+					</div>
+				
+			</div>
   			</td>
   		</tr>
   	</tbody>
