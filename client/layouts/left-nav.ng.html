@@ -4,6 +4,8 @@
 	<div ng-include="'client/layouts/_coordinadorAcademico.html'" ng-if="currentUser.roles[0] == 'coordinadorAcademico'"></div>
 	<div ng-include="'client/layouts/_coordinadorFinanciero.html'" ng-if="currentUser.roles[0] == 'coordinadorFinanciero'"></div>	
 	<div ng-include="'client/layouts/_maestro.html'" ng-if="currentUser.roles[0] == 'maestro'"></div>
+	<div ng-include="'client/layouts/_gerenteVenta.html'" ng-if="currentUser.roles[0] == 'gerenteVenta'"></div>
+	<div ng-include="'client/layouts/_vendedor.html'" ng-if="currentUser.roles[0] == 'vendedor'"></div>
 </nav>
 
 <!--
