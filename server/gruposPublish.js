@@ -1,4 +1,5 @@
 Meteor.publish("grupos",function(options){
+	console.log('123qwe',options)
  	return Grupos.find(options);
 });
 
@@ -7,5 +8,6 @@ Meteor.publish("gruposResumen",function(options){
 });
 
 Meteor.publish("grupo",function(options){
+	console.log('123qwe',options)
   return Grupos.find(options);
 });
