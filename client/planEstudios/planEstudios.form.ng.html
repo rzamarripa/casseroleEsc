@@ -110,13 +110,13 @@
 							<td ng-repeat="_materia in pl.plan.grados[_grado]">
 								<div class="row">
 									<div class="col-sm-8">
-										<strong>{{_materia.materia.clave}}</strong>
+										<strong>{{_materia.materia.nombreCorto}}</strong>
 									</div>
 									<div class="col-sm-2">
 										<input type="button" class="btn btn-danger btn-xs" ng-click="pl.quitarMateria(_materia)"  value="x">
 									</div>
 								</div>
-								<h6><small>{{_materia.materia.nombreCorto}}</small></h6>										
+								<h6><small>{{_materia.materia.nombre}}</small></h6>										
 							</td>
 						</tr>
 					</table>

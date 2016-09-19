@@ -20,7 +20,7 @@
 						</label> 
 					</span>
 					<p class="project-members" style="margin-left: 77px;">
-						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion > 60 ? 'online' : 'busy'">
+						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion >= 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>
 				</li>
