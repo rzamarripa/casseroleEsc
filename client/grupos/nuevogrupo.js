@@ -18,8 +18,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	this.plan = {};
 	
 	window.objeto = this.grupo;
-	console.log("grupoEditar", $stateParams);
-
 
 	this.subscribe('grupos', () => 
 	{
@@ -52,8 +50,82 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 			}];
 		},
+<<<<<<< HEAD
 		function (argument) {
 				
+=======
+		{
+			onReady:function (argument) {
+				var conceptos = ConceptosPago.find().fetch();
+								
+				if(!this.grupo){
+					this.grupo={};
+					this.grupo.asignaciones = [];
+					this.grupo.fechaInicio = new Date();
+					this.grupo.semanaInicio = moment().isoWeek();
+					this.grupo.semanaFin = 52;					
+				}
+					
+				if(!this.grupo.inscripcion)
+					this.grupo.inscripcion={
+						recargo : 0,
+						importeRecargo : 0,
+						diasRecargo : 7,
+						descuento : 0,
+						importeDescuento : 0,
+						diasDescuento : 7
+					}
+				if(!this.grupo.inscripcion.conceptos)
+					this.grupo.inscripcion.conceptos={};
+				if (!this.grupo.colegiatura) 
+					this.grupo.colegiatura={}
+				if(!this.grupo.colegiatura.conceptos)
+					this.grupo.colegiatura.conceptos ={};
+				for(var idcol in this.tiposColegiatura){
+					var col = this.tiposColegiatura[idcol];
+					if(!this.grupo.colegiatura[col]){
+						this.grupo.colegiatura[col]={
+							recargo : 0,
+							importeRecargo : 0,
+							diasRecargo : 7,
+							descuento : 0,
+							importeDescuento : 0,
+							diasDescuento : 7,
+							conceptos : {}
+						}
+					}
+					if(col=='Semanal' || col=='Mensual'){
+						this.grupo.colegiatura[col].diaColegiatura=1;
+					}
+					else{
+							this.grupo.colegiatura[col].diaColegiatura=[1,16];
+					}
+
+				}
+
+				for (var i = 0; i < conceptos.length; i++) {
+					var concepto = conceptos[i]
+					
+					if(concepto.modulo=='inscripcion'){
+						if(!this.grupo.inscripcion.conceptos[concepto._id]){
+							this.grupo.inscripcion.conceptos[concepto._id]=concepto;
+							delete this.grupo.inscripcion.conceptos[concepto._id]._id
+
+						}
+					}
+					else if(concepto.modulo=='colegiatura'){
+						for(var idcol in this.tiposColegiatura){
+							var col = this.tiposColegiatura[idcol];
+							if(!this.grupo.colegiatura[col].conceptos[concepto._id]){
+								this.grupo.colegiatura[col].conceptos[concepto._id]=angular.copy(concepto);
+								
+								delete this.grupo.colegiatura[col].conceptos[concepto._id]._id
+							}
+						}
+
+					}
+				}
+>>>>>>> 9e4121ff45fa624287c9b79f9936e8046207a477
 			}
 		
 	);
@@ -260,7 +332,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		if(planEstudio_id != undefined){
 			rc.plan = PlanesEstudios.findOne(planEstudio_id);
 			if(this.getReactively("plan")){
-				console.log(rc.plan)
 				rc.grados = [];
 				for(var i = 1; i <= rc.plan.grado; i++ ){
 					rc.grados.push(i);
@@ -271,31 +342,22 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	}
 
 	this.getMaterias = function(planEstudio_id, grado){
-		console.log(planEstudio_id, grado);
 		if(planEstudio_id != undefined && grado != undefined){
 			var plan = PlanesEstudios.findOne(planEstudio_id);
-			console.log("plan", plan);
 			grado--;
 			rc.materias = [];
 			_.each(plan.grados, function(val, key){
-				console.log(key, " == ", grado, " val ", val);
 				if(key == grado){
-					console.log("entré al grado ", grado);
-					console.log("mi val es ", val);
 					_.each(val, function(materia){
 						
 						rc.materias.push(materia.materia);
-					});				
-					console.log("arreglo de materias", rc.materias);
+					});
 				}
 			})
 		}
 	};
 
 	this.agregarAsignacion = function(asignacion, form2){
-		
-		//TODO me quedé validando la asignación
-		console.log(asignacion);
 		if(asignacion == undefined || asignacion.maestro_id == undefined || asignacion.materia == undefined || asignacion.grado == undefined){
 			toastr.error('Por favor seleccione maestro, plan de estudios, grado y materia para agregar una asignación.');
 			return
@@ -318,18 +380,34 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		}else{
 			var ultimaAsignacion = _.last(rc.grupo.asignaciones);
 			var ultimaSemana = _.last(ultimaAsignacion.semanas);
-			asignacion.semanas = _.range(ultimaSemana + 1, ultimaSemana + asignacion.materia.semanas + 1); 
+			if((ultimaSemana + 1) <= 52){
+				console.log("ultima", ultimaSemana + 1);
+				asignacion.semanas = _.range(ultimaSemana + 1, ultimaSemana + asignacion.materia.semanas + 1);
+				
+			}else{
+				var rango = _.range(ultimaSemana + 1, ultimaSemana + asignacion.materia.semanas + 1);
+				console.log("original", rango);
+				for(var i = 0; i <= rango.length; i++){
+					console.log(rango);
+					if(rango[i] > 52){
+						rango[i] = rango[i] - 52
+					}
+				}
+				console.log("rango", rango);
+				asignacion.semanas = rango;
+			}
+			
 			console.log("ultima asignacion", ultimaAsignacion);
 			console.log("ultima semana", ultimaSemana);
+			rc.grupo.asignaciones.push(asignacion);
+			rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
+			rc.asignacion = {};
+			rc.materias = [];
 		}
-		rc.grupo.asignaciones.push(asignacion);
-		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
-		rc.asignacion = {};
-		rc.materias = [];
+		
 	}
 	
 	this.editarAsignacion = function(asignacionCambio){
-		console.log(asignacionCambio);
 		rc.asignacion = asignacionCambio;
 	}
 	

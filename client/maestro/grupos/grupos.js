@@ -10,6 +10,8 @@ angular
 	moment.locale("es");
 	this.hoy = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
 	this.fechaHoy = moment().format("dd - MM - yyyy");
+	
+	console.log($stateParams);
 
 	this.subscribe('campus', function(){
 		return [{
@@ -42,7 +44,8 @@ angular
 		gruposMaestro : () => {
 			var misAsignaciones = [];
 			var alumnos = [];
-			_.each(this.getReactively("grupos"), function(grupo){				
+			_.each(this.getReactively("grupos"), function(grupo){
+				console.log("grupo", grupo);
 				_.each(grupo.asignaciones, function(asignacion){
 					if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
 						

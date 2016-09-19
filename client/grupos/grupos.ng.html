@@ -19,15 +19,15 @@
 <br>
 <div class="row">
 	<div class="col-sm-12">
-		<table class="table table-bordered table-responsive">
+		<table class="table table-bordered table-responsive" style="table-layout:fixed;">
 			<thead>
 				<tr>
 					<th width="10%"><div class="text-center">Ciclo</div></th>
 					<th width="10%"><div class="text-center">Grupo</div></th>
-					<th width="5%"><div class="text-center">Alumnos</div></th>
-					<th width="30%"><div class="text-center">Cupo</div></th>
+					<th width="10%"><div class="text-center">Alums.</div></th>
+					<th width="15%"><div class="text-center">Cupo</div></th>
 					<th width="10%"><div class="text-center">Turno</div></th>
-					<th><div class="text-center">Asignaciones</div></th>
+					<th width="35%"><div class="text-center">Asignaciones</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -53,9 +53,9 @@
 						</div>
 					</td>
 			    <td class="text-center">{{gp.getTurno(grupo.turno_id)}}</td>
-			    <td style="overflow: auto;">
+			    <td style="overflow: scroll; width: 100%">
 				    <div class="row" >
-							<table class="table table-bordered font-xs">
+							<table class="table-bordered font-xs">
 					  		<tbody>
 						  		<tr>
 							  		<th ng-repeat="asignacion in grupo.asignaciones" class="no-padding">

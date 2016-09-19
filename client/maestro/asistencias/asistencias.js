@@ -33,14 +33,14 @@ angular
 		});
 	}
 		
-	
-	
+/*
 	this.subscribe('grupos', () => {		
 		return [{
 			_id : $stateParams.grupo_id
 		}]
 	});
 	
+*/
 	this.subscribe('alumnos', () => {		
 		return [{
 			_id : { $in : this.getCollectionReactively("alumnos_id")}
@@ -67,7 +67,7 @@ angular
 
 	this.helpers({		
 		grupo : () => {
-			return Grupos.findOne();
+			return Grupos.findOne($stateParams.grupo_id);
 		},
 		maestro : () => {
 			return Maestros.findOne($stateParams.maestro_id);
@@ -182,6 +182,29 @@ angular
 	  asistencia.fechaActualizacionAsistencia = new Date();
 	  Asistencias.update({_id : tempId}, { $set : asistencia });
 	  toastr.success('Ha actualizado la asistencia correctamente.');
+  }
+  
+  this.tomarAsistencia = function(estatus, $index){
+	  if(estatus == undefined || estatus == 0){
+		  rc.listaAsistencia.alumnos[$index].estatus = 1;
+	  }else if(estatus == 1){
+		  rc.listaAsistencia.alumnos[$index].estatus = 2;
+	  }else if(estatus == 2){
+		  rc.listaAsistencia.alumnos[$index].estatus = 0;
+	  }
+	  console.log(estatus, $index);
+	  console.log(rc.listaAsistencia.alumnos[$index])
+  }
+  
+  this.getColor = function(estatus, $index){
+	  if(estatus == undefined || estatus == 0){
+		  return 'busy';
+		}else if(estatus == 1){
+			return 'online';
+		}else if(estatus == 2){
+			return 'away';
+		}
+		console.log("tiene", estatus);
   }
   
   this.tieneFoto = function(sexo, foto){
