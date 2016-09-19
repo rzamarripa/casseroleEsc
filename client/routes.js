@@ -113,7 +113,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.editarAlumno', {
-      url: '/editarAlumno/:id',
+      url: '/editarAlumno/:alumno_id',
       templateUrl: 'client/alumnos/form.ng.html',
       controller: 'AlumnosDetalleCtrl as al',
       resolve: {

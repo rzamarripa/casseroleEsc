@@ -17,6 +17,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.hayParaPagar = true;
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	
+	console.log($stateParams);
+	
 	this.subscribe("ocupaciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});

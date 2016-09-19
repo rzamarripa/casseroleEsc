@@ -18,14 +18,15 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	this.plan = {};
 	
 	window.objeto = this.grupo;
-
+	console.log("grupoEditar", $stateParams);
 
 
 	this.subscribe('grupos', () => 
 	{
 		return [{
 			_id : $stateParams.id,
-			estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+			estatus : true, 
+			seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}];
 	}, 
 	{
