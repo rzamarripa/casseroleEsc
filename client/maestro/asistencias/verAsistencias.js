@@ -7,6 +7,8 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	window.rc = rc;
 	this.materia_id = "";
 	this.grupo_id = "";
+	
+	console.log($stateParams)
  
 	this.subscribe('grupos',()=>{
 		return [{_id : this.getReactively("grupo_id"), estatus:true}]
@@ -21,7 +23,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	});
 	
 	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : this.getReactively("grupo_id"), materia_id : this.getReactively("materia_id") }]
+		return [{ grupo_id : $stateParams.grupo_id, materia_id : this.getReactively("materia_id") }]
 	});
 
 	this.helpers({
@@ -32,7 +34,6 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 			  rc.grupo_id = grupo._id;
 			  _.each(grupo.asignaciones, function(asignacion){
 				  if(asignacion.estatus == true){
-					  console.log(asignacion);
 					  rc.materia_id = asignacion.materia_id;
 				  }
 			  })

@@ -88,20 +88,20 @@
 									</select>
 								</div>
 					    	
-								<div class="col-sm-1" valida>
+								<div class="col-sm-2" valida>
 									<label>Grado*</label>
 									<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
 										<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
 									</select>
 								</div>
-								<div class="col-sm-3" valida>
+								<div class="col-sm-4" valida>
 									<label>Materia *</label>
 									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
 										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
 									</select>
 								</div>
-								<div class="col-sm-1 col-md-1 col-lg-1 text-center">
-									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+								<div class="col-sm-2 text-center">
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 									<button class="btn btn-primary" ng-click="gp.agregarAsignacion(gp.asignacion, form2)">
 										<i class="fa fa-plus fa-lg"></i>
 									</button>

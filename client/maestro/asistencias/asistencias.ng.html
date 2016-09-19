@@ -7,6 +7,35 @@
 		  Mis Grupos
 		</a>
 	</div>
+</div><br/>
+<div class="row">
+	<article class="col-sm-4">
+		<div class="alert alert-success fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-check"></i>
+			<strong>Asistencia</strong> Llegó a tiempo.
+		</div>
+	</article>
+	<article class="col-sm-4">				
+		<div class="alert alert-warning fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-warning"></i>
+			<strong>Retardo</strong> Llegó tarde.
+		</div>
+	</article>	
+	<article class="col-sm-4">
+		<div class="alert alert-danger fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-times"></i>
+			<strong>Inasistencia!</strong> No vino.
+		</div>
+	</article>
 </div>
 <div class="row" style="margin-top:50px;">
   <div class="col-sm-12">
@@ -16,15 +45,12 @@
 				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.hoy | date:'dd-MM-yyyy HH:mm'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
-				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="alumno.estatus = !alumno.estatus" ng-class="alumno.estatus == true ? '' : 'danger !important'">
-					<span class="handle"> 
-						<label class="checkbox">
-							<input type="checkbox" ng-model="alumno.estatus" value="checked">
-							<i></i> 
-						</label> 
+				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="masas.tomarAsistencia(alumno.estatus, $index)" ng-class="alumno.estatus == true ? '' : 'danger !important'">
+					<span class="handle" style="width: 0px"> 
+						
 					</span>
 					<p class="project-members">
-						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.estatus == true ? 'online' : 'busy'">
+						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 6px solid #fff;" ng-class="masas.getColor(alumno.estatus)">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>
 				</li>		
