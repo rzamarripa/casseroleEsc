@@ -1,7 +1,7 @@
 angular
 .module("casserole")
 .controller("GruposDetalleCtrl", GruposDetalleCtrl);
- function GruposDetalleCtrl($scope, $meteor, $reactive , $state, $stateParams){
+ function GruposDetalleCtrl($scope, $meteor, $reactive , $state, $stateParams, toastr){
 	 
  	let rc = $reactive(this).attach($scope);
 
@@ -56,4 +56,12 @@ angular
 		toastr.success('Grupo modificado.');
 		$state.go("root.grupos");
 	};	
+	
+	this.quitarAlumno = function($index, alumno_id){
+		rc.grupo.alumnos= _.without(rc.grupo.alumnos, $index);
+		var idTemp = rc.grupo._id;
+		delete rc.grupo._id;
+		Grupos.update({_id : idTemp}, {$set : rc.grupo});
+		toastr.success("Ha eliminado al alumno correctamente");
+	}
 };
