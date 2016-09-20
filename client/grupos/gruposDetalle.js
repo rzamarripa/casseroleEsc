@@ -8,16 +8,30 @@ angular
  	this.grupo = {};
   this.action = true;
   this.alumnos_id = [];
+  this.alumnosGrupo = [];
   this.asignacion = {};
+  this.buscar = {};
+  this.buscar.nombre = "";
   
-  console.log($stateParams)
-  console.log(this.getCollectionReactively("alumnos_id"))
+  $(document).ready(function(){
+	  $("select").select2();
+  })
   
   this.subscribe('alumnos', () => {		
 		return [{
 			_id : { $in : this.getCollectionReactively('alumnos_id')}
 		}]
 	});
+	
+	this.subscribe('buscarAlumnos', () => {
+    return [{
+	    options : { limit: 51 },
+	    where : { 
+		    nombreCompleto : this.getReactively('buscar.nombre'), 
+				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+ 		  }
+    }];
+  });
   
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
@@ -27,7 +41,7 @@ angular
 	  grupo : () => {
 			return Grupos.findOne();
 	  },
-	  alumnos : () => {
+	  alumnosGrupo : () => {
 		  if(this.getReactively("grupo")){
 			  rc.alumnos_id = rc.grupo.alumnos;
 		  }
