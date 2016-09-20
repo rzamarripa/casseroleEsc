@@ -35,7 +35,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			
 	this.subscribe('planesEstudios', () => 
 	{
-		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
+		return [{estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
 	});
 	
 	this.subscribe('ciclos', () => {
@@ -300,9 +300,12 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		asignacion.semanas = [];
 		
 		asignacion.estatus = false;
+		console.log("asignaciones", asignacion);
 		if(rc.grupo.asignaciones.length == 0){
+			console.log("es nuevo");
 			asignacion.semanas = _.range(rc.grupo.semanaInicio, rc.grupo.semanaInicio + asignacion.materia.semanas);			
 		}else{
+			console.log("ya tiene");
 			var ultimaAsignacion = _.last(rc.grupo.asignaciones);
 			var ultimaSemana = _.last(ultimaAsignacion.semanas);
 			if((ultimaSemana + 1) <= 52){
@@ -324,11 +327,12 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			
 			console.log("ultima asignacion", ultimaAsignacion);
 			console.log("ultima semana", ultimaSemana);
-			rc.grupo.asignaciones.push(asignacion);
-			rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
-			rc.asignacion = {};
-			rc.materias = [];
+			
 		}
+		rc.grupo.asignaciones.push(asignacion);
+		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
+		rc.asignacion = {};
+		rc.materias = [];
 		
 	}
 	
