@@ -9,36 +9,48 @@
 		</h1>
 	</div>
 </div>
-
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th>Foto</th>
-			<th>Matrícula</th>
-			<th>Nombre</th>
-			<th>Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="alumno in gp.alumnos">
-			<td class="col-sm-1">
-				<img src="{{alumno.profile.fotografia}}" style="width: 70px;border-left: 4px solid #fff;">
-			</td>
-			<td>{{alumno.profile.matricula}}</td>
-			<td>{{alumno.profile.nombreCompleto}}</td>
-			<td>
-				<div class="text-center">
-			    <div class="btn-group">
-					  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					    <span class="caret"></span>
-					    <span class="sr-only">Toggle Dropdown</span>
-					  </button>
-					  <ul class="dropdown-menu text-left">
-					    <li><a href="#" ng-click="gp.quitarAlumno(alumno._id, $index)"><i class="fa fa-trash"></i> Eliminar</a></li>
-					  </ul>
-					</div>
-		    </div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<div class="input-group">
+			<select ng-model="gp.alumnos" class="form-control" >
+				<option value="alumno._id" ng-repeat="alumno in gp.alumnos">{{alumno.profile.nombreCompleto}}</option>
+			</select>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Foto</th>
+					<th>Matrícula</th>
+					<th>Nombre</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="alumno in gp.alumnosGrupo">
+					<td class="col-sm-1">
+						<img src="{{alumno.profile.fotografia}}" style="width: 70px;border-left: 4px solid #fff;">
+					</td>
+					<td>{{alumno.profile.matricula}}</td>
+					<td>{{alumno.profile.nombreCompleto}}</td>
+					<td>
+						<div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="gp.quitarAlumno(alumno._id, $index)"><i class="fa fa-trash"></i> Eliminar</a></li>
+							  </ul>
+							</div>
+				    </div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
