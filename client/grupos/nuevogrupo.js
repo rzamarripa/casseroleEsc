@@ -50,10 +50,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 			}];
 		},
-<<<<<<< HEAD
-		function (argument) {
-				
-=======
 		{
 			onReady:function (argument) {
 				var conceptos = ConceptosPago.find().fetch();
@@ -122,12 +118,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 								delete this.grupo.colegiatura[col].conceptos[concepto._id]._id
 							}
 						}
-
 					}
 				}
->>>>>>> 9e4121ff45fa624287c9b79f9936e8046207a477
 			}
-		
+		}
 	);
 	
 	this.subscribe('turnos',()=>{
