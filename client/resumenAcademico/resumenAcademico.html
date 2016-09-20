@@ -10,7 +10,7 @@
 					<th>
 						Grupo
 					</th>
-					<th ng-repeat ="sm in ra.semanal(0) " >
+					<th width="400" ng-repeat ="sm in ra.semanal(0) ">
 						{{sm.numero}}
 					</th>
 				</tr>
@@ -18,17 +18,15 @@
   	<tbody>	
   		<tr ng-repeat= "hora in ra.horarios()">
   			<td ng-repeat = "col in hora" rowspan="{{col.rowspan}}" colspan="{{col.colspan}}" class="{{col.bgcolor}}" >
-  			<p ng-if="!col.isBar">
-  			{{col.texto}}
-  			</p>
-  			<div ng-if="col.isBar">
-  				Asistencias
-	  			
-					<div class="progress-striped" >
-						<div class="{{col.class}}" aria-valuetransitiongoal="{{col.texto}}" aria-valuenow="{{col.texto}}" style="min-width: 2em;width: {{col.texto}}%;">{{col.texto}}%</div>
+	  			<p ng-if="!col.isBar">
+	  			{{col.texto}}
+	  			</p>
+	  			<div ng-if="col.isBar">
+	  				Asistencias		  			
+						<div class="progress-striped" >
+							<div class="{{col.class}}" aria-valuetransitiongoal="{{col.texto}}" aria-valuenow="{{col.texto}}" style="min-width: 2em;width: {{col.texto}}%;">{{col.texto}}%</div>
+						</div>
 					</div>
-				
-			</div>
   			</td>
   		</tr>
   	</tbody>
