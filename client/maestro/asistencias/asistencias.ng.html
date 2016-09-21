@@ -50,7 +50,8 @@
 						
 					</span>
 					<p class="project-members">
-						<img src="{{alumno.profile.fotografia}}" class="project-members" style="width: 50px;border-left: 6px solid #fff;" ng-class="masas.getColor(alumno.estatus)">
+<!-- 						<img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" data-img="img/superbox/superbox-full-1.jpg" alt="{{alumno.profile.nombreCompleto}}" title="{{alumno.profile.nombreCompleto" class="superbox-img"> -->
+						<img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="project-members" style="width: 50px;border-left: 6px solid #fff;" ng-class="masas.getColor(alumno.estatus)">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>
 				</li>		

@@ -375,10 +375,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		if(rc.grupo.asignaciones.length == 0){
 			var rango = _.range(rc.grupo.semanaInicio, rc.grupo.semanaInicio + asignacion.materia.semanas);
 			_.each(rango, function(ra){
-				if((ra + 1) <= 52){
-					asignacion.semanas.push({anio : rc.grupo.anio, semana : ra + 1});
+				if((ra) <= 52){
+					asignacion.semanas.push({anio : rc.grupo.anio, semana : ra});
 				}else{
-					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra + 1) - 52});
+					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra) - 52});
 				}
 			})
 		}else{
