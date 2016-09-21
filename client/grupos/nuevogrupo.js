@@ -283,8 +283,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	};
 
 	this.agregarAsignacion = function(asignacion, form2){
-		if(asignacion == undefined || asignacion.maestro_id == undefined || asignacion.materia == undefined || asignacion.grado == undefined){
-			toastr.error('Por favor seleccione maestro, plan de estudios, grado y materia para agregar una asignación.');
+		if(asignacion == undefined || asignacion.maestro_id == undefined || 
+				asignacion.materia == undefined || asignacion.grado == undefined ||
+				rc.grupo.anio == undefined || rc.grupo.semanaInicio == undefined || rc.grupo.semanaFin == undefined){
+			toastr.error('Por favor seleccione maestro, plan de estudios, grado, materia y año para agregar una asignación.');
 			return
 		}
 		var materia = JSON.parse(asignacion.materia);
@@ -300,34 +302,28 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		asignacion.semanas = [];
 		
 		asignacion.estatus = false;
-		console.log("asignaciones", asignacion);
+
 		if(rc.grupo.asignaciones.length == 0){
-			console.log("es nuevo");
-			asignacion.semanas = _.range(rc.grupo.semanaInicio, rc.grupo.semanaInicio + asignacion.materia.semanas);			
+			var rango = _.range(rc.grupo.semanaInicio, rc.grupo.semanaInicio + asignacion.materia.semanas);
+			_.each(rango, function(ra){
+				if((ra + 1) <= 52){
+					asignacion.semanas.push({anio : rc.grupo.anio, semana : ra + 1});
+				}else{
+					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra + 1) - 52});
+				}
+			})
 		}else{
-			console.log("ya tiene");
 			var ultimaAsignacion = _.last(rc.grupo.asignaciones);
 			var ultimaSemana = _.last(ultimaAsignacion.semanas);
-			if((ultimaSemana + 1) <= 52){
-				console.log("ultima", ultimaSemana + 1);
-				asignacion.semanas = _.range(ultimaSemana + 1, ultimaSemana + asignacion.materia.semanas + 1);
-				
-			}else{
-				var rango = _.range(ultimaSemana + 1, ultimaSemana + asignacion.materia.semanas + 1);
-				console.log("original", rango);
-				for(var i = 0; i <= rango.length; i++){
-					console.log(rango);
-					if(rango[i] > 52){
-						rango[i] = rango[i] - 52
-					}
+			
+			var rango = _.range(ultimaSemana.semana + 1, ultimaSemana.semana + asignacion.materia.semanas + 1);
+			_.each(rango, function(ra){
+				if(ra <= 52){
+					asignacion.semanas.push({ anio : rc.grupo.anio, semana : ra });
+				}else{
+					asignacion.semanas.push({ anio : rc.grupo.anio + 1, semana : ra - 52 });
 				}
-				console.log("rango", rango);
-				asignacion.semanas = rango;
-			}
-			
-			console.log("ultima asignacion", ultimaAsignacion);
-			console.log("ultima semana", ultimaSemana);
-			
+			})			
 		}
 		rc.grupo.asignaciones.push(asignacion);
 		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)

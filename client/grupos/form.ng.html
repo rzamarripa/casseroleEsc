@@ -88,19 +88,25 @@
 									</select>
 								</div>
 					    	
-								<div class="col-sm-2" valida>
+								<div class="col-sm-3" valida>
 									<label>Grado*</label>
 									<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
 										<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
-									</select>
+									</select>	
 								</div>
-								<div class="col-sm-4" valida>
+								<div class="col-sm-1 text-center">
+									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<button class="btn btn-info" ng-click="gp.getGrados(gp.grupo.planEstudios_id)">
+										<i class="fa fa-refresh fa-lg"></i>
+									</button>
+								</div>
+								<div class="col-sm-3" valida>
 									<label>Materia *</label>
 									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
 										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
 									</select>
 								</div>
-								<div class="col-sm-2 text-center">
+								<div class="col-sm-1 text-center">
 									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 									<button class="btn btn-primary" ng-click="gp.agregarAsignacion(gp.asignacion, form2)">
 										<i class="fa fa-plus fa-lg"></i>
@@ -117,7 +123,7 @@
 							  		<th ng-repeat="asignacion in gp.grupo.asignaciones" class="no-padding">
 								  		<table class="table no-padding" style="border-top: 0px;">
 									  		<tr>
-										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana}}</td>
+										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana.semana}}</td>
 									  		</tr>
 								  		</table>
 								  	</th>
