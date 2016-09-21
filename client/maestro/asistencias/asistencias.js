@@ -208,6 +208,7 @@ angular
   }
   
   this.tieneFoto = function(sexo, foto){
+	  console.log(sexo);
 	  if(foto === undefined){
 		  if(sexo === "masculino")
 			  return "img/badmenprofile.jpeg";

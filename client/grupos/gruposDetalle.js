@@ -23,6 +23,7 @@ angular
 		}]
 	});
 	
+/*
 	this.subscribe('buscarAlumnos', () => {
     return [{
 	    options : { limit: 51 },
@@ -32,6 +33,7 @@ angular
  		  }
     }];
   });
+*/
   
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
@@ -60,6 +62,9 @@ angular
 			  })
 		  }
 		  return asignacionActiva;
+	  },
+	  alumnos : () => {
+		  return Meteor.users.find({roles : ["alumno"]});
 	  }
   });
   
