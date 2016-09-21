@@ -26,12 +26,8 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			estatus : true, 
 			seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}];
-	}, 
-	{
-		onReady:function(){
-			rc.grupo = Grupos.findOne({_id:$stateParams.id});
-		}
-	});
+	}
+	);
 			
 	this.subscribe('planesEstudios', () => 
 	{
@@ -122,7 +118,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 								delete this.grupo.colegiatura[col].conceptos[concepto._id]._id
 							}
 						}
-
 					}
 				}
 			}
@@ -170,6 +165,80 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		},
 		maestros : () => {
 			return Maestros.find();
+		},
+		grupo : () => {
+			var grupo =Grupos.findOne({_id:$stateParams.id});
+			var conceptos = ConceptosPago.find().fetch();
+								
+				if(!grupo){
+					grupo={};
+					grupo.asignaciones = [];
+					grupo.fechaInicio = new Date();
+					grupo.semanaInicio = moment().isoWeek();
+					grupo.semanaFin = 52;					
+				}
+					
+				if(!grupo.inscripcion)
+					grupo.inscripcion={
+						recargo : 0,
+						importeRecargo : 0,
+						diasRecargo : 7,
+						descuento : 0,
+						importeDescuento : 0,
+						diasDescuento : 7
+					}
+				if(!grupo.inscripcion.conceptos)
+					grupo.inscripcion.conceptos={};
+				if (!grupo.colegiatura) 
+					grupo.colegiatura={}
+				if(!grupo.colegiatura.conceptos)
+					grupo.colegiatura.conceptos ={};
+				for(var idcol in this.tiposColegiatura){
+					var col = this.tiposColegiatura[idcol];
+					if(!grupo.colegiatura[col]){
+						grupo.colegiatura[col]={
+							recargo : 0,
+							importeRecargo : 0,
+							diasRecargo : 7,
+							descuento : 0,
+							importeDescuento : 0,
+							diasDescuento : 7,
+							conceptos : {}
+						}
+					}
+					if(col=='Semanal' || col=='Mensual'){
+						grupo.colegiatura[col].diaColegiatura=1;
+					}
+					else{
+							grupo.colegiatura[col].diaColegiatura=[1,16];
+					}
+
+				}
+
+				for (var i = 0; i < conceptos.length; i++) {
+					var concepto = conceptos[i]
+					
+					if(concepto.modulo=='inscripcion'){
+						if(!grupo.inscripcion.conceptos[concepto._id]){
+							grupo.inscripcion.conceptos[concepto._id]=concepto;
+							delete grupo.inscripcion.conceptos[concepto._id]._id
+
+						}
+					}
+					else if(concepto.modulo=='colegiatura'){
+						for(var idcol in this.tiposColegiatura){
+							var col = this.tiposColegiatura[idcol];
+							if(!grupo.colegiatura[col].conceptos[concepto._id]){
+								grupo.colegiatura[col].conceptos[concepto._id]=angular.copy(concepto);
+								
+								delete grupo.colegiatura[col].conceptos[concepto._id]._id
+							}
+						}
+
+					}
+				}
+				console.log("grupo", grupo);
+			return grupo;
 		},
 		grados : () => {
 			var grados = [];
