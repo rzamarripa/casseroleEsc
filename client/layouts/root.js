@@ -78,11 +78,8 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 				var gruposMaestros = [];
 				if(this.getReactively("grupos")){
 					_.each(rc.grupos, function(grupo){
-						console.log("grupo", grupo)
 						_.each(grupo.asignaciones, function(asignacion){
-							console.log("asignacion", asignacion);
 							if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
-								console.log("ya entré");
 								gruposMaestros.push({
 									grupo : grupo,
 									asignacion : asignacion
@@ -90,7 +87,6 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 							}
 						})
 					})
-					console.log("gruposMaestro", gruposMaestros)
 					return gruposMaestros;
 				}
 				

@@ -108,11 +108,12 @@ angular
 			var resultado = {};
 			
 			if(this.getReactively("existeAsistencia") != undefined && this.getReactively("alumnos")){
+				console.log("entre aquí");
 				rc.sePuede = true;
 				rc.existe = true;
 				console.log(rc.existeAsistencia);
 				if(rc.existeAsistencia.alumnos.length > 0){
-					_.each(rc.existeAsistencia.alumnos, function(alumno){
+					_.each(rc.existeAsistencia.alumnos, function(alumno){						
 						var al = Meteor.users.findOne(alumno._id);
 						if(al){
 							if(al.profile.fotografia === undefined){
@@ -133,6 +134,7 @@ angular
 				console.log("asistencia actualizar", rc.existeAsistencia);
 				return rc.existeAsistencia;				
 			}else{
+				console.log("no existe");
 				rc.existe = false;
 				console.log("no existe");
 				if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
@@ -145,6 +147,7 @@ angular
 																																						"profile.nombreCompleto" : 1,
 																																						"profile.matricula" : 1,
 																																						"profile.fotografia" : 1,
+																																						"profile.sexo" : 1,
 																																						_id : 1
 																																				}}).fetch();
 					});
@@ -208,7 +211,6 @@ angular
   }
   
   this.tieneFoto = function(sexo, foto){
-	  console.log(sexo);
 	  if(foto === undefined){
 		  if(sexo === "masculino")
 			  return "img/badmenprofile.jpeg";
