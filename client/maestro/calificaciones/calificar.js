@@ -137,7 +137,7 @@ angular
 	  calificacion.materia_id = rc.materia._id;
 	  calificacion.maestro_id = rc.maestro._id;
 	  calificacion.grupo_id = rc.grupo._id;
-	  calificacion.maestroMateriaGrupo_id = rc.mmg._id;
+	  //calificacion.maestroMateriaGrupo_id = rc.mmg._id;
 	  Calificaciones.insert(calificacion);
 	  toastr.success('Ha calificado correctamente.');
   }
@@ -166,8 +166,8 @@ angular
   }
   
   this.validaCalificacion = function(calificacion){
-	  if(calificacion >= 100){
-		  calificacion = 100;
+	  if(calificacion >= 10){
+		  calificacion = 10;
 	  }
   }
 };

@@ -14,12 +14,13 @@
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
 				<li ng-repeat="alumno in ca.capturaCalificaciones.alumnos">
-					<span style="width: 50px;" > 
+					<span style="width: 150px; text-align: center;"> 
+						{{alumno.calificacion}}
 						<label >
-							<input type="number" min="0" max="100" class="form-control text-center" ng-model="alumno.calificacion" ng-change="masas.validaCalificacion(alumno.calificacion)">
+							<input type="range" min="0" max="10" class="form-control text-center" ng-model="alumno.calificacion" ng-change="masas.validaCalificacion(alumno.calificacion)">
 						</label> 
 					</span>
-					<p class="project-members" style="margin-left: 77px;">
+					<p class="project-members" style="margin-left: 177px;">
 						<img src="{{ca.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion >= 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>

@@ -50,7 +50,6 @@ angular
 			  var grupo = Grupos.findOne({},{ fields : { asignaciones : 1 }});			  
 			  _.each(grupo.asignaciones, function(asignacion){
 				  if(asignacion.estatus == true){
-					  console.log(asignacion);
 					  asignacionActiva = asignacion;
 				  }				  	
 			  })
