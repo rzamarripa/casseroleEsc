@@ -23,17 +23,18 @@ angular
 		}]
 	});
 	
-/*
+
 	this.subscribe('buscarAlumnos', () => {
     return [{
-	    options : { limit: 51 },
+	    options : { limit: 3 },
 	    where : { 
+	    	id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'), 
-				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+			seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
     }];
   });
-*/
+
   
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
@@ -64,7 +65,11 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-		  return Meteor.users.find({roles : ["alumno"]});
+	  		console.log(this.alumnos_id)
+		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]});
+	  },
+	  balumnos : ()=>{
+	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});
 	  }
   });
   

@@ -13,7 +13,7 @@
 	<div class="col-sm-6 col-sm-offset-3">
 		<div class="input-group">
 			<select ng-model="gp.alumnos" class="form-control" >
-				<option value="alumno._id" ng-repeat="alumno in gp.alumnosGrupo">{{alumno.profile.nombreCompleto}}</option>
+				<option value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
 			</select>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="alumno in gp.alumnosGrupo">
+				<tr ng-repeat="alumno in gp.alumnos">
 					<td class="col-sm-1">
 						<img src="{{alumno.profile.fotografia}}" style="width: 70px;border-left: 4px solid #fff;">
 					</td>
