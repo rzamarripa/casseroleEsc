@@ -109,6 +109,7 @@ angular
 																										"profile.nombreCompleto" : 1,
 																										"profile.matricula" : 1,
 																										"profile.fotografia" : 1,
+																										"profile.sexo" : 1,
 																										_id : 1
 																								}}).fetch();
 				}

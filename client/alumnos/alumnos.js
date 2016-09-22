@@ -94,12 +94,6 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		form.$setPristine();
     form.$setUntouched();
 	};
-  	
-	this.cambiarEstatus = function (id) {
-			var alumno = Alumnos.findOne({_id:id});
-	    this.alumno.estatus = !alumno.estatus;
-			this.alumno.save();
-	};
 	
 	this.tomarFoto = function () {
 		$meteor.getPicture({width:200, height: 200, quality: 50}).then(function(data){			

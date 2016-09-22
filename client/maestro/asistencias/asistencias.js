@@ -151,6 +151,9 @@ angular
 																																						_id : 1
 																																				}}).fetch();
 					});
+					_.each(resultado.alumnos, function(alumno){
+						alumno.estatus = 1;
+					})
 					rc.sePuede = true;
 				}else{
 					console.log("No se puede");
