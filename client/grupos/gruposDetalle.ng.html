@@ -32,7 +32,7 @@
 			<tbody>
 				<tr ng-repeat="alumno in gp.alumnosGrupo">
 					<td class="col-sm-1">
-						<img src="{{alumno.profile.fotografia}}" style="width: 70px;border-left: 4px solid #fff;">
+						<img src="{{gp.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 70px;border-left: 4px solid #fff;">
 					</td>
 					<td>{{alumno.profile.matricula}}</td>
 					<td>{{alumno.profile.nombreCompleto}}</td>

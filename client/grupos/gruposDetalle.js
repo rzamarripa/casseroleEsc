@@ -83,4 +83,19 @@ angular
 		Grupos.update({_id : idTemp}, {$set : rc.grupo});
 		toastr.success("Ha eliminado al alumno correctamente");
 	}
+	
+	this.tieneFoto = function(sexo, foto){
+	  if(foto === undefined){
+		  if(sexo === "masculino")
+			  return "img/badmenprofile.jpeg";
+			else if(sexo === "femenino"){
+				return "img/badgirlprofile.jpeg";
+			}else{
+				return "img/badprofile.jpeg";
+			}
+			  
+	  }else{
+		  return foto;
+	  }
+  }
 };

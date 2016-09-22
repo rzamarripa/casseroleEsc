@@ -11,12 +11,6 @@ angular
 	this.hoy = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
 	this.fechaHoy = moment().format("dd - MM - yyyy");
 
-	this.subscribe('campus', function(){
-		return [{
-			_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-		}]
-	});
-	
 	this.subscribe('grupos', () => {		
 		return [{
 			estatus : true
@@ -30,9 +24,6 @@ angular
 	});
 	
 	this.helpers({
-		campus : () => {
-		  return Campus.findOne(Meteor.user().profile.campus_id);
-		},
 		avisos : () => {
 		  return MensajesVendedores.find().fetch();
 		},
