@@ -44,13 +44,6 @@ angular
 	  grupo : () => {
 			return Grupos.findOne();
 	  },
-	  alumnosGrupo : () => {
-		  if(this.getReactively("grupo")){
-			  rc.alumnos_id = rc.grupo.alumnos;
-		  }
-
-			return Meteor.users.find({roles : ["alumno"]});
-	  },
 	  asignacion : () => {
 		  var asignacionActiva = {};
 		  if(this.getReactively("grupo")){
