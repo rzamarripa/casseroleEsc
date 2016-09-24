@@ -6,7 +6,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	rc = $reactive(this).attach($scope);
 	
-	
+	window.rc = rc;
 		
 	this.masInfo = true;
 	this.totalPagar = 0.00;
@@ -16,11 +16,16 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.hayParaPagar = true;
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
+	this.planEstudios_id = [];
 	
 	console.log($stateParams);
 	
 	this.subscribe("ocupaciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	});
+	
+	this.subscribe("curriculas",()=>{
+		return [{estatus:true, alumno_id : $stateParams.alumno_id, planEstudios_id : { $in : this.getCollectionReactively("planEstudios_id")}}]
 	});
 
 	this.subscribe('inscripciones', () => {
@@ -66,6 +71,15 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		},
 		cuenta : () =>{
 			return Cuentas.findOne();
+		},
+		curriculas : () => {
+			if(this.getReactively("inscripciones")){
+				_.each(rc.inscripciones, function(inscripcion){
+					rc.planEstudios_id.push(inscripcion.planEstudios_id);
+				})
+				console.log(rc.planEstudios_id);
+				return Curriculas.find();
+			}			
 		}
 
 	 /* misSemanas : () => {

@@ -66,7 +66,7 @@ angular
 		},
 		alumnosGrupo : () => {
 			var grupo = Grupos.findOne($stateParams.grupo_id);
-			rc.alumnos_id = _.pluck(Inscripciones.find().fetch(), "alumno_id");
+			rc.alumnos_id = grupo.alumnos;
 			rc.seccion_id = this.getReactively("grupo.seccion_id");
 			return Meteor.users.find({roles : ["alumno"]}).fetch();
 		},

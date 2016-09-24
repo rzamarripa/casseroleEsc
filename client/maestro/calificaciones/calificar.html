@@ -13,14 +13,23 @@
 				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{ca.hoy | date:'dd-MM-yyyy HH:mm:ss'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
+				<li>
+					<label class="text-center" style="width: 150px;">
+						<strong>Calificación</strong>
+					</label>
+					<p class="project-members" style="margin-left: 175px;">
+						<strong>Alumno</strong>
+					</p>
+				</li>
 				<li ng-repeat="alumno in ca.capturaCalificaciones.alumnos">
 					<span style="width: 150px; text-align: center;"> 
-						{{alumno.calificacion}}
-						<label >
+						<label>
+							<strong>{{alumno.calificacion}}</strong>
 							<input type="range" min="0" max="10" class="form-control text-center" ng-model="alumno.calificacion" ng-change="masas.validaCalificacion(alumno.calificacion)">
 						</label> 
 					</span>
-					<p class="project-members" style="margin-left: 177px;">
+					
+					<p class="project-members" style="margin-left: 175px;">
 						<img src="{{ca.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion >= 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>

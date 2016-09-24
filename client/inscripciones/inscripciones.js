@@ -37,8 +37,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}]
 	});
 
-
-
 	rc.helpers({
 		ciclos : () => {
 			return Ciclos.find();
@@ -48,9 +46,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  },
 	  tiposIngresos : () => {
 		  return TiposIngresos.find();
-	  },
-	  alumnos : () => {
-		  return Alumnos.find();
 	  },
 	  grupos : () => {
 		  return Grupos.find();
@@ -64,7 +59,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	        return x._id == valor;
 	      });
 	    }
-	  	var a=Inscripciones.find();
+	  	var a = Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
 	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
 	    var grupos 		= Grupos.find().fetch();
@@ -78,18 +73,9 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      inscripcion.ciclo = findInCollection(ciclos, inscripcion.ciclo_id);
 	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.grupo.planEstudios_id);
 	    });
-	    console.log(_inscripciones);
-	    
 	    return _inscripciones;
-		 // return Inscripciones.find();
 	  },
   });
-
-	/*this.inscripciones = [];
-	$meteor.call("getInscripciones").then(function (data) {
-		console.log(data);
-	  	rc.inscripciones = data;
-	  });*/
 
 	this.getCiclo= function(ciclo_id)
 	{
@@ -97,14 +83,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		if(ciclo != undefined)
 		return ciclo.descripcion;
 	};	
-
-	this.getAlumno= function(alumno_id)
-	{
-		var alumno = Alumnos.findOne(alumno_id);
-		if(alumno)
-		return alumno.nombre;
-	};
-
 
 	this.getSeccion= function(seccion_id)
 	{
@@ -127,7 +105,15 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var plan = PlanesEstudios.findOne(plan_id);
 		if(plan != undefined)
 		return plan.clave;
-	};	
+	};
 	
+	//Método para crear las currículas
+	this.createCurricula = function(){
+		toastr.success("inicio")
+		_.each(rc.inscripciones, function(inscripcion){
+			Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : inscripcion.planEstudio.grados });
+		})
+		toastr.success("ya")
+	}
   
 };

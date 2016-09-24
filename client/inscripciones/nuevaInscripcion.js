@@ -9,6 +9,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.pagosRealizados = [];
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
+	this.inscripcion.fechaInscripcion = new Date();
 
 	this.subscribe('alumnos',()=>{
 		return [{"roles" : ["alumno"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.fechaCreacion":-1}}]
@@ -385,7 +386,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
 		Inscripciones.insert(inscripcion);
-		console.log(grupo);
+		var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
+		Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
 		if(!grupo.alumnos)
 			grupo.alumnos=[];
 		grupo.alumnos.push(inscripcion.alumno_id);

@@ -8,18 +8,14 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
   	rc.plan.grados = [];
   rc.action = true;
   rc.subscribe('planesEstudios',function(){
-  		if($stateParams.id){
-  			
-			
+		if($stateParams.id){			
 			rc.plan = PlanesEstudios.findOne({ _id: $stateParams.id });
 			if(!rc.plan){
 				rc.plan={};
 				rc.plan.grados = [];
 			}
-			console.log(rc.plan); 
+
 			rc.action = false;
-			//$('.collapse').coll
-			
 			rc.nuevo = false;
 		}
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }] 
@@ -41,11 +37,6 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	  }]
   });
 
-
-  
-  
-	
-
 	rc.helpers({
 	  planesEstudios : () => {
 		  return PlanesEstudios.find();
@@ -64,11 +55,7 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 		  return Rvoe.find();
 	  },
   });	
-
-	
-	
-
-	
+  	
 	rc.getSeccionById = function(id){ 
 		return Secciones.getSeccionById(id)
 	};
@@ -109,29 +96,29 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 
 	rc.guardar = function(plan,form)
 	{
-			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		    }
-			plan.estatus = true;
-			plan.campus_id = Meteor.user().profile.campus_id;
-			plan.seccion_id = Meteor.user().profile.seccion_id;
-			delete plan.$$hashKey;
-			for (var i = 0; i < plan.grados.length; i++) {
-				for (var j = 0; j < plan.grados[i].length; j++) {
-					delete plan.grados[i][j].$$hashKey;
-				};
+		if(form.$invalid){
+      toastr.error('Error al guardar los datos.');
+      return;
+	  }
+		plan.estatus = true;
+		plan.campus_id = Meteor.user().profile.campus_id;
+		plan.seccion_id = Meteor.user().profile.seccion_id;
+		delete plan.$$hashKey;
+		for (var i = 0; i < plan.grados.length; i++) {
+			for (var j = 0; j < plan.grados[i].length; j++) {
+				delete plan.grados[i][j].$$hashKey;
 			};
-			console.log(plan);
-			plan.usuarioInserto = Meteor.userId();
-			PlanesEstudios.insert(plan);	
-			toastr.success('Guardado correctamente.');	
-			rc.plan = {}; 
-			$('.collapse').collapse('hide');
-			rc.nuevo = true;
-			form.$setPristine();
-	        form.$setUntouched();
-			$state.go("root.planEstudio");
+		};
+		console.log(plan);
+		plan.usuarioInserto = Meteor.userId();
+		PlanesEstudios.insert(plan);	
+		toastr.success('Guardado correctamente.');	
+		rc.plan = {}; 
+		$('.collapse').collapse('hide');
+		rc.nuevo = true;
+		form.$setPristine();
+		form.$setUntouched();
+		$state.go("root.planEstudio");
 	};
 
 	rc.editar = function(id)
