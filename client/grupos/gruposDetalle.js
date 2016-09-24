@@ -42,6 +42,8 @@ angular
 	
 	this.helpers({
 	  grupo : () => {
+	  		var grupo=Grupos.findOne();
+	  		this.alumnos_id= grupo? grupo.alumnos? grupo.alumnos:[]:[] ;
 			return Grupos.findOne();
 	  },
 	  asignacion : () => {
@@ -79,6 +81,22 @@ angular
 		delete rc.grupo._id;
 		Grupos.update({_id : idTemp}, {$set : rc.grupo});
 		toastr.success("Ha eliminado al alumno correctamente");
+	}
+
+	this.agregarAlumno = function(){
+		var alumno_id=rc.alumnose
+		console.log(rc.grupo)
+		if(!rc.grupo.alumnos)
+			rc.grupo.alumnos=[];
+		var x=rc.grupo.alumnos.indexOf(alumno_id);
+		console.log("si entre",x)
+		if(x==-1){
+			rc.grupo.alumnos.push(alumno_id)
+			var idTemp = rc.grupo._id;
+			delete rc.grupo._id;
+			Grupos.update({_id : idTemp}, {$set : rc.grupo});
+			toastr.success("Ha insertado al alumno correctamente");
+		}
 	}
 	
 	this.tieneFoto = function(sexo, foto){

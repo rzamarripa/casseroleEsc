@@ -11,11 +11,11 @@
 </div>
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
-		<div class="input-group">
-			<select ng-model="gp.alumnos" class="form-control" >
-				<option value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
+	
+			<select ng-model="gp.alumnose" class="js-example-basic-single" ng-change="gp.agregarAlumno()" style='width: 100%; '>
+				<option ng-value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
 			</select>
-		</div>
+
 	</div>
 </div>
 <div class="row">
