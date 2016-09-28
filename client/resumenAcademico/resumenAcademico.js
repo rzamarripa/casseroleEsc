@@ -101,8 +101,10 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		for(var i=0;i<semanas.length;i++){
 			var materia = undefined;
 			for(var j=0; !materia && j<grupo.asignaciones.length;j++){
-				//console.log('asd',grupo.anio,semanas[i].anio);
-				if(grupo.asignaciones[j].semanas[0]==semanas[i].numero && grupo.anio==semanas[i].anio)
+				
+				console.log('asd',grupo.asignaciones[j].semanas[0],semanas[i]);
+
+				if(grupo.asignaciones[j].semanas[0].semana==semanas[i].numero && grupo.asignaciones[j].semanas[0].anio==semanas[i].anio)
 					materia=grupo.asignaciones[j]
 			}
 			
@@ -163,14 +165,14 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 					var cantidadAsistencias = Asistencias.find({maestro_id:materia.maestro_id,
 																																																	materia_id:materia.materia_id,
 																																																	grupo_id:grupo._id,
-																																																 semana:_semana}).count();
-						console.log(cantidadAsistencias,turno.asistencias, _semana,hoy.isoWeek());
-				
+																																																 semana:_semana.semana}).count();
+						
 					colc.push({texto: cantidadAsistencias,
 																
 																rowspan:1,
 																bgcolor:cantidadAsistencias<turno.asistencias?  
-																								(_semana<hoy.isoWeek()? "bg-color-red":(_semana==hoy.isoWeek()? "bg-color-yellow":"bg-color-lighten")):"bg-color-greenLight" ,
+																								((_semana.semana<hoy.isoWeek() && _semana.anio== hoy.year() ) || _semana.anio< hoy.year()? "bg-color-red":
+																									(_semana.semana==hoy.isoWeek() && _semana.anio== hoy.year()? "bg-color-yellow":"bg-color-lighten")):"bg-color-greenLight" ,
 																colspan:1,th:false})
 
 				}
