@@ -3,10 +3,13 @@ Meteor.publish("gerentesVenta", function(){
 });
 
 Meteor.publish("usuarios", function(options){
-	console.log(options);
 	return  Meteor.users.find(options);
 });
 
 Meteor.publish("coordinadores", function(){
 	return Roles.getUsersInRole( ['coordinadorAcademico', 'coordinadorFinanciero'] );
+});
+
+Meteor.publish("usuariosMensajes", function(options){
+	return  Roles.getUsersInRole(['coordinadorAcademico', 'coordinadorFinanciero', 'maestro', 'director']);
 });

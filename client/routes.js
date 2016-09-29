@@ -141,8 +141,18 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	        return $meteor.requireUser();
 	      }]
 	    }
+    })    
+    .state('root.mensajes', {
+      url: '/mensajes',
+      templateUrl: 'client/mensajes/mensajes.html',
+      controller: 'MensajesCtrl as mm',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
     })
-     .state('root.subCiclos', {
+    .state('root.subCiclos', {
       url: '/subCiclos',
       templateUrl: 'client/subCiclos/subCiclos.ng.html',
       controller: 'SubCiclosCtrl as sub',

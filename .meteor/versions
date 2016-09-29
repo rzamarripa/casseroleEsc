@@ -99,6 +99,7 @@ srp@1.0.8
 standard-minifier-css@1.0.6
 standard-minifier-js@1.0.6
 stevezhu:lodash@3.10.1
+summernote:standalone@0.8.1
 templating@1.1.9
 templating-tools@1.0.4
 tmeasday:publish-counts@0.7.3

@@ -65,6 +65,7 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			coordinador.profile.campus_id = Meteor.user().profile.campus_id;
 			coordinador.profile.seccion_id = Meteor.user().profile.seccion_id;
 			coordinador.usuarioInserto = Meteor.userId();
+			coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? usuario.profile.apMaterno : "");
 			Meteor.call('createGerenteVenta', coordinador, coordinador.profile.role);
 		  toastr.success('Guardado correctamente.');
 			this.nuevo = true;
