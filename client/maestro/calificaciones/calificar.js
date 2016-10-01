@@ -142,7 +142,7 @@ angular
 		calificacion.estatus = 1;
 	  Calificaciones.insert(calificacion);
 	  _.each(calificacion.alumnos, function(alumno){
-		  var curricula = Curriculas.findOne({alumno_id : alumno._id});
+		  var curricula = Curriculas.findOne({alumno_id : alumno._id});		  
 		  _.each(curricula.grados, function(grado){
 			  _.each(grado, function(materia){
 				  if(materia.materia._id == calificacion.materia_id){
@@ -173,6 +173,30 @@ angular
 	  delete calificacion._id;
 	  calificacion.fechaActualizacionAsistencia = new Date();
 	  Calificaciones.update({_id : tempId}, { $set : calificacion });
+	  _.each(calificacion.alumnos, function(alumno){
+		  var curricula = Curriculas.findOne({alumno_id : alumno._id});		  
+		  _.each(curricula.grados, function(grado){
+			  _.each(grado, function(materia){
+				  if(materia.materia._id == calificacion.materia_id){
+					  materia.calificacion = parseInt(alumno.calificacion);
+					  materia.estatus = 1;
+					  materia.fechaCreacion = new Date();
+					  materia.maestro_id = rc.maestro._id;
+					  materia.grupo_id = rc.grupo._id;
+					  if(materia.calificacion >= 6){
+						  materia.aprobado = true;
+					  }else{
+						  materia.aprobado = false;
+					  }
+				  }
+			  })
+		  })
+		  var idTemp = curricula._id;
+		  delete curricula._id;
+		  Curriculas.update({_id : idTemp}, { $set : curricula})
+		  console.log("curricula", curricula)
+	  })
+	  console.log("calificacion", calificacion);
 	  toastr.success('Ha actualizado la calificación correctamente.');
   }
   

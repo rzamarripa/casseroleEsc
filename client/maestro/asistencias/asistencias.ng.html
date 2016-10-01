@@ -46,7 +46,7 @@
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
 				<li ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="masas.tomarAsistencia(alumno.estatus, $index)" ng-class="alumno.estatus == true ? '' : 'danger !important'">
-					<span class="handle" style="width: 0px"> 
+					<span ng-class="masas.getColorFondo(alumno.estatus)" style="width: 0px; padding: 5px;"> 
 						
 					</span>
 					<p class="project-members">

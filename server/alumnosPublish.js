@@ -16,6 +16,7 @@ Meteor.publish("alumno",function(options){
 });
 
 Meteor.publish("alumnos",function(params){
+	console.log(params);
   return Meteor.users.find(params);
 });
 

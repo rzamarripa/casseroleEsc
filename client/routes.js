@@ -830,6 +830,19 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/resumenAcademico/resumenAcademico.html',
       controller: 'ResumenAcademicoCtrl as ra',
       resolve: {
+	      user: ($auth) => {
+	        return $auth.requireValidUser((user) => {
+	          if (user && user.roles[0] === 'coordinadorAcademico') {
+	            return true;
+	          }
+	          else {
+	            return 'UNAUTHORIZED';
+	          }
+	        })
+	      }
+	    }
+/*
+      resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
 						if(user.roles[0] == "coordinadorAcademico"){
@@ -840,6 +853,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
          });
        }]
     	}
+*/
     })
     .state('root.alumnoCalificaciones', {
       url: '/alumnoCalificaciones',

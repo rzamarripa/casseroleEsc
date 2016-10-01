@@ -8,7 +8,7 @@ angular
 	this.grupos = [];
 	this.alumnos_id = [];
 	moment.locale("es");
-	this.hoy = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+	this.hoy = moment().format("dddd, D MMMM YYYY, h:mm:ss a");
 	this.fechaHoy = moment().format("dd - MM - yyyy");
 
 	this.subscribe('grupos', () => {		
@@ -18,8 +18,9 @@ angular
 	});
 	
 	this.subscribe('alumnos', () => {		
+		console.log("reacitvo")
 		return [{
-			_id : { $in : this.getCollectionReactively("alumnos_id")}
+			_id : { $in : rc.getCollectionReactively("alumnos_id")}
 		}]
 	});
 	
@@ -28,22 +29,20 @@ angular
 		  return MensajesVendedores.find().fetch();
 		},
 		grupos : () => {
-			return Grupos.find();				
+			return Grupos.find();
 		},
 		gruposMaestro : () => {
 			var misAsignaciones = [];
 			var alumnos = [];
-			_.each(this.getReactively("grupos"), function(grupo){
+			_.each(rc.getReactively("grupos"), function(grupo){
 				_.each(grupo.asignaciones, function(asignacion){
 					if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
 						
-						_.each(grupo.alumnos, function(alumno_id){
-							rc.alumnos_id.push(alumno_id);
-						});
-						
+						rc.alumnos_id = rc.alumnos_id.concat(grupo.alumnos ? grupo.alumnos : []);
+
 						misAsignaciones.push({"grupo" : grupo,
 																	"asignacion" : asignacion,
-																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos }, 
+																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos ? grupo.alumnos : [] }, 
 																		roles : ["alumno"]},{ fields : { 
 																				"profile.nombreCompleto" : 1,
 																				"profile.matricula" : 1,

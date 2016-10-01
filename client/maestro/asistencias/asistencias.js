@@ -213,6 +213,17 @@ angular
 		console.log("tiene", estatus);
   }
   
+  this.getColorFondo = function(estatus, $index){
+	  if(estatus == undefined || estatus == 0){
+		  return 'bg-color-red';
+		}else if(estatus == 1){
+			return 'bg-color-green';
+		}else if(estatus == 2){
+			return 'bg-color-yellow';
+		}
+		console.log("tiene", estatus);
+  }
+  
   this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")

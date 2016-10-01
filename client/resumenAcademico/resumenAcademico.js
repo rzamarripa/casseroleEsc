@@ -102,7 +102,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 			var materia = undefined;
 			for(var j=0; !materia && j<grupo.asignaciones.length;j++){
 				
-				console.log('asd',grupo.asignaciones[j].semanas[0],semanas[i]);
+				//console.log('asd',grupo.asignaciones[j].semanas[0],semanas[i]);
 
 				if(grupo.asignaciones[j].semanas[0].semana==semanas[i].numero && grupo.asignaciones[j].semanas[0].anio==semanas[i].anio)
 					materia=grupo.asignaciones[j]

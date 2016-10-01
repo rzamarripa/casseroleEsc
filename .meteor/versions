@@ -3,6 +3,7 @@ accounts-password@1.1.8
 alanning:roles@1.2.15
 allow-deny@1.0.4
 angular@1.3.10
+angular-meteor-auth@1.0.3
 angular-meteor-data@1.3.10
 angular-templates@1.0.3
 angular-templates-runtime@0.0.1
@@ -71,7 +72,7 @@ modules-runtime@0.6.3
 momentjs:moment@2.13.1
 mongo@1.1.7
 mongo-id@1.0.4
-natestrauser:select2@4.0.2
+natestrauser:select2@4.0.3
 npm-bcrypt@0.8.5
 npm-mongo@1.4.43
 observe-sequence@1.0.11

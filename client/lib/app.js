@@ -12,7 +12,8 @@ angular.module('casserole',
     'ui.calendar',
     'ui.bootstrap',
     'checklist-model',
-    'ncy-angular-breadcrumb'
+    'ncy-angular-breadcrumb',
+    'angular-meteor.auth'
   ]
 );
 

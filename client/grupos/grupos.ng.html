@@ -22,18 +22,18 @@
 		<table class="table table-bordered table-responsive" style="table-layout:fixed;">
 			<thead>
 				<tr>
-					<th width="10%"><div class="text-center">Ciclo</div></th>
+					<th class="hidden-xs visible-lg" width="10%"><div class="text-center">Ciclo</div></th>
 					<th width="10%"><div class="text-center">Grupo</div></th>
 					<th width="10%"><div class="text-center">Alums.</div></th>
-					<th width="15%"><div class="text-center">Cupo</div></th>
-					<th width="10%"><div class="text-center">Turno</div></th>
-					<th width="35%"><div class="text-center">Asignaciones</div></th>
-					<th width="10%">
+					<th class="hidden-xs visible-lg" width="15%"><div class="text-center">Cupo</div></th>
+					<th class="hidden-xs visible-lg" width="10%"><div class="text-center">Turno</div></th>
+					<th><div class="text-center">Asignaciones</div></th>
+					<th width="15%">
 						<div class="text-center">
 							Estatus
 						</div>
 					</th>
-					<th width="10%">
+					<th width="15%">
 						<div class="text-center">
 							Acciones
 						</div>
@@ -42,37 +42,37 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="grupo in gp.grupos">
-			    <td class="text-center">{{gp.getCiclo(grupo.ciclo_id)}}</td>
+			    <td class="text-center hidden-xs visible-lg">{{gp.getCiclo(grupo.ciclo_id)}}</td>
 			    <td class="text-center"><a ui-sref="root.grupoDetalle({grupo_id : grupo._id})">{{grupo.identificador}}</a></td>
 			    <td class="text-center"><strong>{{grupo.alumnos.length}} / {{grupo.cupo}}</strong></td>
-			    <td class="text-center">
+			    <td class="text-center hidden-xs visible-lg">
 				    <div class="progress right">
 							<div class="progress-bar bg-color-blue" aria-valuetransitiongoal="75" aria-valuenow="75" style="width: {{grupo.alumnos.length/grupo.cupo*100}}%;">
 								{{grupo.alumnos.length/grupo.cupo*100 | number:00}}%
 							</div>
 						</div>
 					</td>
-			    <td class="text-center">{{gp.getTurno(grupo.turno_id)}}</td>
+			    <td class="text-center hidden-xs visible-lg">{{gp.getTurno(grupo.turno_id)}}</td>
 			    <td style="overflow: scroll; width: 100%">
 				    <div class="row" >
 							<table class="table-bordered font-xs">
 					  		<tbody>
 						  		<tr>
-							  		<th ng-repeat="asignacion in grupo.asignaciones" class="no-padding">
-								  		<table class="table no-padding" style="border-top: 0px;">
+							  		<td ng-repeat="asignacion in grupo.asignaciones" class="no-padding">
+								  		<table class="table no-padding" style="border-top: 0px; width: 130px;">
 									  		<tr>
-										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana.semana}}</td>
+										  		<td class="text-center font-xs no-padding" ng-class="asignacion.estatus ? 'bg-color-green txt-white' : ''" ng-repeat="semana in asignacion.semanas">{{semana.semana}}</td>
 									  		</tr>
 								  		</table>
-								  	</th>
+								  	</td>
 						  		</tr>
 						  		<tr>
-							  		<td class="text-center bg-color-blue txt-color-white font-xs no-padding" ng-repeat="asignacion in grupo.asignaciones">
+							  		<td class="text-center bg-color-blue txt-color-white font-xs" ng-repeat="asignacion in grupo.asignaciones">
 								  		{{asignacion.materia.nombre}}
 								  	</td>
 						  		</tr>
 						  		<tr>
-							  		<td class="text-center bg-color-blueDark txt-color-white font-xs no-padding" ng-repeat="asignacion in grupo.asignaciones">
+							  		<td class="text-center bg-color-blueDark txt-color-white font-xs" ng-repeat="asignacion in grupo.asignaciones">
 								  		{{gp.getMaestro(asignacion.maestro_id)}}							  		
 								  	</td>
 						  		</tr>

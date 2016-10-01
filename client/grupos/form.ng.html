@@ -116,45 +116,48 @@
 						</form>
 					</div>
 					<div class="well">
-						<div class="row" style="overflow: scroll; width: 100%">
-							<table class="table table-bordered" style="table-layout:fixed;">
-					  		<tbody style="width: 100%">
+						<div class="row" style="overflow: scroll; font-size: 8pt;">
+							<table class="table table-bordered">
+					  		<tbody>
 						  		<tr>
-							  		<th ng-repeat="asignacion in gp.grupo.asignaciones" class="no-padding">
-								  		<table class="table no-padding" style="border-top: 0px;">
+							  		<td ng-repeat="asignacion in gp.grupo.asignaciones" class="no-padding">
+								  		<table class="table no-padding" style="border-top: 0px; width: 170px;">
 									  		<tr>
-										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">{{semana.semana}}</td>
+										  		<td class="text-center" ng-repeat="semana in asignacion.semanas">
+											  		<strong>{{semana.semana}}</strong>
+											  	</td>
 									  		</tr>
 								  		</table>
-								  	</th>
-						  		</tr>
-						  		<tr>
-							  		<td class="text-center bg-color-blue txt-color-white smart-form" ng-repeat="asignacion in gp.grupo.asignaciones">
-								  		<label class="toggle">						  			
-									  		<span class="txt-color-white">{{asignacion.materia.nombre}}</span>
-												<input type="checkbox" ng-change="gp.cambiarEstatus(asignacion)" name="estatus" class="onoffswitch-checkbox txt-color-white" ng-model="asignacion.estatus">
-												<i data-swchon-text="Activa" data-swchoff-text="Inactiva"></i>
-												
-											</label>
 								  	</td>
 						  		</tr>
 						  		<tr>
-							  		<th class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
-								  		<div class="input-group">
-												
-												<div class="input-group-btn">
-													<button class="btn btn-danger btn-xs" type="button" ng-click="gp.quitarAsignacion($index)">
-														<i class="fa fa-times fa-xs"></i>
-													</button>
-												</div>
-												<span class="bg-color-blueDark txt-color-white font-xs">{{gp.getMaestro(asignacion.maestro_id)}}</span>
-												<div class="input-group-btn">
-													<button class="btn btn-warning btn-xs" type="button" ng-click="gp.editarAsignacion(asignacion)">
-														<i class="fa fa-pencil fa-xs"></i>
-													</button>
-												</div>
-											</div>								  		
-								  	</th>
+							  		<td class="text-center bg-color-blue txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
+								  		<span class="txt-color-white" style="font-size: 8pt;">{{asignacion.materia.nombre}}</span>
+								  	</td>
+						  		</tr>
+						  		<tr>
+							  		<td class="text-center bg-color-blueDark txt-color-white" ng-repeat="asignacion in gp.grupo.asignaciones">
+											<span class="bg-color-blueDark txt-color-white font-xs">{{gp.getMaestro(asignacion.maestro_id)}}</span>
+								  	</td>
+						  		</tr>
+						  		<tr>
+							  		<td ng-repeat="asignacion in gp.grupo.asignaciones">
+								  		<div class="pull-left smart-form">
+								  			<label class="toggle">						  			
+													<input type="checkbox" ng-change="gp.cambiarEstatus(asignacion)" name="estatus" class="onoffswitch-checkbox txt-color-white" ng-model="asignacion.estatus">
+													<i data-swchon-text="Activa" data-swchoff-text="Inactiva"></i>													
+												</label>
+								  		</div>
+								  		<div class="pull-right">
+								  			<div class="input-group">												
+													<div class="input-group-btn">
+														<button class="btn btn-danger btn-xs" ng-click="gp.quitarAsignacion($index)">
+															<i class="fa fa-times fa-xs"></i>
+														</button>
+													</div>													
+												</div>	
+								  		</div>
+							  		</td>
 						  		</tr>
 					  		</tbody>
 							</table>

@@ -32,9 +32,10 @@ mdg:camera
 zuuk:stale-session
 standard-minifier-css
 standard-minifier-js
-natestrauser:select2
 huei90:angular-validation
 rshashkov:angular-meteor-breadcrumb
 tmeasday:publish-counts
 angularutils:pagination
+natestrauser:select2
 summernote:standalone
+angular-meteor-auth
