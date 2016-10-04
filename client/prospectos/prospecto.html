@@ -185,71 +185,224 @@
 								</div>
 								<div class="row">
 									<div class="col-sm-12">
-										<div class="collapse" id="formProspecto">
-											<form id="checkout-form" class="smart-form" novalidate="novalidate">
-												<fieldset>
-													<h4>Información de Contacto</h4>
-													<div class="row">
-														<section class="col col-1">
-															<button class="btn btn-primary btn-sm" ng-click="fa.tomarFoto()"><i class="fa fa-camera"></i></button>
-															<img width="100px" ng-src="{{al.prospecto.fotografia}}" ng-class="{'img-thumbnail': !!al.prospecto.fotografia}" />
-														</section>
-														<section class="col col-6">								
-															<label class="input"> <i class="icon-prepend fa fa-user"></i>
-																<input type="text" name="fname" ng-model="fa.prospecto.nombre" placeholder="Nombre Completo">
-															</label>
-														</section>
-														<section class="col col-5">
-															<label class="input"> <i class="icon-prepend fa fa-calendar"></i>
-																<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="fa.prospecto.fechaNac" placeholder="Fecha Nacimiento"/>
-															</label>
-														</section>
+										<div class="collapse" id="formProspecto" style="margin-bottom: 50px;">
+											<form name="form" class="form-horizontal" role="form" novalidate>		
+										  	<h4>Datos Personales</h4>
+										  	<div class="well">
+											  	<div class="row">
+												  	<div class="col-sm-3">
+															<label>Fotografía</label>
+															<button class="btn btn-primary" ng-click="fa.tomarFoto()"><i class="fa fa-camera"></i></button>
+															<img width="100px" ng-src="{{fa.prospecto.profile.fotografia}}" ng-class="{'img-thumbnail': !!fa.prospecto.profile.fotografia}" />
+														</div>
+											    	<div class="col-sm-3" valida>				    
+													    <label for="nombre">Nombre *</label>
+													    <input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="fa.prospecto.profile.nombre" required="">						
+											    	</div>
+											    	<div class="col-sm-3" valida>
+													    <label for="apPaterno">Apellido Paterno *</label>
+													    <input name="apPaterno" type="text" class="form-control" id="apPaterno" placeholder="Apellido Paterno" ng-model="fa.prospecto.profile.apPaterno" required="">
+											    	</div>
+											    	<div class="col-sm-3">
+													    <label for="apMaterno">Apellido Materno</label>
+													    <input type="text" class="form-control" id="apMaterno" placeholder="Apellido Materno" ng-model="fa.prospecto.profile.apMaterno">
+											    	</div>
+											    </div>		 
+													<div class="row">	
+														<div class="col-sm-3">
+															<label for="escuela">Interés</label>
+															<select class="form-control" ng-model="fa.prospecto.profile.interes">
+																<option value="Casserole">Casserole</option>
+																<option value="Prepa Icep">Prepa ICEP</option>
+																<option value="Universidad Icep">Universidad ICEP</option>
+															</select>
+														</div>					
+														<div class="col-sm-3">
+													    <label for="curp">Curp</label>
+													    <input type="text" class="form-control" id="curp" placeholder="CURP" ng-model="fa.prospecto.profile.curp">
+											    	</div>
+														<div class="col-sm-3">
+															<label for="fechaNac">Fecha de nacimiento *</label>
+															<input name="fechaNac" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="fa.prospecto.profile.fechaNac" />
+														</div>
+														<div class="col-sm-3">
+															<label for="lugarNac">Lugar de nacimiento</label>
+															<input type="text" class="form-control" id="lugarNac" placeholder="Lugar de Nacimiento" ng-model="fa.prospecto.profile.lugarNac">
+														</div>
 													</div>
-							
-													<div class="row">
-														<section class="col col-6">
-															<label class="input"> <i class="icon-prepend fa fa-envelope-o"></i>
-																<input type="email" name="email" ng-model="fa.prospecto.correo" placeholder="Correo">
-															</label>
-														</section>
-														<section class="col col-6">
-															<label class="input"> <i class="icon-prepend fa fa-phone"></i>
-																<input type="tel" name="phone" ng-model="fa.prospecto.telefono" placeholder="Teléfono" data-mask="(999) 999-9999">
-															</label>
-														</section>
-													</div>
-												</fieldset>
-												<fieldset>
-													<div class="row">
-														<section class="col col-6">
-															<h4>Quieres estudiar...</h4>
-															<div class="inline-group">
-																<label class="radio" ng-repeat="seccion in fa.secciones">
-																	<input type="radio" ng-model="fa.prospecto.quiero" value="{{seccion.nombreseccion}}" ng-click="fa.seleccionarSeccion(seccion);" name="radio-inline">
-																	<i></i>{{seccion.nombreseccion}}
-																</label>
-															</div>
-														</section>
-														<section class="col col-6">
-															<h4>Etapa de Venta</h4>
-															<select required ng-model="fa.prospecto.etapaVenta_id" class="form-control" ng-options="etapaVenta._id as etapaVenta.nombre for etapaVenta in fa.etapasVenta" ng-change="fa.cambiarEtapaVenta(fa.prospecto.etapaVenta_id)"></select>
-														</section>
+													<div class="row">		
+														<div class="col-sm-3" valida>
+																<label for="etapaVenta">Etapa de Venta *</label>
+																<select required name="etapaVenta" ng-model="fa.prospecto.profile.etapaVenta_id" class="form-control" ng-options="etapaVenta._id as etapaVenta.nombre for etapaVenta in fa.etapasVenta" ng-change="fa.cambiarEtapaVenta(fa.prospecto.etapaVenta_id)"></select>
+														</div>				
+														<div class="col-sm-3" valida>
+													    <label for="sexo">Sexo *</label>
+													    <select name="sexo" ng-model="fa.prospecto.profile.sexo" data-placeholder="Seleccione" class="form-control" required>
+															    <option value=""></option>
+															    <option value="masculino">Masculino</option>
+															    <option value="femenino">Femenino</option>
+															</select>
+											    	</div>
+														<div class="col-sm-3" valida>
+															<label for="ocupacion">Ocupación *</label>
+															<select name="ocupacion" class="form-control" placeholder="Seleccione" ng-model="fa.prospecto.profile.ocupacion_id" required="">
+															  <option ng-repeat="ocupacion in fa.ocupaciones" value="{{ocupacion._id}}">
+															  	{{ocupacion.nombre}}
+															  </option>
+															</select>
+														</div>	
+														<div class="col-sm-3">
+															<label for="escolaridad">Escolaridad</label>
+															<input name="escolaridad" type="text" class="form-control" id="escolaridad" placeholder="Escolaridad" ng-model="fa.prospecto.profile.escolaridad">
+														</div>
 													</div>
 													<div class="row">
-														<section class="col col-sm-12">
-															<h4>Información adicional</h4>
-															<label class="textarea"> 										
-																<textarea rows="3" name="info" ng-model="fa.prospecto.informacion" placeholder="Información Adicional"></textarea> 
-															</label>
-														</section>
+														<div class="col-sm-4">
+													  	<label for="vivePadres" class="checkbox-inline"><input type="checkbox" id="vivePadres" ng-model="fa.prospecto.profile.vivePadres"> Vive con sus padres</label>					    
+												  	</div>
+														<div class="col-sm-4">
+															<label for="nivelSocial">Nivel social</label><br/>
+													    <select ng-model="fa.prospecto.profile.nivelSocial" class="form-control">
+															  <option value="Baja">Baja</option>
+															  <option value="Media">Media</option>
+															  <option value="Alta">Alta</option>
+															</select>
+														</div>
+														<div class="col-sm-4">
+															<label for="medio">¿Cómo te enteraste de nosotros?</label>
+													    <select ng-model="fa.prospecto.profile.medio" class="form-control">
+															  <option value="Espectaculares">Espectaculares</option>
+															  <option value="Página Web">Página Web</option>
+															  <option value="Radio">Radio</option>
+															  <option value="TV">TV</option>
+															  <option value="Módulo">Módulo</option>
+															  <option value="Visita a casa">Visita a casa</option>
+															  <option value="Recomendación de Alumnos">Recomendación de Alumnos</option>
+															  <option value="Recomendación de Trabajadores">Recomendación de Trabajadores</option>
+															  <option value="Volantes">Volantes</option>
+															</select>
+														</div>
 													</div>
-												</fieldset>
-												<footer>
-													<button type="submit" class="btn btn-primary" ng-click="fa.actualizar(fa.prospecto)">
-														Actualizar
-													</button>
-												</footer>
-											</form>											
+													<div class="row">
+														<div class="col-sm-4">
+															<label for="correo">Correo electrónico</label>
+															<input type="email" class="form-control" placeholder="Correo" ng-model="fa.prospecto.profile.correo">
+														</div>
+														<div class="col-sm-4" valida>
+															<label for="correoCalificaciones">Correo para calificaciones *</label>
+															<input name="correoCalificaciones" type="email" class="form-control" id="correoCalificaciones" placeholder="Correo calificaciones" ng-model="fa.prospecto.profile.correoCalificaciones" required="">
+														</div>
+														<div class="col-sm-4">
+															<label for="talla">Talla uniforme</label><br/>
+													    <select ng-model="fa.prospecto.profile.talla" class="form-control">
+														    <optgroup label="Femenino">
+														    	<option value="femsm">SM</option>
+																  <option value="femS">S</option>
+																  <option value="femM">M</option>
+																  <option value="femL">L</option>
+																  <option value="femXL">XL</option>
+																  <option value="femEspecial">Especial</option>
+														    </optgroup>
+														    <optgroup label="Masculino">
+														    	<option value="massm">SM</option>
+																  <option value="masS">S</option>
+																  <option value="masM">M</option>
+																  <option value="masL">L</option>
+																  <option value="masXL">XL</option>
+																  <option value="masEspecial">Especial</option>  
+														    </optgroup>					  
+															</select>
+														</div>
+													</div>
+										  	</div>
+											  <h4>Domicilio</h4>
+											  <div class="well">
+												  <div class="row">
+												  	<div class="col-sm-6" valida>
+												  		<label for="calleNum">Calle y número *</label>
+													    <input name="calleNum" type="text" class="form-control" id="calleNum" placeholder="Calle y Número" ng-model="fa.prospecto.profile.calleNum" required="">
+												  	</div>
+												  	<div class="col-sm-6" valida>
+															<label for="colonia">Colonia *</label>
+															<input name="colonia" type="text" class="form-control" id="colonia" placeholder="Colonia" ng-model="fa.prospecto.profile.colonia" required="">
+												  	</div>
+												  </div>
+												  <div class="row">
+												  	<div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
+												  		<label for="entreCalles">Entre calles</label>
+															<input type="text" class="form-control" id="entreCalles" placeholder="Entre calles" ng-model="fa.prospecto.profile.entreCalles">
+												  	</div>
+												  </div>	
+												  <div class="row">
+												  	<div class="col-sm-6">
+												  		<label for="tel1">Tel. 1</label>
+															<input type="text" class="form-control" id="tel1" placeholder="Teléfono 1" ng-model="fa.prospecto.profile.tel1">
+												  	</div>
+												  	<div class="col-sm-6">
+															<label for="tel2">Tel. 2</label>
+															<input type="text" class="form-control" id="tel2" placeholder="Teléfono 2" ng-model="fa.prospecto.profile.tel2">
+												  	</div>
+												  </div>
+												  <div class="row">
+												  	<div class="col-sm-4">
+												  		<label for="estado">Estado</label>
+															<input type="text" class="form-control" id="estado" placeholder="Estado" ng-model="fa.prospecto.profile.estado">
+												  	</div>
+												  	<div class="col-sm-4">
+													  	<label for="ciudad">Ciudad</label>
+													    <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" ng-model="fa.prospecto.profile.ciudad">
+												  	</div>
+												  	<div class="col-sm-4">
+															<label for="codigoPostal">Código Postal</label>
+													    <input type="text" class="form-control" id="codigoPostal" placeholder="Código Postal" ng-model="fa.prospecto.profile.codigoPostal">
+												  	</div>
+												  </div>	
+											  </div>
+												<h4>Información Familiar</h4>
+												<div class="well">  
+												  <div class="row">
+												  	<div class="col-sm-6">
+												  		<label for="padreTutor">Padre o Tutor</label>
+													    <input name="padreTutor" type="text" class="form-control" id="padreTutor" placeholder="Padre o Tutor" ng-model="fa.prospecto.profile.padreTutor">
+												  	</div>
+												  	<div class="col-sm-3">
+															<label for="telefonoPadreTutor">Teléfono</label>
+															<input type="text" class="form-control" id="telefonoPadreTutor" placeholder="Teléfono del Padre" ng-model="fa.prospecto.profile.telefonoPadreTutor">
+												  	</div>
+												  	<div class="col-sm-3">
+															<label for="correoPadre">Correo</label>
+															<input type="email" class="form-control" id="correoPadre" placeholder="Correo del Padre" ng-model="fa.prospecto.profile.correoPadre">
+												  	</div>
+												  </div>
+												  <div class="row">
+												  	<div class="col-sm-6">
+												  		<label for="madre">Madre</label>
+															<input name="madre" type="text" class="form-control" id="madre" placeholder="Madre" ng-model="fa.prospecto.profile.madre">
+												  	</div>
+												  	<div class="col-sm-3">
+															<label for="ocupacionMadre">Teléfono</label>
+															<input type="text" class="form-control" id="telefonoMadre" placeholder="Teléfono de la Madre" ng-model="fa.prospecto.profile.telefonoMadre">
+												  	</div>
+												  	<div class="col-sm-3">
+															<label for="correoMadre">Correo</label>
+															<input type="email" class="form-control" id="correoMadre" placeholder="Correo de la Madre" ng-model="fa.prospecto.profile.correoMadre">
+												  	</div>
+												  </div>
+												  <div class="row">
+												  	<div class="col-sm-12">
+															<label for="observacionesGenerales">Observaciones generales</label>
+															<textarea type="text" class="form-control" id="observacionesGenerales" placeholder="Observaciones Generales" 
+															ng-model="fa.prospecto.profile.observacionesGenerales"></textarea>
+												  	</div>
+												  </div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<input type="submit" ng-click="fa.guardar(fa.prospecto,form)" value="Guardar" class="btn btn-primary" ng-show="fa.action" valida-form formulario="form">
+														<input type="submit" ng-click="fa.actualizar(fa.prospecto,form)" value="Actualizar" class="btn btn-primary" ng-show="!fa.action" valida-form formulario="form">				
+													</div>
+												</div>	  
+										  </form>
 										</div>
 									</div>
 								</div> 
@@ -262,27 +415,22 @@
 												<ul class="list-unstyled">
 													<li>
 														<p class="text-muted">
-															<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.telefono}}</span>
+															<i class="fa fa-phone"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.profile.tel1}}</span>
 														</p>
 													</li>
 													<li>
 														<p class="text-muted">
-															<i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{fa.prospecto.correo}}">{{fa.prospecto.correo}}</a>
+															<i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{fa.prospecto.correo}}">{{fa.prospecto.profile.correoCalificaciones}}</a>
 														</p>
 													</li>
 													<li>
 														<p class="text-muted">
-															<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.fechaNac | date:"dd-MM-yyyy"}}</span>
+															<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
 														</p>
 													</li>
 													<li>
 														<p class="text-muted">
-															<i class="fa fa-book"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.prospecto.estudioInteres}}</span>
-														</p>
-													</li>
-													<li>
-														<p class="text-muted">
-															<i class="fa fa-tasks"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.getEtapaVenta(fa.prospecto.etapaVenta_id)}}</span>
+															<i class="fa fa-tasks"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{fa.getEtapaVenta(fa.prospecto.profile.etapaVenta_id)}}</span>
 														</p>
 													</li>
 												</ul>
@@ -295,12 +443,12 @@
 								        </header>
 								        <div>
 								          <div class="widget-body">
-								            <h1 class="text-muted">{{fa.prospecto.nombre}}</h1>
+								            <h1 class="text-muted">{{fa.prospecto.profile.nombre}} {{fa.prospecto.profile.apPaterno}} {{fa.prospecto.profile.apMaterno}}</h1>
 														<ul class="list-unstyled">															
 															<li>
 																<ul class="list-unstyled" >
 																	<span class="txt-color-darken">Quiero estudiar en: </span><br/>
-																	<li class="text-muted fa fa-book" style="margin-left: 15px;" > {{fa.prospecto.estudioInteres}}</li>
+																	<li class="text-muted fa fa-book" style="margin-left: 15px;" > {{fa.prospecto.profile.interes}}</li>
 																	<br ng-repeat-end>
 																</ul>
 															</li>
@@ -309,7 +457,7 @@
 														<p class="font-sm">
 															<i>Información Adicional</i>
 															<p class="font-xs">
-																{{fa.prospecto.informacion}}
+																{{fa.prospecto.profile.observacionesGenerales}}
 															</p>
 														</p>
 														

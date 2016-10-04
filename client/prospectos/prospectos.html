@@ -14,7 +14,7 @@
 </div>
 <br/>
 <!-- List -->
-<div class="row">
+<div class="row" style="font-size: 8pt;">
   <div class="col-lg-12">
     <h6 class="description">Nuestros Prospectos</h6>
     <div class="row pt-md">
@@ -22,24 +22,24 @@
         <table class="table table-bordered">
 	        <tr>
 		        <th>No.</th>
-		        <th>Nombre</th>		        
+		        <th>Nombre</th>
+		        <th>Fecha Nac.</th>
 		        <th>Teléfono</th>
 		        <th>Correo</th>
-		        <th>Interés</th>
 		        <th>Etapa de Venta</th>
 		        <th>Información Adicional</th>
 		        <th>Acciones</th>
 	        </tr>
 	        <tr ng-repeat="prospecto in fa.prospectos">
 		        <td>{{$index + 1}}</td>
-		        <td><a href="./prospecto/{{prospecto._id}}">{{prospecto.nombre}}</a></td>
-		        <td>{{prospecto.telefono}}</td>
-		        <td>{{prospecto.correo}}</td>
-		        <td>{{prospecto.estudioInteres}}</td>
-		        <td>{{fa.getEtapaVenta(prospecto.etapaVenta_id)}}</td>
-		        <td>{{prospecto.informacion}}</td>
+		        <td><a href="./prospecto/{{prospecto._id}}">{{prospecto.profile.nombre}} {{prospecto.profile.apPaterno}} {{prospecto.profile.apMaterno}} </a></td>
+		        <td>{{prospecto.profile.fechaNac | date:"dd-MM-yyyy"}}</td>
+		        <td>{{prospecto.profile.tel1}}</td>
+		        <td>{{prospecto.profile.correoCalificaciones}}</td>
+		        <td>{{fa.getEtapaVenta(prospecto.profile.etapaVenta_id)}}</td>
+		        <td>{{prospecto.profile.observacionesGenerales}}</td>
 			      <td>
-							<button class="btn btn-danger" ng-confirm-click="Está seguro de eliminar el prospecto?" confirmed-click="fa.eliminar(prospecto)">
+							<button class="btn btn-danger btn-xs" ng-confirm-click="Está seguro de eliminar el prospecto?" confirmed-click="fa.eliminar(prospecto)">
 								<i class="fa fa-trash"></i>
 							</button>
 		        </td>

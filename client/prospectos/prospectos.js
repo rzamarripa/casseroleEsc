@@ -6,7 +6,8 @@ angular.module("casserole")
   this.action = true;
   
   this.prospecto = {};
-  
+  this.prospecto.profile = {};
+  window.rc = rc;
   this.buscar = {};
   this.buscar.nombre = '';
   this.buscar.etapaVenta_id = '';
@@ -14,26 +15,28 @@ angular.module("casserole")
   console.log("state", $stateParams);
   
   if($stateParams.vendedor_id){
-	  console.log("entré aquí");
-	  rc.buscar.etapaVenta_id = $stateParams.etapaVenta_id;
-	  this.subscribe('prospectos', () => {
+	  
+	  this.subscribe('prospectosPorVendedor', () => {
 	    return [{
-		    options : { limit: 10 },
-		    where : { nombre : this.getReactively('buscar.nombre'), etapaVenta_id : this.getReactively("buscar.etapaVenta_id"), vendedor_id:$stateParams.vendedor_id }
-	    }] ;
+		    "profile.estatus" : 1,
+		    "profile.etapaVenta_id" : this.getReactively("buscar.etapaVenta_id"),
+		    "profile.vendedor_id" : Meteor.userId()
+	    }];
 	  });
 	  
   }else{
-	  console.log("entré allá");
-	  this.subscribe('prospectos', () => {
+	  this.subscribe('prospectosPorVendedor', () => {
 	    return [{
-		    options : { limit: 10 },
-		    where : { nombre : this.getReactively('buscar.nombre'), etapaVenta_id : this.getReactively("buscar.etapaVenta_id"), vendedor_id:Meteor.userId() }
-	    }] ;
+		    "profile.estatus" : 1,
+		    "profile.etapaVenta_id" : this.getReactively("buscar.etapaVenta_id"),
+		    "profile.vendedor_id" : Meteor.userId()
+	    }];
 	  });
   }
   
-  this.subscribe("empleados");
+  this.subscribe("ocupaciones", () => {
+	  return [{estatus : true}];
+  });
   
   this.subscribe('secciones', function(){
 	  return [{
@@ -57,21 +60,103 @@ angular.module("casserole")
 	  },
 	  secciones : () => {
 		  return Secciones.find();
+	  },
+	  ocupaciones : () => {
+		  return Ocupaciones.find();
 	  }
   });
   
-  this.guardar = function(prospecto)
+  this.guardar = function(prospecto, form)
 	{
-		this.prospecto.estatus = 1;
-		this.prospecto.fecha = new Date();
-		this.prospecto.etapaVenta_id = this.etapaVenta._id;
-		this.prospecto.vendedor_id = Meteor.userId();
-		this.prospecto.campus_id = Meteor.user().profile.campus_id;
-		var prospecto_id = Prospectos.insert(this.prospecto);
-		toastr.success('prospecto guardado.');
-		this.prospecto = {}; 
+		//Validación
+		if(form.$invalid){
+			this.validation = true;
+      toastr.error('Error al guardar los datos.');
+      return;
+    }
+    
+    //Buscar si hay repetidos
+    var repetidos = Prospectos.find({
+	    "profile.nombre": prospecto.profile.nombre,
+	    "profile.apPaterno": prospecto.profile.apPaterno
+	  }).fetch();
+	  
+	  console.log(repetidos);
+	  
+	  //Hay repetidos
+	  if(repetidos.length > 0){
+		  
+		  //Fecha de Nacimiento Elegida
+	    var mes = prospecto.profile.fechaNac.getMonth() + 1;
+	    var fechaNacimiento = mes + '-' + 
+														prospecto.profile.fechaNac.getDate() + '-' +
+														prospecto.profile.fechaNac.getFullYear();
+														
+														
+			console.log("fechaNacimiento", fechaNacimiento);
+			
+			//Recorrer repetidos para comparar la fecha de nacimiento
+		  _.each(repetidos, function(repetido){
+			  
+			  //Obtener el mes de nacimiento y obtener la fecha completa
+			  var mesRepetido = repetido.profile.fechaNac.getMonth() + 1;
+			  var repetidoFechaNac = mesRepetido + '-' +
+			  											 repetido.profile.fechaNac.getDate() + '-' +
+			  											 repetido.profile.fechaNac.getFullYear();
+			  console.log("repetidoFechaNac", repetidoFechaNac);
+			  
+			  //Es igual la fecha de nacimiento (ya mucha coincidencia)
+			  if(fechaNacimiento == repetidoFechaNac){
+				  console.log("son repetidos");
+				  //Ver si ya pasaron más de 3 días que correponden a 259200000 milisegundos
+				  var ms = moment(new Date(),"YYYY/MM/DD").diff(moment(repetido.profile.fechaUltimoContacto,"YYYY/MM/DD"));
+				  toastr.error(repetido.profile.nombre + " " + repetido.profile.apPaterno + ' ya está asignado.');
+				  console.log("ms",ms)
+				  if(ms >= 259200000 && Meteor.userId() != repetido.profile.vendedor_id){
+					  toastr.success(repetido.profile.nombre + " " + repetido.profile.apPaterno + ' es tuyo.');
+					  //Proponer quitarle el prospecto al vendedor anterior
+					  toastr.error('Este prospecto NO ha sido atendido en 3 días o más');				  
+					  var r = confirm("Quieres darle seguimiento a este prospecto tu, esto hará que se te asigne?");
+					  if(r == true){
+						  Prospectos.update(repetido._id, {$set : { "profile.vendedor_id" : Meteor.userId()}});
+						  toastr.success("Prospecto reasignado")
+					  }else{
+						  toastr.success("Por favor notifica al vendedor que le de seguimiento")
+					  }
+				  }else{
+					  
+				  }
+			  }else{
+				  //No se encontró un prospecto igual y se insertará.
+				  prospecto.profile.estatus = 1;
+					prospecto.profile.fecha = new Date();
+					prospecto.profile.etapaVenta_id = rc.etapaVenta._id;
+					prospecto.profile.vendedor_id = Meteor.userId();
+					prospecto.profile.campus_id = Meteor.user().profile.campus_id;
+					prospecto.profile.fechaUltimoContacto = new Date();
+					var prospecto_id = Prospectos.insert(prospecto);
+					toastr.success('prospecto guardado.');
+					$state.go('root.prospecto',{id : prospecto_id});
+			  }			  
+		  })
+	  }else{
+		  //No se encontró un prospecto igual y se insertará.
+		  prospecto.profile.estatus = 1;
+			prospecto.profile.fecha = new Date();
+			prospecto.profile.etapaVenta_id = rc.etapaVenta._id;
+			prospecto.profile.vendedor_id = Meteor.userId();
+			prospecto.profile.campus_id = Meteor.user().profile.campus_id;
+			prospecto.profile.fechaUltimoContacto = new Date();
+			var prospecto_id = Prospectos.insert(prospecto);
+			toastr.success('prospecto guardado.');
+			$state.go('root.prospecto',{id : prospecto_id});
+	  }
+    
+		
+		
+		//this.prospecto = {}; 
 		$('.collapse').collapse('hide');
-		$state.go('root.prospecto',{id : prospecto_id});
+		
 	};
 	
 	this.editar = function(id)
@@ -116,5 +201,10 @@ angular.module("casserole")
   this.filtrarEtapaVenta = function(etapaVenta_id){
 	  this.buscar.etapaVenta_id = etapaVenta_id;
   }
+  
+  this.tomarFoto = function () {
+		$meteor.getPicture({width:200, height: 200, quality: 50}).then(function(data){			
+			rc.prospecto.profile.fotografia = data;
+		})
+	};
 };
-

@@ -15,7 +15,6 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
   };
 
   this.login = function () {
-		console.log(this.credentials);
 	    $meteor.loginWithPassword(this.credentials.username, this.credentials.password).then(
 	      function () {
 		      toastr.success("Bienvenido al Sistema");
