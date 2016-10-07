@@ -42,8 +42,8 @@ angular
 	
 	this.helpers({
 	  grupo : () => {
-	  		var grupo=Grupos.findOne();
-	  		this.alumnos_id= grupo? grupo.alumnos? grupo.alumnos:[]:[] ;
+  		var grupo=Grupos.findOne();
+  		this.alumnos_id= grupo? grupo.alumnos? grupo.alumnos:[]:[] ;
 			return Grupos.findOne();
 	  },
 	  asignacion : () => {

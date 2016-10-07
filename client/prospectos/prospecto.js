@@ -93,7 +93,10 @@ angular.module("casserole")
 	{
 		var idTemp = prospecto._id;
 		delete prospecto._id;		
+		console.log(prospecto);
+		console.log(idTemp);
 		Prospectos.update({_id:idTemp},{$set:prospecto});
+		Prospectos.update({_id:idTemp}, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 	};
@@ -105,8 +108,8 @@ angular.module("casserole")
 			prospecto.estatus = false;
 		else
 			prospecto.estatus = true;
-		
-		Prospectos.update({_id: id},{$set :  {estatus : prospecto.estatus}});
+			
+		Prospectos.update($stateParams.id, { $set : {estatus : prospecto.estatus, "profile.fechaUltimoContacto":new Date() } } )
   };  
   
   this.tomarFoto = function () {
@@ -127,6 +130,7 @@ angular.module("casserole")
 	  llamada.vendedor_id = Meteor.userId();
 	  llamada.estatus = false;
 	  Llamadas.insert(llamada);
+	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.llamada = {};
 	  $('.collapseLlamada').collapse('hide');
   };
@@ -144,6 +148,7 @@ angular.module("casserole")
 		delete llamada._id;	
 		delete llamada.$$hashKey;	
 		Llamadas.update({_id:idTemp},{$set:llamada});
+		Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 		$('.collapseLlamada').collapse('hide');
 		this.actionLlamada = true;
 	};
@@ -156,6 +161,7 @@ angular.module("casserole")
 	  reunion.vendedor_id = Meteor.userId();
 	  reunion.estatus = false;
 	  Reuniones.insert(reunion);
+	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.reunion = {};
 	  $('.collapseReunion').collapse('hide');
   }
@@ -173,6 +179,7 @@ angular.module("casserole")
 		delete reunion._id;		
 		delete reunion.$$hashKey;	
 		Reuniones.update({_id:idTemp},{$set:reunion});
+		Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 		$('.collapseReunion').collapse('hide');
 		this.actionReunion = true;
 	};
@@ -185,6 +192,7 @@ angular.module("casserole")
 	  tarea.vendedor_id = Meteor.userId();
 	  tarea.estatus = false;
 	  Tareas.insert(tarea);
+	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.tarea = {};
 	  $('.collapseTarea').collapse('hide');
   }
@@ -203,6 +211,7 @@ angular.module("casserole")
 		delete tarea._id;		
 		delete tarea.$$hashKey;	
 		Tareas.update({_id:idTemp},{$set:tarea});
+		Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 		$('.collapseTarea').collapse('hide');
 		this.actionTarea = true;
 	};
