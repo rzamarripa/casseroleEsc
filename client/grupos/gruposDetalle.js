@@ -26,9 +26,9 @@ angular
 
 	this.subscribe('buscarAlumnos', () => {
     return [{
-	    options : { limit: 3 },
+	    options : { limit: 10 },
 	    where : { 
-	    	id : { $nin : this.getCollectionReactively('alumnos_id')},
+	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'), 
 			seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
@@ -84,7 +84,7 @@ angular
 	}
 
 	this.agregarAlumno = function(){
-		var alumno_id=rc.alumnose
+		var alumno_id=rc.alumnose._id
 		console.log(rc.grupo)
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
