@@ -84,12 +84,13 @@ angular
 	}
 
 	this.agregarAlumno = function(){
-		var alumno_id=rc.alumnose._id
-		console.log(rc.grupo)
+		console.log(rc.alumnose);
+		var alumno_id=rc.alumnose
+		//console.log(rc.grupo)
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
 		var x=rc.grupo.alumnos.indexOf(alumno_id);
-		console.log("si entre",x)
+		console.log("si entre",x,alumno_id)
 		if(x==-1){
 			rc.grupo.alumnos.push(alumno_id)
 			var idTemp = rc.grupo._id;

@@ -67,7 +67,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    var ciclos	 	= Ciclos.find().fetch();
 	    var planesEstudios = PlanesEstudios.find().fetch();
 	    _inscripciones.forEach(function (inscripcion) {
-	      console.log(inscripcion);
+	      //console.log(inscripcion);
 	      inscripcion.alumno = findInCollection(alumnos, inscripcion.alumno_id);
 	      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
 	      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);
