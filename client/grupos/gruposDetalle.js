@@ -26,9 +26,9 @@ angular
 
 	this.subscribe('buscarAlumnos', () => {
     return [{
-	    options : { limit: 3 },
+	    options : { limit: 10 },
 	    where : { 
-	    	id : { $nin : this.getCollectionReactively('alumnos_id')},
+	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'), 
 			seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
@@ -84,12 +84,13 @@ angular
 	}
 
 	this.agregarAlumno = function(){
+		console.log(rc.alumnose);
 		var alumno_id=rc.alumnose
-		console.log(rc.grupo)
+		//console.log(rc.grupo)
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
 		var x=rc.grupo.alumnos.indexOf(alumno_id);
-		console.log("si entre",x)
+		console.log("si entre",x,alumno_id)
 		if(x==-1){
 			rc.grupo.alumnos.push(alumno_id)
 			var idTemp = rc.grupo._id;

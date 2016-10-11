@@ -1,10 +1,12 @@
 Meteor.publish("buscarAlumnos",function(options){
 		let selector = {
 	  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
-	  	"profile.seccion_id": options.where.seccion_id
+	  	"profile.seccion_id": options.where.seccion_id,
+	  	"_id":options.where._id,
+	  	roles : ["alumno"]
 		}
-	
-		Counts.publish(this, 'number-alumnos',Meteor.users.find({roles : ["alumno"],'profile.campus_id':options.where.campus_id}),{noReady: true});	
+		console.log(selector);
+		Counts.publish(this, 'number-alumnos',Meteor.users.find({roles : ["alumno"],'profile.campus_id':options.where.campus_id,"profile.seccion_id": options.where.seccion_id}),{noReady: true});	
 		return Meteor.users.find(selector, options.options);	
 
 });

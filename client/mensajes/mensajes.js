@@ -5,9 +5,15 @@ angular
 function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
 	this.action = true;
-  this.nuevo = true;
+    this.nuevo = true;
 	this.viendoMensaje = false;
 	this.mensaje = {};
+
+	this.perPage = 10;
+    this.page = 1;
+    this.sort = {
+      fechaEnvio: -1
+    };
 	
 	window.rc = rc;
 	
@@ -23,19 +29,26 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe('usuariosMensajes');
 	
 	this.subscribe('mensajes',()=>{
-		return [{para_id : Meteor.user() != undefined ? Meteor.userId() : "" }]
+		return [{para_id : Meteor.user() != undefined ? Meteor.userId() : "" },{
+      limit: parseInt(this.perPage),
+      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
+      sort: this.getReactively('sort')}]
 	});
   
   this.helpers({
 		mensajes : () => {
-		  return Mensajes.find({}, { sort: {fechaEnvio : -1}});
+		  return Mensajes.find({}, { sort: this.getReactively('sort')});
 	  },
 	  destinatarios : () => {
 		  return Meteor.users.find({"profile.estatus" : true, "profile.campus_id" : Meteor.user().profile.campus_id})
 	  },
 	  mensajesNuevos : () => {
 		  return Mensajes.find({estatus : 1});
-	  }
+	  },
+	  mensajesCount() {
+	  	console.log(Counts.get('numberOfMensajes'))
+        return Counts.get('numberOfMensajes');
+      }
   });
 
   this.nuevoMensaje = function()
@@ -137,6 +150,11 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}else{
 			toastr.success('No se seleccionaron mensajes.');
 		}
-			
+  }
+  this.pageChanged=function(newPage) {
+  	var numeroPaginas = Math.ceil(this.mensajesCount/this.perPage);
+
+  	if(newPage>0 && newPage<=numeroPaginas)
+    this.page = newPage;
   }
 };

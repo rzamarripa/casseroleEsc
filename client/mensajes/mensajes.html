@@ -31,10 +31,11 @@
 </a>
 	
 		<div class="btn-group pull-right inbox-paging">
-			<a href="javascript:void(0);" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-left"></i></strong></a>
-			<a href="javascript:void(0);" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-right"></i></strong></a>
+			<a ng-click="mm.pageChanged(mm.page-1)" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-left"></i></strong></a>
+			<a ng-click="mm.pageChanged(mm.page+1)" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-right"></i></strong></a>
 		</div>
-		<span class="pull-right"><strong>1-30</strong> of <strong>{{mm.mensajes.length | number}}</strong></span>
+
+		<span class="pull-right"><strong>{{(mm.page-1)*mm.perPage+1}}-{{(mm.page-1)*mm.perPage+mm.mensajes.length}}</strong> of <strong>{{mm.mensajesCount | number}}</strong></span>
 	
 	</div>
 	
@@ -111,7 +112,7 @@
 			<table id="inbox-table" class="table table-striped table-hover">
 				<tbody>
 			
-					<tr id="msg1" ng-class="{ 'highlight' : mensaje.checked, 'unread' : mensaje.estatus == 1, 'danger' : mensaje.importante == 2}" ng-repeat="mensaje in mm.mensajes">
+					<tr id="msg1" ng-class="{ 'highlight' : mensaje.checked, 'unread' : mensaje.estatus == 1, 'danger' : mensaje.importante == 2}"  dir-paginate="mensaje in mm.mensajes | itemsPerPage: mm.perPage" total-items="mm.mensajesCount">
 						<td class="inbox-table-icon">
 							<div class="checkbox">
 								<label>
@@ -137,7 +138,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<dir-pagination-controls on-page-change="mm.pageChanged(newPageNumber)"></dir-pagination-controls>
 		</div>
+		
+
 		<div ng-if="mm.viendoMensaje" class="table-wrap custom-scroll" style="height: 525px; opacity: 1;">
 			<h2 class="email-open-header">
 				<button class="btn btn-primary" ng-click="mm.viendoMensaje = false; mm.mensaje = {}">

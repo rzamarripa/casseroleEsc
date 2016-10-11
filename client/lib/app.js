@@ -13,6 +13,7 @@ angular.module('casserole',
     'ui.bootstrap',
     'checklist-model',
     'ncy-angular-breadcrumb',
+    'angularUtils.directives.dirPagination',
     'angular-meteor.auth'
   ]
 );
