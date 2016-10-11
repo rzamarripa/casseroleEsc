@@ -13,3 +13,7 @@ Meteor.publish("coordinadores", function(){
 Meteor.publish("usuariosMensajes", function(options){
 	return  Roles.getUsersInRole(['coordinadorAcademico', 'coordinadorFinanciero', 'maestro', 'director']);
 });
+
+Meteor.publish("todosUsuarios", function(){
+	return Roles.getUsersInRole(['coordinadorAcademico', 'coordinadorFinanciero', 'director']);
+});

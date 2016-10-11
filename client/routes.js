@@ -793,6 +793,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
+    .state('root.alumnoAsistencias', {
+      url: '/alumnoAsistencias/:alumno_id/:grupo_id/:materia_id',
+      templateUrl: 'client/alumno/asistencias/alumnoAsistencias.html',
+      controller: 'AlumnoAsistenciasCtrl as aa',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
     .state('root.capturarCalificaciones', {
       url: '/capturarCalificaciones/:grupo_id/:materia_id/:maestro_id',
       templateUrl: 'client/maestro/calificaciones/calificar.html',

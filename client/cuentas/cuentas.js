@@ -20,7 +20,7 @@ function CuentasCtrl($scope, $meteor, $reactive, $state, toastr) {
   {
     this.action = true;
     this.nuevo = !this.nuevo;
-    this.cuenta = {};		
+    this.cuenta = {};
   };
 	
   this.guardar = function(cuenta,form)

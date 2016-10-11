@@ -15,6 +15,12 @@ angular.module("casserole")
 	  }]
   });
   
+  this.subscribe('ocupaciones', () => {
+    return [{
+			estatus : true
+    }];
+  });
+  
   this.subscribe('etapasVenta', function(){
 	  return [{
 		  estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -92,11 +98,16 @@ angular.module("casserole")
 	this.actualizar = function(prospecto)
 	{
 		var idTemp = prospecto._id;
-		delete prospecto._id;		
-		console.log(prospecto);
-		console.log(idTemp);
+		delete prospecto._id;
+		var etapaVenta = EtapasVenta.findOne({nombre : "Inscrito", campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });		
+		if(etapaVenta._id == prospecto.profile.etapaVenta_id){
+			prospecto.profile.estatus = 2;
+		}else{
+			prospecto.profile.estatus = 1;
+		}
+		prospecto.profile.fechaUltimoContacto = new Date();
+		console.log("prospecto", prospecto);
 		Prospectos.update({_id:idTemp},{$set:prospecto});
-		Prospectos.update({_id:idTemp}, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 	};
@@ -120,7 +131,7 @@ angular.module("casserole")
 	
 	this.cambiarEtapaVenta = function(etapaVenta){
 		console.log(etapaVenta);
-	}
+	};
   
   // Llamadas
   
@@ -164,7 +175,7 @@ angular.module("casserole")
 	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.reunion = {};
 	  $('.collapseReunion').collapse('hide');
-  }
+  };
   
   this.editarReunion = function(reunion)
 	{
@@ -195,7 +206,7 @@ angular.module("casserole")
 	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.tarea = {};
 	  $('.collapseTarea').collapse('hide');
-  }
+  };
   
   this.editarTarea = function(tarea)
 	{
@@ -220,13 +231,11 @@ angular.module("casserole")
 	  var etapaVenta = EtapasVenta.findOne(etapaVenta_id);
 	  if(etapaVenta)
 	  	return etapaVenta.nombre;
-  }
+  };
   
   this.seleccionarSeccion = function(seccion){
-	  console.log(this.prospecto);
 	  this.prospecto.estudioInteres = seccion.nombreseccion; 
 	  this.prospecto.seccion_id = seccion._id
-	  console.log(this.prospecto);
-  }
+  };
 		
 };

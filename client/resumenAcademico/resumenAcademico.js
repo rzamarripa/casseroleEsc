@@ -179,7 +179,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 
 				
 		
-				cold.push({texto: 'Inasistencias: '+faltasTotales,
+				cold.push({texto: 'Faltas: '+faltasTotales,
 																
 																rowspan:1,
 																bgcolor:faltasTotales>0 ? "bg-color-red":"" ,

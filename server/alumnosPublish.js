@@ -7,8 +7,6 @@ Meteor.publish("buscarAlumnos",function(options){
 		Counts.publish(this, 'number-alumnos',Meteor.users.find({roles : ["alumno"],'profile.campus_id':options.where.campus_id}),{noReady: true});	
 		return Meteor.users.find(selector, options.options);	
 
-	
-	
 });
 
 Meteor.publish("alumno",function(options){

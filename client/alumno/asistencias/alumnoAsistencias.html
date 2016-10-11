@@ -1,0 +1,60 @@
+<div class="row-fluid">
+	<div class="col-sm-12">
+		<h2>{{aa.grupo.nombre}} - {{aa.materia.nombre}}</h2>
+	</div>
+</div>
+<div class="row">
+	<article class="col-sm-4">
+		<div class="alert alert-success fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-check"></i>
+			<strong>Asistencia</strong>.
+		</div>
+	</article>
+	<article class="col-sm-4">				
+		<div class="alert alert-warning fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-warning"></i>
+			<strong>Justificante</strong>.
+		</div>
+	</article>	
+	<article class="col-sm-4">
+		<div class="alert alert-danger fade in">
+			<button class="close" data-dismiss="alert">
+				×
+			</button>
+			<i class="fa-fw fa fa-times"></i>
+			<strong>Inasistencia!</strong>.
+		</div>
+	</article>
+</div>
+<div class="row">
+	<div class="col-sm-12">		
+			<table class="table table-bordered">
+		    <thead>
+		      <tr>
+		        <th class="col-sm-1">Matrícula</th>
+		        <th class="col-sm-2">Nombre</th>
+		        <th class="text-center" ng-repeat="asistencia in aa.asistencias">
+			        <span class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</span>
+			      </th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr ng-repeat="alumno in aa.alumnosAsistidos" style="font-size: 10px;">
+						<td class="cell">{{alumno.matricula}}</td>
+						<td class="cell">{{alumno.nombre}}</td>
+					  <td class="cell text-center" ng-repeat="asistencia in alumno.dias track by $index">
+						  <span ng-if="asistencia == 0" class="label label-danger">&nbsp;</span>
+							<span ng-if="asistencia == 1" class="label label-success">&nbsp;</span>
+						  <span ng-if="asistencia == 2" class="label label-warning">&nbsp;</span>
+					  </td>
+					</tr>
+		    </tbody>
+			</table>
+	</div>
+</div>
