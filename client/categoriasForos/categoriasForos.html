@@ -1,0 +1,91 @@
+<h2>Categorías en Foros</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{cf.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevacategoria" 
+				ng-click="cf.nuevacategoria()">
+		  {{cf.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">		  		
+			    <div class="row">			    	
+			    	<div class="col-sm-12" valida>
+						  <label>Nombre *</label>
+				    	<input name="nombre" type="text" class="form-control"  ng-model="cf.categoria.nombre" required="">
+			    	</div>			    	
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-12">
+				    	<label>Descripción</label>
+			    		<textarea class="form-control" rows="3" ng-model="cf.categoria.descripcion"></textarea>
+			    	</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="cf.guardar(cf.categoria,form)" value="Guardar" class="btn btn-primary" ng-show="cf.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="cf.actualizar(cf.categoria,form)" value="Actualizar" class="btn btn-primary" ng-show="!cf.action" valida-form formulario="form"/>				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>					
+					<th><div class="text-center">Nombre</div></th>
+					<th><div class="text-center">Descripción</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="categoria in cf.categoriasForos">
+			    <td>{{categoria.nombre}}</td>
+			    <td>{{categoria.descripcion}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="categoria.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!categoria.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="cf.editar(categoria._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="cf.cambiarEstatus(categoria._id)">
+							    				<i class="fa fa-{{categoria.estatus ? 'trash' : 'check' }}"></i> {{categoria.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

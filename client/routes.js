@@ -809,6 +809,70 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
+    .state('root.maestroForos', {
+      url: '/maestroForos/:grupo_id',
+      templateUrl: 'client/maestro/foros/foros.html',
+      controller: 'ForosCtrl as f',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.alumnoForos', {
+      url: '/alumnoForos/:grupo_id',
+      templateUrl: 'client/alumno/foros/foros.html',
+      controller: 'AlumnoForosCtrl as f',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.foroDetalle', {
+      url: '/foroDetalle/:foro_id/:grupo_id',
+      templateUrl: 'client/maestro/foros/detalleForo.html',
+      controller: 'DetalleForoCtrl as df',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.categoriasForos', {
+      url: '/categoriasForos',
+      templateUrl: 'client/categoriasForos/categoriasForos.html',
+      controller: 'CategoriasForosCtrl as cf',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })    
     .state('root.capturarCalificaciones', {
       url: '/capturarCalificaciones/:grupo_id/:materia_id/:maestro_id',
       templateUrl: 'client/maestro/calificaciones/calificar.html',

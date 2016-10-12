@@ -1,14 +1,13 @@
 angular.module("casserole")
-.controller("ForosCtrl",ForosCtrl)
-function ForosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
+.controller("DetalleForoCtrl",DetalleForoCtrl)
+function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   let rc = $reactive(this).attach($scope);
 	window.rc = rc;
 	
 	this.action = true;
-	this.foro = {};
 
 	this.subscribe('foros',()=>{
-		return [{ estatus:true, grupo_id : $stateParams.grupo_id }];
+		return [{ estatus:true, grupo_id : $stateParams.grupo_id, _id : $stateParams.foro_id }];
 	});
 	
 	this.subscribe('categoriasForos',()=>{
@@ -16,8 +15,8 @@ function ForosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	});
 	
 	rc.helpers({
-		foros : () => {
-			return Foros.find();
+		foro : () => {
+			return Foros.findOne();
 		},
 		categoriasForos : () => {
 			return CategoriasForos.find();
