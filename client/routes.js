@@ -571,7 +571,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	        return $meteor.requireUser();
 	      }]
 	    }
-    })    
+    })
     .state('root.gerentesVenta', {
       url: '/gerentesVenta',
       templateUrl: 'client/gerentesVenta/gerentesVenta.html',
@@ -1038,6 +1038,36 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
       controller: 'TipoPublicidadCtrl as tp'
     }) 
+    .state('root.nuevoCalendario', {
+      url: '/nuevoCalendario/:id',
+      templateUrl: 'client/calendarios/form.html',
+      controller: 'CalendarioDetalleCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    }) 
+    .state('root.calendarios', {
+      url: '/calendarios',
+      templateUrl: 'client/calendarios/calendarios.html',
+      controller: 'CalendariosCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.editarCalendario', {
+      url: '/editarCalendario/:id',
+      templateUrl: 'client/calendarios/form.html',
+      controller: 'CalendarioDetalleCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
     ; 
     
     

@@ -2,7 +2,6 @@ Meteor.publish("buscarAlumnos",function(options){
 		let selector = {
 	  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
 	  	"profile.seccion_id": options.where.seccion_id,
-	  	"_id":options.where._id,
 	  	roles : ["alumno"]
 		}
 		console.log(selector);
