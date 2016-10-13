@@ -1,0 +1,127 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark"><i class="fa fa-calendar fa-fw "></i> 
+			Calendario
+			<span>&gt;
+			General
+			</span>
+		</h1>
+	</div>
+</div>
+<form name="form1" novalidate>
+<div class="row" style="margin-bottom: 20px;">
+	<div class="col-sm-8" valida>
+		<input name="nombre" type="text" id="nombrecalendario" class="form-control input-lg" ng-model="ca.calendario.nombre" placeholder="Nombre del Calendario" required=""/>
+	</div>
+	<div class="col-sm-4">
+		<input type="submit" ng-click="ca.guardarCalendario(form1)" value="Guardar" class="btn btn-primary btn-block btn-lg" ng-show="ca.action" valida-form formulario="form1">
+		<input type="submit" ng-click="ca.modificarCalendario(ca.calendario,form1)" value="Actualizar" class="btn btn-primary btn-block btn-lg" ng-show="!ca.action" valida-form formulario="form1">
+	</div>
+</div>
+</form>
+
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-3" style="padding-right: 0px;">
+		<div class="jarviswidget jarviswidget-color-blueDark">
+			<header>
+				<span class="widget-icon"> <i class="fa fa-{{ca.actionAgregar ? 'plus' : 'pencil'}}"></i> </span>
+				<h2> Agrega Eventos </h2>
+			</header>
+		<div>
+		<div class="widget-body">
+			<form name="form2" novalidate>
+				<fieldset>
+					<div class="form-group" valida>
+						<label for="title">Título *</label>
+						<input class="form-control" id="title" name="title" maxlength="30" type="text" placeholder="Título del Evento" ng-model="ca.evento.title" required="">
+						<p class="note">{{ca.evento.title.length > 0 ? ca.evento.title.length : "0" }} de 30 caracteres</p>
+					</div>
+
+					<div class="form-group" valida>
+						<label for="description">Descripción *</label>
+						<textarea name="description" class="form-control" placeholder="Por favor expláyese" rows="3" maxlength="60" id="description" ng-model="ca.evento.description" required=""></textarea>
+						<p class="note">{{ca.evento.description.length > 0 ? ca.evento.description.length : "0" }} de 60 caracteres</p>
+					</div>
+					
+					<div class="form-group" valida>
+						<label for="start">Inicio *</label>
+						<input name="start" date-time class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ca.evento.start" required=""/>
+					</div>
+					
+					<div class="form-group" valida>
+						<label for="end">Fin *</label>
+						<input name="end" date-time date-format="dd-mm-yyyy" class="form-control" auto-close="true" view="date" max-view="date" min-view="minutes" ng-model="ca.evento.end" required=""/>
+					</div>
+					
+					<div class="form-group">
+						<label>Seleccionar el color del evento</label>
+						<div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
+							<label class="btn bg-color-darken" ng-click='ca.evento.className = "bg-color-darken";'>
+								<input  type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-blue" ng-click='ca.evento.className = "bg-color-blue";'>
+								<input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-pink" ng-click='ca.evento.className = "bg-color-pink";'>
+								<input type="radio" name="priority" id="option3" value="bg-color-pink txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-greenLight" ng-click='ca.evento.className = "bg-color-greenLight";'>
+								<input type="radio" name="priority" id="option4" value="bg-color-greenLight txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-blueLight" ng-click='ca.evento.className = "bg-color-blueLight";'>
+								<input type="radio" name="priority" id="option5" value="bg-color-blueLight txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+							<label class="btn bg-color-red" ng-click='ca.evento.className = "bg-color-red";'>
+								<input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
+								<i class="fa fa-check txt-color-white"></i> </label>
+						</div>
+						<div class="btn-toolbar" style="margin-top:20px;">
+							<div class="btn-group">
+								<button type="button" 
+									ng-click="ca.agregarEvento(ca.evento,form2);" 
+									class="btn btn-default" ng-show="ca.actionAgregar" 
+									valida-form formulario="form2">
+									<i class="fa fa-plus fa-lg"></i>
+								</button>																	
+							</div>
+							<div class="btn-group">
+								<button type="button"
+									ng-click="ca.modificarEvento(ca.evento,form2);" 
+									class="btn btn-default" ng-show="!ca.actionAgregar" 
+									valida-form formulario="form2">
+										<i class="fa fa-check fa-lg"></i>
+								</button>
+								<button type="button" 
+									ng-click="ca.cancelarEvento();" 
+									class="btn btn-warning text-center" 
+									ng-show="!ca.actionAgregar">
+										<i class="fa fa-close fa-lg"></i>
+								</button>
+								<button type="button" 
+									ng-click="ca.eliminarEvento();" 
+									class="btn btn-danger" ng-show="!ca.actionAgregar">
+										<i class="fa fa-trash fa-lg"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		</div>
+		</div>
+	</div>
+	<div class="col-sm-12 col-md-12 col-lg-9">
+		<div class="jarviswidget jarviswidget-color-blueDark">
+			<header>
+				<span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+				<h2> Calendario de Eventos </h2>				
+			</header>
+			<div>
+				<div class="widget-body">
+					<div ui-calendar="ca.uiConfig.calendar" class="calendar" ng-model="ca.eventSources"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

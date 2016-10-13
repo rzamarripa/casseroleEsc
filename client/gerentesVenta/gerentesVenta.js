@@ -6,6 +6,8 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;  
+  this.validaUsuario = false;
+  this.validaContrasena = false;
   
 	this.subscribe('gerentesVenta',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -34,7 +36,7 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
  
 	this.guardar = function(gerenteVenta,form)
 	{		
-			if(form.$invalid){
+			if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
 		      toastr.error('Error al guardar los datos.');
 		      return;
 			}
@@ -61,7 +63,7 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	
 	this.actualizar = function(gerenteVenta,form)
 	{
-			if(form.$invalid){
+			if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
 		        toastr.error('Error al actualizar los datos.');
 		        return;
 		  }
@@ -91,4 +93,23 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			rc.gerenteVenta.profile.fotografia = data;
 		});
 	};
+	
+	this.validarUsuario = function(username){
+		var existeUsuario = Meteor.users.find({username : username}).count();
+		if(existeUsuario){
+			rc.validaUsuario = false;
+		}else{
+			rc.validaUsuario = true;
+		}
+	}
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
 };

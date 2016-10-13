@@ -48,32 +48,34 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   
   this.nuevoCoordinador = function()
   {
-			this.action = true;
-	    this.nuevo = !this.nuevo;
-	    this.coordinador = {}; 
-	    this.coordinador.profile = {};
+		this.action = true;
+    this.nuevo = !this.nuevo;
+    this.coordinador = {}; 
+    this.coordinador.profile = {};
   };
  
 	this.guardar = function(coordinador,form)
 	{		
-			if(form.$invalid){
-        toastr.error('Error al guardar los datos.');
-        return;
-		  }
-			console.log(coordinador);
-			coordinador.profile.estatus = true;
-			coordinador.profile.campus_id = Meteor.user().profile.campus_id;
-			coordinador.profile.seccion_id = Meteor.user().profile.seccion_id;
-			coordinador.usuarioInserto = Meteor.userId();
-			coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? usuario.profile.apMaterno : "");
-			Meteor.call('createGerenteVenta', coordinador, coordinador.profile.role);
-		  toastr.success('Guardado correctamente.');
-			this.nuevo = true;
-			this.coordinador = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;	
-			form.$setPristine();
-			form.$setUntouched();	
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+      toastr.error('Error al guardar los datos.');
+      return;
+	  }
+		console.log(coordinador);
+		coordinador.profile.estatus = true;
+		coordinador.profile.campus_id = Meteor.user().profile.campus_id;
+		coordinador.profile.seccion_id = Meteor.user().profile.seccion_id;
+		coordinador.usuarioInserto = Meteor.userId();
+		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? usuario.profile.apMaterno : "");
+		Meteor.call('createGerenteVenta', coordinador, coordinador.profile.role);
+	  toastr.success('Guardado correctamente.');
+		this.nuevo = true;
+		this.coordinador = {};
+		$('.collapse').collapse('hide');
+		this.nuevo = true;	
+		form.$setPristine();
+		form.$setUntouched();	
+		this.validaUsuario = false;
+		this.validaContrasena = false;
 	};
 	
 	this.editar = function(id)
@@ -86,7 +88,7 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	
 	this.actualizar = function(coordinador,form)
 	{
-		if(form.$invalid){
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
       toastr.error('Error al actualizar los datos.');
       return;
 		}
@@ -97,6 +99,8 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 		this.nuevo = true;
 		form.$setPristine();
 		form.$setUntouched();
+		this.validaUsuario = false;
+		this.validaContrasena = false;
 	};
 		
 	this.tomarFoto = function(){

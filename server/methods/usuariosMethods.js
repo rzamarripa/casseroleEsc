@@ -47,7 +47,7 @@ Meteor.methods({
 		Accounts.setPassword(id, usuario.contrasena, {logout: false});
 	},
 	createGerenteVenta: function (usuario, rol) {
-	  console.log(usuario.profile);
+	  console.log(usuario);
 	  console.log(rol);
 	  
 		if(usuario.maestro_id != undefined)
@@ -60,6 +60,8 @@ Meteor.methods({
 		});
 		
 		Roles.addUsersToRoles(usuario_id, rol);
+		
+		return usuario_id;
 		
 	},
 	updateGerenteVenta: function (usuario, rol) {		

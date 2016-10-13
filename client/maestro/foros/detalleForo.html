@@ -1,0 +1,53 @@
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well">
+			<table class="table table-striped table-forum">
+				<thead>
+					<tr>
+						<th colspan="2">
+							<a class="btn btn-primary" ui-sref="root.maestroForos({grupo_id : df.foro.grupo_id})">Volver</a>
+							<strong><span class="font-md">Foro</span> :</strong> {{df.foro.titulo}}</th>
+					</tr>
+					<tr>
+						<th colspan="2"> <p class="lead">{{df.foro.descripcion}}</p> </th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Post -->
+					<tr ng-repeat-start="comentario in df.foro.comentarios">
+						<td class="text-center" ><strong>{{comentario.usuario.profile.nombreCompleto}}</strong></td>
+						<td class="text-right"><strong>Creado</strong> <em>{{comentario.fecha | date : "dd-MM-yyyy HH:mm:ss"}}</em></td>
+					</tr>
+					<tr ng-repeat-end>
+						<td class="text-center" style="width: 15%;">
+							<div class="push-bit">
+								<img src="{{df.tieneFoto(comentario.usuario.profile.fotografia, comentario.usuario.profile.sexo)}}" 
+										 width="60" alt="{{comentario.usuario.profile.nombreCompleto}}" class="online">
+							</div><small>{{comentario.usuario.roles[0] | uppercase}}</small></td>
+						<td>
+							<p>
+								<span ng-bind-html="comentario.descripcion"></span>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-center" style="width: 15%;">
+							<div class="push-bit">
+								<a href="profile.html"> <img src="{{df.tieneFoto(currentUser.profile.fotografia, currentUser.profile.sexo)}}" 
+									width="60" alt="{{currentUser.profile.nombreCompleto}}" class="online"> </a>
+							</div><small>{{currentUser.profile.nombre}} {{currentUser.profile.apPaterno}}</small>
+						</td>
+						<td style="border-bottom: 1px solid #cecece;">
+							<form name="form">
+								<div id="summernote"></div>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button class="btn btn-primary" ng-click="df.comentar(form)" valida-form formulario="form">Comentar</button>
+		</div>
+	</div>
+
+</div>

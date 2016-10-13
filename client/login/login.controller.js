@@ -18,7 +18,12 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    $meteor.loginWithPassword(this.credentials.username, this.credentials.password).then(
 	      function () {
 		      toastr.success("Bienvenido al Sistema");
-	        $state.go('root.home');        
+		      if(Meteor.user().roles[0] == "alumno"){
+			      $state.go('root.alumnoMuro');
+		      }else{
+			      $state.go('root.home');
+		      }
+	        
 	      },
 	      function (error) {
 		      if(error.reason == "Match failed"){

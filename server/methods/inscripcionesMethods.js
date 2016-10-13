@@ -25,5 +25,11 @@ Meteor.methods({
         return x._id == valor;
       });
     }
+  },
+  cantidadAlumnos : function(campus_id) {
+	  console.log("campus", campus_id);
+	  var cantidad = Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus_id}).count();
+	  console.log("cantidadAlumnos", cantidad)
+	  return cantidad;
   }
 });

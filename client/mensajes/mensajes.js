@@ -57,6 +57,7 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
     this.action = true;
     this.nuevo = !this.nuevo;
     this.mensaje = {};
+    $("#summernote").summernote("reset");
   };
 	
 	this.seleccionarTodos = function(){
@@ -68,21 +69,18 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.enviar = function(mensaje){
 		_.each(mensaje.para, function(destinatario){
 			var para = Meteor.users.findOne(destinatario, { fields : { "profile.nombreCompleto" : 1, _id : 0}});
-			for(var i = 0; i<2000; i++){
-				Mensajes.insert({
-					asunto : mensaje.asunto + " " + i,
-					para_id : destinatario,
-					para : para.profile.nombreCompleto,
-					de_id : Meteor.userId(),
-					de : Meteor.user().profile.nombreCompleto,
-					fechaEnvio : new Date(),
-					cuerpo : $("#summernote").summernote("code"),
-					estatus : 1,
-					importante : 1,
-				})
-			}
-				
-		})
+			Mensajes.insert({
+				asunto : mensaje.asunto,
+				para_id : destinatario,
+				para : para.profile.nombreCompleto,
+				de_id : Meteor.userId(),
+				de : Meteor.user().profile.nombreCompleto,
+				fechaEnvio : new Date(),
+				cuerpo : $("#summernote").summernote("code"),
+				estatus : 1,
+				importante : 1,
+			});				
+		});
 		mensaje = {};
 		this.viendoMensaje = false;
 		this.nuevo = true;

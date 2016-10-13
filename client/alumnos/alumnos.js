@@ -57,8 +57,7 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  	var matriculaOriginalN = parseInt(matriculaOriginal);
 			  	var matriculaNueva = matriculaOriginalN+this.cantidad+1;
 			  	matriculaNueva = 'e'+matriculaNueva
-				  window.matricula = matriculaNueva;
-					 rc.alumno.username = matriculaNueva;
+					rc.alumno.username = matriculaNueva;
 				  rc.alumno.profile.matricula = matriculaNueva;
 				  
 			  }else{

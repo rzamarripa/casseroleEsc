@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i> 
+				Calendarios 
+			<span>&gt; 
+				Listar
+			</span>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-primary" ui-sref="root.nuevoCalendario" ng-click="ca.nuevoCalendario()">
+		  Nuevo
+		</a>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered table-responsive">
+			<thead>
+				<tr>
+					<th width="10%" class="text-center">No.</th>
+					<th ><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Cant. Eventos</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>		
+		    <tr ng-repeat="calendario in ca.calendarios">
+			    <td class="text-center">{{$index + 1}}</td>
+			    <td>{{calendario.nombre}}</td>
+			    <td class="text-center">{{calendario.eventos.length}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="calendario.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!calendario.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+								  <li><a href="./editarCalendario/{{calendario._id}}"><i class="fa fa-pencil"></i> Editar</a></li>
+									<li><a href="#" ng-click="ca.purgarEventos(calendario._id)"><i class="fa fa-trash"></i> Purgar Eventos </a></li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+  </div>
+</div>

@@ -2,7 +2,7 @@ angular.module("casserole")
 .controller("InscripcionesCtrl",InscripcionesCtrl)
 function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   let rc = $reactive(this).attach($scope);
-
+	window.rc = rc;
 
 	this.subscribe('ciclos',()=>{
 		return [{estatus:true,
@@ -62,12 +62,12 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  	var a = Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
 	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
+	  	console.log(alumnos);
 	    var grupos 		= Grupos.find().fetch();
 	    var secciones = Secciones.find().fetch();
 	    var ciclos	 	= Ciclos.find().fetch();
 	    var planesEstudios = PlanesEstudios.find().fetch();
 	    _inscripciones.forEach(function (inscripcion) {
-	      //console.log(inscripcion);
 	      inscripcion.alumno = findInCollection(alumnos, inscripcion.alumno_id);
 	      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
 	      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);

@@ -11,11 +11,10 @@
 					<ul class="items">
 			      <li><a ui-sref="root.asistenciaGrupo({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Tomar asistencia</a></li>
 			      <li><a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Ver asistencia</a></li>
-			      <li><a href="/pizarron/{{grupo.grupo._id}}">Pizarrón compartido</a></li>
-			      
 			      <li><a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" >Capturar calificaciones</a></li>
 			      <li><a ui-sref="root.verCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Ver calificaciones</a></li>
 			      <li><a ui-sref="root.planeacionClase({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">Planear la Clase</a></li>
+			      <li><a ui-sref="root.maestroForos({grupo_id : grupo.grupo._id})">Foros</a></li>
 			    </ul>
 			    <div class="offer">
 			      <span class="usd"><sup>#</sup></span>

@@ -571,7 +571,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	        return $meteor.requireUser();
 	      }]
 	    }
-    })    
+    })
     .state('root.gerentesVenta', {
       url: '/gerentesVenta',
       templateUrl: 'client/gerentesVenta/gerentesVenta.html',
@@ -793,6 +793,86 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
+    .state('root.alumnoAsistencias', {
+      url: '/alumnoAsistencias/:alumno_id/:grupo_id/:materia_id',
+      templateUrl: 'client/alumno/asistencias/alumnoAsistencias.html',
+      controller: 'AlumnoAsistenciasCtrl as aa',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.maestroForos', {
+      url: '/maestroForos/:grupo_id',
+      templateUrl: 'client/maestro/foros/foros.html',
+      controller: 'ForosCtrl as f',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.alumnoForos', {
+      url: '/alumnoForos/:grupo_id',
+      templateUrl: 'client/alumno/foros/foros.html',
+      controller: 'AlumnoForosCtrl as f',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.foroDetalle', {
+      url: '/foroDetalle/:foro_id/:grupo_id',
+      templateUrl: 'client/maestro/foros/detalleForo.html',
+      controller: 'DetalleForoCtrl as df',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.categoriasForos', {
+      url: '/categoriasForos',
+      templateUrl: 'client/categoriasForos/categoriasForos.html',
+      controller: 'CategoriasForosCtrl as cf',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })    
     .state('root.capturarCalificaciones', {
       url: '/capturarCalificaciones/:grupo_id/:materia_id/:maestro_id',
       templateUrl: 'client/maestro/calificaciones/calificar.html',
@@ -958,6 +1038,46 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
       controller: 'TipoPublicidadCtrl as tp'
     }) 
+    .state('root.nuevoCalendario', {
+      url: '/nuevoCalendario/:id',
+      templateUrl: 'client/calendarios/form.html',
+      controller: 'CalendarioDetalleCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    }) 
+    .state('root.calendarios', {
+      url: '/calendarios',
+      templateUrl: 'client/calendarios/calendarios.html',
+      controller: 'CalendariosCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.editarCalendario', {
+      url: '/editarCalendario/:id',
+      templateUrl: 'client/calendarios/form.html',
+      controller: 'CalendarioDetalleCtrl as ca',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })    
+    .state('root.alumnoMuro', {
+      url: '/muro/:alumno_id',
+      templateUrl: 'client/alumno/muro/muro.html',
+      controller: 'AlumnoMuroCtrl as m',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
     ; 
     
     

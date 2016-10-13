@@ -10,9 +10,12 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.inscripcion.fechaInscripcion = new Date();
+	this.inscrito = "";
+	this.cantidadAlumnos = 0;
+	this.prospecto = {};
 
-	this.subscribe('alumnos',()=>{
-		return [{"roles" : ["alumno"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.fechaCreacion":-1}}]
+	this.subscribe('prospectosPorInscribir',()=>{
+		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profilenombre":1}}]
 	});
 	this.subscribe('vendedores');
 	this.subscribe("secciones",() => {
@@ -20,7 +23,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	this.subscribe('ciclos',()=>{
 		return [{estatus:true,
-			seccion_id : this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):""
+			seccion_id : this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):""
 		}];
 	});
 	this.subscribe("tiposingresos",() => {
@@ -29,18 +32,26 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe("grupos", () => {
 		return [{
 		 estatus:true,
-		 seccion_id :  this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):"",
-		 ciclo_id : this.getReactively('inscripcion.ciclo_id')? this.getReactively('inscripcion.ciclo_id'):"",
+		 seccion_id :  this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):"",
+		 ciclo_id : this.getReactively('inscripcion.ciclo_id') ? this.getReactively('inscripcion.ciclo_id'):"",
 		}]
 	});
 	this.subscribe("planesEstudios",() => {
 		return [{
 			estatus:true,
-			seccion_id :  this.getReactively('inscripcion.seccion_id')? this.getReactively('inscripcion.seccion_id'):""
+			seccion_id :  this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):""
 		}]
 	});
 	this.subscribe('cuentas', ()=>{
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	});
+	
+	this.subscribe('campus', ()=>{
+		return [{estatus:true, _id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+	});
+	
+	this.subscribe('etapasVenta', ()=>{
+		return [{estatus:true}]
 	});
 
 	this.helpers({
@@ -51,34 +62,34 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			return Cuentas.findOne({inscripcion: true});
 		},
 		vendedores : () => {
-		 var usuarios = Meteor.users.find().fetch();
-		 var vendedores = [];
-		 _.each(usuarios, function(usuario){
-				if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
-					vendedores.push(usuario);
-				}
-		 });
-		 console.log(vendedores);
-		 return vendedores;
-	 },
-		alumnos : () => {
-			return Meteor.users.find({roles : ["alumno"]});
+			var usuarios = Meteor.users.find().fetch();
+			var vendedores = [];
+			_.each(usuarios, function(usuario){
+			if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
+			vendedores.push(usuario);
+			}
+			});
+			console.log(vendedores);
+			return vendedores;
+		},
+		prospectos : () => {
+			return Prospectos.find();
 		},
 		grupos : () => {
-		 return Grupos.find();
-	 },
+			return Grupos.find();
+		},
 		secciones : () => {
-		 return Secciones.find();
-	 },
-	 grupos : () => {
-		 return Grupos.find();
-	 },
-	 tiposIngresos : () => {
-		 return TiposIngresos.find();
-	 },
-	 ciclos : () => {
+			return Secciones.find();
+		},
+		tiposIngresos : () => {
+			return TiposIngresos.find();
+		},
+		ciclos : () => {
 			return Ciclos.find();
 		},
+		campus : () => {
+			return Campus.findOne();
+		}
 	});
 
 	this.llenarComision = function(_comision,importe){
@@ -146,7 +157,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			});
 			mfecha = mfecha.day(8);
 		}
-		console.log(plan);
 		return plan;
 	}
 	this.planPagosMensual=function() {
@@ -379,33 +389,85 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		console.log(this.inscripcion);
 	}
 	
-	this.guardar=function  (inscripcion) {
+	this.guardar = function(inscripcion) {
 		var grupo = Grupos.findOne(inscripcion.grupo_id);
 		inscripcion.planEstudios_id=grupo.planEstudios_id;
 		inscripcion.campus_id = Meteor.user().profile.campus_id;
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
-		Inscripciones.insert(inscripcion);
-		var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
-		Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
-		if(!grupo.alumnos)
-			grupo.alumnos=[];
-		grupo.alumnos.push(inscripcion.alumno_id);
-		grupo.inscritos = parseInt(grupo.inscritos) + 1;
-		delete grupo._id;
-		Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
-		toastr.success('Alumno Inscrito');
 		
+		//Crear alumno a partir del prospecto
+		
+		var prospecto = Prospectos.findOne({_id : inscripcion.prospecto_id});
+		delete prospecto._id;
+		delete prospecto.estatus;
+		var alumno = prospecto;
+		var nombre = alumno.profile.nombre != undefined ? alumno.profile.nombre + " " : "";
+		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
+		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
+		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
+		alumno.profile.fechaCreacion = new Date();
+		alumno.profile.campus_id = inscripcion.campus_id;
+		alumno.profile.seccion_id = inscripcion.seccion_id;
+		alumno.profile.usuarioInserto = Meteor.userId();
+		alumno.profile.estatus = true;
+		Meteor.call('cantidadAlumnos', inscripcion.campus_id, function(error, result){
+			if(error){
+				alert('Error');
+			}else{
+				rc.cantidadAlumnos = result;
+				var matriculaAnterior = 0;
+			  anio = '' + new Date().getFullYear();
+			  anio = anio.substring(2,4);
+				if(rc.cantidadAlumnos > 0){
+			  	var matriculaOriginal = anio + rc.campus.clave + "0000";
+			  	var matriculaOriginalN = parseInt(matriculaOriginal);
+			  	var matriculaNueva = matriculaOriginalN+rc.cantidadAlumnos+1;
+			  	matriculaNueva = 'e'+matriculaNueva
+					alumno.username = matriculaNueva;
+				  alumno.profile.matricula = matriculaNueva;
+				  console.log(matriculaNueva);
+				  alumno.password = "123qwe";
+				  
+			  }else{
+				  alumno.username = "e" + anio + Meteor.user().profile.campus_clave + "0001";
+				  alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
+			  }
+			  Meteor.call('createGerenteVenta', alumno, 'alumno', function(error, result){
+				  if(error){
+					  console.log(error);
+				  }else{
+					  inscripcion.alumno_id = result;
+					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
+						var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
+						Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
+						if(!grupo.alumnos)
+							grupo.alumnos=[];
+						grupo.alumnos.push(inscripcion.alumno_id);
+						grupo.inscritos = parseInt(grupo.inscritos) + 1;
+						delete grupo._id;
+						Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
+						Inscripciones.insert(inscripcion);
+						toastr.success('Alumno Inscrito');
+				  }
+			  });
+
+				return result;
+			}
+		});
+		
+		//Termina la creación del alumno
+		
+		//Generar los pagos realizados
 		for (var i = 0; i < this.pagosRealizados.length; i++) {
 			Pagos.insert(this.pagosRealizados[i]);
 		}
 		for (var i = 0; i < this.comisiones.length; i++) {
 			Comisiones.insert(this.comisiones[i]);
 		}
+
 		$state.go("root.inscripciones");
-		console.log(this.inscripcion);
-		console.log(this.pagosRealizados)
-		console.log(this.comisiones)
+		console.log("inscripcion", this.inscripcion);
 	}
 	this.cambiarConceptosInscripcion=function  (argument) {
 		try{
@@ -413,5 +475,34 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}catch(e){
 
 		}
+	};
+	
+	this.getProspectoSeleccionado = function(prospecto_id){
+		this.prospectoSeleccionado = Prospectos.findOne({_id : prospecto_id});
+		this.prospecto = this.prospectoSeleccionado;
+		this.inscripcion.vendedor_id = this.prospectoSeleccionado.profile.vendedor_id;
+		this.prospectoSeleccionado.activo = true;
+		$('.collapse').collapse('show');
 	}
+	
+	this.actualizarProspecto = function(prospecto)
+	{
+		var idTemp = prospecto._id;
+		delete prospecto._id;
+		delete prospecto.activo;
+		var etapaVenta = EtapasVenta.findOne({nombre : "Inscrito", campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });		
+/*
+		if(etapaVenta._id == prospecto.profile.etapaVenta_id){
+			prospecto.profile.estatus = 2;
+		}else{
+			prospecto.profile.estatus = 1;
+		}
+*/
+		prospecto.profile.fechaUltimoContacto = new Date();
+		console.log("prospecto", prospecto);
+		Prospectos.update({_id:idTemp},{$set:prospecto});
+		toastr.success('Prospecto Actualizado');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+	};
 };
