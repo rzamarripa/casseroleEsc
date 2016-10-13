@@ -1067,6 +1067,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	        return $meteor.requireUser();
 	      }]
 	    }
+    })    
+    .state('root.alumnoMuro', {
+      url: '/muro/:alumno_id',
+      templateUrl: 'client/alumno/muro/muro.html',
+      controller: 'AlumnoMuroCtrl as m',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
     })
     ; 
     

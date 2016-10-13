@@ -76,7 +76,8 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		this.comentario.usuario_id = Meteor.userId();
 		this.comentario.fecha = new Date();
 		
-		Foros.update({_id : $stateParams.foro_id}, { $set : {ultimoPost : new Date(), nombreUsuarioUltimoPost : Meteor.user().profile.nombreCompleto}, $push : {"comentarios" : this.comentario}});
+		Foros.update({_id : $stateParams.foro_id}, { $set : {ultimoPost : new Date(), 
+			nombreUsuarioUltimoPost : Meteor.user().profile.nombreCompleto}, $push : {"comentarios" : this.comentario}});
 		toastr.success('Guardado correctamente.');
 		this.comentario = {};
 		$('.collapse').collapse('hide');

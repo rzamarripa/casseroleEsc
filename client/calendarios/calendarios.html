@@ -22,7 +22,9 @@
 		<table class="table table-bordered table-responsive">
 			<thead>
 				<tr>
-					<th width="50%"><div class="text-center">Nombre</div></th>					
+					<th width="10%" class="text-center">No.</th>
+					<th ><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Cant. Eventos</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -37,7 +39,9 @@
 			</thead>
 			<tbody>		
 		    <tr ng-repeat="calendario in ca.calendarios">
+			    <td class="text-center">{{$index + 1}}</td>
 			    <td>{{calendario.nombre}}</td>
+			    <td class="text-center">{{calendario.eventos.length}}</td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="calendario.estatus" class="label label-success">
@@ -56,8 +60,8 @@
 							    <span class="sr-only">Toggle Dropdown</span>
 							  </button>
 							  <ul class="dropdown-menu text-left">
-<!-- 							    <li><a href="./calendarios/{{calendario._id}}"><i class="fa fa-eye"></i> Ver</a></li> -->
-							    <li><a href="./editarCalendario/{{calendario._id}}"><i class="fa fa-pencil"></i> Editar</a></li>
+								  <li><a href="./editarCalendario/{{calendario._id}}"><i class="fa fa-pencil"></i> Editar</a></li>
+									<li><a href="#" ng-click="ca.purgarEventos(calendario._id)"><i class="fa fa-trash"></i> Purgar Eventos </a></li>
 							  </ul>
 							</div>
 				    </div>				    

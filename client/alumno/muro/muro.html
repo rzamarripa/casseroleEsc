@@ -1,0 +1,93 @@
+<div class="row">
+				
+	<div class="col-sm-12">
+
+
+			<div class="well well-sm">
+
+				<div class="row">
+					<div class="col-lg-3">
+						<div ui-calendar="m.uiConfig.calendar" class="calendar" ng-model="m.eventSources"></div>
+					</div>
+					<div class="col-sm-12 col-md-12 col-lg-6">
+
+						<form method="post" class="well padding-bottom-10" onsubmit="return false;">
+							<textarea rows="2" class="form-control" placeholder="Qué estás pensando?" ng-model="m.post.mensaje"></textarea>
+							<div class="margin-top-10" style="padding-bottom: 30px;">
+								<button type="submit" class="btn btn-sm btn-primary pull-right" ng-click="m.comentar(m.post)">
+									Enviar
+								</button>								
+							</div>
+						</form>
+
+						<div class="timeline-seperator text-center" ng-repeat-start="post in m.posts"> <span>{{post.createdAt | date : "dd-MM-yyyy HH:mm:ss"}}</span>
+							<div class="btn-group pull-right">
+								<a href="javascript:void(0);" data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle"><span class="caret single"></span></a>
+								<ul class="dropdown-menu text-left">									
+									<li ng-if="currentUser._id == post.user_id">
+										<a href="javascript:void(0);">Editar</a>
+									</li>
+									<li ng-if="currentUser._id == post.user_id">
+										<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
+									</li>
+								</ul>
+							</div> 
+						</div>
+						<div class="chat-body no-padding profile-message" ng-repeat-end>
+							<ul>
+								<li class="message">
+									<img src="img/avatars/sunny.png" class="online" alt="sunny">
+									<span class="message-text"> 
+										<a href="javascript:void(0);" class="username">{{post.name}} 
+											<small class="text-muted pull-right ultra-light"> 2 minutes ago </small>
+										</a> 
+										{{post.message}}
+									</span>
+									<ul class="list-inline font-xs">
+										<li ng-if="currentUser._id == post.user_id">
+											<a href="javascript:void(0);" class="text-primary">Editar</a>
+										</li>
+										<li ng-if="currentUser._id == post.user_id">
+											<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
+										</li>
+									</ul>
+								</li>
+								<li class="message message-reply" ng-repeat="reply in post.replies">
+									<img src="img/avatars/3.png" class="online" alt="user">
+									<span class="message-text"> <a href="javascript:void(0);" class="username">{{reply.name}}</a> {{reply.comment}} </span>
+
+									<ul class="list-inline font-xs">
+										<li>
+											<a href="javascript:void(0);" class="text-muted">1 minute ago </a>
+										</li>
+									</ul>
+
+								</li>	
+								<li>
+									<div class="input-group wall-comment-reply">
+										<input id="btn-input" type="text" class="form-control" placeholder="Escribe tu comentario aquí..." ng-model="m.reply.message">
+										<span class="input-group-btn">
+											<button class="btn btn-primary" id="btn-chat" ng-click="m.reply(m.reply, post._id)">
+												<i class="fa fa-reply"></i> Comentar
+											</button> </span>
+									</div>
+								</li>
+								
+							</ul>
+							
+						</div>
+						<ul>
+							<li class="message text-center">
+								<a class="btn btn-sm btn-default" ng-click='m.loadMore()'><i class="fa fa-arrow-down text-muted"></i> MÁS</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+
+	</div>
+
+</div>
+
