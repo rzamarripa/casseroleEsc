@@ -14,7 +14,8 @@ angular.module('casserole',
     'checklist-model',
     'ncy-angular-breadcrumb',
     'angularUtils.directives.dirPagination',
-    'angular-meteor.auth'
+    'angular-meteor.auth',
+    'ngFileUpload'
   ]
 );
 

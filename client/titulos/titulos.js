@@ -3,7 +3,7 @@ angular
   .controller('TitulosCtrl', TitulosCtrl);
  
 function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
-	$reactive(this).attach($scope);
+	var rc= $reactive(this).attach($scope);
 
   this.subscribe("titulos",()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -24,6 +24,7 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    this.nuevo = !this.nuevo;
 	    this.titulo = {}; 
 	};
+
   
   this.guardar = function(titulo,form)
 	{
@@ -31,22 +32,50 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		        toastr.error('Error al guardar los datos.');
 		        return;
 		  }
-			titulo.estatus = true;
-			titulo.campus_id = Meteor.user().profile.campus_id;
-			titulo.usuarioInserto = Meteor.userId();
-			Titulos.insert(titulo);
-			toastr.success('Guardado correctamente.');
-			this.titulo = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
-			$state.go('root.titulos');
+		  	console.log(titulo);
+		  	Meteor.call("saveFile",[rc.archivo],function(error,result){
+		  		console.log("resultado ",result);
+                console.log("error ",error);
+                if(error){
+                	toastr.error('Error al guardar los datos.');
+                	return;
+                }
+                console.log(titulo);
+                titulo.estatus = true;
+				titulo.campus_id = Meteor.user().profile.campus_id;
+				titulo.usuarioInserto = Meteor.userId();
+				titulo.archivo=result;
+				console.log(titulo);
+				Titulos.insert(titulo);
+				toastr.success('Guardado correctamente.');
+				rc.titulo = {};
+				$('.collapse').collapse('hide');
+				rc.nuevo = true;
+				rc.archivo=null;
+				form.$setPristine();
+		    	form.$setUntouched();
+				$state.go('root.titulos');
+
+				return;
+
+            });
+		
+			
 	};
 	
 	this.editar = function(id)
 	{
-			this.titulo = Titulos.findOne({_id:id});
+		this.titulo = Titulos.findOne({_id:id});
+		if(this.titulo.archivo){
+			
+			Meteor.call("loadFile",this.titulo.archivo,function(error,result){
+				console.log(rc.titulo)
+				console.log(this.titulo)
+				
+				rc.muestra=result;
+				//console.log(rc.archivo); 
+			})
+		}
 	    this.action = false;
 	    $('.collapse').collapse('show');
 	    this.nuevo = false;
@@ -59,15 +88,25 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		        toastr.error('Error al actualizar los datos.');
 		        return;
 		    }
-			var idTemp = titulo._id;
-			delete titulo._id;	
-			titulo.usuarioActualizo = Meteor.userId(); 
-			Titulos.update({_id:idTemp},{$set:titulo});
-			toastr.success('Actualizado correctamente.');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
+		    Meteor.call("saveFile",rc.archivo,function(error,result){
+		  		console.log("resultado ",result);
+                console.log("error ",error);
+                if(error){
+                	toastr.error('Error al guardar los datos.');
+                	return;
+                }
+				var idTemp = titulo._id;
+				delete titulo._id;	
+				titulo.archivo=result;
+				titulo.usuarioActualizo = Meteor.userId(); 
+				Titulos.update({_id:idTemp},{$set:titulo});
+				toastr.success('Actualizado correctamente.');
+				$('.collapse').collapse('hide');
+				this.nuevo = true;
+				rc.archivo=null;
+				form.$setPristine();
+		    	form.$setUntouched();
+		    });
 		
 	};
 

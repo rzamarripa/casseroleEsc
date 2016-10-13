@@ -27,6 +27,7 @@ caching-compiler@1.0.4
 caching-html-compiler@1.0.6
 callback-hook@1.0.8
 check@1.2.1
+danialfarid:ng-file-upload@5.0.9
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.5
 ddp-client@1.2.7
@@ -78,6 +79,9 @@ npm-mongo@1.4.43
 observe-sequence@1.0.11
 ordered-dict@1.0.7
 pbastowski:angular-babel@1.0.9
+peerlibrary:assert@0.2.5
+peerlibrary:blocking@0.5.2
+peerlibrary:fs@0.1.7
 promise@0.6.7
 random@1.0.9
 rate-limit@1.0.4
