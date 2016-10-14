@@ -39,3 +39,6 @@ angularutils:pagination
 natestrauser:select2
 summernote:standalone
 angular-meteor-auth
+danialfarid:ng-file-upload
+peerlibrary:fs
+modules
