@@ -32,6 +32,22 @@
 								</li>
 							</ul>
 						</li>
+						<li role="treeitem">
+							<span>
+								<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo._id})">
+									<i class="fa fa-lg fa-list"></i> Foros
+								</a>
+							</span>
+							<ul role="group">
+								<li ng-repeat="clase in mmg.horario.clases">
+									<span>
+										<a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">
+											<i class="fa fa-message"> {{clase.start | date : 'dd-MMMM-yyyy HH:ss' }}</i>
+										</a>
+									</span>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</li>				
 			</ul>

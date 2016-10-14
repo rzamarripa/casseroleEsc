@@ -38,7 +38,7 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
 	  rc.action = true;
 	}
 	
-	window.calendario = rc.calendario;
+	window.rc = rc;
 	
   this.agregarEvento = function(evento, form){
   	if(form.$invalid){

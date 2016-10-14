@@ -3,13 +3,31 @@
     <li data-ui-sref-active="active">
       <a ui-sref="root.alumnoMuro" tilte="Home">
         <i class="fa fa-lg fa-fw fa-home"></i>
-        <span class="menu-item-parent">Panel de Control</span>
+        <span class="menu-item-parent">Principal</span>
       </a>
     </li>
     <li data-ui-sref-active="active">
-      <a ui-sref="root.alumnoGrupos({alumno_id : currentUser._id})" tilte="Home">
+      <a ui-sref="root.alumnoGrupos({alumno_id : currentUser._id})" tilte="Mis Grupos">
         <i class="fa fa-lg fa-fw fa-group"></i>
         <span class="menu-item-parent">Mis Grupos</span>
+      </a>
+    </li>
+    <li data-ui-sref-active="active">
+      <a ui-sref="root.alumnoPagos({alumno_id : currentUser._id})" tilte="Mis Pagos">
+        <i class="fa fa-lg fa-fw fa-dollar"></i>
+        <span class="menu-item-parent">Mis Pagos</span>
+      </a>
+    </li>
+    <li data-ui-sref-active="active">
+      <a ui-sref="root.alumnoKardex({alumno_id : currentUser._id})" tilte="Mi Kárdex">
+        <i class="fa fa-lg fa-fw fa-list"></i>
+        <span class="menu-item-parent">Mi Kárdex</span>
+      </a>
+    </li>
+    <li data-ui-sref-active="active">
+      <a ui-sref="root.alumnoCalendario" tilte="Calendario Escolar">
+        <i class="fa fa-lg fa-fw fa-list"></i>
+        <span class="menu-item-parent">Calendario Escolar</span>
       </a>
     </li>
 	</ul>

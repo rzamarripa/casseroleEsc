@@ -8,7 +8,7 @@ function HorarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $state
 	this.clase = {};
   this.actionAgregar = true;
   this.colorSeleccionado = null;
-  
+  window.rc = rc;
   var clasesTotales = [];
   var aulasTotales = [];
   this.horario 	= {};

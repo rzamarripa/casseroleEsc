@@ -40,12 +40,12 @@
 		        <th class="col-sm-1">Matrícula</th>
 		        <th class="col-sm-2">Nombre</th>
 		        <th class="text-center" ng-repeat="asistencia in aa.asistencias">
-			        <span class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</span>
+			        <span class="text-center" style="font-size: 12px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</span>
 			      </th>
 		      </tr>
 		    </thead>
 		    <tbody>
-		      <tr ng-repeat="alumno in aa.alumnosAsistidos" style="font-size: 10px;">
+		      <tr ng-repeat="alumno in aa.alumnosAsistidos" style="font-size: 12px;">
 						<td class="cell">{{alumno.matricula}}</td>
 						<td class="cell">{{alumno.nombre}}</td>
 					  <td class="cell text-center" ng-repeat="asistencia in alumno.dias track by $index">
