@@ -85,7 +85,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  vendedoresNombre = [];
 		  if(vend.ready()){
 			  _.each(this.vendedores, function(vendedor){
-				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno;
+				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno + " " + vendedor.profile.apMaterno;
 				  vendedoresNombre.push(nombre);
 			  });
 		  }

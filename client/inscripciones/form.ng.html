@@ -495,9 +495,8 @@
 												<div class="row">
 													<div class="col-sm-12">
 														<label>Vendedor</label>
-														
 														<select class="form-control" ng-model="ins.inscripcion.vendedor_id">
-													    	<option value="{{vendedor._id}}" ng-repeat="vendedor in ins.vendedores">{{vendedor.profile.nombre}} {{vendedor.profile.apPaterno}}</option>
+													    	<option value="{{vendedor._id}}" ng-repeat="vendedor in ins.vendedores">{{vendedor.profile.nombre}} {{vendedor.profile.apPaterno}} {{vendedor.profile.apMaterno}}</option>
 												    	</select>
 													</div>
 												</div>

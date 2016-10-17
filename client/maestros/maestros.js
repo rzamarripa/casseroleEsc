@@ -13,7 +13,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 
 	this.helpers({
 	  maestros : () => {
-		  return Maestros.find();
+		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  },
 	  cantidad : () => {
 		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}).count();

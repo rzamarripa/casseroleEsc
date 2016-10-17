@@ -175,14 +175,6 @@
 				        </header>
 			          <div class="widget-body">
 							    <div class='row'>
-<!--
-							    	<div class="col-sm-4">
-											<label >Departamento académico</label>
-											<select name="deptoAcademico" class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.deptoAcademico_id">
-												<option ng-repeat="deptoAcademico in sec.deptosAcademicos" value="{{deptoAcademico._id}}">{{deptoAcademico.descripcionCorta}}</option>
-											</select>
-										</div>
--->
 										<div class="col-sm-4" valida>
 							    		<label>Nivel educativo *</label>
 									    <select name="nivelEdu" ng-model="sec.seccion.nivelEdu" class="form-control" required="">
@@ -202,30 +194,18 @@
 							    	</div>
 							    </div>
 							    <div class="row">
+								    <div class="col-sm-4">
+									    <label>Categoria </label>
+									    <input type="text" class="form-control" placeholder="Categoria" ng-model="sec.seccion.categoria">
+							    	</div>
 							    	<div class="col-sm-4">
 									    <label>Dependencia</label>
 									    <input type="text" class="form-control" placeholder="Dependencia" ng-model="sec.seccion.dependencia">
 							    	</div>
 							    	<div class="col-sm-4">
-									    <label>Servicio </label>
-									    <input type="text" class="form-control" placeholder="Servicio" ng-model="sec.seccion.servicio">
-							    	</div>
-							    	<div class="col-sm-4">
-											<label >Turno</label>
-											<select class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.turno_id">
-												<option ng-repeat="turno in sec.turnos" value="{{turno._id}}">{{turno.nombre}}</option>
-											</select>
-										</div>
-							    </div>
-							    <div class="row">
-							    	<div class="col-sm-4">
-									    <label>Categoria </label>
-									    <input type="text" class="form-control" placeholder="Categoria" ng-model="sec.seccion.categoria">
-							    	</div>
-							    	<div class="col-sm-4">
 									    <label>Clave de incorporación  </label>
 									    <input type="text" class="form-control" placeholder="Clave de incorporación " ng-model="sec.seccion.claveIncor">
-							    	</div>										
+							    	</div>
 							    </div>
 			          </div>
 				      </div>
