@@ -35,7 +35,10 @@ angular.module("casserole")
 	this.helpers({
 	  llamadas : () => {
 		  //TODO me quedé haciendo las llamadas
-		  var llamadas = Llamadas.find().fetch();
+		  var llamadas = Llamadas.find({
+				vendedor_id : Meteor.userId(),
+				estatus : false
+			}).fetch();
 		  llamadas = _.sortBy(llamadas, function(llamada){ return llamada.fecha; });
 		  if(llamadas != undefined){
 			  this.prospectos_id = _.pluck(llamadas, 'prospecto_id');
@@ -46,7 +49,10 @@ angular.module("casserole")
 		  return llamadas;
 	  },
 	  reuniones : () => {
-		  var reuniones = Reuniones.find().fetch();
+		  var reuniones = Reuniones.find({
+				vendedor_id : Meteor.userId(),
+				estatus : false
+			}).fetch();
 		  reuniones = _.sortBy(reuniones, function(reunion){ return reunion.fecha; });
 		  if(reuniones != undefined){
 			  this.prospectos_id = _.pluck(reuniones, 'prospecto_id');
@@ -57,7 +63,10 @@ angular.module("casserole")
 		  return reuniones;
 	  },
 	  tareas : () => {
-		  var tareas = Tareas.find().fetch();
+		  var tareas = Tareas.find({
+				vendedor_id : Meteor.userId(),
+				estatus : false
+			}).fetch();
 		  tareas = _.sortBy(tareas, function(tarea){ return tarea.fecha; });
 		  if(tareas != undefined){
 			  this.prospectos_id = _.pluck(tareas, 'prospecto_id');
@@ -68,7 +77,9 @@ angular.module("casserole")
 		  return tareas;
 	  },
 	  prospectos : () => {
-		  return Prospectos.find();
+		  return Prospectos.find({
+				_id : {$in:this.getCollectionReactively('prospectos_id')}
+			});
 	  }
   });
   

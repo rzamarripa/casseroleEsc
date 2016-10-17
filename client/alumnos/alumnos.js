@@ -5,7 +5,7 @@ angular
  
 function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
-
+	window.rc = rc;
   this.action = true;
   this.alumno = {};
   this.alumno.profile = {};
@@ -18,13 +18,11 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
     return [{
 	    options : { limit: 51 },
 	    where : { 
-		    nombreCompleto : this.getReactively('buscar.nombre'), 
- 		   seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
- 		   campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
- 		  }
- 		   
-    	}
-    ];
+				nombreCompleto : this.getReactively('buscar.nombre'), 
+				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+				campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			} 		   
+    }];
   });
   
   this.subscribe('ocupaciones',()=>{
@@ -37,14 +35,17 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   
 	this.helpers({
 		alumnos : () => {
-			return Meteor.users.find({roles : ["alumno"]}, { sort : {"profile.nombreCompleto" : 1 }});
+			return Meteor.users.find({
+		  	"profile.nombreCompleto": { '$regex' : '.*' + this.getReactively('buscar.nombre') || '' + '.*', '$options' : 'i' },
+		  	"profile.seccion_id": Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+		  	roles : ["alumno"]
+			}, { sort : {"profile.nombreCompleto" : 1 }});
 		},
 	  ocupaciones : () => {
-		  return Ocupaciones.find();
+		  return Ocupaciones.find({estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});
 	  },
 	  cantidad : () => {
 			 var x = Counts.get('number-alumnos');
-			 console.log(x);
 			 return x;
 	  },
 	  matricula : () => {
@@ -85,7 +86,6 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		alumno.profile.campus_id = Meteor.user().profile.campus_id;
 		alumno.profile.seccion_id = Meteor.user().profile.seccion_id;
 		alumno.profile.usuarioInserto = Meteor.userId();
-		console.log(alumno);
 		Meteor.call('createGerenteVenta', rc.alumno, 'alumno');
 		toastr.success('Guardado correctamente.');
 		$state.go('root.alumnos');			

@@ -62,7 +62,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  	var a = Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
 	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
-	  	console.log(alumnos);
 	    var grupos 		= Grupos.find().fetch();
 	    var secciones = Secciones.find().fetch();
 	    var ciclos	 	= Ciclos.find().fetch();
@@ -95,8 +94,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.getGrupo= function(grupo_id)
 	{
 		var grupo = Grupos.findOne(grupo_id);
-		console.log(grupo_id);
-		console.log(grupo);
 		if(grupo)
 			return grupo.identificador;
 	};	

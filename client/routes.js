@@ -1118,7 +1118,5 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
-    ; 
-    
-    
+    ;
 }]);

@@ -1,8 +1,8 @@
 angular
 	.module('casserole')
-	.controller('AlumnosDetalleCtrl', AlumnosDetalleCtrl);
+	.controller('AlumnoKardexCtrl', AlumnoKardexCtrl);
  
-function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
+function AlumnoKardexCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	rc = $reactive(this).attach($scope);
 	
@@ -28,13 +28,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		return [{estatus:true, alumno_id : $stateParams.alumno_id, planEstudios_id : { $in : this.getCollectionReactively("planEstudios_id")}}]
 	});
 
-	this.subscribe('inscripciones', () => {
-		return [{
-			alumno_id : $stateParams.alumno_id,
-			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-		}];
-	});
-	
 	this.subscribe('alumno', () => {
 		return [{
 			id : $stateParams.alumno_id,
