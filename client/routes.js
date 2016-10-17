@@ -816,7 +816,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -832,7 +832,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "alumno"){
+						if(user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -848,7 +848,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

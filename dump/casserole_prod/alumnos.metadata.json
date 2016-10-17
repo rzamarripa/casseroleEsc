@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.alumnos","name":"_id_"}]}
+{"options":{"create":"alumnos"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.alumnos","name":"_id_"}]}

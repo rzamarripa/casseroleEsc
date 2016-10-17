@@ -50,6 +50,8 @@ Meteor.methods({
 	  console.log(usuario);
 	  console.log(rol);
 	  
+	  usuario.profile.friends = [];
+	  
 		if(usuario.maestro_id != undefined)
 			profile.maestro_id = usuario.maestro_id;
 		

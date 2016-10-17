@@ -1,11 +1,6 @@
 angular.module("casserole")
 .controller("AlumnoMuroCtrl",AlumnoMuroCtrl)
 function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
-	
-	$(document).ready(function(){
-    $('[data-toggle="popover"]').popover(); 
-	});
-
   let rc = $reactive(this).attach($scope);
 	window.rc = rc;
 	this.usuarioActual = null;
@@ -88,6 +83,12 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
     calendario : () => {
 	    if(this.getReactively("calendarios")){
 		    return Calendarios.findOne();
+	    }
+    },
+    eventos : () => {
+	    if(this.getReactively("calendario")){
+		    //ME FALTA ORDENAR 
+		    return _.sortBy(rc.calendario.eventos, function(evento) { return evento.start.dateTime; });
 	    }
     }
 

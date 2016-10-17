@@ -7,7 +7,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.action = true;
   this.nuevo = true;
   this.vendedor_id = "";
-  this.buscar = {};
+  this.buscar = {};  
   this.buscar.fechaInicial = new Date();
   this.buscar.fechaFinal = new Date();
   this.vendeores_id = [];

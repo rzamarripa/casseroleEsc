@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.calificaciones","name":"_id_"}]}
+{"options":{"create":"calificaciones"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.calificaciones","name":"_id_"}]}

@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.civiles","name":"_id_"}]}
+{"options":{"create":"civiles"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.civiles","name":"_id_"}]}

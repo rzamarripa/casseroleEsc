@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.ciclos","name":"_id_"}]}
+{"options":{"create":"ciclos"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.ciclos","name":"_id_"}]}
