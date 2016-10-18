@@ -10,12 +10,15 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6 col-sm-offset-3">
-		
+	<div class="col-sm-3">
+		<a class="btn btn-primary" href="./grupos">
+		  Listar Grupos
+		</a>
+	</div>
+	<div class="col-sm-6">
 			<select ng-model="gp.alumnose" class="js-example-basic-single"  style='width: 100%; '>
 				<option ng-value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
 			</select>
-			
 	</div>
 	<div>
 		<button type="button" class="btn btn-primary"  ng-click="gp.agregarAlumno()">
