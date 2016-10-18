@@ -36,7 +36,7 @@
 								<i></i></label> 
 							</span>
 							<p class="col-sm-8">
-								<strong><a href="/prospecto/{{llamada.prospecto_id}}">{{llamada.prospecto.nombre}}</a></strong> - {{llamada.asunto}}
+								<strong><a href="/prospecto/{{llamada.prospecto_id}}">{{llamada.prospecto.profile.nombreCompleto}}</a></strong> - {{llamada.asunto}}
 								<span class="text-muted">{{llamada.resultado}} </span>
 								<span class="date">{{llamada.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
 								<span ng-if="llamada.estatus == true" >
@@ -54,7 +54,7 @@
 									<input type="checkbox" ng-model="reunion.estatus">
 									<i></i> </label> </span>
 							<p class="col-sm-8">
-								<strong><a href="/prospecto/{{reunion.prospecto_id}}">{{reunion.prospecto.nombre}}</a></strong> - {{reunion.asunto}} 
+								<strong><a href="/prospecto/{{reunion.prospecto_id}}">{{reunion.prospecto.profile.nombreCompleto}}</a></strong> - {{reunion.asunto}} 
 								<span class="text-muted">{{reunion.resultado}} </span>
 								<span class="date ">{{reunion.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
 								<span ng-if="reunion.estatus == true" >
@@ -74,7 +74,7 @@
 									<input type="checkbox" ng-model="tarea.estatus">
 									<i></i> </label> </span>
 							<p class="col-sm-8">
-								<strong><a href="/prospecto/{{tarea.prospecto_id}}">{{tarea.prospecto.nombre}}</a></strong> - {{tarea.asunto}} 
+								<strong><a href="/prospecto/{{tarea.prospecto_id}}">{{tarea.prospecto.profile.nombreCompleto}}</a></strong> - {{tarea.asunto}} 
 								<span class="text-muted">{{tarea.resultado}} </span>
 								<span class="date ">{{tarea.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
 								<span ng-if="tarea.estatus == true" >

@@ -83,9 +83,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/',
       templateUrl: 'client/home/home.ng.html',      
       controller: 'HomeCtrl as ho',
-      ncyBreadcrumb: {
-		    label: "Hola"
-		  },
       resolve: {
 	      "currentUser": ["$meteor", function($meteor){
 	        return $meteor.requireUser();

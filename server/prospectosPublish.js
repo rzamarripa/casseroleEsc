@@ -28,11 +28,9 @@ Meteor.publish("prospectosSeguimiento",function(options){
 });
 
 Meteor.publish("prospectosPorVendedor",function(options){
-	console.log(options);
 	return Prospectos.find(options); 
 });
 
 Meteor.publish("prospectosPorInscribir",function(options){
-	console.log(options);
 	return Prospectos.find(options); 
 });

@@ -30,7 +30,7 @@ angular
 	    where : { 
 	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'), 
-			seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
     }];
   });
@@ -43,7 +43,7 @@ angular
 	this.helpers({
 	  grupo : () => {
   		var grupo=Grupos.findOne();
-  		this.alumnos_id= grupo? grupo.alumnos? grupo.alumnos:[]:[] ;
+  		this.alumnos_id = grupo ? grupo.alumnos ? grupo.alumnos : [] : [];
 			return Grupos.findOne();
 	  },
 	  asignacion : () => {
@@ -59,7 +59,6 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-	  		console.log(this.alumnos_id)
 		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]});
 	  },
 	  balumnos : ()=>{
