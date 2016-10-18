@@ -13,6 +13,8 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.buscar = {};
   this.buscar.nombre = '';
 	this.validation = false;
+	this.validaUsuario = false;
+  this.validaContrasena = false;
 	
 	this.subscribe('buscarAlumnos', () => {
     return [{

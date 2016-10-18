@@ -47,10 +47,9 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	this.guardar = function(vendedor,form)
 	{		
 			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		    }
-			console.log(vendedor);
+        toastr.error('Error al guardar los datos.');
+        return;
+	    }
 			vendedor.profile.estatus = true;
 			vendedor.profile.campus_id = Meteor.user().profile.campus_id;
 			//vendedor.profile.seccion_id = Meteor.user().profile.seccion_id;
