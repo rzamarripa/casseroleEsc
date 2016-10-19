@@ -6,6 +6,8 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	
 	this.action = true;
 	this.maestro = {}; 
+	this.validaUsuario = false;
+  this.validaContrasena = false;
 	
 	this.subscribe('maestros',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
