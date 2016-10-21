@@ -412,7 +412,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		});
 	}
 	this.condonar = function(){
-		if (confirm("Está seguro de desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
+		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
 			for (var i = 0; i < rc.inscripciones.length; i++) {
 				var inscripcion=rc.inscripciones[i];
@@ -537,7 +537,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 	this.cambioTipoColegiatura=function(selected, oldValue,curso){
 		//console.log(selected,oldValue);
-		if (confirm("Está seguro de desea cambiar el Plan de Pagos")) {
+		if (confirm("Está seguro que desea cambiar el Plan de Pagos")) {
 			//console.log(curso);
 			var fechas = curso.planPagos.fechas;
 			
