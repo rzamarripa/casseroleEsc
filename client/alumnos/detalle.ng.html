@@ -228,15 +228,19 @@
 		          <div class="widget-body">
 		            <form class="smart-form" ng-repeat = "curso in al.inscripciones" novalidate> 
 									<header>
-
-										<h1>  {{al.grupo(curso.grupo_id).nombre}} </h1>
-										<div class="text-right" >
-											Tipo de Plan de Pago:
-											<select name="repeatSelect" id="repeatSelect" ng-model="curso.planPagos.colegiatura.tipoColegiatura" ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}',curso)" >
-												<option ng-repeat="plan in al.tipoPlanes" value="{{plan}}">{{plan}}</option>
-											</select>
+										<div class="row">
+											<div class="col-sm-4">
+												<h1>  {{al.grupo(curso.grupo_id).nombre}} </h1>
+											</div>
+											<div class="col-sm-2 col-sm-offset-4">
+												<div class="form-group">
+													<label for="repeatSelect">Tipo de Plan de Pago:</label>
+													<select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="curso.planPagos.colegiatura.tipoColegiatura" ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}',curso)" >
+														<option ng-repeat="plan in al.tipoPlanes" value="{{plan}}">{{plan}}</option>
+													</select>
+												</div>
+											</div>
 										</div>
-	
 									</header>		
 									<div >
 										<h2> Colegiatura : </h2>	

@@ -4,7 +4,7 @@ angular
  function GruposDetalleCtrl($scope, $meteor, $reactive , $state, $stateParams, toastr){
 	 
  	let rc = $reactive(this).attach($scope);
-
+ 	window.rc = rc;
  	this.grupo = {};
   this.action = true;
   this.alumnos_id = [];
