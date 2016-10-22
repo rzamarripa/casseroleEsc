@@ -82,13 +82,15 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	this.actualizar = function(maestro,form)
 	{
 			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
+        toastr.error('Error al guardar los datos.');
+        return;
 		  }
 			var idTemp = maestro._id;
 			delete maestro._id;		
 			maestro.usuarioActualizo = Meteor.userId();
 			Maestros.update({_id:idTemp},{$set:maestro});
+			console.log(idTemp);
+			Meteor.call('updateUsuario', maestro, idTemp, 'maestro');
 			toastr.success('Actualizado correctamente.');
 			$('.collapse').collapse('hide');
 			this.nuevo = true;

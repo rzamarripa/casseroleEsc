@@ -1096,7 +1096,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.alumnoKardex', {
-      url: '/alumnoCalendario',
+      url: '/alumnoKardex',
       templateUrl: 'client/alumno/kardex/kardex.html',
       controller: 'AlumnoKardexCtrl as k',
       resolve: {
