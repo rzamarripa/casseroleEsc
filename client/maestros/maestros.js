@@ -20,7 +20,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}).count();
 	  },
 	  nombreUsuario : () => {
-		  if(this.getReactively("maestro") && Meteor.user()){
+		  if(this.getReactively("maestro") && Meteor.user() && this.action == true){
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
 			  if(this.getReactively("cantidad") > 0){
