@@ -47,8 +47,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe("grupos",() => {
-			return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
-		});
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
+	});
 	
 	this.subscribe('pagosAlumno', () => {
 		return [{
@@ -243,6 +243,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		}
 		return "";
 	}
+	
 	this.pagarLiquidacion=function(plan,i,semanasPagadas){
 		var cobro=plan.fechas[i];
 		semanasPagadas.push({
