@@ -44,6 +44,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   {
     this.action = true;
     this.nuevo = !this.nuevo;
+    this.maestro = {};
   };
 
 	this.guardar = function(maestro,form)
