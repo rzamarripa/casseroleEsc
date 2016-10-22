@@ -88,7 +88,8 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 			var idTemp = maestro._id;
 			delete maestro._id;		
 			maestro.usuarioActualizo = Meteor.userId();
-			Maestros.update({_id:idTemp},{$set:maestro});
+			var id = Maestros.update({_id:idTemp},{$set:maestro});
+			maestro.maestro_id = idTemp;
 			console.log(idTemp);
 			Meteor.call('updateUsuario', maestro, idTemp, 'maestro');
 			toastr.success('Actualizado correctamente.');
