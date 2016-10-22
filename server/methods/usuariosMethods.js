@@ -28,27 +28,38 @@ Meteor.methods({
 	  }
 	},
 	updateUsuario: function (usuario, id, rol) {
-		
-	  var user = Meteor.users.findOne({"_id" : id});
-	  console.log(user);
+		console.log(usuario);
+		console.log(id);
+	  var user = Meteor.users.findOne({"username" : usuario.nombreUsuario});
+	  console.log(user._id);
 	  console.log(usuario.nombreUsuario);
-	  Meteor.users.update({_id: user._id}, {$set:{
-			username: usuario.nombreUsuario,
-			roles: [rol],
-			profile: {
+	  
+	  profile = {
 				email: usuario.correo,
 				nombre: usuario.nombre,
 				apellidos: usuario.apPaterno + " " + usuario.apMaterno,
 				nombreCompleto : usuario.nombre  + " " + usuario.apPaterno + " " + usuario.apMaterno,
-				fotografia : usuario.fotografia,
-				empleado_id : id
+				fotografia : usuario.fotografia
 			}
+	  
+	  if(usuario.maestro_id != undefined){
+		  console.log("es diferetne")
+		  profile.maestro_id = id;
+	  }
+			
+			
+	  Meteor.users.update({username: user.username}, {$set:{
+			username: usuario.nombreUsuario,
+			roles: [rol],
+			profile: profile
 		}});
-		Accounts.setPassword(id, usuario.contrasena, {logout: false});
+		Accounts.setPassword(user._id, usuario.contrasena, {logout: false});
 	},
 	createGerenteVenta: function (usuario, rol) {
 	  console.log(usuario);
 	  console.log(rol);
+	  
+	  usuario.profile.friends = [];
 	  
 		if(usuario.maestro_id != undefined)
 			profile.maestro_id = usuario.maestro_id;

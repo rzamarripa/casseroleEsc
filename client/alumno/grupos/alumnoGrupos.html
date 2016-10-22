@@ -3,15 +3,13 @@
     <div class="panel panel-default coupon">
       <div class="panel-heading" id="head">
         <div class="panel-title" id="title">
-            <h4>{{asignacion.materia.clave}} - {{asignacion.materia.nombre}}<span class="pull-right">{{asignacion.grupo.grupoNombre}} - {{asignacion.grupo.grupoIdentificador}}</span></h4>
+            <h4>{{asignacion.materia.nombreCorto}} - {{asignacion.materia.nombre}}<span class="pull-right">{{asignacion.grupo.grupoNombre}} - {{asignacion.grupo.grupoIdentificador}}</span></h4>
         </div>
       </div>
       <div class="panel-body">
 	      <div class="col-sm-12 col-md-3">
 					<ul class="items">
 			      <li><a ui-sref="root.alumnoAsistencias({alumno_id : asignacion.alumno_id, grupo_id : asignacion.grupo._id, materia_id : asignacion.materia._id})">Ver asistencia</a></li>
-			      <li><a href="/tareas/{{grupo._id}}/{{asignacion.maestro._id}}">Tareas</a></li>
-			      <li><a href="/calificacionesGrupo/{{mmg.grupo_id}}">Exámenes</a></li>
 			      <li><a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo._id})">Foros</a></li>
 			    </ul>
 			    <div class="offer">
@@ -40,12 +38,12 @@
       </div>
       <div class="panel-footer">
         <div class="coupon-code">
-            Día: {{masgrupo.hoy | date:'EEEE'}}
+            Día: {{ag.hoy | date:'EEEE'}}
             <span class="print">
                 <a href="#" class="btn btn-link"><i class="fa fa-lg fa-print"></i> Imprimir</a>
             </span>
         </div>
-        <div class="exp">Fecha:{{ masgrupo.hoy | date:'dd-MM-yyyy'}}</div>
+        <div class="exp">Fecha:{{ ag.hoy | date:'dd-MM-yyyy'}}</div>
       </div>
     </div>
 	</div>

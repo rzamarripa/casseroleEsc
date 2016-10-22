@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.asistencias","name":"_id_"}]}
+{"options":{"create":"asistencias"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.asistencias","name":"_id_"}]}

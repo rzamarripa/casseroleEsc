@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.deptosAcademicos","name":"_id_"}]}
+{"options":{"create":"deptosacademicos"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.deptosacademicos","name":"_id_"}]}

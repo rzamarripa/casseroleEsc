@@ -7,7 +7,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.action = true;
   this.nuevo = true;
   this.vendedor_id = "";
-  this.buscar = {};
+  this.buscar = {};  
   this.buscar.fechaInicial = new Date();
   this.buscar.fechaFinal = new Date();
   this.vendeores_id = [];
@@ -26,17 +26,18 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	this.subscribe('etapasVenta',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", estatus : true}]
 	});
-	
+
 	this.subscribe('inscripciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
-	
+
 	this.subscribe('prospectosPorVendedor',()=>{
 		return [{
-			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
-			vendedor_id : {$in:this.getCollectionReactively('vendedores_id')}}]
+			"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
+			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')}
+		}];
 	});
- 
+
   this.helpers({
 	  vendedores : () => {
 		  if(Meteor.user()){
@@ -52,7 +53,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  },
 	  ultimosProspectos : () => {
 		  
-		  return Prospectos.find({vendedor_id : this.getReactively("vendedor_id")}).fetch();		  
+		  return Prospectos.find({"profile.vendedor_id" : this.getReactively("vendedor_id")}).fetch();		  
 	  },
 	  etapasVenta : () => {
 		  
@@ -63,8 +64,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  var arreglo = [];
 		  if(vend.ready()){
 			  _.each(rc.vendedores, function(vendedor){
-				  arreglo.push(Prospectos.find({vendedor_id : vendedor._id, 
-					fecha : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
+				  arreglo.push(Prospectos.find({"profile.vendedor_id" : vendedor._id, 
+					"profile.fecha" : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
 			  });
 		  }
 		  		  
@@ -85,7 +86,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  vendedoresNombre = [];
 		  if(vend.ready()){
 			  _.each(this.vendedores, function(vendedor){
-				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno;
+				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno + " " + vendedor.profile.apMaterno;
 				  vendedoresNombre.push(nombre);
 			  });
 		  }
@@ -110,8 +111,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 			    chart: { type: 'column' },
 			    title: { text: 'Resumen de productividad de ventas' },
 			    subtitle: {
-		        text: 'Del ' + moment(rc.fechaInicial).format('LL') + 
-		        			' al ' + moment(rc.fechaFinal).format('LL')
+		        text: 'Del ' + moment(rc.getReactively("fechaInicial")).format('LL') + 
+		        			' al ' + moment(rc.getReactively("fechaFinal")).format('LL')
 			    },
 			    xAxis: {
 		        categories: rc.vendedoresNombres,
@@ -149,8 +150,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   //Cantidad de prospectos por vendedor y por fecha
   this.getCantidadProspectos = function(vendedor_id){
 	  rc.vendedor_id = vendedor_id;
-	  var query = {vendedor_id : this.getReactively("vendedor_id"), 
-		fecha : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
+	  var query = {"profile.vendedor_id" : this.getReactively("vendedor_id"), 
+		"profile.fecha" : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
 	  
 	  return Prospectos.find(query).count();;
   };
@@ -163,7 +164,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   
   //Cantidad total de prospectos por vendedor
   this.getCantidadTotalDeProspectosPorVendedor = function(vendedor_id){
-	  return Prospectos.find({vendedor_id : vendedor_id}).count();
+	  return Prospectos.find({"profile.vendedor_id" : vendedor_id}).count();
   }
   
   //Cantidad total de inscritos por vendedor
@@ -173,24 +174,27 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   
   //Listado de prospectos por vendedor
   this.getProspectos = function(vendedor_id){
-	  return Prospectos.find({vendedor_id : vendedor_id}).fetch();
+	  return Prospectos.find({"profile.vendedor_id" : vendedor_id}).fetch();
   }
   
   //Cantidad de prospectos por etapa de venta (no se usa)
   this.getProspectosPorEtapa = function(etapaVenta_id){
-	  return Prospectos.find({etapaVenta_id : etapaVenta_id}).count();
+	  return Prospectos.find({"profile.etapaVenta_id" : etapaVenta_id}).count();
   }
   
   //Cantidad de prospectos por etapa de venta y por vendedor
   this.getCantidadProspectosPorEtapaVenta = function(vendedor_id, etapaVenta_id){
-	  return Prospectos.find({vendedor_id : vendedor_id, etapaVenta_id : etapaVenta_id, fecha : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}}).count();
+	  return Prospectos.find({"profile.vendedor_id" : vendedor_id, "profile.etapaVenta_id" : etapaVenta_id, "profile.fecha" : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}}).count();
   };
   
   //Buscar prospectos entre fechas
-  this.buscarProspectos = function(buscar){
-	  //rc.fechaInicial = buscar.fechaInicial;
-	  //rc.fechaFinal = buscar.fechaFinal;
+	  this.buscarProspectos = function(buscar){
+	  console.log(buscar);
+	  rc.fechaInicial = buscar.fechaInicial.setHours(0);
+	  rc.fechaFinal = buscar.fechaFinal.setHours(24);
+	  console.log(buscar);
   }
+
   
   //Actualizar el destinatario para enviar mensaje a un vendedor
   this.nuevoMensaje = function(vendedor_id){

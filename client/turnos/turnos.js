@@ -53,10 +53,9 @@ angular.module("casserole")
 	this.actualizar = function(turno,form)
 	{
 			if(form.$invalid){
-		        toastr.error('Error al actualizar los datos del Turno.');
-		        return;
-		    }
-		    console.log(turno);
+        toastr.error('Error al actualizar los datos del Turno.');
+        return;
+	    }
 			var idTemp = turno._id;
 			delete turno._id;		
 			turno.usuarioActualizo = Meteor.userId(); 

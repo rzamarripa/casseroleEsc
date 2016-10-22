@@ -4,7 +4,7 @@ angular
  function GruposDetalleCtrl($scope, $meteor, $reactive , $state, $stateParams, toastr){
 	 
  	let rc = $reactive(this).attach($scope);
-
+ 	window.rc = rc;
  	this.grupo = {};
   this.action = true;
   this.alumnos_id = [];
@@ -23,19 +23,17 @@ angular
 		}]
 	});
 	
-
-	this.subscribe('buscarAlumnos', () => {
+	this.subscribe('buscarNoAlumnos', () => {
     return [{
 	    options : { limit: 10 },
-	    where : { 
+	    where : {
 	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
-		    nombreCompleto : this.getReactively('buscar.nombre'), 
-			seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+		    nombreCompleto : this.getReactively('buscar.nombre'),
+				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
     }];
   });
 
-  
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
   });
@@ -43,7 +41,7 @@ angular
 	this.helpers({
 	  grupo : () => {
   		var grupo=Grupos.findOne();
-  		this.alumnos_id= grupo? grupo.alumnos? grupo.alumnos:[]:[] ;
+  		this.alumnos_id = grupo ? grupo.alumnos ? grupo.alumnos : [] : [];
 			return Grupos.findOne();
 	  },
 	  asignacion : () => {
@@ -59,7 +57,6 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-	  		console.log(this.alumnos_id)
 		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]});
 	  },
 	  balumnos : ()=>{
@@ -85,7 +82,7 @@ angular
 
 	this.agregarAlumno = function(){
 		console.log(rc.alumnose);
-		var alumno_id=rc.alumnose
+		var alumno_id = rc.alumnose
 		//console.log(rc.grupo)
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];

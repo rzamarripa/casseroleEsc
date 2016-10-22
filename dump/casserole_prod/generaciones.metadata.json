@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.generaciones","name":"_id_"}]}
+{"options":{"create":"generaciones"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.generaciones","name":"_id_"}]}

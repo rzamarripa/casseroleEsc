@@ -1,0 +1,1 @@
+{"options":{"create":"prospectos"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.prospectos","name":"_id_"}]}

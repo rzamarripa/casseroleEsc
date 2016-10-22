@@ -43,7 +43,6 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 					}
 				});
 			});
-			console.log("misAsignaciones", misAsignaciones)
 			return misAsignaciones;
 	  }	  
   });

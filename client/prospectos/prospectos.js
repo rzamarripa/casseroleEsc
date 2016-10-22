@@ -11,6 +11,7 @@ angular.module("casserole")
   this.buscar = {};
   this.buscar.nombre = '';
   this.buscar.etapaVenta_id = '';
+  this.titulo = "";
   
   console.log("state", $stateParams);
   
@@ -103,11 +104,9 @@ angular.module("casserole")
 			  var repetidoFechaNac = mesRepetido + '-' +
 			  											 repetido.profile.fechaNac.getDate() + '-' +
 			  											 repetido.profile.fechaNac.getFullYear();
-			  console.log("repetidoFechaNac", repetidoFechaNac);
 			  
 			  //Es igual la fecha de nacimiento (ya mucha coincidencia)
 			  if(fechaNacimiento == repetidoFechaNac){
-				  console.log("son repetidos");
 				  //Ver si ya pasaron más de 3 días que correponden a 259200000 milisegundos
 				  var ms = moment(new Date(),"YYYY/MM/DD").diff(moment(repetido.profile.fechaUltimoContacto,"YYYY/MM/DD"));
 				  toastr.error(repetido.profile.nombre + " " + repetido.profile.apPaterno + ' ya está asignado.');
@@ -129,6 +128,10 @@ angular.module("casserole")
 			  }else{
 				  //No se encontró un prospecto igual y se insertará.
 				  prospecto.profile.estatus = 1;
+				  var nombre = prospecto.profile.nombre != undefined ? prospecto.profile.nombre + " " : "";
+					var apPaterno = prospecto.profile.apPaterno != undefined ? prospecto.profile.apPaterno + " " : "";
+					var apMaterno = prospecto.profile.apMaterno != undefined ? prospecto.profile.apMaterno : "";
+					prospecto.profile.nombreCompleto = nombre + apPaterno + apMaterno;
 					prospecto.profile.fecha = new Date();
 					prospecto.profile.etapaVenta_id = rc.etapaVenta._id;
 					prospecto.profile.vendedor_id = Meteor.userId();
@@ -142,6 +145,10 @@ angular.module("casserole")
 	  }else{
 		  //No se encontró un prospecto igual y se insertará.
 		  prospecto.profile.estatus = 1;
+		  var nombre = prospecto.profile.nombre != undefined ? prospecto.profile.nombre + " " : "";
+			var apPaterno = prospecto.profile.apPaterno != undefined ? prospecto.profile.apPaterno + " " : "";
+			var apMaterno = prospecto.profile.apMaterno != undefined ? prospecto.profile.apMaterno : "";
+			prospecto.profile.nombreCompleto = nombre + apPaterno + apMaterno;
 			prospecto.profile.fecha = new Date();
 			prospecto.profile.etapaVenta_id = rc.etapaVenta._id;
 			prospecto.profile.vendedor_id = Meteor.userId();
@@ -152,11 +159,8 @@ angular.module("casserole")
 			$state.go('root.prospecto',{id : prospecto_id});
 	  }
     
-		
-		
 		//this.prospecto = {}; 
 		$('.collapse').collapse('hide');
-		
 	};
 	
 	this.editar = function(id)
@@ -170,14 +174,13 @@ angular.module("casserole")
 	this.actualizar = function(prospecto)
 	{
 		var idTemp = prospecto._id;
-		delete prospecto._id;		
+		delete prospecto._id;
 		Prospectos.update({_id:idTemp},{$set:prospecto});
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 	};
 	
 	this.eliminar = function(prospecto){
-		console.log(prospecto);
 		Prospectos.remove({_id : prospecto._id});		
 	}
 
@@ -198,13 +201,27 @@ angular.module("casserole")
 	  	return etapaVenta.nombre;
   }
   
-  this.filtrarEtapaVenta = function(etapaVenta_id){
+  this.filtrarEtapaVenta = function(etapaVenta_id, etapaNombre){
 	  this.buscar.etapaVenta_id = etapaVenta_id;
+	  if(etapaNombre == "Prospecto"){
+		  this.titulo = "Prospectos";
+	  }else if(etapaNombre == "Negociación"){
+		  this.titulo = "Negociación"
+	  }else if(etapaNombre == "Inscrito"){
+		  this.titulo = "Inscritos";
+	  }else if(etapaNombre == "No Inscrito"){
+		  this.titulo = "No Inscritos"
+	  }
+	  
   }
   
   this.tomarFoto = function () {
 		$meteor.getPicture({width:200, height: 200, quality: 50}).then(function(data){			
 			rc.prospecto.profile.fotografia = data;
+		})
+		
+		$meteor.getPicture({width:60, height: 60, quality: 50}).then(function(data){			
+			rc.prospecto.profile.thumbnail = data;
 		})
 	};
 };

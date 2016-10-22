@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.roles","name":"_id_"},{"v":1,"key":{"name":1},"unique":true,"ns":"casserole_prod.roles","name":"name_1"}]}
+{"options":{"create":"roles"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.roles","name":"_id_"},{"v":1,"key":{"name":1},"unique":true,"ns":"casserole_prod.roles","name":"name_1"}]}

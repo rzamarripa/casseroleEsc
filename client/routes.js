@@ -83,9 +83,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/',
       templateUrl: 'client/home/home.ng.html',      
       controller: 'HomeCtrl as ho',
-      ncyBreadcrumb: {
-		    label: "Hola"
-		  },
       resolve: {
 	      "currentUser": ["$meteor", function($meteor){
 	        return $meteor.requireUser();
@@ -816,7 +813,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -832,7 +829,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "alumno"){
+						if(user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -848,7 +845,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "maestro" || user.roles[0] == "alumno"){
+						if(user.roles[0] == "maestro" || user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1069,7 +1066,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })    
     .state('root.alumnoMuro', {
-      url: '/muro/:alumno_id',
+      url: '/muro',
       templateUrl: 'client/alumno/muro/muro.html',
       controller: 'AlumnoMuroCtrl as m',
       resolve: {
@@ -1078,7 +1075,45 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
-    ; 
-    
-    
+    .state('root.alumnoPerfil', {
+      url: '/alumnoPerfil/:alumno_id',
+      templateUrl: 'client/alumno/perfil/perfil.html',
+      controller: 'AlumnoPerfilCtrl as a',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.alumnoCalendario', {
+      url: '/alumnoCalendario',
+      templateUrl: 'client/alumno/calendario/calendario.html',
+      controller: 'AlumnoCalendarioCtrl as c',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.alumnoKardex', {
+      url: '/alumnoKardex',
+      templateUrl: 'client/alumno/kardex/kardex.html',
+      controller: 'AlumnoKardexCtrl as k',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.alumnoPagos', {
+      url: '/alumnoPagos',
+      templateUrl: 'client/alumno/pagos/pagos.html',
+      controller: 'AlumnoPagosCtrl as p',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    ;
 }]);

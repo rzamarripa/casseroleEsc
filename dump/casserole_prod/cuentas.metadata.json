@@ -1,1 +1,1 @@
-{"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.cuentas","name":"_id_"}]}
+{"options":{"create":"cuentas"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.cuentas","name":"_id_"}]}

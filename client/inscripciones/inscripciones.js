@@ -2,6 +2,7 @@ angular.module("casserole")
 .controller("InscripcionesCtrl",InscripcionesCtrl)
 function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   let rc = $reactive(this).attach($scope);
+
 	window.rc = rc;
 	var subs = []
 	subs.push(this.subscribe('ciclos',()=>{
@@ -33,18 +34,12 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}));
 	subs.push(this.subscribe('inscripciones',() => {
 		return [{
+			estatus : 1,
 		 	seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
 	}));
 	
-	$scope.$on('$destroy', function(){
-		console.log('subs',subs)
-		for(var i in subs){
-			var sub = subs[i]
-			console.log(sub);
-			sub.stop();
-		}
-	});
+	
 
 	rc.helpers({
 		ciclos : () => {
@@ -68,10 +63,9 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	        return x._id == valor;
 	      });
 	    }
-	  	var a = Inscripciones.find();
+	  	//var a = Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
 	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
-	  	console.log(alumnos);
 	    var grupos 		= Grupos.find().fetch();
 	    var secciones = Secciones.find().fetch();
 	    var ciclos	 	= Ciclos.find().fetch();
@@ -81,7 +75,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
 	      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);
 	      inscripcion.ciclo = findInCollection(ciclos, inscripcion.ciclo_id);
-	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.grupo.planEstudios_id);
+	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.planEstudios_id);
 	    });
 	    return _inscripciones;
 	  },
@@ -104,8 +98,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.getGrupo= function(grupo_id)
 	{
 		var grupo = Grupos.findOne(grupo_id);
-		console.log(grupo_id);
-		console.log(grupo);
 		if(grupo)
 			return grupo.identificador;
 	};	
