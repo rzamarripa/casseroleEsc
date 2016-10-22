@@ -18,7 +18,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	this.planEstudios_id = [];
 	
-	console.log($stateParams);
+	console.log("parametros",$stateParams);
 	
 	this.subscribe("ocupaciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -29,6 +29,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe('inscripciones', () => {
+		
 		return [{
 			alumno_id : $stateParams.alumno_id,
 			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
