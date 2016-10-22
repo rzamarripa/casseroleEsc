@@ -37,9 +37,9 @@
 						<ul>
 							<li class="message">
 								<img src="{{m.tieneFoto(post.photo, post.gender)}}" width="50" class="online" alt="sunny">
-								<span class="message-text"> 
-									<a href="javascript:void(0);" class="username">{{post.name}} 
-										<small class="text-muted pull-right lead"> {{m.duracion(post.createdAt)}} </small>
+								<span class="message-text" style="width: 85%;"> 
+									<a href="#" class="username" >{{post.name}} 
+										<small class="text-muted pull-right"> {{m.duracion(post.createdAt)}} </small>
 									</a> 
 									{{post.message}}
 								</span>
@@ -130,10 +130,16 @@
 						<table class="table table-hover">								
 							<tr ng-repeat="evento in m.eventos" class="{{evento.className}}">
 								<td>
-									<p>{{evento.title}}<small class="pull-right"><span class="label label-default">{{m.duracion(evento.start)}}</span></small></p>
+									<p style="margin-bottom: 3px;">
+										<i class="fa fa-dot-circle-o"></i><strong> {{evento.title}}</strong>
+										<small class="pull-right">
+											<span class="label label-default">{{m.duracion(evento.start)}}</span>
+										</small>
+									</p>
+									<hr style="margin: 3px;">
 									<small><cite title="{{m.duracion(evento.start)}}">{{evento.description}}</cite></small><br/>
-									<small>Inicio : {{evento.start | date:"dd-MM-yyyy"}} Fin : {{evento.end | date:"dd-MM-yyyy"}}</small><br/>
-									<small>Fin    : {{evento.end | date:"dd-MM-yyyy"}}</small>
+									<small>Inicio&nbsp;: {{evento.start | date:"dd-MM-yyyy"}}</small><br/>
+									<small>Fin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{evento.end | date:"dd-MM-yyyy"}}</small>
 								</td>
 							</tr>
 						</table>

@@ -102,6 +102,7 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th>No.</th>
 					<th width="12%">Foto</th>
 					<th width="20%"><div class="text-center">Nombre</div></th>
 					<th width="20%">Nombre de Usuario</th>
@@ -120,6 +121,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="maestro in maes.maestros">
+			    <td>{{$index + 1}}</td>
 		    	<td><img ng-class="{'img-thumbnail': !!maestro.fotografia}" width="100px" ng-src="{{maestro.fotografia}}"/> </td>
 			    <td>{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}</td>
 			    <td>{{maestro.nombreUsuario}}</td>

@@ -10,12 +10,6 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
   var eventosTotales = [];
   this.eventSources = [];
   
-  this.init = function(){
-	  console.log("init");
-  }
-  
-  
-		
 	this.subscribe("calendarios",()=>{
 		return [{estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}];
 	});

@@ -76,6 +76,7 @@ angular
 		rc.grupo.alumnos= _.without(rc.grupo.alumnos, $index);
 		var idTemp = rc.grupo._id;
 		delete rc.grupo._id;
+		rc.grupo.inscritos--;
 		Grupos.update({_id : idTemp}, {$set : rc.grupo});
 		toastr.success("Ha eliminado al alumno correctamente");
 	}
@@ -90,6 +91,7 @@ angular
 		console.log("si entre",x,alumno_id)
 		if(x==-1){
 			rc.grupo.alumnos.push(alumno_id)
+			rc.grupo.inscritos++;
 			var idTemp = rc.grupo._id;
 			delete rc.grupo._id;
 			Grupos.update({_id : idTemp}, {$set : rc.grupo});
