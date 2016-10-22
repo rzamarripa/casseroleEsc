@@ -20,7 +20,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}).count();
 	  },
 	  nombreUsuario : () => {
-		  if(Meteor.user()){
+		  if(this.getReactively("maestro") && Meteor.user()){
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
 			  if(this.getReactively("cantidad") > 0){
@@ -49,7 +49,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 
 	this.guardar = function(maestro,form)
 	{
-		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+		if(form.$invalid || !rc.validaContrasena){
       toastr.error('Error al guardar los datos.');
       return;
 		}
