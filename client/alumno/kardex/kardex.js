@@ -24,18 +24,19 @@ function AlumnoKardexCtrl($scope, $meteor, $reactive, $state, toastr, $statePara
 	
 	this.helpers({
 		inscripciones : () =>{
-			return Inscripciones.find({
+			var inscripciones = Inscripciones.find({
 				alumno_id : Meteor.userId(),
 				campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
 			});
+			if(inscripciones){
+				return inscripciones;
+			}
 		},
 		curriculas : () => {
 			if(this.getReactively("inscripciones")){
-				console.log("entre");
 				_.each(rc.inscripciones, function(inscripcion){
 					rc.planEstudios_id.push(inscripcion.planEstudios_id);
 				})
-				console.log("plan", rc.planEstudios_id);
 				return Curriculas.find();
 			}			
 		}

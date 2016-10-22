@@ -23,19 +23,17 @@ angular
 		}]
 	});
 	
-
-	this.subscribe('buscarAlumnos', () => {
+	this.subscribe('buscarNoAlumnos', () => {
     return [{
 	    options : { limit: 10 },
-	    where : { 
+	    where : {
 	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
-		    nombreCompleto : this.getReactively('buscar.nombre'), 
+		    nombreCompleto : this.getReactively('buscar.nombre'),
 				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
  		  }
     }];
   });
 
-  
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
   });
@@ -84,7 +82,7 @@ angular
 
 	this.agregarAlumno = function(){
 		console.log(rc.alumnose);
-		var alumno_id=rc.alumnose
+		var alumno_id = rc.alumnose
 		//console.log(rc.grupo)
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
