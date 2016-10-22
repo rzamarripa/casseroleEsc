@@ -16,21 +16,24 @@
 		</a>
 	</div>
 	<div class="col-sm-6">
-			<select ng-model="gp.alumnose" class="js-example-basic-single"  style='width: 100%; '>
-				<option ng-value="alumno" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
-			</select>
+		<label for="noAlumnos">Agregar alumnos</label>
+		<select name="noAlumnos" ng-model="gp.alumnose" class="js-example-basic-single"  style='width: 100%; '>
+			<option ng-value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
+		</select>
 	</div>
-	<div>
+	<div class="col-sm-1">
 		<button type="button" class="btn btn-primary"  ng-click="gp.agregarAlumno()">
 			<span class="fa fa-plus fa-fw" aria-hidden="true"></span>
 		</button>
 	</div>
 </div>
+<br/>
 <div class="row">
 	<div class="col-sm-12">
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th width="5%">No.</th>
 					<th>Foto</th>
 					<th>Matrícula</th>
 					<th>Nombre</th>
@@ -39,6 +42,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="alumno in gp.alumnos">
+					<td class="text-center">{{$index + 1}}</td>
 					<td class="col-sm-1">
 						<img src="{{gp.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 70px;border-left: 4px solid #fff;">
 					</td>
