@@ -11,11 +11,16 @@
 	<div class="col-sm-12">
 		<div class="input-group">
 			<div class="input-group-btn">
+				<a href="#" ng-click="al.getFocus()" class="btn btn-default btn-primary">
+					<i class="fa fa-search"></i>
+				</a>
+<!--
 				<a href="./nuevoAlumno" class="btn btn-default btn-primary">
 					<i class="fa fa-plus"></i> Nuevo
 				</a>
+-->
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." ng-model="al.buscar.nombre">
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="al.buscar.nombre">
 		</div>
 	</div>
 </div>

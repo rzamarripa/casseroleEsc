@@ -431,6 +431,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  }else{
 				  alumno.username = "e" + anio + Meteor.user().profile.campus_clave + "0001";
 				  alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
+				  alumno.password = "123qwe";
 			  }
 			  Meteor.call('createGerenteVenta', alumno, 'alumno', function(error, result){
 				  if(error){

@@ -115,5 +115,8 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  }else{
 		  return foto;
 	  }
-  }  
+  };
+  this.getFocus = function(){
+	  document.getElementById('buscar').focus();
+  };  
 }
