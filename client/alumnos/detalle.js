@@ -18,17 +18,20 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	this.planEstudios_id = [];
 	
-	console.log($stateParams);
+	//console.log("parametros",$stateParams);
 	
 	this.subscribe("ocupaciones",()=>{
+
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
 	this.subscribe("curriculas",()=>{
+
 		return [{estatus:true, alumno_id : $stateParams.alumno_id, planEstudios_id : { $in : this.getCollectionReactively("planEstudios_id")}}]
 	});
 
 	this.subscribe('inscripciones', () => {
+		
 		return [{
 			alumno_id : $stateParams.alumno_id,
 			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -43,14 +46,17 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe("cuentas",()=>{
+
 		return [{activo:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
 
 	this.subscribe("grupos",() => {
+
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
 	});
 	
 	this.subscribe('pagosAlumno', () => {
+
 		return [{
 			alumno_id : $stateParams.alumno_id
 		}];
@@ -80,7 +86,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				_.each(rc.inscripciones, function(inscripcion){
 					rc.planEstudios_id.push(inscripcion.planEstudios_id);
 				})
-				console.log(rc.planEstudios_id);
+				//console.log(rc.planEstudios_id);
 				return Curriculas.find();
 			}			
 		}
@@ -92,8 +98,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	
-	this.actualizar = function(alumno,form)
-	{
+	this.actualizar = function(alumno,form){
 		if(form.$invalid){
 			toastr.error('Error al actualizar los datos.');
 			return;
@@ -127,7 +132,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 	this.masInformacion = function(){
 		this.masInfo = !this.masInfo;
-		console.log(this.masInfo);
+		//console.log(this.masInfo);
 	}
 	this.estaInscrito = function(alumno_id){
 		inscrito = Inscripciones.findOne({alumno_id: alumno_id});
@@ -156,7 +161,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(diasRecargo>concepto.diasRecargo){
 			importe+=concepto.importeRecargo;
 		}
-		//console.log(importe);
+		////console.log(importe);
 		return importe
 	}	
 
@@ -178,7 +183,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 
 	this.seleccionarSemana = function(cobro,plan){
-		//console.log(cobro);
+		////console.log(cobro);
 		//var semSel = cobro.anio + cobro.numero;	
 		rc.hayParaPagar = true;
 		rc.totalPagar=0;
@@ -195,7 +200,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					//plan.fechas[i].pago = this.calcularImporteU(plan,i)
 				}
 		};
-		//console.log(rc.totalPagar);
+		////console.log(rc.totalPagar);
 		for (var i = cobro.numeroPago; i < plan.fechas.length; i++) {
 			if(plan.fechas[i].pagada!=1 && plan.fechas[i].pagada!=5 && plan.fechas[i].faltante)
 				plan.fechas[i].pagada=6;		
@@ -213,7 +218,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				semanasImprimir.push(semana);
 			}
 		});
-		//console.log(semanasImprimir);
+		////console.log(semanasImprimir);
 		$state.go("anon.pagosImprimir",{semanas : semanasImprimir, id : $stateParams.alumno_id},{newTab : true});
 		
 	}
@@ -309,7 +314,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		this.pagarDescuento(plan,i,semanasPagadas);
 	}
 	this.pagarRecargo = function(plan,i,semanasPagadas){
-		console.log(plan,i,plan.fechas[i]);
+		//console.log(plan,i,plan.fechas[i]);
 		var cobro=plan.fechas[i];
 		var fechaActual = new Date();
 		var fechaCobro = new Date(plan.fechas[i].fecha);
@@ -384,7 +389,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				delete inscripcion._id;
 				Inscripciones.update({_id:inscripcion_id},{$set:inscripcion});
 			}
-			console.log(semanasPagadas);
+			//console.log(semanasPagadas);
 			for(var i in semanasPagadas){
 				var semana = semanasPagadas[i];
 				Pagos.insert(semana);
@@ -438,7 +443,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				delete inscripcion._id;
 				Inscripciones.update({_id:inscripcion_id},{$set:inscripcion});
 			}
-			console.log(semanasCondonadas);
+			//console.log(semanasCondonadas);
 			for(var i in semanasCondonadas){
 				var semana = semanasCondonadas[i];
 				Pagos.insert(semana);
@@ -457,7 +462,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		for (var i = 0; i <totalPagos; i++) {
 			plan.push({
 				semana:mfecha.isoWeek(),
-				fecha:mfecha.toDate(),
+				fecha:angular.copy(mfecha.toDate()),
 				tipoPlan:'Semanal',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
@@ -465,7 +470,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			});
 			mfecha = mfecha.day(8);
 		}
-		console.log(plan);
+		//console.log(plan);
 		return plan;
 	}
 
@@ -490,7 +495,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		for (var i = 0; i <totalPagos; i++) {
 			plan.push({
 				semana:mfecha.isoWeek(),
-				fecha:mfecha.toDate(),
+				fecha:angular.copy(mfecha.toDate()),
 				tipoPlan:'Quincenal',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
@@ -506,7 +511,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				mfecha.date(dia[par]);
 			}
 		}
-		console.log(plan);
+		//console.log(plan);
 		return plan;
 	}
 
@@ -524,7 +529,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		for (var i = 0; i <totalPagos; i++) {
 			plan.push({
 				semana:mfecha.isoWeek(),
-				fecha:mfecha.toDate(),
+				fecha:angular.copy(mfecha.toDate()),
 				tipoPlan:'Mensual',
 				numeroPago:i+1,
 				mes:mfecha.get('month')+1,
@@ -532,18 +537,24 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			});
 			mfecha.add(1,'month');
 		}
-		console.log(plan);
+		//console.log(plan);
 		return plan;
 	}
 
 	this.cambioTipoColegiatura=function(selected, oldValue,curso){
-		//console.log(selected,oldValue);
+		////console.log(selected,oldValue);
 		if (confirm("Está seguro que desea cambiar el Plan de Pagos")) {
-			//console.log(curso);
+			////console.log(curso);
 			var fechas = curso.planPagos.fechas;
 			
 			var fechaActual = new Date()
-			var fechaUltima = null
+			var fechaUltima = {fecha:new Date()}
+			switch(selected){
+				case 'Mensual':
+				case 'Quincenal':
+				case 'Semanal':
+			}
+
 			
 			while(fechas.length>0 && fechas[fechas.length-1].fecha>fechaActual && (!fechas[fechas.length-1].pagada || fechas[fechas.length-1].pagada==0)){
 				
@@ -565,11 +576,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					r=7;
 					break;
 			}
+			console.log(fechaUltima,plan);
 
 			var mfechaUltima =moment(fechaUltima.fecha);
 
 			for(var i=0;i<plan.length;i++){
-				//console.log(fechaUltima.fecha,plan[i].fecha,fechaUltima.fecha<plan[i].fecha)
+				console.log(fechaUltima.fecha,plan[i].fecha,fechaUltima.fecha<plan[i].fecha)
 				if(fechaUltima.fecha<=plan[i].fecha){
 					plan[i].numeroPago = fechas[fechas.length-1].numeroPago+1
 					if(fechaUltima.numeroPago == plan[i].numeroPago){
@@ -584,7 +596,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					fechas.push(plan[i]);
 				}
 			}
-			console.log(curso);
+			//console.log(curso);
+		
+			Inscripciones.update({_id:curso._id},{$set:{planPagos:curso.planPagos}});
+			//	ins
 
 		}
 		else{

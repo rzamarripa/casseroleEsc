@@ -2,40 +2,44 @@ angular.module("casserole")
 .controller("InscripcionesCtrl",InscripcionesCtrl)
 function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   let rc = $reactive(this).attach($scope);
-	this.i = 0;
-	this.subscribe('ciclos',()=>{
+
+	window.rc = rc;
+	var subs = []
+	subs.push(this.subscribe('ciclos',()=>{
 		return [{estatus:true,
 		seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 	}]
-	});
-	this.subscribe("secciones",() => {
+	}));
+	subs.push(this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
-	});
-	this.subscribe("tiposingresos",() => {
+	}));
+	subs.push(this.subscribe("tiposingresos",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
-	this.subscribe('alumnos',()=>{
+	}));
+	subs.push(this.subscribe('alumnos',()=>{
 		return [{"profile.estatus":true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
-	});
-	this.subscribe("grupos", () => {
+	}));
+	subs.push(this.subscribe("grupos", () => {
 		return [{
 		 estatus:true,
 		 seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
-	});
-	this.subscribe("planesEstudios",() => {
+	}));
+	subs.push(this.subscribe("planesEstudios",() => {
 		return [{
 			estatus:true,
 			seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		
 		}]
-	});
-	this.subscribe('inscripciones',() => {
+	}));
+	subs.push(this.subscribe('inscripciones',() => {
 		return [{
 			estatus : 1,
 		 	seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
-	});
+	}));
+	
+	
 
 	rc.helpers({
 		ciclos : () => {
