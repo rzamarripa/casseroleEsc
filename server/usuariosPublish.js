@@ -17,3 +17,7 @@ Meteor.publish("usuariosMensajes", function(options){
 Meteor.publish("todosUsuarios", function(){
 	return Roles.getUsersInRole(['coordinadorAcademico', 'coordinadorFinanciero', 'director']);
 });
+
+Meteor.publish("validaUsuarios", function(){
+	return Roles.getUsersInRole( ['director', 'coordinadorFinanciero', 'coordinadorAcademico', 'gerenteVenta', 'vendedor'] );
+});

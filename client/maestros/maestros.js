@@ -6,7 +6,6 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	
 	this.action = true;
 	this.maestro = {}; 
-	this.validaUsuario = false;
   this.validaContrasena = false;
 	
 	this.subscribe('maestros',()=>{
@@ -43,31 +42,31 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   	  
   this.nuevoMaestro = function()
   {
-	    this.action = true;
-	    this.nuevo = !this.nuevo;
+    this.action = true;
+    this.nuevo = !this.nuevo;
   };
 
 	this.guardar = function(maestro,form)
 	{
-			if(form.$invalid){
-	      toastr.error('Error al guardar los datos.');
-	      return;
-		  }
-		
-			maestro.estatus = true;
-			maestro.campus_id = Meteor.user().profile.campus_id;
-			maestro.usuarioInserto = Meteor.userId();
-			maestro.fechaCreacion = new Date();
-			maestro.campus_id = Meteor.user().profile.campus_id;
-			var id = Maestros.insert(maestro);	
-			maestro.maestro_id = id;
-			Meteor.call('createUsuario', rc.maestro, 'maestro');
-			toastr.success("Maestro Creado \n Usuario Creado");
-			maestro = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();	
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+      toastr.error('Error al guardar los datos.');
+      return;
+		}
+	
+		maestro.estatus = true;
+		maestro.campus_id = Meteor.user().profile.campus_id;
+		maestro.usuarioInserto = Meteor.userId();
+		maestro.fechaCreacion = new Date();
+		maestro.campus_id = Meteor.user().profile.campus_id;
+		var id = Maestros.insert(maestro);	
+		maestro.maestro_id = id;
+		Meteor.call('createUsuario', rc.maestro, 'maestro');
+		toastr.success("Maestro Creado \n Usuario Creado");
+		maestro = {};
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();	
 	};
 
 	this.editar = function(id)
@@ -114,6 +113,16 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 			rc.maestro.fotografia = data;
 		});
 	};
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
 	
 };
 

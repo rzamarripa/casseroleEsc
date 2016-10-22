@@ -7,19 +7,27 @@
 		</a>
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form" novalidate>
-		  	<div class="well">	    
+		  	<div class="well">
 			    <div class="row">
 				    	<div class="col-sm-4" valida>					    
 					    	<label>Nombre de usuario *</label>
 					    	<input name="nombreusuario" type="text" class="form-control" placeholder="Nombre de usuario" ng-model="maes.maestro.nombreUsuario" required="" disabled="">
 				    	</div>    	   
-				    	<div class="col-sm-4" valida>					    
+				    	<div class="col-sm-4" ng-class="!maes.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 					    	<label>Contraseña *</label>
-					    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" ng-model="maes.maestro.contrasena" required="">
+					    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
+					    	ng-model="maes.maestro.contrasena" 
+					    	ng-change="maes.validarContrasena(maes.maestro.contrasena, maes.maestro.confirmarContrasena)"
+					    	required="">
+					    	<div class="note note-success" ng-if="!maes.validaContrasena == true">Las contraseñas no coinciden.</div>
 				    	</div>		    				    	    
-				    	<div class="col-sm-4" valida>					    
+				    	<div class="col-sm-4" ng-class="!maes.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 					    	<label>Confirmar Contraseña *</label>
-					    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" ng-model="maes.maestro.confirmarContrasena" required="">
+					    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
+					    		ng-model="maes.maestro.confirmarContrasena" 
+					    		ng-change="maes.validarContrasena(maes.maestro.contrasena, maes.maestro.confirmarContrasena)"
+					    		required="">
+					    	<div class="note note-success" ng-if="!maes.validaContrasena == true">Las contraseñas no coinciden.</div>
 				    	</div>
 				</div>
 			</div> 
