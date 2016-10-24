@@ -45,6 +45,9 @@ angular
 																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos ? grupo.alumnos : [] }, 
 																		roles : ["alumno"]},{ fields : { 
 																				"profile.nombreCompleto" : 1,
+																				"profile.nombre" : 1,
+																				"profile.apPaterno" : 1,
+																				"profile.apMaterno" : 1,
 																				"profile.matricula" : 1,
 																				"profile.sexo" : 1,
 																				"profile.fotografia" : 1,

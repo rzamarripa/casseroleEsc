@@ -57,7 +57,7 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]});
+		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.matricula" : 1}});
 	  },
 	  balumnos : ()=>{
 	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});

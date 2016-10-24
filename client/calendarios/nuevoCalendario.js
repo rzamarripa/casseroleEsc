@@ -15,19 +15,30 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
   var d = date.getDate();
   var m = date.getMonth();
   var y = date.getFullYear();
+  
+  this.calendario 	= {};
+	this.calendario.eventos = [];
   		
 	if($stateParams.id != ""){
 		this.subscribe("calendarios",()=>{
 			return [{estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}];
 		});
-		rc.calendario 	= Calendarios.findOne($stateParams.id);
-		rc.action = false;
 		
+		rc.action = false;
+
 		this.helpers({
 			calendario : () => {
 				var calendario = Calendarios.findOne();
 				if(calendario){
 					return calendario;
+				}
+			},
+			eventSources : () => {
+				if(this.getReactively("calendario")){
+					console.log([rc.calendario.eventos, rc.calendario.eventos.length])
+					return [rc.calendario.eventos, rc.calendario.eventos.length];
+				}else{
+					return [[],0]
 				}
 			}
 		});
@@ -267,6 +278,6 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
     }
   };
   
-  this.eventSources = [this.calendario.eventos, eventosTotales];
+  //this.eventSources = [this.calendario.eventos, eventosTotales];
   
 };

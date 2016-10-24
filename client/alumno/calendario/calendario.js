@@ -20,7 +20,7 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
 		},
 		calendario : () => {
 			var calendario = Calendarios.findOne();
-			if(calendario){
+			if(calendario.eventos.length > 0){
 				rc.eventSources = [calendario.eventos];
 				return calendario;
 			}
@@ -77,6 +77,6 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
     }
   };
   
-  //this.eventSources = [this.calendario.eventos, this.calendario.eventos.lenght];
+  this.eventSources = [this.calendario.eventos, this.calendario.eventos.lenght];
   
 };
