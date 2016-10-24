@@ -8,6 +8,7 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   this.nuevo = true;  
   this.validaUsuario = false;
   this.validaContrasena = false;
+  this.usernameSeleccionado = "";
   
 	this.subscribe('validaUsuarios',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -59,19 +60,21 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
     this.action = false;
     $('.collapse').collapse('show');
     this.nuevo = false;
+    this.usernameSeleccionado = this.gerenteVenta.username;
+    this.validaUsuario = true;
 	};
 	
 	this.actualizar = function(gerenteVenta,form)
 	{
-			if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
-		        toastr.error('Error al actualizar los datos.');
-		        return;
-		  }
-			Meteor.call('updateGerenteVenta', gerenteVenta, 'gerenteVenta');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+	        toastr.error('Error al actualizar los datos.');
+	        return;
+	  }
+		Meteor.call('updateGerenteVenta', gerenteVenta, 'gerenteVenta');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();
 	};
 	
 	/*
@@ -95,12 +98,26 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	};
 	
 	this.validarUsuario = function(username){
-		var existeUsuario = Meteor.users.find({username : username}).count();
-		if(existeUsuario){
-			rc.validaUsuario = false;
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
 		}else{
-			rc.validaUsuario = true;
-		}
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}
+		}		
 	}
 	
 	this.validarContrasena = function(contrasena, confirmarContrasena){

@@ -85,5 +85,23 @@ function BitacoraCtrl($scope, $meteor, $reactive, $state, toastr) {
       console.log('hola');
       self.perPage +=10; 
   }
+  
+  self.tieneFoto = function(usuario_id){
+	  var usuarioEncontrado = Meteor.users.findOne(usuario_id);
+	  if(usuarioEncontrado){
+		  if(usuarioEncontrado.profile.fotografia === null || usuarioEncontrado.profile.fotografia === undefined){
+			  if(usuarioEncontrado.profile.sexo === "masculino")
+				  return "img/badmenprofile.jpeg";
+				else if(usuarioEncontrado.profile.sexo === "femenino"){
+					return "img/badgirlprofile.jpeg";
+				}else{
+					return "img/badprofile.jpeg";
+				}
+				  
+		  }else{
+			  return usuarioEncontrado.profile.fotografia;
+		  }
+	  }
+  };
 
 };
