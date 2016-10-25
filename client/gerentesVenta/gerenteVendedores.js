@@ -35,7 +35,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	this.subscribe('prospectosPorVendedor',()=>{
 		return [{
 			"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
-			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')}
+			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')},
+			"profile.estatus" : 1
 		}];
 	});
 
