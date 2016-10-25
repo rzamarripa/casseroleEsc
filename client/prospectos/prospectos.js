@@ -21,7 +21,7 @@ angular.module("casserole")
 	    return [{
 		    "profile.estatus" : 1,
 		    "profile.etapaVenta_id" : this.getReactively("buscar.etapaVenta_id"),
-		    "profile.vendedor_id" : Meteor.userId()
+		    "profile.vendedor_id" : $stateParams.vendedor_id
 	    }];
 	  });
 	  
