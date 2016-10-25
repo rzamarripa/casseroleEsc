@@ -82,8 +82,7 @@ function BitacoraCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
   
   self.loadMore=function(){
-      console.log('hola');
-      self.perPage +=10; 
+		self.perPage +=10; 
   }
   
   self.tieneFoto = function(usuario_id){

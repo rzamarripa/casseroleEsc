@@ -69,7 +69,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 					"profile.fecha" : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
 			  });
 		  }
-		  
+		  console.log(cantidadProspectos);
 		  return cantidadProspectos;
 	  },
 	  cantidadInscritosPorVendedor : () => {

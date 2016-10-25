@@ -126,6 +126,31 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		}
 	}
 	
+	this.validarUsuario = function(username){
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
+		}else{
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}else{
+				rc.validaUsuario = true;
+			}
+		}		
+	}
+	
 };
 
 

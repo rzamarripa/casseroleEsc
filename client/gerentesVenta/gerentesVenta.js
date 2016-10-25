@@ -116,6 +116,8 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 				}else{
 					rc.validaUsuario = false;
 				}
+			}else{
+				rc.validaUsuario = true;
 			}
 		}		
 	}

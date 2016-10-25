@@ -16,19 +16,21 @@
 								<span class="input-group-addon">
 									<i class="fa fa-{{c.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
 								</span>
-							</div>				    				    
+							</div>	
+							<div class="note note-success" ng-if="!c.validaUsuario == true">Este usuario no está disponible.</div>
 			    	</div>
-			    	<div class="col-sm-4" valida>					    
+			    	<div class="col-sm-4" ng-class="!c.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 				    	<label>Contraseña *</label>
 				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
 				    	ng-model="c.coordinador.password" 
 				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)" required>
 			    	</div>		    				    	    
-			    	<div class="col-sm-4" valida>					    
+			    	<div class="col-sm-4" ng-class="!c.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 				    	<label>Confirmar Contraseña *</label>
 				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
 				    	ng-model="c.coordinador.confirmarContrasena" 
 				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)" required>
+				    	<div class="note note-success" ng-if="!c.validaContrasena == true">Las contraseñas no coinciden.</div>
 						</div>
 			    </div>
 			    <div class="row">
@@ -60,7 +62,15 @@
 			    	</div>
 			    </div>
 			    <div class="row">
-				    <div class="col-sm-3" valida>					    
+				    <div class="col-sm-4" valida>
+					    <label for="sexo">Sexo *</label>
+					    <select name="sexo" ng-model="gv.gerenteVenta.profile.sexo" data-placeholder="Seleccione" class="form-control" required>
+							    <option value=""></option>
+							    <option value="masculino">Masculino</option>
+							    <option value="femenino">Femenino</option>
+							</select>
+			    	</div>
+				    <div class="col-sm-4" valida>					    
 				    	<label>Tipo de Usuario *</label>
 				    	<select name="gerente" class="form-control" ng-model="c.coordinador.profile.role" required>
 					    	<option value="coordinadorAcademico">Coordinador Académico</option>
@@ -79,7 +89,7 @@
 						<input type="submit" ng-click="c.guardar(c.coordinador,form)" value="Guardar" class="btn btn-primary" ng-show="c.action" ng-disabled="!c.validaUsuario || !c.validaContrasena" valida-form formulario="form" />
 						<input type="submit" ng-click="c.actualizar(c.coordinador,form)" value="Actualizar" class="btn btn-primary" ng-show="!c.action" valida-form formulario="form" />				
 					</div>
-				</div>	  
+		  	</div>
 		  </form>
 		</div>
 	</div>
