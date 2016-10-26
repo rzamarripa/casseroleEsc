@@ -14,7 +14,7 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	
   this.helpers({
 	  titulos : () => {
-		  return Titulos.find();
+		  return Titulos.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  }
   });
 

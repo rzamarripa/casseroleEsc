@@ -36,13 +36,14 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 	
 	this.helpers({
 		grupos : () => {
-		 return Grupos.find();
+		 return Grupos.find({ where : {seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""},
+							fields : { fields : { inscripcion : 0, colegiatura : 0, conceptosComision : 0 }}});
 		},
 		ciclos: () => {
-			return Ciclos.find();
+			return Ciclos.find({seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",estatus:true});
 		},
 		turnos : () => {
-		 return Turnos.find();
+		 return Turnos.find({estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 		}
 	});
   
