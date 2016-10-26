@@ -7,7 +7,7 @@
 		</a>
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form" novalidate>
-		  	<div class="well">	    
+		  	<div class="well">
 			    <div class="row">
 				    <div class="col-sm-3" valida>					    
 				    	<label>Gerente *</label>
@@ -15,18 +15,29 @@
 					    	<option value="{{gerente._id}}" ng-repeat="gerente in v.gerentesVenta">{{gerente.profile.nombre}} {{gerente.profile.apPaterno}} {{gerente.profile.apMaterno}}</option>
 				    	</select>
 			    	</div>
-			    	<div class="col-sm-3" valida>					    
+			    	<div class="col-sm-3" valida>	
 				    	<label>Usuario *</label>
-				    	<input name="usuario" type="text" class="form-control" placeholder="Usuario" ng-model="v.vendedor.username" required>
+				    	<div class="input-group">					    	
+								<input type="text" class="form-control" name="usuario" ng-model="v.vendedor.username" ng-change="v.validarUsuario(v.vendedor.username)" required>
+								<span class="input-group-addon">
+									<i class="fa fa-{{v.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
+								</span>
+							</div>	
+							<div class="note note-success" ng-if="!v.validaUsuario == true">Este usuario no está disponible.</div>
 			    	</div>
-			    	<div class="col-sm-3" valida>					    
+			    	<div class="col-sm-3" ng-class="!v.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 				    	<label>Contraseña *</label>
-				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" ng-model="v.vendedor.password" required>
+				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="v.vendedor.password" 
+				    	ng-change="v.validarContrasena(v.vendedor.password, v.vendedor.confirmarContrasena)" required>
 			    	</div>		    				    	    
-			    	<div class="col-sm-3" valida>					    
+			    	<div class="col-sm-3" ng-class="!v.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
 				    	<label>Confirmar Contraseña *</label>
-				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" ng-model="v.vendedor.confirmarContrasena" required>
-					</div>
+				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="v.vendedor.confirmarContrasena" 
+				    	ng-change="v.validarContrasena(v.vendedor.password, v.vendedor.confirmarContrasena)" required>
+				    	<div class="note note-success" ng-if="!v.validaContrasena == true">Las contraseñas no coinciden.</div>
+						</div>
 			    	<div class="col-sm-4" valida>
 			    		<label>Nombre *</label>
 				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="v.vendedor.profile.nombre" required>
@@ -51,6 +62,14 @@
 			    	<div class="col-sm-4">
 			    		<label>Correo *</label>
 				    	<input name="correo" type="email" class="form-control" placeholder="Correo" ng-model="v.vendedor.profile.correo" required>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+					    <label for="sexo">Sexo *</label>
+					    <select name="sexo" ng-model="v.vendedor.profile.sexo" data-placeholder="Seleccione" class="form-control" required>
+							    <option value=""></option>
+							    <option value="masculino">Masculino</option>
+							    <option value="femenino">Femenino</option>
+							</select>
 			    	</div>
 			    	<div class="col-sm-4">
 							<label for="talla">Fotografía</label>

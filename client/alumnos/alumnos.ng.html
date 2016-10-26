@@ -11,11 +11,16 @@
 	<div class="col-sm-12">
 		<div class="input-group">
 			<div class="input-group-btn">
+				<a href="#" ng-click="al.getFocus()" class="btn btn-default btn-primary">
+					<i class="fa fa-search"></i>
+				</a>
+<!--
 				<a href="./nuevoAlumno" class="btn btn-default btn-primary">
 					<i class="fa fa-plus"></i> Nuevo
 				</a>
+-->
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." ng-model="al.buscar.nombre">
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="al.buscar.nombre">
 		</div>
 	</div>
 </div>
@@ -24,15 +29,12 @@
 		<div class="superbox-list" ng-repeat="alumno in al.alumnos">
 			<div class="img-box" style="margin:20px;">
 				<img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" data-img="img/superbox/superbox-full-1.jpg" alt="{{alumno.profile.nombreCompleto}}" title="{{alumno.profile.nombreCompleto" class="superbox-img">
-				<ul class="text-center" style="margin-left: -5px;">
+				<ul class="text-center" style="margin-left: -26px;">
 	        <a href="/alumnos/{{alumno._id}}"><li><i class="fa fa-eye"></i></li></a>
 	        <a href="/editarAlumno/{{alumno._id}}"><li><i class="fa fa-pencil"></i></li></a>
 	      </ul>
 			</div>
-			<p class="lead font-xs text-center">{{alumno.profile.nombreCompleto}}</p>
+			<p class="lead font-xs text-center">{{alumno.profile.nombre}} <br/> {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}</p>
 		</div>
-		
-	</div>	
-	<div class="superbox-show" style="height:300px; display: none"></div>
-
+	</div>
 </div>

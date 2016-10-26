@@ -14,9 +14,11 @@
 		<a class="btn btn-primary" href="./nuevaInscripcion">
 		  Nuevo
 		</a>
+<!--
 		<button class="btn btn-primary" ng-click="ins.createCurricula()">
 		  crear curriculas
 		</button>
+-->
 	</div>	
 </div>
 <br/>
@@ -39,7 +41,7 @@
 			<tbody class="font-sm">				
 				<tr ng-repeat="_inscripcion in ins.inscripciones" >
 					<td>{{ $index + 1 }}</td>
-					<td><a href="./alumnos/{{_inscripcion.alumno_id}}">{{_inscripcion.alumno.profile.matricula}}</a></td>
+					<td><a ui-sref="root.alumnoDetalle({alumno_id:_inscripcion.alumno_id})">{{_inscripcion.alumno.profile.matricula}}</a></td>
 					<td><a href="./alumnos/{{_inscripcion.alumno_id}}">{{_inscripcion.alumno.profile.nombreCompleto}}</a></td>
 					<td>{{_inscripcion.ciclo.nombre}}</td>
 					<td>{{_inscripcion.seccion.descripcion}}</td>

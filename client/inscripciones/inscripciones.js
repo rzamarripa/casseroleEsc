@@ -2,40 +2,44 @@ angular.module("casserole")
 .controller("InscripcionesCtrl",InscripcionesCtrl)
 function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 
-	this.subscribe('ciclos',()=>{
+	window.rc = rc;
+	var subs = []
+	subs.push(this.subscribe('ciclos',()=>{
 		return [{estatus:true,
 		seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 	}]
-	});
-	this.subscribe("secciones",() => {
+	}));
+	subs.push(this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
-	});
-	this.subscribe("tiposingresos",() => {
+	}));
+	subs.push(this.subscribe("tiposingresos",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
-	this.subscribe('alumnos',()=>{
+	}));
+	subs.push(this.subscribe('alumnos',()=>{
 		return [{"profile.estatus":true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
-	});
-	this.subscribe("grupos", () => {
+	}));
+	subs.push(this.subscribe("grupos", () => {
 		return [{
 		 estatus:true,
 		 seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
-	});
-	this.subscribe("planesEstudios",() => {
+	}));
+	subs.push(this.subscribe("planesEstudios",() => {
 		return [{
 			estatus:true,
 			seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		
 		}]
-	});
-	this.subscribe('inscripciones',() => {
+	}));
+	subs.push(this.subscribe('inscripciones',() => {
 		return [{
+			estatus : 1,
 		 	seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
-	});
+	}));
+	
+	
 
 	rc.helpers({
 		ciclos : () => {
@@ -59,10 +63,9 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	        return x._id == valor;
 	      });
 	    }
-	  	var a = Inscripciones.find();
+	  	//var a = Inscripciones.find();
 	  	var _inscripciones = Inscripciones.find().fetch();
 	  	var alumnos 	= Meteor.users.find({roles : ["alumno"]}).fetch();
-	  	console.log(alumnos);
 	    var grupos 		= Grupos.find().fetch();
 	    var secciones = Secciones.find().fetch();
 	    var ciclos	 	= Ciclos.find().fetch();
@@ -72,7 +75,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
 	      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);
 	      inscripcion.ciclo = findInCollection(ciclos, inscripcion.ciclo_id);
-	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.grupo.planEstudios_id);
+	      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.planEstudios_id);
 	    });
 	    return _inscripciones;
 	  },
@@ -95,8 +98,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.getGrupo= function(grupo_id)
 	{
 		var grupo = Grupos.findOne(grupo_id);
-		console.log(grupo_id);
-		console.log(grupo);
 		if(grupo)
 			return grupo.identificador;
 	};	

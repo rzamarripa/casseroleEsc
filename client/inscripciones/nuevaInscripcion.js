@@ -15,7 +15,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.prospecto = {};
 
 	this.subscribe('prospectosPorInscribir',()=>{
-		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profilenombre":1}}]
+		return [{"profile.estatus" : 1, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profilenombre":1}}]
 	});
 	this.subscribe('vendedores');
 	this.subscribe("secciones",() => {
@@ -65,11 +65,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			var usuarios = Meteor.users.find().fetch();
 			var vendedores = [];
 			_.each(usuarios, function(usuario){
-			if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
-			vendedores.push(usuario);
-			}
+				if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
+					vendedores.push(usuario);
+				}
 			});
-			console.log(vendedores);
 			return vendedores;
 		},
 		prospectos : () => {
@@ -432,13 +431,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  }else{
 				  alumno.username = "e" + anio + Meteor.user().profile.campus_clave + "0001";
 				  alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
+				  alumno.password = "123qwe";
 			  }
 			  Meteor.call('createGerenteVenta', alumno, 'alumno', function(error, result){
 				  if(error){
 					  console.log(error);
 				  }else{
 					  inscripcion.alumno_id = result;
-					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
+					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 2 }})
 						var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
 						Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
 						if(!grupo.alumnos)

@@ -83,9 +83,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/',
       templateUrl: 'client/home/home.ng.html',      
       controller: 'HomeCtrl as ho',
-      ncyBreadcrumb: {
-		    label: "Hola"
-		  },
       resolve: {
 	      "currentUser": ["$meteor", function($meteor){
 	        return $meteor.requireUser();
@@ -1099,7 +1096,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	    }
     })
     .state('root.alumnoKardex', {
-      url: '/alumnoCalendario',
+      url: '/alumnoKardex',
       templateUrl: 'client/alumno/kardex/kardex.html',
       controller: 'AlumnoKardexCtrl as k',
       resolve: {
@@ -1118,7 +1115,5 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
-    ; 
-    
-    
+    ;
 }]);

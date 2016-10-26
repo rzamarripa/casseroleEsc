@@ -6,6 +6,7 @@ Meteor.methods({
 				apellidos: usuario.apPaterno + " " + usuario.apMaterno,
 				nombreCompleto : usuario.nombre  + " " + usuario.apPaterno + " " + (usuario.apMaterno ? usuario.apMaterno : ""),
 				fotografia : usuario.fotografia,
+				sexo : usuario.sexo,
 				estatus:true,
 				campus_id : usuario.campus_id,
 				seccion_id : usuario.seccion_id
@@ -15,7 +16,7 @@ Meteor.methods({
 		
 		var usuario_id = Accounts.createUser({
 			username: usuario.nombreUsuario,
-			password: usuario.contrasena,			
+			password: usuario.contrasena,
 			profile: profile
 		});
 		
@@ -28,23 +29,29 @@ Meteor.methods({
 	  }
 	},
 	updateUsuario: function (usuario, id, rol) {
-		
-	  var user = Meteor.users.findOne({"_id" : id});
-	  console.log(user);
-	  console.log(usuario.nombreUsuario);
-	  Meteor.users.update({_id: user._id}, {$set:{
+	  var user = Meteor.users.findOne({"username" : usuario.nombreUsuario});
+	  
+	  profile = {
+			email: usuario.correo,
+			nombre: usuario.nombre,
+			sexo : usuario.sexo,
+			apellidos: usuario.apPaterno + " " + usuario.apMaterno,
+			nombreCompleto : usuario.nombre  + " " + usuario.apPaterno + " " + usuario.apMaterno,
+			fotografia : usuario.fotografia
+		}
+	  
+	  if(usuario.maestro_id != undefined){
+		  console.log("es diferetne")
+		  profile.maestro_id = id;
+	  }
+			
+			
+	  Meteor.users.update({username: user.username}, {$set:{
 			username: usuario.nombreUsuario,
 			roles: [rol],
-			profile: {
-				email: usuario.correo,
-				nombre: usuario.nombre,
-				apellidos: usuario.apPaterno + " " + usuario.apMaterno,
-				nombreCompleto : usuario.nombre  + " " + usuario.apPaterno + " " + usuario.apMaterno,
-				fotografia : usuario.fotografia,
-				empleado_id : id
-			}
+			profile: profile
 		}});
-		Accounts.setPassword(id, usuario.contrasena, {logout: false});
+		Accounts.setPassword(user._id, usuario.contrasena, {logout: false});
 	},
 	createGerenteVenta: function (usuario, rol) {
 	  console.log(usuario);
@@ -68,7 +75,6 @@ Meteor.methods({
 	},
 	updateGerenteVenta: function (usuario, rol) {		
 		var user = Meteor.users.findOne({"username" : usuario.username});
-
 	  Meteor.users.update({username: usuario.username}, {$set:{
 			username: usuario.username,
 			roles: [rol],

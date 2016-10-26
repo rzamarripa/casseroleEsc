@@ -4,6 +4,7 @@ angular
 function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
   let rc = $reactive(this).attach($scope);
+  window.rc = rc;
   this.action = true;
   this.nuevo = true;
   this.vendedor_id = "";
@@ -26,17 +27,19 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	this.subscribe('etapasVenta',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", estatus : true}]
 	});
-	
+
 	this.subscribe('inscripciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
-	
+
 	this.subscribe('prospectosPorVendedor',()=>{
 		return [{
 			"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
-			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')}}]
+			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')},
+			"profile.estatus" : 1
+		}];
 	});
- 
+
   this.helpers({
 	  vendedores : () => {
 		  if(Meteor.user()){
@@ -60,17 +63,18 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  },
 	  cantidadProspectosPorVendedor : () => {
 		  
-		  var arreglo = [];
+		  var cantidadProspectos = [];
 		  if(vend.ready()){
 			  _.each(rc.vendedores, function(vendedor){
-				  arreglo.push(Prospectos.find({"profile.vendedor_id" : vendedor._id, 
-					fecha : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
+				  cantidadProspectos.push(Prospectos.find({"profile.vendedor_id" : vendedor._id, 
+					"profile.fecha" : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
 			  });
 		  }
-		  		  
-		  return arreglo;
+		  console.log(cantidadProspectos);
+		  return cantidadProspectos;
 	  },
-	  cantidadInscritosPorVendedor : () => {		  
+	  cantidadInscritosPorVendedor : () => {
+		  
 		  var cantidadInscritos = [];
 		  if(vend.ready()){
 			  _.each(rc.vendedores, function(vendedor){
@@ -82,10 +86,11 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  return cantidadInscritos;
 	  },
 	  vendedoresNombres : () => {
+		  
 		  vendedoresNombre = [];
 		  if(vend.ready()){
 			  _.each(this.vendedores, function(vendedor){
-				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno;
+				  var nombre = vendedor.profile.nombre + " " + vendedor.profile.apPaterno + " " + vendedor.profile.apMaterno;
 				  vendedoresNombre.push(nombre);
 			  });
 		  }
@@ -110,8 +115,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 			    chart: { type: 'column' },
 			    title: { text: 'Resumen de productividad de ventas' },
 			    subtitle: {
-		        text: 'Del ' + moment(rc.fechaInicial).format('LL') + 
-		        			' al ' + moment(rc.fechaFinal).format('LL')
+		        text: 'Del ' + moment(rc.getReactively("fechaInicial")).format('LL') + 
+		        			' al ' + moment(rc.getReactively("fechaFinal")).format('LL')
 			    },
 			    xAxis: {
 		        categories: rc.vendedoresNombres,
@@ -150,7 +155,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.getCantidadProspectos = function(vendedor_id){
 	  rc.vendedor_id = vendedor_id;
 	  var query = {"profile.vendedor_id" : this.getReactively("vendedor_id"), 
-		fecha : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
+		"profile.fecha" : { $gte : this.getReactively("fechaInicial"), $lt: this.getReactively("fechaFinal")}};
 	  
 	  return Prospectos.find(query).count();;
   };
@@ -187,10 +192,14 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   };
   
   //Buscar prospectos entre fechas
-  this.buscarProspectos = function(buscar){
-	  //rc.fechaInicial = buscar.fechaInicial;
-	  //rc.fechaFinal = buscar.fechaFinal;
-  }
+	/*
+		this.buscarProspectos = function(buscar){
+		  rc.fechaInicial = buscar.fechaInicial.setHours(0);
+		  rc.fechaFinal = buscar.fechaFinal.setHours(24);
+		  console.log(rc.fechaInicial, rc.fechaFinal);
+	  }
+	*/
+
   
   //Actualizar el destinatario para enviar mensaje a un vendedor
   this.nuevoMensaje = function(vendedor_id){

@@ -6,6 +6,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	
 	this.action = true;
 	this.maestro = {}; 
+  this.validaContrasena = false;
 	
 	this.subscribe('maestros',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -13,13 +14,13 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 
 	this.helpers({
 	  maestros : () => {
-		  return Maestros.find();
+		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  },
 	  cantidad : () => {
 		  return Maestros.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}).count();
 	  },
 	  nombreUsuario : () => {
-		  if(Meteor.user()){
+		  if(this.getReactively("maestro") && Meteor.user() && this.action == true){
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
 			  if(this.getReactively("cantidad") > 0){
@@ -41,31 +42,32 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   	  
   this.nuevoMaestro = function()
   {
-	    this.action = true;
-	    this.nuevo = !this.nuevo;
+    this.action = true;
+    this.nuevo = !this.nuevo;
+    this.maestro = {};
   };
 
 	this.guardar = function(maestro,form)
 	{
-			if(form.$invalid){
-	      toastr.error('Error al guardar los datos.');
-	      return;
-		  }
-		
-			maestro.estatus = true;
-			maestro.campus_id = Meteor.user().profile.campus_id;
-			maestro.usuarioInserto = Meteor.userId();
-			maestro.fechaCreacion = new Date();
-			maestro.campus_id = Meteor.user().profile.campus_id;
-			var id = Maestros.insert(maestro);	
-			maestro.maestro_id = id;
-			Meteor.call('createUsuario', rc.maestro, 'maestro');
-			toastr.success("Maestro Creado \n Usuario Creado");
-			maestro = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();	
+		if(form.$invalid || !rc.validaContrasena){
+      toastr.error('Error al guardar los datos.');
+      return;
+		}
+	
+		maestro.estatus = true;
+		maestro.campus_id = Meteor.user().profile.campus_id;
+		maestro.usuarioInserto = Meteor.userId();
+		maestro.fechaCreacion = new Date();
+		maestro.campus_id = Meteor.user().profile.campus_id;
+		var id = Maestros.insert(maestro);	
+		maestro.maestro_id = id;
+		Meteor.call('createUsuario', rc.maestro, 'maestro');
+		toastr.success("Maestro Creado \n Usuario Creado");
+		maestro = {};
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();	
 	};
 
 	this.editar = function(id)
@@ -80,13 +82,16 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	this.actualizar = function(maestro,form)
 	{
 			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
+        toastr.error('Error al guardar los datos.');
+        return;
 		  }
 			var idTemp = maestro._id;
 			delete maestro._id;		
 			maestro.usuarioActualizo = Meteor.userId();
-			Maestros.update({_id:idTemp},{$set:maestro});
+			var id = Maestros.update({_id:idTemp},{$set:maestro});
+			maestro.maestro_id = idTemp;
+			console.log(idTemp);
+			Meteor.call('updateUsuario', maestro, idTemp, 'maestro');
 			toastr.success('Actualizado correctamente.');
 			$('.collapse').collapse('hide');
 			this.nuevo = true;
@@ -110,6 +115,41 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 			rc.maestro.fotografia = data;
 		});
 	};
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
+	
+	this.validarUsuario = function(username){
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
+		}else{
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}else{
+				rc.validaUsuario = true;
+			}
+		}		
+	}
 	
 };
 

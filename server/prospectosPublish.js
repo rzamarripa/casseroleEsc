@@ -33,6 +33,5 @@ Meteor.publish("prospectosPorVendedor",function(options){
 });
 
 Meteor.publish("prospectosPorInscribir",function(options){
-	console.log(options);
 	return Prospectos.find(options); 
 });

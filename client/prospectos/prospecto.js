@@ -99,12 +99,7 @@ angular.module("casserole")
 	{
 		var idTemp = prospecto._id;
 		delete prospecto._id;
-		var etapaVenta = EtapasVenta.findOne({nombre : "Inscrito", campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });		
-		if(etapaVenta._id == prospecto.profile.etapaVenta_id){
-			prospecto.profile.estatus = 2;
-		}else{
-			prospecto.profile.estatus = 1;
-		}
+		prospecto.profile.estatus = 1;
 		prospecto.profile.fechaUltimoContacto = new Date();
 		console.log("prospecto", prospecto);
 		Prospectos.update({_id:idTemp},{$set:prospecto});

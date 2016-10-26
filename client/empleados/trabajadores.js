@@ -31,8 +31,8 @@ let rc = $reactive(this).attach($scope);
 	this.guardar = function(trabajador,form)
 	{
 			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
+        toastr.error('Error al guardar los datos.');
+        return;
 		  }
 			Accounts.createUser({
 				username: this.trabajador.nombreUsuario,
@@ -74,9 +74,9 @@ let rc = $reactive(this).attach($scope);
 	this.actualizar = function(trabajador,form)
 	{
 			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		    }
+        toastr.error('Error al guardar los datos.');
+        return;
+		   }
 			
 			var idTemp = trabajador._id;
 			delete trabajador._id;		

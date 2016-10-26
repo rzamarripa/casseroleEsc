@@ -8,9 +8,10 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   this.nuevo = true;
   this.validaUsuario = false;
   this.validaContrasena = false;
+  this.usernameSeleccionado = "";
   
-	this.subscribe('coordinadores',()=>{
-		return [{}]
+	this.subscribe('validaUsuarios',()=>{
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 
   this.helpers({
@@ -65,7 +66,7 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 		coordinador.profile.campus_id = Meteor.user().profile.campus_id;
 		coordinador.profile.seccion_id = Meteor.user().profile.seccion_id;
 		coordinador.usuarioInserto = Meteor.userId();
-		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? usuario.profile.apMaterno : "");
+		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? coordinador.profile.apMaterno : "");
 		Meteor.call('createGerenteVenta', coordinador, coordinador.profile.role);
 	  toastr.success('Guardado correctamente.');
 		this.nuevo = true;
@@ -80,10 +81,12 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	
 	this.editar = function(id)
 	{
-	    this.coordinador = Meteor.users.findOne({_id:id});
-	    this.action = false;
-	    $('.collapse').collapse('show');
-	    this.nuevo = false;
+    this.coordinador = Meteor.users.findOne({_id:id});
+    this.action = false;
+    $('.collapse').collapse('show');
+    this.nuevo = false;
+    this.usernameSeleccionado = this.coordinador.username;
+    this.validaUsuario = true;
 	};
 	
 	this.actualizar = function(coordinador,form)
@@ -110,12 +113,29 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	};
 	
 	this.validarUsuario = function(username){
-		var existeUsuario = Meteor.users.find({username : username}).count();
-		if(existeUsuario){
-			rc.validaUsuario = false;
+		console.log(username);
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
 		}else{
-			rc.validaUsuario = true;
-		}
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}else{
+				rc.validaUsuario = true;
+			}
+		}		
 	}
 	
 	this.validarContrasena = function(contrasena, confirmarContrasena){
@@ -127,4 +147,6 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			}
 		}
 	}
+	
+	
 };

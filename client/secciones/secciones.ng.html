@@ -15,19 +15,28 @@
 				          <h2>Información del Director de la Sección</h2>
 				        </header>
 				        <div>
+					        
 				          <div class="widget-body">							
 								    <div class="row">
 									    <div class="col-sm-2" valida>					    
 									    	<label>Nombre *</label>
 									    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="sec.seccion.nombre" required>
 								    	</div>
-								    	<div class="col-sm-3" valida>
+								    	<div class="col-sm-2" valida>
 									    	<label>Apellido Paterno *</label>
 									    	<input name="apPaterno" type="text" class="form-control" placeholder="Apellido Paterno" ng-model="sec.seccion.apPaterno" required>
 								    	</div>
-								    	<div class="col-sm-3">					    
+								    	<div class="col-sm-2">					    
 									    	<label>Apellido Materno</label>
 									    	<input name="apMaterno"  type="text" class="form-control" placeholder="Apellido Materno" ng-model="sec.seccion.apMaterno" >
+								    	</div>
+								    	<div class="col-sm-2" valida>
+										    <label for="sexo">Sexo *</label>
+										    <select name="sexo" ng-model="sec.seccion.sexo" data-placeholder="Seleccione" class="form-control" required>
+												    <option value=""></option>
+												    <option value="masculino">Masculino</option>
+												    <option value="femenino">Femenino</option>
+												</select>
 								    	</div>
 								    	<div class="col-sm-2" valida>					    
 									    	<label>Usuario *</label>
@@ -175,14 +184,6 @@
 				        </header>
 			          <div class="widget-body">
 							    <div class='row'>
-<!--
-							    	<div class="col-sm-4">
-											<label >Departamento académico</label>
-											<select name="deptoAcademico" class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.deptoAcademico_id">
-												<option ng-repeat="deptoAcademico in sec.deptosAcademicos" value="{{deptoAcademico._id}}">{{deptoAcademico.descripcionCorta}}</option>
-											</select>
-										</div>
--->
 										<div class="col-sm-4" valida>
 							    		<label>Nivel educativo *</label>
 									    <select name="nivelEdu" ng-model="sec.seccion.nivelEdu" class="form-control" required="">
@@ -202,30 +203,18 @@
 							    	</div>
 							    </div>
 							    <div class="row">
+								    <div class="col-sm-4">
+									    <label>Categoria </label>
+									    <input type="text" class="form-control" placeholder="Categoria" ng-model="sec.seccion.categoria">
+							    	</div>
 							    	<div class="col-sm-4">
 									    <label>Dependencia</label>
 									    <input type="text" class="form-control" placeholder="Dependencia" ng-model="sec.seccion.dependencia">
 							    	</div>
 							    	<div class="col-sm-4">
-									    <label>Servicio </label>
-									    <input type="text" class="form-control" placeholder="Servicio" ng-model="sec.seccion.servicio">
-							    	</div>
-							    	<div class="col-sm-4">
-											<label >Turno</label>
-											<select class="form-control select2" placeholder="Seleccione" ng-model="sec.seccion.turno_id">
-												<option ng-repeat="turno in sec.turnos" value="{{turno._id}}">{{turno.nombre}}</option>
-											</select>
-										</div>
-							    </div>
-							    <div class="row">
-							    	<div class="col-sm-4">
-									    <label>Categoria </label>
-									    <input type="text" class="form-control" placeholder="Categoria" ng-model="sec.seccion.categoria">
-							    	</div>
-							    	<div class="col-sm-4">
 									    <label>Clave de incorporación  </label>
 									    <input type="text" class="form-control" placeholder="Clave de incorporación " ng-model="sec.seccion.claveIncor">
-							    	</div>										
+							    	</div>
 							    </div>
 			          </div>
 				      </div>

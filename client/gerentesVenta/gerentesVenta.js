@@ -8,10 +8,11 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   this.nuevo = true;  
   this.validaUsuario = false;
   this.validaContrasena = false;
+  this.usernameSeleccionado = "";
   
-	this.subscribe('gerentesVenta',()=>{
+	this.subscribe('validaUsuarios',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	 });
+	});
  
   this.helpers({
 	  gerentesVenta : () => {
@@ -36,21 +37,21 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
  
 	this.guardar = function(gerenteVenta,form)
 	{		
-			if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
-		      toastr.error('Error al guardar los datos.');
-		      return;
-			}
-			gerenteVenta.profile.estatus = true;
-			gerenteVenta.profile.campus_id = Meteor.user().profile.campus_id;
-			gerenteVenta.usuarioInserto = Meteor.userId();
-			Meteor.call('createGerenteVenta', gerenteVenta, 'gerenteVenta');
-			toastr.success('Guardado correctamente.');
-			this.nuevo = true;
-			this.gerenteVenta = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;		
-			form.$setPristine();
-			form.$setUntouched();
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+      toastr.error('Error al guardar los datos.');
+      return;
+		}
+		gerenteVenta.profile.estatus = true;
+		gerenteVenta.profile.campus_id = Meteor.user().profile.campus_id;
+		gerenteVenta.usuarioInserto = Meteor.userId();
+		Meteor.call('createGerenteVenta', gerenteVenta, 'gerenteVenta');
+		toastr.success('Guardado correctamente.');
+		this.nuevo = true;
+		this.gerenteVenta = {};
+		$('.collapse').collapse('hide');
+		this.nuevo = true;		
+		form.$setPristine();
+		form.$setUntouched();
 	};
 	
 	this.editar = function(id)
@@ -59,19 +60,21 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
     this.action = false;
     $('.collapse').collapse('show');
     this.nuevo = false;
+    this.usernameSeleccionado = this.gerenteVenta.username;
+    this.validaUsuario = true;
 	};
 	
 	this.actualizar = function(gerenteVenta,form)
 	{
-			if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
-		        toastr.error('Error al actualizar los datos.');
-		        return;
-		  }
-			Meteor.call('updateGerenteVenta', gerenteVenta, 'gerenteVenta');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
+		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+	        toastr.error('Error al actualizar los datos.');
+	        return;
+	  }
+		Meteor.call('updateGerenteVenta', gerenteVenta, 'gerenteVenta');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();
 	};
 	
 	/*
@@ -95,12 +98,28 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	};
 	
 	this.validarUsuario = function(username){
-		var existeUsuario = Meteor.users.find({username : username}).count();
-		if(existeUsuario){
-			rc.validaUsuario = false;
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
 		}else{
-			rc.validaUsuario = true;
-		}
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}else{
+				rc.validaUsuario = true;
+			}
+		}		
 	}
 	
 	this.validarContrasena = function(contrasena, confirmarContrasena){

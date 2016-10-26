@@ -4,13 +4,15 @@ angular
 function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
 	let rc = $reactive(this).attach($scope);
-	  this.action = true;
-	  this.nuevo = true;  
+  this.action = true;
+  this.nuevo = true;  
+  this.validaUsuario = false;
+  this.validaContrasena = false;
+  this.usernameSeleccionado = "";
   
-	this.subscribe('vendedores',()=>{
-		return [{}]
-	 });
-
+	this.subscribe('validaUsuarios',()=>{
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	});
 	
  
   this.helpers({
@@ -38,39 +40,40 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
   
   this.nuevoVendedor = function()
   {
-			this.action = true;
-	    this.nuevo = !this.nuevo;
-	    this.vendedor = {}; 
-	    this.vendedor.profile = {};
+		this.action = true;
+    this.nuevo = true;
+    this.vendedor = {}; 
+    this.vendedor.profile = {};
   };
  
 	this.guardar = function(vendedor,form)
 	{		
-			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		    }
-			console.log(vendedor);
-			vendedor.profile.estatus = true;
-			vendedor.profile.campus_id = Meteor.user().profile.campus_id;
-			//vendedor.profile.seccion_id = Meteor.user().profile.seccion_id;
-			vendedor.usuarioInserto = Meteor.userId();
-			Meteor.call('createGerenteVenta', vendedor, 'vendedor');
-		  toastr.success('Guardado correctamente.');
-			this.nuevo = true;
-			this.vendedor = {};
-			$('.collapse').collapse('hide');
-			this.nuevo = true;	
-			form.$setPristine();
-			form.$setUntouched();	
+		if(form.$invalid){
+      toastr.error('Error al guardar los datos.');
+      return;
+    }
+		vendedor.profile.estatus = true;
+		vendedor.profile.campus_id = Meteor.user().profile.campus_id;
+		//vendedor.profile.seccion_id = Meteor.user().profile.seccion_id;
+		vendedor.usuarioInserto = Meteor.userId();
+		Meteor.call('createGerenteVenta', vendedor, 'vendedor');
+	  toastr.success('Guardado correctamente.');
+		this.nuevo = true;
+		this.vendedor = {};
+		$('.collapse').collapse('hide');
+		this.nuevo = true;	
+		form.$setPristine();
+		form.$setUntouched();	
 	};
 	
 	this.editar = function(id)
 	{
-	    this.vendedor = Meteor.users.findOne({_id:id});
-	    this.action = false;
-	    $('.collapse').collapse('show');
-	    this.nuevo = false;
+    this.vendedor = Meteor.users.findOne({_id:id});
+    this.action = false;
+    $('.collapse').collapse('show');
+    this.nuevo = false;
+    this.usernameSeleccionado = this.vendedor.username;
+    this.validaUsuario = true;
 	};
 	
 	this.actualizar = function(vendedor,form)
@@ -100,5 +103,41 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 			return gerente.profile.nombre + " " + gerente.profile.apPaterno+ " " + gerente.profile.apMaterno;
 		}
 			
+	}
+	
+	this.validarUsuario = function(username){
+		console.log(username);
+		if(this.nuevo){
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				rc.validaUsuario = false;
+			}else{
+				rc.validaUsuario = true;
+			}
+		}else{
+			console.log(rc.usernameSeleccionado);
+			var existeUsuario = Meteor.users.find({username : username}).count();
+			if(existeUsuario){
+				var usuario = Meteor.users.findOne({username : username});
+				console.log(usuario)
+				if(rc.usernameSeleccionado == usuario.username){
+					rc.validaUsuario = true;
+				}else{
+					rc.validaUsuario = false;
+				}
+			}else{
+				rc.validaUsuario = true;
+			}
+		}		
+	}
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
 	}
 };
