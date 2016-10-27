@@ -131,6 +131,7 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	
 	this.duracion = function(fecha){
 		var fechaMilisegundos = moment().diff(fecha);
+		moment.locale("es")
 		return moment.duration(fechaMilisegundos).humanize();
 	}
 	

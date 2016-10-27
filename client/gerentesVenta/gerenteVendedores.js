@@ -4,6 +4,7 @@ angular
 function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
   let rc = $reactive(this).attach($scope);
+  window.rc = rc;
   this.action = true;
   this.nuevo = true;
   this.vendedor_id = "";
@@ -34,7 +35,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	this.subscribe('prospectosPorVendedor',()=>{
 		return [{
 			"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
-			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')}
+			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')},
+			"profile.estatus" : 1
 		}];
 	});
 
@@ -61,17 +63,18 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  },
 	  cantidadProspectosPorVendedor : () => {
 		  
-		  var arreglo = [];
+		  var cantidadProspectos = [];
 		  if(vend.ready()){
 			  _.each(rc.vendedores, function(vendedor){
-				  arreglo.push(Prospectos.find({"profile.vendedor_id" : vendedor._id, 
+				  cantidadProspectos.push(Prospectos.find({"profile.vendedor_id" : vendedor._id, 
 					"profile.fecha" : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
 			  });
 		  }
-		  		  
-		  return arreglo;
+		  console.log(cantidadProspectos);
+		  return cantidadProspectos;
 	  },
-	  cantidadInscritosPorVendedor : () => {		  
+	  cantidadInscritosPorVendedor : () => {
+		  
 		  var cantidadInscritos = [];
 		  if(vend.ready()){
 			  _.each(rc.vendedores, function(vendedor){
@@ -83,6 +86,7 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  return cantidadInscritos;
 	  },
 	  vendedoresNombres : () => {
+		  
 		  vendedoresNombre = [];
 		  if(vend.ready()){
 			  _.each(this.vendedores, function(vendedor){
@@ -188,12 +192,13 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   };
   
   //Buscar prospectos entre fechas
-	  this.buscarProspectos = function(buscar){
-	  console.log(buscar);
-	  rc.fechaInicial = buscar.fechaInicial.setHours(0);
-	  rc.fechaFinal = buscar.fechaFinal.setHours(24);
-	  console.log(buscar);
-  }
+	/*
+		this.buscarProspectos = function(buscar){
+		  rc.fechaInicial = buscar.fechaInicial.setHours(0);
+		  rc.fechaFinal = buscar.fechaFinal.setHours(24);
+		  console.log(rc.fechaInicial, rc.fechaFinal);
+	  }
+	*/
 
   
   //Actualizar el destinatario para enviar mensaje a un vendedor

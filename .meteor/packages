@@ -43,3 +43,5 @@ danialfarid:ng-file-upload
 peerlibrary:fs
 modules
 meteorhacks:aggregate
+angularui:ui-calendar
+planettraining:jquery-fullcalendar

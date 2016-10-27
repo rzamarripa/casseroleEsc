@@ -58,6 +58,14 @@
 			    		<label>Correo</label>
 				    	<input name="correo" type="email" class="form-control" placeholder="Correo" ng-model="gv.gerenteVenta.profile.correo" >
 			    	</div>
+			    	<div class="col-sm-4" valida>
+					    <label for="sexo">Sexo *</label>
+					    <select name="sexo" ng-model="gv.gerenteVenta.profile.sexo" data-placeholder="Seleccione" class="form-control" required>
+							    <option value=""></option>
+							    <option value="masculino">Masculino</option>
+							    <option value="femenino">Femenino</option>
+							</select>
+			    	</div>
 			    	<div class="col-sm-4">
 						<label for="talla">Fotografía</label>
 						<button class="btn btn-primary" ng-click="gv.tomarFoto()"><i class="fa fa-camera"></i></button>

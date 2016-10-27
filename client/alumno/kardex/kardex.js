@@ -33,12 +33,16 @@ function AlumnoKardexCtrl($scope, $meteor, $reactive, $state, toastr, $statePara
 			}
 		},
 		curriculas : () => {
+			return Curriculas.find();
+		},
+		planEstudios_id : () => {
 			if(this.getReactively("inscripciones")){
+				planEstudios_ids = [];
 				_.each(rc.inscripciones, function(inscripcion){
-					rc.planEstudios_id.push(inscripcion.planEstudios_id);
+					planEstudios_ids.push(inscripcion.planEstudios_id);
 				})
-				return Curriculas.find();
-			}			
+			}
+			return planEstudios_ids;
 		}
 	});
 }

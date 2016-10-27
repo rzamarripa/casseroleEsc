@@ -16,37 +16,15 @@
 								<span><i class="fa fa-check"></i> Calificaciones</span>
 							</a>
 						</li>
-						<li role="treeitem">
-							<span>
-								<a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">
-									<i class="fa fa-lg fa-list"></i> Asistencias
-								</a>
-							</span>
-							<ul role="group">
-								<li ng-repeat="clase in mmg.horario.clases">
-									<span>
-										<a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">
-											<i class="fa fa-list"> {{clase.start | date : 'dd-MMMM-yyyy HH:ss' }}</i>
-										</a>
-									</span>
-								</li>
-							</ul>
+						<li role="treeitem">							
+							<a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">
+								<span><i class="fa fa-lg fa-list"></i> Asistencias</span>
+							</a>
 						</li>
 						<li role="treeitem">
-							<span>
-								<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo._id})">
-									<i class="fa fa-lg fa-list"></i> Foros
-								</a>
-							</span>
-							<ul role="group">
-								<li ng-repeat="clase in mmg.horario.clases">
-									<span>
-										<a ui-sref="root.asistenciaGrupo({grupo_id : mmg.grupo_id, materia_id : mmg.materia_id, maestro_id : mmg.grupo.maestro_id, horario_id : mmg.grupo.horario_id})">
-											<i class="fa fa-message"> {{clase.start | date : 'dd-MMMM-yyyy HH:ss' }}</i>
-										</a>
-									</span>
-								</li>
-							</ul>
+							<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo._id})">
+								<span><i class="fa fa-lg fa-comments-o"></i> Foros</span>
+							</a>														
 						</li>
 					</ul>
 				</li>				

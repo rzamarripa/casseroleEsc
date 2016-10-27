@@ -93,7 +93,8 @@ function SeccionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams)
 				campus_id : $stateParams.campus_id,
 				campus_clave : rc.campus.clave,
 				seccion_id : seccion_id,
-				estatus : true
+				estatus : true,
+				sexo : seccion.sexo
 			}
 		}
 		
@@ -142,7 +143,8 @@ function SeccionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams)
 					campus_id : $stateParams.campus_id,
 					campus_clave : rc.campus.clave,
 					seccion_id : idTemp,
-					estatus : true
+					estatus : true,
+					sexo : seccion.sexo
 				}
 			}
 			Meteor.call('updateGerenteVenta', usuario, 'director');

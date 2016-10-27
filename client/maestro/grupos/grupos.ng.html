@@ -25,17 +25,18 @@
 				<div class="col-sm-12 col-md-9">
 					<div class="row-alumnos-fluid" style="overflow: auto;">
 						<div class="col-lg-alumnos-3" ng-repeat="alumno in grupo.alumnos track by $index">
-	            <a target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})"><div class="card hovercard">
+	            <a href="#" target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})" style="text-decoration:none;">
+		            <div class="card hovercard">
 	                <div class="cardheader"></div>
 	                <div class="avatar">
-	                  <img ng-src="{{masgrupo.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="img-responsive img-thumbnail">
+	                  <img ng-src="{{masgrupo.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" >
 	                </div>
 	                <div class="info">
-	                  <p>
-	                    {{alumno.profile.nombreCompleto}}
+	                  <p class="font-xs" style="margin: 0px;">
+	                    {{alumno.profile.nombre}}<br/> {{alumno.profile.apPaterno}}<br/> {{alumno.profile.apMaterno}}
 	                  </p>
 	                </div>
-	            </div>
+	            	</div>
 	            </a>
 						</div>	
 					</div>

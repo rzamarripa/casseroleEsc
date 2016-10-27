@@ -57,7 +57,7 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]});
+		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.matricula" : 1}});
 	  },
 	  balumnos : ()=>{
 	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});
@@ -76,6 +76,7 @@ angular
 		rc.grupo.alumnos= _.without(rc.grupo.alumnos, $index);
 		var idTemp = rc.grupo._id;
 		delete rc.grupo._id;
+		rc.grupo.inscritos--;
 		Grupos.update({_id : idTemp}, {$set : rc.grupo});
 		toastr.success("Ha eliminado al alumno correctamente");
 	}
@@ -90,6 +91,7 @@ angular
 		console.log("si entre",x,alumno_id)
 		if(x==-1){
 			rc.grupo.alumnos.push(alumno_id)
+			rc.grupo.inscritos++;
 			var idTemp = rc.grupo._id;
 			delete rc.grupo._id;
 			Grupos.update({_id : idTemp}, {$set : rc.grupo});
