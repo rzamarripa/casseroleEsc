@@ -5,6 +5,9 @@
 			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="sec.nuevoSeccion()">
 		  {{sec.nuevo == true ? 'Nuevo' : 'Cancelar'}}
 		</a>
+		<a class="btn btn-primary" href="./campus">
+		  Listar Campus
+		</a>
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form"  novalidate>
 				<section id="usuario" data-widget-grid="data-widget-grid1" >
@@ -240,9 +243,9 @@
 			<thead>
 				<tr>
 					<th width="5%"><div class="text-center">Clave</div></th>
-					<th width="10%"><div class="text-center">Nombre</div></th>	
+					<th width="20%"><div class="text-center">Nombre</div></th>	
 					<th width="20%"><div class="text-center">Descripción</div></th>	
-					<th width="10%"><div class="text-center">Departamento Académico</div></th>
+<!-- 					<th width="10%"><div class="text-center">Departamento Académico</div></th> -->
 					<th width="10%"><div class="text-center">Campus</div></th>		
 				    <th width="10%">
 						<div class="text-center">
@@ -262,7 +265,7 @@
 			    <td>{{seccion.clave}}</td>
 			    <td>{{seccion.nombreseccion}}</td>
 			    <td>{{seccion.descripcion}}</td>
-			    <td>{{sec.getDeptoAcademico(seccion.deptoAcademico_id)}}</td>
+<!-- 			    <td>{{sec.getDeptoAcademico(seccion.deptoAcademico_id)}}</td> -->
 			    <td>{{sec.getCampus(seccion.campus_id)}}</td>
 			    <td> 
 				    <div class="text-center">
