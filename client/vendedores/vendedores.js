@@ -41,7 +41,7 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
   this.nuevoVendedor = function()
   {
 		this.action = true;
-    this.nuevo = true;
+    this.nuevo = !this.nuevo;
     this.vendedor = {}; 
     this.vendedor.profile = {};
   };
