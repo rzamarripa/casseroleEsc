@@ -25,6 +25,11 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
+	this.subscribe("turnos",()=>{
+
+		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	});
+	
 	this.subscribe("curriculas",()=>{
 
 		return [{estatus:true, alumno_id : $stateParams.alumno_id, planEstudios_id : { $in : this.getCollectionReactively("planEstudios_id")}}]
@@ -73,10 +78,18 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return Pagos.find();
 		},
 		inscripciones : () =>{
-			return Inscripciones.find({
+			var inscripciones = Inscripciones.find({
 				alumno_id : $stateParams.alumno_id,
 				campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-			});
+			}).fetch();
+			
+			if(inscripciones.length > 0){
+				_.each(inscripciones, function(inscripcion){
+					inscripcion.grupo = Grupos.findOne(inscripcion.grupo_id);
+					inscripcion.grupo.turno = Turnos.findOne(inscripcion.grupo.turno_id);
+				})
+			}
+			return inscripciones;
 		},
 		cuenta : () =>{
 			return Cuentas.findOne();
