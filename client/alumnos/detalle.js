@@ -394,7 +394,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var semana = semanasPagadas[i];
 				Pagos.insert(semana);
 			}
-			$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});  			
+			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
+			var url = $state.href('anon.pagosImprimir', {semanas : semanasPagadas, id : $stateParams.alumno_id});
+			window.open(url,'_blank');
 		}
 	}
 	this.condonarPago=function(plan,i,semanasCondonadas){

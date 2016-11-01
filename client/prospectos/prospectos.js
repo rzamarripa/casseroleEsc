@@ -54,10 +54,10 @@ angular.module("casserole")
 		  return Prospectos.find();
 	  },
 	  etapaVenta : () => {
-		  return EtapasVenta.findOne();
+		  return EtapasVenta.findOne({orden : 1});
 	  },
 	  etapasVenta : () => {
-		  return EtapasVenta.find();
+		  return EtapasVenta.find({}, {sort: {orden: 1}});
 	  },
 	  secciones : () => {
 		  return Secciones.find();

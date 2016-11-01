@@ -13,6 +13,10 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	this.subscribe('validaUsuarios',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
+	this.subscribe('secciones',()=>{
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	});
 
   this.helpers({
 	  coordinadores : () => {
@@ -20,9 +24,11 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 		  var coordinadores = [];
 		  _.each(usuarios, function(usuario){
 			  if(usuario.roles[0] == "coordinadorFinanciero" || usuario.roles[0] == 'coordinadorAcademico' && usuario.profile.campus_id == (Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" )){
+				  usuario.profile.seccion = Secciones.findOne(usuario.profile.seccion_id);
 				  coordinadores.push(usuario);
 			  }
 		  });
+		  console.log(coordinadores);
 		  return coordinadores;
 	  },
 	  coordinadoresFinancieros : () => {

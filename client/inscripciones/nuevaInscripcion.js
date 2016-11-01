@@ -53,6 +53,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe('etapasVenta', ()=>{
 		return [{estatus:true}]
 	});
+	
+	this.subscribe("ocupaciones", () => {
+	  return [{estatus : true}];
+  });
 
 	this.helpers({
 		cuentaActiva : () =>{
@@ -88,6 +92,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		},
 		campus : () => {
 			return Campus.findOne();
+		},
+		ocupaciones :  () => {
+			return Ocupaciones.find({estatus : true});
 		}
 	});
 

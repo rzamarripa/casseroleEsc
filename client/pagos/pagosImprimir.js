@@ -9,6 +9,8 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   this.buscar.nombre = "";
   this.fecha = new Date();
   
+  console.log($stateParams.semanas);
+  
   this.semanas = $stateParams.semanas;
   this.subTotal = 0.00;
   this.iva = 0.00;

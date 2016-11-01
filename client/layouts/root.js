@@ -70,6 +70,12 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			}]
 		});
 		
+		this.subscribe("turnos", function(){
+			return [{
+				estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
+		
 		this.helpers({
 			grupos : () => {
 				return Grupos.find();
@@ -82,11 +88,13 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 							if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
 								gruposMaestros.push({
 									grupo : grupo,
-									asignacion : asignacion
+									asignacion : asignacion,
+									turno : Turnos.findOne(grupo.turno_id)
 								})
 							}
 						})
-					})
+					});
+					console.log(gruposMaestros);
 					return gruposMaestros;
 				}
 				
