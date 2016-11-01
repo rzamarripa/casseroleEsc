@@ -16,10 +16,10 @@ function SubCiclosCtrl($scope, $meteor, $reactive, $state, toastr) {
 
   this.helpers({
 	  subCiclos : () => {
-		  return SubCiclos.find();
+		  return SubCiclos.find({seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" });
 	  },
 	  ciclos : () => {
-		  return Ciclos.find();
+		  return Ciclos.find({estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" });
 	  },
   });
   	  

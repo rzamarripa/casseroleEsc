@@ -155,10 +155,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var concepto = plan.colegiatura[plan.fechas[i].tipoPlan];
 		var importe = concepto.importeRegular+(plan.fechas[i].remanente? plan.fechas[i].remanente:0);
 		
-		if(diasDescuento>concepto.diasDescuento){
+		if(diasDescuento>=concepto.diasDescuento){
 			importe-=concepto.importeDescuento;
 		}
-		if(diasRecargo>concepto.diasRecargo){
+		if(diasRecargo>=concepto.diasRecargo){
 			importe+=concepto.importeRecargo;
 		}
 		////console.log(importe);
@@ -321,7 +321,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
 		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24));
 		var concepto = plan.colegiatura[plan.fechas[i].tipoPlan]; 
-		if(diasRecargo>concepto.diasRecargo){	
+		if(diasRecargo>=concepto.diasRecargo){	
 			semanasPagadas.push({
 										fechaPago 	: new Date(),
 										alumno_id 	: $stateParams.alumno_id,
@@ -347,7 +347,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diasRecargo = Math.floor((fechaActual-fechaCobro) / (1000 * 60 * 60 * 24)); 
 		var diasDescuento = Math.floor((fechaCobro-fechaActual) / (1000 * 60 * 60 * 24));
 		var concepto = plan.colegiatura[plan.fechas[i].tipoPlan]; 
-		if(diasDescuento>concepto.diasDescuento){	
+		if(diasDescuento>=concepto.diasDescuento){	
 			semanasPagadas.push({
 										fechaPago 	: new Date(),
 										alumno_id 	: $stateParams.alumno_id,

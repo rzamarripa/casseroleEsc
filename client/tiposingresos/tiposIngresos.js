@@ -14,7 +14,7 @@ function TiposIngresosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	
   this.helpers({
 	  tiposingresos : () => {
-		  return TiposIngresos.find();
+		  return TiposIngresos.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  }
   });
 	this.nuevo = true;

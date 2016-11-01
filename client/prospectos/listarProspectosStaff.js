@@ -47,7 +47,7 @@ angular.module("casserole")
 		  return Empleados.find();
 	  },
 	  etapaVenta : () => {
-		  return EtapasVenta.findOne();
+		  return EtapasVenta.findOne({orden : "1", estatus : true});
 	  }
   });
   

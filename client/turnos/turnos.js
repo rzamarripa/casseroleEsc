@@ -9,7 +9,7 @@ angular.module("casserole")
 
 	this.helpers({
 	  turnos : () => {
-		  return Turnos.find();
+		  return Turnos.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  }
 	 
   });

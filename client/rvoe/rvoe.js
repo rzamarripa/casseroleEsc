@@ -11,7 +11,7 @@ function RvoeCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.helpers({
 	  rvoes : () => {
-		  return Rvoe.find();
+		  return Rvoe.find({seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""});
 	  }
   });
   	  
