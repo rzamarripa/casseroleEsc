@@ -97,3 +97,72 @@ a:hover{
 i.red{
 	color:#BC0213;
 }
+
+.contact-box .center-version {
+    border: 1px solid #e7eaec;
+    padding: 0;
+}
+
+.contact-box {
+    background-color: #ffffff;
+    border: 1px solid #e7eaec;
+    padding: 0px;
+    margin-bottom: 3px;
+}
+
+.contact-box .contact-box-footer {
+    text-align: center;
+    background-color: #ffffff;
+    border-top: 1px solid #e7eaec;
+    padding: 4px 12px;
+}
+
+.contact-box .center-version > a img {
+    
+}
+
+.img-circle {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.m-b-xs {
+    margin-bottom: 5px;
+}
+
+.contact-box.center-version > a {
+    display: block;
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+
+.m-b-xs {
+    margin-bottom: 5px;
+}
+h3, h4, h5 {
+    margin-top: 5px;
+    font-weight: 600;
+}
+h3 {
+    font-size: 16px;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 100;
+}
+.h3, h3 {
+    font-size: 24px;
+}
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}

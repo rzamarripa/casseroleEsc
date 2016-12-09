@@ -15,7 +15,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.prospecto = {};
 
 	this.subscribe('prospectosPorInscribir',()=>{
-		return [{"profile.estatus" : 1, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profilenombre":1}}]
+		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.nombre":1}}]
 	});
 	this.subscribe('vendedores');
 	this.subscribe("secciones",() => {
@@ -445,7 +445,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 					  console.log(error);
 				  }else{
 					  inscripcion.alumno_id = result;
-					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 2 }})
+					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
 						var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
 						Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
 						if(!grupo.alumnos)
