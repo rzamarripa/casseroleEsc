@@ -149,16 +149,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var dia = this.inscripcion.planPagos.colegiatura.Semanal.diaColegiatura;
 		var totalPagos = this.inscripcion.planPagos.colegiatura.Semanal.totalPagos;
 		var mfecha = moment(fechaIncial);
-		mfecha=mfecha.day(dia);
+		mfecha = mfecha.day(dia);
 		var inicio =  mfecha.toDate();
 		var plan =[]
-		for (var i = 0; i <totalPagos; i++) {
+		for (var i = 0; i < totalPagos; i++) {
 			plan.push({
-				semana:mfecha.isoWeek(),
-				fecha:mfecha.toDate(),
-				tipoPlan:'Semanal',
-				numeroPago:i+1,
-				mes:mfecha.get('month')+1,
+				semana : mfecha.isoWeek(),
+				fecha : mfecha.toDate(),
+				tipoPlan : 'Semanal',
+				numeroPago : i + 1,
+				mes:mfecha.get('month') + 1,
 				anio:mfecha.get('year')
 			});
 			mfecha = mfecha.day(8);
@@ -455,6 +455,20 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 						delete grupo._id;
 						Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
 						Inscripciones.insert(inscripcion);
+						_.each(inscripcion.planPagos.fechas, function(pago){
+							PlanPagos.insert({alumno_id : inscripcion.alumno_id,
+															vendedor_id : inscripcion.vendedor_id,
+															seccion_id : inscripcion.seccion_id,
+															campus_id : inscripcion.campus_id,
+															fechaInscripcion : inscripcion.fechaInscripcion,
+															semana : pago.semana,
+															tipoPlan : pago.tipoPlan,
+															numeroPago : pago.numeroPago,
+															mes : pago.mes,
+															anio : pago.anio,
+															fechaPago : pago.fecha});
+						})
+						
 						toastr.success('Alumno Inscrito');
 				  }
 			  });
