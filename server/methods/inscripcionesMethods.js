@@ -31,5 +31,23 @@ Meteor.methods({
 	  var cantidad = Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus_id}).count();
 	  console.log("cantidadAlumnos", cantidad)
 	  return cantidad;
+  },
+  generaPlanPagos : function(inscripcion) {
+	  console.log("inscripcion", inscripcion);
+	  _.each(inscripcion.planPagos.fechas, function(pago){
+			PlanPagos.insert({alumno_id : inscripcion.alumno_id,
+				vendedor_id : inscripcion.vendedor_id,
+				seccion_id : inscripcion.seccion_id,
+				campus_id : inscripcion.campus_id,
+				fechaInscripcion : inscripcion.fechaInscripcion,
+				semana : pago.semana,
+				tipoPlan : pago.tipoPlan,
+				numeroPago : pago.numeroPago,
+				mes : pago.mes,
+				anio : pago.anio,
+				fechaPago : pago.fecha,
+				estatus : false
+			});
+		});
   }
 });
