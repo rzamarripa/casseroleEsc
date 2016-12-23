@@ -16,8 +16,7 @@
 				<tbody>
 					<!-- Post -->
 					<tr ng-repeat-start="comentario in df.foro.comentarios">
-						<td class="text-center" ><strong>{{comentario.usuario.profile.nombreCompleto}}</strong></td>
-						<td class="text-right"><strong>Creado</strong> <em>{{comentario.fecha | date : "dd-MM-yyyy HH:mm:ss"}}</em></td>
+						<td colspan="2" ><strong>{{comentario.usuario.profile.nombreCompleto}}</strong><span class="pull-right text-right"><strong>Creado</strong> <em>{{comentario.fecha | date : "dd-MM-yyyy HH:mm:ss"}}</em></span></td>
 					</tr>
 					<tr ng-repeat-end>
 						<td class="text-center" style="width: 15%;">

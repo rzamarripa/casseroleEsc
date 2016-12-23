@@ -4,7 +4,7 @@ angular
 function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
 	let rc = $reactive(this).attach($scope);
-	
+	window.rc = rc;
 	this.maestros_id = [];
 	this.subscribe('asistenciasr', ()  => {
 			return [{},{maestro_id:1,grupo_id:1,semana:1}]
@@ -30,14 +30,10 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 
-	
-	
-	
-	
 	this.helpers({
 		grupos : () => {
-		 return Grupos.find({ where : {seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""},
-							fields : { fields : { inscripcion : 0, colegiatura : 0, conceptosComision : 0 }}});
+		 return Grupos.find({ seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""});
+		 //fields : { fields : { inscripcion : 0, colegiatura : 0, conceptosComision : 0 }}}
 		},
 		ciclos: () => {
 			return Ciclos.find({seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",estatus:true});
@@ -289,9 +285,12 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		var _grupos = [];
 		try{
 			var gpos = this.grupos;
+			console.log("gpos", gpos);
 			for(var gpoId in gpos){
 				var grupo=gpos[gpoId];
+				console.log("grupo", grupo);
 				var turno = Turnos.findOne({_id:grupo.turno_id});
+				console.log("turno", turno);
 				if(horario.horaInicio==turno.horaInicio && horario.horaFin==turno.horaFin)
 					_grupos.push(grupo);
 			}
@@ -303,6 +302,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
     return $scope.prevGruposPorHorario;
   }
   $scope.prevGruposPorHorario = _grupos;
+  console.log("grupos", _grupos);
   return _grupos;
 	}
 };
