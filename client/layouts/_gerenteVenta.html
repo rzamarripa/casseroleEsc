@@ -7,44 +7,4 @@
       </a>
     </li>
 	</ul>
-	<ul data-smart-menu ng-repeat="grupo in ro.gruposMaestro">
-    <li data-menu-collapse data-ui-sref-active="active">
-	    <a href="#">
-	      <i class="fa fa-lg fa-fw fa-group"></i>
-	      <span class="menu-item-parent">{{grupo.grupo.nombre}}</span>
-	    </a>
-	    <ul>
-		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.asistenciaGrupo({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Tomar Asistencias">
-		        <i class="fa fa-lg fa-fw fa-calendar-check-o"></i>
-		        <span class="menu-item-parent">Tomar asistencia</span>
-		      </a>
-		    </li>
-		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Ver Asistencias">
-		        <i class="fa fa-lg fa-fw fa-eye"></i>
-		        <span class="menu-item-parent">Ver asistencia</span>
-		      </a>
-		    </li>
-	      <li data-ui-sref-active="active">
-		      <a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Calificaciones">
-		        <i class="fa fa-lg fa-fw fa-check"></i>
-		        <span class="menu-item-parent">Calificar</span>
-		      </a>
-		    </li>
-		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.verCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Ver Califiaciones">
-		        <i class="fa fa-lg fa-fw fa-eye"></i>
-		        <span class="menu-item-parent">Ver calificaciones</span>
-		      </a>
-		    </li>
-		    <li data-ui-sref-active="active">
-		      <a ui-sref="root.planeacionClase({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" tilte="Planear la Clase">
-		        <i class="fa fa-lg fa-fw fa-bookmark"></i>
-		        <span class="menu-item-parent">Planear la clase</span>
-		      </a>
-		    </li>
-	    </ul>
-    </li>   
-	</ul>
 </nav>

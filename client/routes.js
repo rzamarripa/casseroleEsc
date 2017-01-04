@@ -539,6 +539,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
+    .state('root.conceptos', {
+      url: '/conceptos',
+      templateUrl: 'client/conceptos/conceptos.ng.html',
+      controller: 'ConceptosCtrl as con',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
     .state('root.conceptosComision', {
       url: '/conceptosComision',
       templateUrl: 'client/conceptosComision/conceptosComision.ng.html',
