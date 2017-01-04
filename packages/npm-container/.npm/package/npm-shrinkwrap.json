@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "docxtemplater": {
+      "version": "3.0.2",
+      "resolved": "https://registry.npmjs.org/docxtemplater/-/docxtemplater-3.0.2.tgz",
+      "from": "docxtemplater@3.0.2"
+    },
+    "dom-parser": {
+      "version": "0.1.5",
+      "resolved": "https://registry.npmjs.org/dom-parser/-/dom-parser-0.1.5.tgz",
+      "from": "dom-parser@0.1.5"
+    },
+    "jszip": {
+      "version": "2.6.1",
+      "resolved": "https://registry.npmjs.org/jszip/-/jszip-2.6.1.tgz",
+      "from": "jszip@2.6.1"
+    },
+    "pako": {
+      "version": "1.0.4",
+      "resolved": "https://registry.npmjs.org/pako/-/pako-1.0.4.tgz",
+      "from": "pako@>=1.0.2 <1.1.0"
+    },
+    "xmldom": {
+      "version": "0.1.27",
+      "resolved": "https://registry.npmjs.org/xmldom/-/xmldom-0.1.27.tgz",
+      "from": "xmldom@>=0.1.27 <0.2.0"
+    }
+  }
+}

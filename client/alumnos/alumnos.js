@@ -119,4 +119,8 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.getFocus = function(){
 	  document.getElementById('buscar').focus();
   };  
+  
+  this.pruebaDoc = function(){
+	  Meteor.call("pruebaDoc");
+  }
 }
