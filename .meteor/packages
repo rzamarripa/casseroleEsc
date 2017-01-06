@@ -45,6 +45,5 @@ modules@0.7.7
 meteorhacks:aggregate
 angularui:ui-calendar
 planettraining:jquery-fullcalendar
-npm-container
-meteorhacks:npm
+
 shell-server
