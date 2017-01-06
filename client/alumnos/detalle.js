@@ -86,7 +86,16 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return Pagos.find();
 		},
 		planPagos : () => {
-			return PlanPagos.find();
+			 var raw = PlanPagos.find().fetch();
+			 var planes = [];
+			 for(var id in raw){
+			 	pago = raw[id];
+			 	if(!planes[pago.inscripcion_id])
+			 		planes[pago.inscripcion_id]=[];
+			 	planes[pago.inscripcion_id].push(pago);
+
+			 }
+			 return planes;
 		},
 		inscripciones : () =>{
 			var inscripciones = Inscripciones.find({
@@ -578,7 +587,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 	this.cambioTipoColegiatura=function(selected, oldValue, curso){
 		if (confirm("Está seguro que desea cambiar el Plan de Pagos")) {
-			var fechas = al.planPagos;
+			var fechas = al.planPagos[curso._id];
 			
 			var fechaActual = new Date()
 			var fechaUltima = {fecha:new Date()}
@@ -627,6 +636,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		
 			Inscripciones.update({_id:curso._id},{$set:{planPagos:curso.planPagos}});
+
+			_.each(inscripcion.planPagos.fechas, function(pago){
+				
+			})
 		}
 		else{
 			curso.planPagos.colegiatura.tipoColegiatura = oldValue;

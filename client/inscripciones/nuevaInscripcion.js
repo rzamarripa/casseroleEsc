@@ -541,7 +541,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 						grupo.inscritos = parseInt(grupo.inscritos) + 1;
 						delete grupo._id;
 						Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
-						Inscripciones.insert(inscripcion);
+						inscripcion._id=Inscripciones.insert(inscripcion);
 						Meteor.call("generaPlanPagos", inscripcion,  (err, res) => {
 							if(err){
 								alert(err);
