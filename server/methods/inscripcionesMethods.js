@@ -51,13 +51,13 @@ Meteor.methods({
 				numeroPago : pago.numeroPago,
 				mes : pago.mes,
 				anio : pago.anio,
-				fechaPago : pago.fecha,
+				fecha : pago.fecha,
 				estatus : false,
 				pagada : (pago.pagada == 1) ? 1 : 0
 			});
 		})
 	  inscripcion.planPagos.fechas=undefined;
 
-	  Inscripciones.update({_id:inscripcion._id},{$set:{planPagos:undefined}});
+	  Inscripciones.update({_id:inscripcion._id},{$set:{planPagos:inscripcion.planPagos}});
   }
 });
