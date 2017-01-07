@@ -89,6 +89,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    },
     })
+    .state('root.dashboard', {
+      url: '/dashboard',
+      templateUrl: 'client/dashboard/dashboard.html',      
+      controller: 'DashboardCtrl as da',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',

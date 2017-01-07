@@ -25,7 +25,8 @@
 				<div class="col-sm-12 col-md-9">
 					<div class="row-alumnos-fluid" style="overflow: auto;">
 						<div class="col-lg-alumnos-3" ng-repeat="alumno in grupo.alumnos track by $index">
-	            <a href="#" target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})" style="text-decoration:none;">
+<!-- 	        <a href="#" target="_blank" ui-sref="root.alumnoDetalle({alumno_id : alumno._id})" style="text-decoration:none;"> -->
+	            <span >
 		            <div class="card hovercard">
 	                <div class="cardheader"></div>
 	                <div class="avatar">
@@ -37,11 +38,10 @@
 	                  </p>
 	                </div>
 	            	</div>
-	            </a>
+	            </span>
 						</div>	
 					</div>
 				</div>
-   
       </div>
       <div class="panel-footer">
         <div class="coupon-code">
