@@ -1035,6 +1035,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
       controller: 'TipoPublicidadCtrl as tp'
     }) 
+    .state('root.mediosPublicidad', {
+      url: '/mediosPublicidad',
+      templateUrl: 'client/mediosPublicidad/mediosPublicidad.ng.html',
+      controller: 'MediosPublicidadCtrl as mp'
+    }) 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     .state('root.nuevoCalendario', {
       url: '/nuevoCalendario/:id',
       templateUrl: 'client/calendarios/form.html',

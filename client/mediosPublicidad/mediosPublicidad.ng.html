@@ -1,0 +1,85 @@
+<h2>Medios de Publidad</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{mp.nuevo == true ? 'primary' : 'danger'}}"	 role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevocivil" ng-click="mp.nuevoCivil()">
+		   {{mp.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>					    
+						    <label>Nombre</label>
+					    	<input name="estadocivil" type="text" class="form-control" placeholder="Medio de publidad" ng-model="mp.medios.nombre" required>
+			    	</div>
+			    </div>   
+			</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="mp.guardar(mp.medios)" value="Guardar" class="btn btn-primary" ng-show="mp.action" valida-form formulario="form">
+						<input type="submit" ng-click="mp.actualizar(mp.medios)" value="Actualizar" class="btn btn-primary" ng-show="!mp.action" valida-form formulario="form">	
+
+					</div>
+				</div>
+					  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="50%"><div class="text-center">Medio de publicidad</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="medio in mp.mediosPublicidad">
+			    <td>{{medio.nombre}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="medio.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!medio.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="mp.editar(medio._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="mp.cambiarEstatus(medio._id)">
+							    				<i class="fa fa-{{medio.estatus ? 'trash' : 'check' }}"></i> {{medio.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
