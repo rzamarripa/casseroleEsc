@@ -48,6 +48,10 @@ angular.module("casserole")
   this.subscribe("etapaVenta", () =>{
 	  return  [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
   });
+
+  this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	 });
   
   this.helpers({
 	  prospectos : () => {
@@ -64,7 +68,10 @@ angular.module("casserole")
 	  },
 	  ocupaciones : () => {
 		  return Ocupaciones.find();
-	  }
+	  },
+	   mediosPublicidad : () => {
+		  return MediosPublicidad.find();
+	  },
   });
   
   this.guardar = function(prospecto, form)
