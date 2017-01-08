@@ -5,6 +5,8 @@ angular
 function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
 	window.rc = rc;
+	
+	this.alumnos_id = [];
 
   this.subscribe("inscripciones",()=>{
 		return [{estatus : 1, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -15,7 +17,11 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	
 	this.subscribe('pagosPorSemana',()=>{
-		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : moment().isoWeek(), pagada : 1 }]
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : moment().isoWeek(), pagada : 1}]
+	});
+	
+	this.subscribe('alumnos', () => {		
+		return [{_id : { $in : this.getCollectionReactively('alumnos_id')}}]
 	});
 
   this.helpers({
@@ -35,7 +41,29 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
 	  },
 	  pagosPorSemana : () => {
-		  return Pagos.find();
+		  var pagos = PlanPagos.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : moment().isoWeek(), pagada : 1}).fetch();		  
+		  var arreglo = {};
+		  if(pagos){
+			  _.each(pagos, function(pago){
+				  rc.alumnos_id.push(pago.alumno_id);
+			  });
+			  
+				_.each(pagos, function(pago){
+					if(undefined == arreglo[pago.alumno_id]){
+						arreglo[pago.alumno_id] = {};
+						arreglo[pago.alumno_id].semanasPagadas = [];
+						arreglo[pago.alumno_id].alumno = Meteor.users.findOne({_id : pago.alumno_id});
+						arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
+						arreglo[pago.alumno_id].tipoPlan = pago.tipoPlan;
+						arreglo[pago.alumno_id].fechaPago = pago.fechaPago;
+					}else{
+						arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
+					}
+				});
+
+		  }
+		  console.log("arreglo", _.toArray( arreglo));
+		  return arreglo;
 	  }
   });
 }

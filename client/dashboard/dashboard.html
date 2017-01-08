@@ -25,12 +25,18 @@
 	<div class="col-xs-12">
 		<table class="table table-bordered">
 			<tr>
-				<td>Fecha Pago</td>
-				<td></td>
+				<th class="text-center">No.</th>
+				<th>Alumno</th>
+				<th>Fecha Pago</th>
+				<th>Tipo Plan</th>
+				<th>Semana que pagó</th>
 			</tr>
 			<tr ng-repeat="pago in da.pagosPorSemana">
-				<td>{{pago.fechaPago | date:"dd-mm-yyyy"}}</td>
-				<td>{{pago.semanaPago}}</td>
+				<td class="text-center">{{$index + 1}}</td>
+				<td>{{pago.alumno.profile.nombre}} {{pago.alumno.profile.apPaterno}}</td>
+				<td>{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+				<td>{{pago.tipoPlan}}</td>
+				<td><span ng-repeat="semana in pago.semanasPagadas"> {{semana}} |</span></td>
 			</tr>
 		</table>
 	</div>
