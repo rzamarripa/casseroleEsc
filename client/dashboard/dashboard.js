@@ -13,6 +13,10 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe('campus',()=>{
 		return [{_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
+	this.subscribe('pagosPorSemana',()=>{
+		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : moment().isoWeek(), pagada : 1 }]
+	});
 
   this.helpers({
 	  inscripcionesActivas : () => {
@@ -29,6 +33,9 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  },
 	  mensuales : () => {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
+	  },
+	  pagosPorSemana : () => {
+		  return Pagos.find();
 	  }
   });
 }

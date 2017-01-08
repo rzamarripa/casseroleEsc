@@ -399,11 +399,15 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.pago = pago.pago ? pago.pago : 0 + pago.faltante;
 						pago.pagada = 1;
 						pago.faltante = 0;
+						pago.fechaPago = new Date();
+						pago.semanaPago = moment().isoWeek();
 					}
 					else if(pago.pagada == 2){
 						rc.pagarCobro(pago, semanasPagadas, configuracion);
 						pago.pago = rc.calcularImporteU(pago, configuracion);
 						pago.pagada = 1;
+						pago.fechaPago = new Date();
+						pago.semanaPago = moment().isoWeek();
 					}
 					var idTemp = pago._id;
 					delete pago._id
