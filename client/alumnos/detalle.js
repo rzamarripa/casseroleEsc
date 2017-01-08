@@ -18,6 +18,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	this.planEstudios_id = [];
 	this.ocupacion_id = "";
+	this.semanasSeleccionadas = [];
 	
 	this.subscribe("ocupaciones",()=>{
 
@@ -212,6 +213,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.seleccionarSemana = function(cobro, plan, configuracion){
 		rc.hayParaPagar = true;
 		rc.totalPagar = 0;
+		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
 				if(plan[i].pagada != 1 && plan[i].pagada != 5 ){
 					rc.hayParaPagar = false;
@@ -221,6 +223,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					else{
 						rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
 					}
+					rc.semanasSeleccionadas.push(plan[i]);
 					plan[i].pagada = 2;
 					//plan[i].pago = this.calcularImporteU(plan,i)
 				}
