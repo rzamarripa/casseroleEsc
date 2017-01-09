@@ -15,6 +15,10 @@ function AlumnoPagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
 	});
 	
+	this.subscribe("planPagos",()=>{
+		return [{alumno_id : Meteor.userId()}]
+	});
+	
 	this.subscribe('pagosAlumno', () => {
 		return [{
 			alumno_id : Meteor.userId()
@@ -23,7 +27,7 @@ function AlumnoPagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	
 	this.helpers({
 		misPagos : () => {
-			return Pagos.find();
+			return PlanPagos.find();
 		},
 		inscripciones : () =>{
 			return Inscripciones.find({

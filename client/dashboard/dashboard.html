@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa-fw fa fa-home"></i> {{da.campus.nombre}}
+		</h1>
+	</div>
+	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+		<ul id="sparks" class="">
+			<li class="sparks-info">
+				<h5> Inscritos <span class="txt-color-blue"><i class="fa fa-graduation-cap"></i>&nbsp;{{da.inscripcionesActivas | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Semanal <span class="txt-color-purple"><i class="fa fa-calendar-check-o"></i>&nbsp;{{da.semanales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Quincenal <span class="txt-color-teal"><i class="fa fa-calendar-o"></i>&nbsp;{{da.quincenales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Mensual <span class="txt-color-greenDark"><i class="fa fa-calendar"></i>&nbsp;{{da.mensuales | number}}</span></h5>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-bordered">
+			<tr>
+				<th class="text-center">No.</th>
+				<th>Alumno</th>
+				<th>Fecha Pago</th>
+				<th>Tipo Plan</th>
+				<th>Semana que pagó</th>
+			</tr>
+			<tr ng-repeat="pago in da.pagosPorSemana">
+				<td class="text-center">{{$index + 1}}</td>
+				<td>{{pago.alumno.profile.nombre}} {{pago.alumno.profile.apPaterno}}</td>
+				<td>{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+				<td>{{pago.tipoPlan}}</td>
+				<td><span ng-repeat="semana in pago.semanasPagadas"> {{semana}} |</span></td>
+			</tr>
+		</table>
+	</div>
+</div>

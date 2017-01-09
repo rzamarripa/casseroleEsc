@@ -58,7 +58,9 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 		}
   ]
 */
-
+	console.log($stateParams)
+	 $stateParams.semanas=JSON.parse($stateParams.semanas)
+	 console.log($stateParams)
   this.semanas = {};
   _.each($stateParams.semanas, function(semana){
 	  if(undefined == rc.semanas[semana.tipo]){
@@ -112,8 +114,10 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 		}
   });
   
-  _.each(this.semanas, function(semana){
-	  rc.subTotal += semana.importe;
+  _.each($stateParams.semanas, function(semana){
+	  rc.subTotal += (semana.importe/1.16);
+	  rc.total += semana.importe;
+	  rc.iva = rc.total-rc.subTotal;
 	  console.log(semana.importe);
   });
   

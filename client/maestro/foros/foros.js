@@ -12,7 +12,7 @@ function ForosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	});
 	
 	this.subscribe('categoriasForos',()=>{
-		return [{ estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }];
+		return [{ estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
 	});
 	
 	rc.helpers({

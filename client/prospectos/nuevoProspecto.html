@@ -79,7 +79,7 @@
 						  <option value="Alta">Alta</option>
 						</select>
 					</div>
-					<div class="col-sm-4">
+					<!-- <div class="col-sm-4">
 						<label for="medio">¿Cómo te enteraste de nosotros?</label>
 				    <select ng-model="fa.prospecto.profile.medio" class="form-control">
 						  <option value="Espectaculares">Espectaculares</option>
@@ -92,6 +92,14 @@
 						  <option value="Recomendación de Trabajadores">Recomendación de Trabajadores</option>
 						  <option value="Volantes">Volantes</option>
 						</select>
+					</div> -->
+					<div class="col-sm-4">
+								<label>¿Cómo te enteraste de nosotros?</label>
+								<select  id="objeto" class="form-control"  placeholder="Seleccione" ng-model="fa.prospecto.profile.medio_id">
+								<option ng-repeat="objeto in fa.mediosPublicidad" value="{{objeto._id}}">
+									{{objeto.nombre}}
+								</option>
+							</select>
 					</div>
 				</div>
 				<div class="row">

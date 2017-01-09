@@ -42,10 +42,10 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     
     .state('anon.pagosImprimir', {
-      url: '/pagosImprimir',
+      url: '/pagosImprimir/:id/:semanas',
       templateUrl: 'client/pagos/pagosImprimir.ng.html',
       controller: 'PagosImprimirCtrl as pi',
-      params: { 'semanas': ':semanas' , 'id' : ':id'},
+     // params: { 'semanas': ':semanas' , 'id' : ':id'},
     })
     .state('anon.logout', {
       url: '/logout',
@@ -83,6 +83,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/',
       templateUrl: 'client/home/home.ng.html',      
       controller: 'HomeCtrl as ho',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
+    .state('root.dashboard', {
+      url: '/dashboard',
+      templateUrl: 'client/dashboard/dashboard.html',      
+      controller: 'DashboardCtrl as da',
       resolve: {
 	      "currentUser": ["$meteor", function($meteor){
 	        return $meteor.requireUser();
@@ -1087,6 +1097,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
       controller: 'TipoPublicidadCtrl as tp'
     }) 
+    .state('root.mediosPublicidad', {
+      url: '/mediosPublicidad',
+      templateUrl: 'client/mediosPublicidad/mediosPublicidad.ng.html',
+      controller: 'MediosPublicidadCtrl as mp'
+    }) 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     .state('root.nuevoCalendario', {
       url: '/nuevoCalendario/:id',
       templateUrl: 'client/calendarios/form.html',

@@ -64,12 +64,14 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
   } 
 
   this.guardar = function(planeacion){
+	  console.log("planeacion");
 	  planeacion.estatus = 1;
 	  planeacion.grupo_id = $stateParams.grupo_id;
 	  planeacion.maestro_id = $stateParams.maestro_id;
 	  planeacion.materia_id = $stateParams.materia_id;
 	  planeacion.campus_id = Meteor.user().profile.campus_id;
 		planeacion.seccion_id = Meteor.user().profile.seccion_id;
+		console.log(planeacion);
 	  Planeaciones.insert(planeacion);
 	  planeacion = {};
 	  toastr.success('Guardado correctamente como borrador.');

@@ -1,1 +1,0 @@
-{"options":{"create":"mensajesVendedores"},"indexes":[{"v":1,"key":{"_id":1},"ns":"casserole_prod.mensajesVendedores","name":"_id_"}]}

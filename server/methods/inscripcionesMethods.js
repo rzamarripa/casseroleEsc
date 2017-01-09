@@ -41,6 +41,7 @@ Meteor.methods({
 		  }
 		  
 			PlanPagos.insert({alumno_id : inscripcion.alumno_id,
+				inscripcion_id : inscripcion._id,
 				vendedor_id : inscripcion.vendedor_id,
 				seccion_id : inscripcion.seccion_id,
 				campus_id : inscripcion.campus_id,
@@ -50,10 +51,13 @@ Meteor.methods({
 				numeroPago : pago.numeroPago,
 				mes : pago.mes,
 				anio : pago.anio,
-				fechaPago : pago.fecha,
+				fecha : pago.fecha,
 				estatus : false,
 				pagada : (pago.pagada == 1) ? 1 : 0
 			});
-		});
+		})
+	  inscripcion.planPagos.fechas=undefined;
+
+	  Inscripciones.update({_id:inscripcion._id},{$set:{planPagos:inscripcion.planPagos}});
   }
 });
