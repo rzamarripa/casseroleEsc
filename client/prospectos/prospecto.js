@@ -99,7 +99,12 @@ angular.module("casserole")
 	{
 		var idTemp = prospecto._id;
 		delete prospecto._id;
-		prospecto.profile.estatus = 1;
+		var porInscribir = EtapasVenta.findOne({orden : 3});
+		if(prospecto.profile.etapaVenta_id == porInscribir._id){
+			prospecto.profile.estatus = 2;
+		}else{
+			prospecto.profile.estatus = 1;
+		}
 		prospecto.profile.fechaUltimoContacto = new Date();
 		console.log("prospecto", prospecto);
 		Prospectos.update({_id:idTemp},{$set:prospecto});

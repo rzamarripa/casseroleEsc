@@ -36,8 +36,9 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="10%"><div class="text-center">Orden</div></th>
-					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="20%"><div class="text-center">Orden</div></th>
+					<th width="55%"><div class="text-center">Nombre</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -52,6 +53,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="etapaVenta in ev.etapasVenta">
+			    <td>{{$index + 1}}</td>			    
 			    <td>{{etapaVenta.orden}}</td>
 			    <td>{{etapaVenta.nombre}}</td>
 			    <td>

@@ -115,8 +115,9 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					    <th width="5%"><div class="text-center">No.</div></th>
 					<!--<th width="10%"><div class="text-center">Clave</div></th>-->
-					    <th width="50%"><div class="text-center">Nombre</div></th>
+					    <th width="30%"><div class="text-center">Nombre</div></th>
 					<!--<th width="10%"><div class="text-center">Domicilio</div></th>-->
 					<!--<th width="10%"><div class="text-center">No.Exterior</div></th>-->
 					<!--<th width="10%"><div class="text-center">No.Interior</div></th>-->
@@ -127,12 +128,12 @@
 					<!--<th width="20%"><div class="text-center">Ciudad</div></th>-->
 					<!--<th width="10%"><div class="text-center">Estado</div></th>-->
 					<!--<th width="10%"><div class="text-center">Pais</div></th>-->
-					    <th width="10%"><div class="text-center">Teléfonos</div></th>
+					    <th width="15%"><div class="text-center">Teléfonos</div></th>
 					<!--<th width="10%"><div class="text-center">Fax</div></th>-->
 					<!--<th width="10%"><div class="text-center">RFC</div></th>-->
 					<!--<th width="10%"><div class="text-center">Tipo Persona</div></th>-->
-					    <th width="10%"><div class="text-center">Correo</div></th>
-					    <th width="10%"><div class="text-center">Contacto</div></th>
+					    <th width="15%"><div class="text-center">Correo</div></th>
+					    <th width="15%"><div class="text-center">Contacto</div></th>
 					<!--<th width="10%"><div class="text-center">Titular</div></th>-->
 					<!--<th width="10%"><div class="text-center">Puesto del titular</div></th>-->
 			   <th width="10%">
@@ -149,7 +150,8 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="empresa in emp.empresas">
-			    <td>{{empresa.razonSocial}} </td> 
+			    <td>{{$index + 1}} </td>
+			    <td>{{empresa.razonSocial}} </td>
 			    <td>{{empresa.telefonos}} </td>
 			    <td>{{empresa.email}} </td>
 			    <td>{{empresa.titular}} </td>

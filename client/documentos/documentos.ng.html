@@ -32,7 +32,8 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="10%"><div class="text-center">Nombre</div></th>	
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="75%"><div class="text-center">Nombre</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -47,6 +48,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="documento in doc.documentos">
+			    <td>{{$index + 1}}</td>			    
 			    <td>{{documento.nombre}}</td>
 			    <td>
 				    <div class="text-center">

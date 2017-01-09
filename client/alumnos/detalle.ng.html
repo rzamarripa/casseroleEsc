@@ -197,7 +197,7 @@
 											</div>											
 											<div class="tab-pane" id="pagos">												
 												<div class="row">
-													<section class="col col-sm-1 text-center padding-20" ng-repeat="semana in al.misSemanas" ng-click="al.seleccionarSemana(semana)" ng-class="al.obtenerEstatus(semana.pagada)">
+													<section class="col col-sm-1 text-center padding-20" ng-repeat="semana in al.misSemanas" ng-click="al.seleccionarSemana(semana)" ng-class="($index == al.misSemana.length) ? al.obtenerEstatus(semana.pagada) : ''">
 														<label class="input text-center">
 															<label type="text" class="text-center">{{semana.numero}} / {{semana.anio}} | {{semana.pagada}}</label>
 														</label>
@@ -235,7 +235,9 @@
 											<div class="col-sm-2 col-sm-offset-4">
 												<div class="form-group">
 													<label for="repeatSelect">Tipo de Plan de Pago:</label>
-													<select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="curso.planPagos.colegiatura.tipoColegiatura" ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}',curso)" >
+													<select class="form-control" name="repeatSelect" id="repeatSelect" 
+														ng-model="curso.planPagos.colegiatura.tipoColegiatura" 
+														ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}', curso)" >
 														<option ng-repeat="plan in al.tipoPlanes" value="{{plan}}">{{plan}}</option>
 													</select>
 												</div>
@@ -246,17 +248,16 @@
 										<h2> Colegiatura : </h2>	
 										<fieldset>
 											<div class="row">
-											<section class="col col-1"  ng-click="al.seleccionarSemana(cobro,curso.planPagos)" ng-repeat = "cobro in curso.planPagos.fechas" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+											<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos, curso.planPagos)" ng-repeat = "cobro in al.planPagos" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input ng-class="al.obtenerEstatus(cobro,curso.planPagos)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
+													<input class="font-xs" ng-class="al.obtenerEstatus(cobro, al.planPagos, curso.planPagos)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
 												</label>
 											</section>
 											</div>
 										</fieldset>
-
 									</div>
 									<fieldset>
-											<div class="row">
+										<div class="row">
 											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
 													<input  type="text" value="Seleccionados" disabled="" class="bg-color-blue txt-color-white">
@@ -287,29 +288,26 @@
 													<input  type="text" value="Pendientes" disabled="" class="">
 												</label>
 											</section>
-
-											</div>
+										</div>
 									</fieldset>
-
+									<div class="well well-sm  bg-color-darken txt-color-white no-border">
+										<div class="fa-lg">
+											Total a Pagar :
+											<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+										</div>														
+									</div>
+									<div class="pull-left" style="margin:20px;">
+										<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar(al.planPagos, curso.planPagos)" ng-disabled="al.hayParaPagar">Condonar</button>
+									</div>
 									
-									
+									<div class="pull-right" style="margin:20px;">
+										<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos, curso.planPagos)" ng-disabled="al.hayParaPagar">Pagar</a>
+									</div>
+									<div class="pull-right" style="margin:20px;">
+										<button type="button" class="btn btn-primary btn-lg" ng-click="al.imprimir()" ng-disabled="al.hayParaImprimir">Imprimir</button>
+									</div>
 								</form>
-								<div class="well well-sm  bg-color-darken txt-color-white no-border">
-									<div class="fa-lg">
-										Total a Pagar :
-										<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
-									</div>														
-								</div>
-								<div class="pull-left" style="margin:20px;">
-									<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar()" ng-disabled="al.hayParaPagar">Condonar</button>
-								</div>
 								
-								<div class="pull-right" style="margin:20px;">
-									<button type="button" class="btn btn-primary btn-lg" ng-click="al.pagar()" ng-disabled="al.hayParaPagar">Pagar</button>
-								</div>
-								<div class="pull-right" style="margin:20px;">
-									<button type="button" class="btn btn-primary btn-lg" ng-click="al.imprimir()" ng-disabled="al.hayParaImprimir">Imprimir</button>
-								</div>
 		          </div>
 		        </div>
 		      </div>
@@ -319,7 +317,7 @@
 		    <div class="col-sm-12">
 		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
 		        <header>
-		          <h2>Curricula</h2>
+		          <h2>Currícula</h2>
 		        </header>
 		        <div>
 		          <div class="widget-body">

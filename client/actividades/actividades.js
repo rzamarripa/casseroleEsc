@@ -8,6 +8,11 @@ angular.module("casserole")
   this.prospectosReuniones_id = [];
   this.prospectosTareas_id = [];
   this.prospectos_ids = [];
+  this.llamadas = [];
+  this.reuniones = [];
+  this.tareas = [];
+  window.rc = rc;
+  
 	this.subscribe('llamadas', function(){
 		return [{
 			vendedor_id : Meteor.userId(),
@@ -41,6 +46,7 @@ angular.module("casserole")
 		  llamadas = _.sortBy(llamadas, function(llamada){ return llamada.fecha; });
 		  if(this.llamadas != undefined){
 			  _.each(llamadas, function(llamada){
+				  rc.prospectos_ids.push(llamada.prospecto_id);
 				  llamada.prospecto = Prospectos.findOne(llamada.prospecto_id);
 			  })
 		  }
@@ -56,6 +62,7 @@ angular.module("casserole")
 			  rc.prospectosReuniones_id = [];
 			  rc.prospectosReuniones_id = _.pluck(reuniones, 'prospecto_id');
 			  _.each(reuniones, function(reunion){
+				  rc.prospectos_ids.push(reunion.prospecto_id);
 				  reunion.prospecto = Prospectos.findOne(reunion.prospecto_id);
 			  })
 		  }
@@ -71,37 +78,11 @@ angular.module("casserole")
 			  rc.prospectosTareas_id = [];
 			  rc.prospectosTareas_id = _.pluck(tareas, 'prospecto_id');
 			  _.each(tareas, function(tarea){
+				  rc.prospectos_ids.push(tarea.prospecto_id);
 				  tarea.prospecto = Prospectos.findOne(tarea.prospecto_id);
 			  })
 		  }
 		  return tareas;
-	  },
-	  prospectosLlamadas_id : () => {
-			if(this.getReactively("llamadas")){
-				return _.pluck(rc.llamadas, 'prospecto_id');
-			}
-	  },
-	  prospectosReuniones_id : () => {
-			if(this.getReactively("reuniones")){
-				return _.pluck(rc.reuniones, 'prospecto_id');
-			}
-	  },
-	  prospectosTareas_id : () => {
-			if(this.getReactively("tareas")){
-				return _.pluck(rc.tareas, 'prospecto_id');
-			}
-	  },	  
-	  prospectos : () => {
-		  return Prospectos.find({
-				_id : {$in:this.getCollectionReactively('prospectos_ids')}
-			});
-	  },
-	  prospectos_ids : () => {
-		  var pros_ids = [];
-		  if(this.getReactively("prospectosLLamadas_id") || this.getReactively("prospectosReuniones_id") || this.getReactively("prospectosTareas_id")){
-			  pros_ids = _.union(rc.prospectosLlamadas_id, rc.prospectosReuniones_id, rc.prospectosTareas_id);
-			  return pros_ids;
-		  }
 	  }
   });
 

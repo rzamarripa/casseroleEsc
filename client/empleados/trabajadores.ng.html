@@ -83,17 +83,18 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="10%"><div class="text-center">Foto</div></th>
-					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="15%"><div class="text-center">Foto</div></th>
+					<th width="15%"><div class="text-center">Nombre</div></th>
 					<th width="15%"><div class="text-center">Dirección </div></th>
 					<th width="10%"><div class="text-center">Teléfono</div></th>
-					<th width="10%"><div class="text-center">correo</div></th>
+					<th width="20%"><div class="text-center">correo</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
 						</div>
 					</th>
-					<th width="7%">
+					<th width="10%">
 						<div class="text-center">
 							Acciones
 						</div>
@@ -102,6 +103,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="trabajador in emp.trabajadores">
+			    <td>{{$index + 1}}</td>
 		    	<td><img width="100px" ng-src="{{trabajador.fotografia}}" ng-class="{'img-thumbnail': !!trabajador.fotografia}"/> </td>
 			    <td>{{trabajador.nombre}} {{trabajador.apPaterno}} {{trabajador.apMaterno}}</td>
 			    <td>{{trabajador.direccion}} </td>

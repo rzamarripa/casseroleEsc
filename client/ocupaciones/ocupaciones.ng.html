@@ -38,8 +38,9 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="30%"><div class="text-center">Clave</div></th>
-					<th width="30%"><div class="text-center">Nombre</div></th>				
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="20%"><div class="text-center">Clave</div></th>
+					<th width="55%"><div class="text-center">Nombre</div></th>				
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -54,6 +55,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="ocupacion in oc.ocupaciones">
+			    <td>{{$index + 1}} </td>
 			    <td>{{ocupacion.clave}} </td>
 			    <td>{{ocupacion.nombre}} </td>
 			    <td>

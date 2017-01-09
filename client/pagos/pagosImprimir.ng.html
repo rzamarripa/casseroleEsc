@@ -3,15 +3,15 @@
 		<div class="widget-body no-padding">
 			<div class="padding-10">
 				<div class="row text-center">
-					<div class="col-sm-3 col-sm-offset-4">
+					<div class="col-sm-4 col-sm-offset-4">
 						<div>
-							<img src="http://www.casserole.edu.mx/wp-content/themes/blain/images/loghead.jpg" width="200" alt="recibo icon">
+							<img src="{{pi.seccion.logo}}" width="200" alt="recibo icon">
 						</div>
 						<address>
 							<br>
 							<strong>Casserole</strong>
 							<br>
-							SERDAN #119,
+							{{pi.seccion.direccion}}
 							<br>
 							COL. CENTRO
 							<br/>
@@ -31,25 +31,34 @@
 						</div>
 						<table class="table">
 							<tr>
-								<td>CANT.</td>
+								<td>CONCEPTO</td>
 								<td>DESCRIPCIÓN</td>
-								<td style="text-align: right">IMPORTE</td>
 							</tr>
-							<tr ng-repeat="semana in pi.semanas">
-								<td class="text-center"><strong>1</strong></td>
-								<td> {{ semana.concepto}}</td>
-								<td style="text-align: right">{{semana.importe | currency }}</td>
+							<tr ng-repeat="(key, value) in pi.semanas">
+								<td ><strong>{{key}}</strong></td>
+								<td>
+									<table class="table">
+										<tr>
+											<th>Número</th>
+											<th>Importe</th>
+										</tr>
+										<tr ng-repeat="semana in value">
+											<td class="text-right">{{semana.semana}} / {{semana.anio}}</td>
+											<td>{{semana.importe | currency}}</td>
+										</tr>
+									</table>
+								</td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align: right"><strong>Subtotal:</strong></td>
+								<td style="text-align: right"><strong>Subtotal:</strong></td>
 								<td style="text-align: right">{{pi.subTotal | currency}}</td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align: right"><strong>IVA:</strong></td>
+								<td style="text-align: right"><strong>IVA:</strong></td>
 								<td style="text-align: right">{{pi.iva | currency}}</td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+								<td style="text-align: right"><strong>Total:</strong></td>
 								<td style="text-align: right">{{pi.total | currency}}</td>
 							</tr>
 						</table>						

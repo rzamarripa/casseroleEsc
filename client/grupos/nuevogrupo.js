@@ -265,7 +265,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			return;
 		}
 		this.grupo.estatus = true;
-		var conceptosComision =ConceptosComision.find().fetch();
+		var conceptosComision = ConceptosComision.find().fetch();
 		this.grupo.conceptosComision = conceptosComision;
 		this.grupo.campus_id = Meteor.user().profile.campus_id;
 		this.grupo.seccion_id = Meteor.user().profile.seccion_id;
@@ -310,6 +310,9 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			toastr.error('Error al actualizar los datos del Grupo.');
 			return;
 		}
+		
+		var conceptosComision = ConceptosComision.find().fetch();
+		this.grupo.conceptosComision = conceptosComision;
 		
 		var idTemp = grupo._id;
 		delete grupo._id;	
