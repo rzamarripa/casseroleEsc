@@ -68,7 +68,7 @@
 							<label class="control-label col-md-2"><strong>Para</strong></label>
 							<div class="col-md-10">
 								<select multiple ng-model="mm.mensaje.para" style="width: 100%; border: white 0px;" class="js-example-basic-single select2">
-									<option value="{{destinatario._id}}" ng-repeat="destinatario in mm.destinatarios">{{destinatario.profile.nombreCompleto}}</option>
+									<option value="{{destinatario._id}}" ng-repeat="destinatario in mm.destinatarios">{{destinatario.profile.nombreCompleto}} ({{destinatario.roles[0]}})</option>
 								</select>								
 							</div>
 						</div>

@@ -100,3 +100,30 @@
 	  </table>
 	</div>
 </div>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped">
+			<caption><h4>Listado de Depósitos</h4></caption>
+			<thead class="thead">
+				<tr>
+					<th>No.</th>
+					<th>Fecha</th>
+					<th>A nombre</th>
+					<th>Cuenta</th>
+					<th>Tipo Gasto</th>
+					<th>Importe</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="gasto in gc.gastos">
+					<td>{{$index + 1}}</td>
+					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
+					<td>{{ gasto.aNombreDe }}</td>
+					<td>{{ gasto.cuenta.nombre }}</td>
+					<td>Depósitos</td>
+					<td>{{ gasto.importe | currency }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -3,8 +3,9 @@ angular
   .controller('GastosCtrl', GastosCtrl);
  
 function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
-	$reactive(this).attach($scope);
+	let rc = $reactive(this).attach($scope);
   this.nuevo = false;
+  window.rc = rc;
   this.tipoGasto = 'cheques';
   this.gasto = {};
   this.semanaActual = moment(new Date()).isoWeek();
@@ -35,7 +36,14 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 
   this.helpers({
 		gastos : () => {
-			return Gastos.find({tipoGasto  : this.getReactively('tipoGasto')});
+			var gas = Gastos.find({tipoGasto  : this.getReactively('tipoGasto')}).fetch();
+			if(rc.getReactively("tipoGasto") == "depositos"){
+				console.log("entré")
+				_.each(gas, function(g){
+					g.cuenta = Cuentas.findOne(g.cuenta_id);
+				})
+			}
+			return gas;
 		},
     conceptos : () =>{
       return ConceptosGasto.find();

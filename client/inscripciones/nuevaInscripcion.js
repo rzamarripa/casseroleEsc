@@ -60,6 +60,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe("ocupaciones", () => {
 	  return [{estatus : true}];
   });
+  
+  this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	});
 
 	this.helpers({
 		cuentaActiva : () =>{
@@ -98,7 +102,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		},
 		ocupaciones :  () => {
 			return Ocupaciones.find({estatus : true});
-		}
+		},
+	   mediosPublicidad : () => {
+		  return MediosPublicidad.find();
+	  }
 	});
 
 	this.llenarComision = function(_comision,importe){
