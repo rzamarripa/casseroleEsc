@@ -44,13 +44,14 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="20%"><div class="text-center">Nombre</div></th>									
-					<th width="10%">
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="45%"><div class="text-center">Nombre</div></th>
+					<th width="20%">
 						<div class="text-center">
 							Activa
 						</div>
 					</th>
-					<th width="10%">
+					<th width="20%">
 						<div class="text-center">
 							Inscripción
 						</div>
@@ -64,6 +65,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="cuenta in cc.cuentas">
+			    <td>{{$index + 1}}</td>
 			    <td>{{cuenta.nombre}} </td>
 			    <td>
 				    <div class="text-center">

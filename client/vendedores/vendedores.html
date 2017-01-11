@@ -95,9 +95,10 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<td width="10%"><div class="text-center">Gerente</div></td>
+					<td width="5%"><div class="text-center">No.</div></td>
+					<td width="15%"><div class="text-center">Gerente</div></td>
 					<th width="10%"><div class="text-center">Foto</div></th>
-					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="20%"><div class="text-center">Nombre</div></th>
 					<th width="10%"><div class="text-center">Usuario </div></th>
 					<th width="10%"><div class="text-center">Teléfono</div></th>
 					<th width="10%"><div class="text-center">correo</div></th>
@@ -106,7 +107,7 @@
 							Estatus
 						</div>
 					</th>
-					<th width="7%">
+					<th width="10%">
 						<div class="text-center">
 							Acciones
 						</div>
@@ -115,6 +116,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="vendedor in v.vendedores">
+			    <td>{{$index + 1}}</td>
 			    <td>{{v.getGerenteVenta(vendedor.profile.gerenteVenta_id)}}</td>
 		    	<td><img width="100px" ng-src="{{vendedor.profile.fotografia}}" ng-class="{'img-thumbnail': !!vendedor.fotografia}"/> </td>
 			    <td>{{vendedor.profile.nombre}} {{vendedor.profile.apPaterno}} {{vendedor.profile.apMaterno}} </td>

@@ -48,11 +48,12 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="10%"><div class="text-center">Turno</div></th>
-					<th width="10%"><div class="text-center">Asistencias</div></th>
-					<th width="10%"><div class="text-center">Inasistencias</div></th>
-					<th width="10%"><div class="text-center">Hora Inicio</div></th>
-					<th width="10%"><div class="text-center">Hora Final</div></th>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="27%"><div class="text-center">Turno</div></th>
+					<th width="12%"><div class="text-center">Asistencias</div></th>
+					<th width="12%"><div class="text-center">Inasistencias</div></th>
+					<th width="12%"><div class="text-center">Hora Inicio</div></th>
+					<th width="12%"><div class="text-center">Hora Final</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -67,6 +68,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="turno in tn.turnos">
+			    <td>{{$index + 1}}</td>			    
 			    <td>{{turno.nombre}}</td>
 			    <td>{{turno.asistencias}}</td>
 			    <td>{{turno.inasistencias}}</td>

@@ -101,18 +101,19 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th width="5%"><div class="text-center">No.</div></th>
 					<th width="10%"><div class="text-center">Foto</div></th>
-					<th width="10%"><div class="text-center">Nombre</div></th>
+					<th width="20%"><div class="text-center">Nombre</div></th>
 					<th width="10%"><div class="text-center">Usuario </div></th>
 					<th width="10%"><div class="text-center">Rol </div></th>
 					<th width="10%"><div class="text-center">Teléfono</div></th>
-					<th width="10%"><div class="text-center">Sección</div></th>
+					<th width="15%"><div class="text-center">Sección</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
 						</div>
 					</th>
-					<th width="7%">
+					<th width="10%">
 						<div class="text-center">
 							Acciones
 						</div>
@@ -121,6 +122,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="coordinador in c.coordinadores">
+			    <td>{{$index + 1}}</td>
 		    	<td><img width="100px" ng-src="{{coordinador.profile.fotografia}}" ng-class="{'img-thumbnail': !!coordinador.fotografia}"/> </td>
 			    <td>{{coordinador.profile.nombre}} {{coordinador.profile.apPaterno}} {{coordinador.profile.apMaterno}} </td>
 			    <td>{{coordinador.username}} </td>

@@ -15,7 +15,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.prospecto = {};
 
 	this.subscribe('prospectosPorInscribir',()=>{
+
 		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.nombre":1}}]
+
 	});
 	
 	this.subscribe('vendedores');
@@ -109,6 +111,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 
 	this.llenarComision = function(_comision,importe){
+		console.log('Inicio llenarComision')
 		try{
 			var vendedor = Meteor.users.findOne({_id:this.inscripcion.vendedor_id});
 			console.log("comision", _comision)
@@ -133,6 +136,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		catch(e){
 
 		}
+		console.log('Fin llenarComision')
 	};
 	/*this.llenarPago=function(concepto,plan,tipoPlan){
 		this.pagosRealizados.push({
@@ -155,6 +159,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 					});
 	}*/
 	this.planPagosSemana =function () {
+		console.log('Inicio planPagosSemana')
+
 		console.log("entré aquí semanal");
 		var fechaInicial=this.inscripcion.planPagos.colegiatura.fechaInicial;
 		var dia = this.inscripcion.planPagos.colegiatura.Semanal.diaColegiatura;
@@ -181,10 +187,13 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			plan.push(pago);
 			mfecha = mfecha.day(8);
 		}
+		console.log('Fin planPagosSemana')
 		return plan;
 	}
 	
 	this.planPagosMensual=function() {
+		console.log('Inicio planPagosMensual')
+
 		console.log("entré aquí mensual");
 		var fechaInicial=this.inscripcion.planPagos.colegiatura.fechaInicial;
 		var dia = this.inscripcion.planPagos.colegiatura.Mensual.diaColegiatura;
@@ -213,6 +222,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			plan.push(pago);
 			mfecha.add(1,'month');
 		}
+
 		console.log("plan de pagos", plan);
 		return plan;
 	}
@@ -261,9 +271,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			}
 		}
 		console.log(plan);
+		console.log('Fin planPagosQuincenal')
 		return plan;
 	}
 	this.llenarPago=function(concepto,plan,tipoPlan){
+
 		console.log(concepto, plan, tipoPlan);
 		this.pagosRealizados.push({
 			fechaPago 	: new Date(),
@@ -283,24 +295,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			weekday : this.diaActual,
 			semanaPago: this.semanaPago
 		});
-
-
-
-
 	}
 	this.calcularInscripcion=function(){
-		
 		console.log("calcular inscripción");
 		//Se suman los conceptos de inscripción
 		var tipo = this.inscripcion.planPagos.colegiatura.tipoColegiatura;
 		console.log("tipo", tipo)
 		var _concepto = this.inscripcion.planPagos.colegiatura[this.inscripcion.planPagos.colegiatura.tipoColegiatura];
-
 		var cobroObligatorio =  _concepto.importeRegular;
-
-
-
-
 		var conIns = this.inscripcion.planPagos.inscripcion;
 		this.inscripcion.totalPagar = 0;
 		this.comisiones = [];
@@ -407,10 +409,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				}
 			}
 		}		
+
+		console.log(this.inscripcion);
+		console.log('Fin calcularInscripcion')
+
 		console.log("llenaPago", this.inscripcion);
+
 	}
 
 	this.hayCupo = function(grupo_id){
+		console.log('Inicio hayCupo')
 		var grupo = Grupos.findOne(grupo_id);
 		var planEstudios = PlanesEstudios.findOne(grupo.planEstudios_id);
 
@@ -462,17 +470,24 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}else{
 			this.cupo = "remove";
 		}
+		console.log('Fin hayCupo')
 	}
 	this.cuantoPaga = function(importe){
+		console.log('Inicio cuantoPaga')
 		if(importe>this.inscripcion.totalPagar)
 			this.inscripcion.cambio = parseFloat(importe) - parseFloat(this.inscripcion.totalPagar);
 		else 
 			this.inscripcion.cambio =0;
 		this.calcularInscripcion();
+		console.log('Fin cuantoPaga')
 	}
 
 	this.cambioTipoColegiatura = function  (value) {
+
+		console.log('Inicio cambioTipoColegiatura')
+
 		console.log("cambio tipo colegiatura");
+
 		console.log(value);
 		this.inscripcion.importePagado = 0.00;
 		if(value=='Semanal')
@@ -483,10 +498,15 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			this.inscripcion.planPagos.fechas = this.planPagosMensual()
 		
 		this.calcularInscripcion();
+
+		console.log(this.inscripcion);
+		console.log('Fin cambioTipoColegiatura')
+
 		console.log("inscripcion final", this.inscripcion);
 	}
 	
 	this.guardar = function(inscripcion) {
+		console.log('Inicio guardar')
 		var grupo = Grupos.findOne(inscripcion.grupo_id);
 		inscripcion.planEstudios_id=grupo.planEstudios_id;
 		inscripcion.campus_id = Meteor.user().profile.campus_id;
@@ -508,6 +528,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		alumno.profile.seccion_id = inscripcion.seccion_id;
 		alumno.profile.usuarioInserto = Meteor.userId();
 		alumno.profile.estatus = true;
+		console.log('Inicio cantidadAlumnos')
 		Meteor.call('cantidadAlumnos', inscripcion.campus_id, function(error, result){
 			if(error){
 				alert('Error');
@@ -533,7 +554,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				  alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
 				  alumno.password = "123qwe";
 			  }
+
+			  console.log('Inicio createGerenteVenta')
+
 			  //Se crea el usuario del alumnos
+
 			  Meteor.call('createGerenteVenta', alumno, 'alumno', function(error, result){
 				  if(error){
 					  console.log(error);
@@ -541,6 +566,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 					  inscripcion.alumno_id = result;
 					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
 						var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
+					console.log(planEstudio)
 						Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
 						if(!grupo.alumnos)
 							grupo.alumnos=[];
@@ -573,7 +599,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 						
 						return result;
 				  }
+				  console.log('Fin createGerenteVenta')
 			  });
+			  console.log('Fin cantidadAlumnos')
 
 				
 			}
@@ -581,26 +609,43 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		
 		//Termina la creación del alumno
 		
-		
+		//Generar los pagos realizados
+		for (var i = 0; i < this.pagosRealizados.length; i++) {
+			Pagos.insert(this.pagosRealizados[i]);
+		}
+		for (var i = 0; i < this.comisiones.length; i++) {
+			Comisiones.insert(this.comisiones[i]);
+		}
+
+		$state.go("root.inscripciones");
+		console.log("inscripcion", this.inscripcion);
+		console.log('Fin guardar')
+
 	}
 	this.cambiarConceptosInscripcion=function  (argument) {
+		console.log('Inicio cambiarConceptosInscripcion')
 		try{
 			this.calcularInscripcion();
 		}catch(e){
 
 		}
+		console.log('Fin cambiarConceptosInscripcion')
 	};
 	
 	this.getProspectoSeleccionado = function(prospecto_id){
+		console.log('Inicio getProspectoSeleccionado')
 		this.prospectoSeleccionado = Prospectos.findOne({_id : prospecto_id});
 		this.prospecto = this.prospectoSeleccionado;
 		this.inscripcion.vendedor_id = this.prospectoSeleccionado.profile.vendedor_id;
 		this.prospectoSeleccionado.activo = true;
 		$('.collapse').collapse('show');
+		console.log('Fin getProspectoSeleccionado')
+		
 	}
 	
 	this.actualizarProspecto = function(prospecto)
 	{
+		console.log('Inicio actualizarProspecto')
 		var idTemp = prospecto._id;
 		delete prospecto._id;
 		delete prospecto.activo;
@@ -618,5 +663,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		toastr.success('Prospecto Actualizado');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
+		console.log('Fin actualizarProspecto')
 	};
 };

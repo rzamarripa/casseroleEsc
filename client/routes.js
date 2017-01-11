@@ -254,10 +254,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/secciones/secciones.ng.html',
       controller: 'SeccionesCtrl as sec',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.nacionalidad', {
       url: '/nacionalidad',
@@ -434,30 +440,48 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/campus/campus.ng.html',
       controller: 'CampusCtrl as cp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })    
     .state('root.campusDetalle', {
       url: '/campusDetalle/:id',
       templateUrl: 'client/campus/campusDetalle.ng.html',
       controller: 'CampusDetalleCtrl as cd',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.avisos', {
       url: '/avisos',
       templateUrl: 'client/avisos/avisos.ng.html',
       controller: 'AvisosCtrl as av',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })    
     .state('root.aulas', {
       url: '/aulas',
@@ -548,6 +572,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	        return $meteor.requireUser();
 	      }]
 	    }
+    })
+    .state('root.conceptos', {
+      url: '/conceptos',
+      templateUrl: 'client/conceptos/conceptos.ng.html',
+      controller: 'ConceptosCtrl as con',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.conceptosComision', {
       url: '/conceptosComision',
@@ -681,9 +721,15 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/bitacora/bitacora.ng.html',
       controller: 'BitacoraCtrl as bita',
       resolve: {
-        "currentUser": ["$meteor", function($meteor){
-          return $meteor.requireUser();
-        }]
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
       }
     })
     .state('root.gastos', {
@@ -711,9 +757,15 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/conceptosGasto/conceptosGasto.ng.html',
       controller: 'ConceptosGastoCtrl as cgc',
       resolve: {
-        "currentUser": ["$meteor", function($meteor){
-          return $meteor.requireUser();
-        }]
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
       }
     })    
     .state('root.agregarGasto', {

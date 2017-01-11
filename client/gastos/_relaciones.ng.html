@@ -68,14 +68,16 @@
 		<table class="table table-striped table-bordered table-list">
 	    <thead>
 	      <tr>
-	      	<th></th>
-	      	<th>Fecha Límite</th>
-	        <th class="hidden-xs">Registros</th>
-	        <th>Importe</th>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="10%"><div class="text-center"></div></th>
+					<th width="35%"><div class="text-center">Fecha Límite</div></th>
+					<th width="25%"><div class="text-center hidden-xs">Registros</div></th>
+					<th width="25%"><div class="text-center">Importe</div></th>
 	      </tr> 
 	    </thead>
 	    <tbody>
 	      <tr ng-repeat="gasto in gc.gastos">
+		      <td>{{$index + 1}}</td>
 	      	<td align="center">
 	          <a ng-click="gc.cambiarEstatus(gasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
 	        </td>

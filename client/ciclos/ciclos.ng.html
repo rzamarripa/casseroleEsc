@@ -40,9 +40,10 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="20%"><div class="text-center">Nombre</div></th>
-					<th width="15%"><div class="text-center">Fecha Inicio</div></th>					
-					<th width="15%"><div class="text-center">Fecha Fin</div></th>										
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="35%"><div class="text-center">Nombre</div></th>
+					<th width="20%"><div class="text-center">Fecha Inicio</div></th>					
+					<th width="20%"><div class="text-center">Fecha Fin</div></th>										
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -57,6 +58,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="ciclo in cl.ciclos">
+			    <td>{{$index + 1}}</td>
 			    <td>{{ciclo.nombre}} </td>
 			    <td>{{ciclo.fechaInicio | date:"dd-MM-yyyy"}}</td>
 			    <td>{{ciclo.fechaFin | date:"dd-MM-yyyy"}}</td>

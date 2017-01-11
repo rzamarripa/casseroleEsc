@@ -42,9 +42,10 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th width="5%"><div class="text-center">No.</div></th>
 					<th width="10%"><div class="text-center">Clave</div></th>
 					<th width="20%"><div class="text-center">Descripción Corta</div></th>
-					<th width="50%"><div class="text-center">Descripción Larga</div></th>		
+					<th width="45%"><div class="text-center">Descripción Larga</div></th>		
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -59,6 +60,7 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="deptoAcademico in da.deptosAcademicos">
+			    <td>{{$index + 1}}</td>			    
 			    <td>{{deptoAcademico.clave}}</td>
 			    <td>{{deptoAcademico.descripcionCorta}}</td>
 			    <td>{{deptoAcademico.descripcion}} </td>
