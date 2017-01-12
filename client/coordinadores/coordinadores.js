@@ -101,7 +101,7 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
       toastr.error('Error al actualizar los datos.');
       return;
 		}
-			
+		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? coordinador.profile.apMaterno : "");
 		Meteor.call('updateGerenteVenta', coordinador, coordinador.profile.role);
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');

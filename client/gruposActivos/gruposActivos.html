@@ -1,28 +1,27 @@
 <h2>Grupos Activos</h2>
 <div class="tree">
-	<ul role="tree" class="col-sm-4" ng-repeat="grupo in ga.gruposActivos">
-		
+	<ul role="tree" class="col-sm-3" ng-repeat="asignacionesPorMaestro in ga.gruposActivos">
 		<li class="parent_li" role="treeitem">
-			<span title="Collapse this branch">
-				<i class="fa fa-lg fa-group"></i> {{ga.getMaestro(grupo.asignacion.maestro_id)}}</span>
+			<span>
+				<i class="fa fa-lg fa-user"></i> {{asignacionesPorMaestro.maestro.nombre + " " + asignacionesPorMaestro.maestro.apPaterno}} </span>
 			<ul role="group">
-				<li class="parent_li" role="treeitem" >
+				<li class="parent_li" role="treeitem" ng-repeat="asignacion in asignacionesPorMaestro.asignaciones">
 					<span class="label bg-color-orange" title="Collapse this branch">
-						<i class="fa fa-lg fa-minus-circle"></i> {{grupo.grupo.nombre}}
+						<i class="fa fa-lg fa-group"></i> {{asignacion.grupo}}
 					</span>
 					<ul role="group" >
 						<li>
-							<a ui-sref="root.capturarCalificaciones({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})" >
+							<a ui-sref="root.capturarCalificaciones({grupo_id : asignacion.grupo_id, materia_id : asignacion.materia_id, maestro_id : asignacionesPorMaestro.maestro._id})" >
 								<span><i class="fa fa-check"></i> Calificaciones</span>
 							</a>
 						</li>
 						<li role="treeitem">							
-							<a ui-sref="root.verAsistencias({grupo_id : grupo.grupo._id, materia_id : grupo.asignacion.materia_id, maestro_id : grupo.asignacion.maestro_id})">
+							<a ui-sref="root.verAsistencias({grupo_id : asignacion.grupo_id, materia_id : asignacion.materia_id, maestro_id : asignacionesPorMaestro.maestro._id})">
 								<span><i class="fa fa-lg fa-list"></i> Asistencias</span>
 							</a>
 						</li>
 						<li role="treeitem">
-							<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo._id})">
+							<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo_id})">
 								<span><i class="fa fa-lg fa-comments-o"></i> Foros</span>
 							</a>														
 						</li>

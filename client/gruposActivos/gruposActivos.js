@@ -13,6 +13,7 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	this.maestros_id = [];
 	this.materias_id = [];
 	this.grupos = {};
+	this.cant = 0;
 	
 	this.subscribe('grupos', () => {		
 		return [{
@@ -25,32 +26,56 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			_id : { $in : this.getCollectionReactively('maestros_id')}
 		}]
 	});
+	
+	$(document).ready(function() {
+			
+		
+			
+			// PAGE RELATED SCRIPTS
+		
+			$('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+			$('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Collapse this branch').on('click', function(e) {
+				var children = $(this).parent('li.parent_li').find(' > ul > li');
+				if (children.is(':visible')) {
+					children.hide('fast');
+					$(this).attr('title', 'Expand this branch').find(' > i').removeClass().addClass('fa fa-lg fa-plus-circle');
+				} else {
+					children.show('fast');
+					$(this).attr('title', 'Collapse this branch').find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
+				}
+				e.stopPropagation();
+			});			
+		
+		})
 
   this.helpers({
 	  grupos : () => {
 		  return Grupos.find();
 	  },
 	  gruposActivos : () => {
-		  var misAsignaciones = [];
-			_.each(this.getReactively("grupos"), function(grupo){				
+		  var misAsignaciones = {};
+			_.each(this.getReactively("grupos"), function(grupo){
 				_.each(grupo.asignaciones, function(asignacion){
 					if(asignacion.estatus == true){
 						rc.maestros_id.push(asignacion.maestro_id);
-						misAsignaciones.push({
-							"grupo" : grupo,
-							"asignacion" : asignacion
-						});
+						if(undefined == misAsignaciones[asignacion.maestro_id]){
+							misAsignaciones[asignacion.maestro_id] = {};
+							misAsignaciones[asignacion.maestro_id].asignaciones = [];
+							misAsignaciones[asignacion.maestro_id].maestro = Maestros.findOne(asignacion.maestro_id);
+							asignacion.grupo = grupo.nombre;
+							asignacion.grupo_id = grupo._id;
+							misAsignaciones[asignacion.maestro_id].asignaciones.push(asignacion)
+						}else{
+							asignacion.grupo = grupo.nombre;
+							asignacion.grupo_id = grupo._id;
+							misAsignaciones[asignacion.maestro_id].asignaciones.push(asignacion)
+						}
 					}
 				});
 			});
-			return misAsignaciones;
+			
+			console.log("misAsignaciones", _.toArray(misAsignaciones));
+			return _.toArray(misAsignaciones);
 	  }	  
   });
-  
-  this.getMaestro = function(maestro_id){
-	  var maestro = Maestros.findOne(maestro_id);
-	  if(maestro){
-		  return maestro.nombre + " " + maestro.apPaterno + " " + maestro.apMaterno;
-	  }
-  }	
 };

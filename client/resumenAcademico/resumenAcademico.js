@@ -53,15 +53,15 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		var _semanas = [];
 		var i =0;
 		try{
-	  var ciclo = this.ciclos[c];
-	  var fini= moment(ciclo.fechaInicio);
-	  while(fini.diff(ciclo.fechaFin)<0){
-	   _semanas.push({numero:fini.isoWeek(),anio:fini.year(),id:i++})
-	   fini.day(8);
-	  }
-	  fini = moment(ciclo.fechaFin);
-	  if(fini.isoWeek()>_semanas[_semanas.length-1])
-	   _semanas.push({numero:fini.isoWeek(),anio:fini.year(),id:i++});
+		  var ciclo = this.ciclos[c];
+		  var fini= moment(ciclo.fechaInicio);
+		  while(fini.diff(ciclo.fechaFin)<0){
+		   _semanas.push({numero:fini.isoWeek(),anio:fini.year(),id:i++})
+		   fini.day(8);
+		  }
+		  fini = moment(ciclo.fechaFin);
+		  if(fini.isoWeek()>_semanas[_semanas.length-1])
+		   _semanas.push({numero:fini.isoWeek(),anio:fini.year(),id:i++});
 	 }catch(ex){
 
 	 }
@@ -270,7 +270,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 
 		}
 		catch(ex){ 
-			console.log(ex,ex.stack)
+			//console.log(ex,ex.stack)
 		}
 		//console.log('1',_ret)
 		if (angular.equals($scope.prevHorarios, _ret)) {
@@ -285,12 +285,12 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
 		var _grupos = [];
 		try{
 			var gpos = this.grupos;
-			console.log("gpos", gpos);
+			//console.log("gpos", gpos);
 			for(var gpoId in gpos){
 				var grupo=gpos[gpoId];
-				console.log("grupo", grupo);
+				//console.log("grupo", grupo);
 				var turno = Turnos.findOne({_id:grupo.turno_id});
-				console.log("turno", turno);
+				//console.log("turno", turno);
 				if(horario.horaInicio==turno.horaInicio && horario.horaFin==turno.horaFin)
 					_grupos.push(grupo);
 			}
@@ -302,7 +302,7 @@ function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams,
     return $scope.prevGruposPorHorario;
   }
   $scope.prevGruposPorHorario = _grupos;
-  console.log("grupos", _grupos);
+  //console.log("grupos", _grupos);
   return _grupos;
 	}
 };

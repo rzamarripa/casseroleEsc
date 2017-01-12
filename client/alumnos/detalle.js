@@ -401,6 +401,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.faltante = 0;
 						pago.fechaPago = new Date();
 						pago.semanaPago = moment().isoWeek();
+						pago.anioPago = moment().get('year');
 					}
 					else if(pago.pagada == 2){
 						rc.pagarCobro(pago, semanasPagadas, configuracion);
@@ -408,6 +409,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.pagada = 1;
 						pago.fechaPago = new Date();
 						pago.semanaPago = moment().isoWeek();
+						pago.anioPago = moment().get('year');
 					}
 					var idTemp = pago._id;
 					delete pago._id

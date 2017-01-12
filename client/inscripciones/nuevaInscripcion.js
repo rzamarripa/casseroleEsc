@@ -62,6 +62,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe("ocupaciones", () => {
 	  return [{estatus : true}];
   });
+  
+  this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	});
 
 	this.helpers({
 		cuentaActiva : () =>{
@@ -100,7 +104,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		},
 		ocupaciones :  () => {
 			return Ocupaciones.find({estatus : true});
-		}
+		},
+	   mediosPublicidad : () => {
+		  return MediosPublicidad.find();
+	  }
 	});
 
 	this.llenarComision = function(_comision,importe){
@@ -505,6 +512,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.campus_id = Meteor.user().profile.campus_id;
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
+		inscripcion.semana = moment(new Date()).isoWeek();
 		
 		//Crear alumno a partir del prospecto
 		

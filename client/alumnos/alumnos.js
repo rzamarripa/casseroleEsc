@@ -17,14 +17,16 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.validaContrasena = false;
 	
 	this.subscribe('buscarAlumnos', () => {
-    return [{
-	    options : { limit: 51 },
-	    where : { 
-				nombreCompleto : this.getReactively('buscar.nombre'), 
-				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
-				campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-			} 		   
-    }];
+		if(this.getReactively("buscar.nombre").length > 3){
+			return [{
+		    options : { limit: 51 },
+		    where : { 
+					nombreCompleto : this.getReactively('buscar.nombre'), 
+					seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+					campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+				} 		   
+	    }];
+		}
   });
   
   this.subscribe('ocupaciones',()=>{
@@ -116,11 +118,8 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return foto;
 	  }
   };
+  
   this.getFocus = function(){
 	  document.getElementById('buscar').focus();
   };  
-  
-  this.pruebaDoc = function(){
-	  Meteor.call("pruebaDoc");
-  }
 }
