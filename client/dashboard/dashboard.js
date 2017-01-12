@@ -17,7 +17,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.anio = moment().get('year');
 	
   this.subscribe("inscripciones",()=>{
-		return [{estatus : 1, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+		return [{estatus : 1, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semana : parseInt(this.getReactively("semanaActual")) }]
 	});
 	
 	this.subscribe('campus',()=>{
@@ -162,37 +162,45 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 			arreglo = _.toArray(arreglo);
 		  
 		  $('#gastosGrafica').highcharts( {
-	        title: {
-	            text: 'Relación de Gastos de la Semana ' + this.getReactively("semanaActual"),
-	            x: -20 //center
-	        },
-	        subtitle: {
-	            text: (rc.campus != undefined) ? rc.campus.nombre : '',
-	            x: -20
-	        },
-	        xAxis: {
-	            categories: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-	        },
-	        yAxis: {
-	            title: {
-	                text: 'Gasto en $'
-	            },
-	            plotLines: [{
-	                value: 0,
-	                width: 1,
-	                color: '#808080'
-	            }]
-	        },
-	        tooltip: {
-	            valueSuffix: ' Pesos'
-	        },
-	        legend: {
-	            layout: 'vertical',
-	            align: 'right',
-	            verticalAlign: 'middle',
-	            borderWidth: 0
-	        },
-	        series: arreglo
+			  chart: {
+            type: 'areaspline'
+        },
+        title: {
+            text: 'Relación de Gastos de la Semana ' + this.getReactively("semanaActual"),
+            x: -20 //center
+        },
+        subtitle: {
+            text: (rc.campus != undefined) ? rc.campus.nombre : '',
+            x: -20
+        },
+        xAxis: {
+            categories: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            plotBands: [{ // visualize the weekend
+                from: 4.5,
+                to: 6.5,
+                color: 'rgba(68, 170, 213, .2)'
+            }]
+        },
+        yAxis: {
+            title: {
+                text: 'Gasto en $'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' Pesos'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: arreglo
 	    });
 		  return arreglo;
 	  }
