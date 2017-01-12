@@ -63,6 +63,15 @@ angular.module('casserole').config(['$injector', function ($injector) {
         }]
       }
     });
+    
+/*
+    .state('anon.recuperar', {
+      url: '/login',
+      templateUrl: 'client/login/recuperar.ng.html',
+      controller: 'LoginCtrl as lc',
+      controllerAs: 'lc'
+    })
+*/
 
   /***************************
    * Login Users Routes
@@ -84,90 +93,144 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/home/home.ng.html',      
       controller: 'HomeCtrl as ho',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    },
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "gerenteVenta" || user.roles[0] == "vendedor"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.dashboard', {
       url: '/dashboard',
       templateUrl: 'client/dashboard/dashboard.html',      
       controller: 'DashboardCtrl as da',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    },
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',
       controller: 'AlumnosCtrl as al',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.nuevoAlumno', {
       url: '/nuevoAlumno',
       templateUrl: 'client/alumnos/form.ng.html',
       controller: 'AlumnosCtrl as al',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.editarAlumno', {
       url: '/editarAlumno/:alumno_id',
       templateUrl: 'client/alumnos/form.ng.html',
       controller: 'AlumnosDetalleCtrl as al',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.alumnoDetalle', {
       url: '/alumnos/:alumno_id',
       templateUrl: 'client/alumnos/detalle.ng.html',
       controller: 'AlumnosDetalleCtrl as al',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.ciclos', {
       url: '/ciclos',
       templateUrl: 'client/ciclos/ciclos.ng.html',
       controller: 'CiclosCtrl as cl',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })    
     .state('root.mensajes', {
       url: '/mensajes',
       templateUrl: 'client/mensajes/mensajes.html',
       controller: 'MensajesCtrl as mm',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "maestro"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.subCiclos', {
       url: '/subCiclos',
       templateUrl: 'client/subCiclos/subCiclos.ng.html',
       controller: 'SubCiclosCtrl as sub',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
      .state('root.periodos', {
       url: '/periodos',
@@ -184,70 +247,112 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/deptosAcademicos/deptosAcademicos.ng.html',
       controller: 'DeptosAcademicosCtrl as da',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.materias', {
       url: '/materias',
       templateUrl: 'client/materias/materias.ng.html',
       controller: 'MateriasCtrl as mat',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.ocupaciones', {
       url: '/ocupaciones',
       templateUrl: 'client/ocupaciones/ocupaciones.ng.html',
       controller: 'OcupacionesCtrl as oc',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"  || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.tiposIngresos', {
       url: '/tiposIngresos',
       templateUrl: 'client/tiposingresos/tiposIngresos.ng.html',
       controller: 'TiposIngresosCtrl as tiping',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.empresas', {
       url: '/empresas',
       templateUrl: 'client/empresas/empresas.ng.html',
       controller: 'EmpresasCtrl as emp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.estadoCivil', {
       url: '/estadoCivil',
       templateUrl: 'client/estadoCivil/estadoCivil.ng.html',
       controller: 'CivilesCtrl as civ',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.titulos', {
       url: '/titulos',
       templateUrl: 'client/titulos/titulos.ng.html',
       controller: 'TitulosCtrl as tit',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.secciones', {
       url: '/secciones/:campus_id',
@@ -270,90 +375,144 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/nacionalidad/nacionalidad.ng.html',
       controller: 'NacionalidadesCtrl as nac',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.planEstudio', {
       url: '/planEstudios',
       templateUrl: 'client/planEstudios/planEstudios.index.ng.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.nuevoPlanEstudio', {
       url: '/nuevoPlanEstudios',
       templateUrl: 'client/planEstudios/planEstudios.form.ng.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.editarPlanEstudio', {
       url: '/editarPlanEstudios/:id',
       templateUrl: 'client/planEstudios/planEstudios.form.ng.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.planEstudioDetalle', {
       url: '/planEstudios/:id',
       templateUrl: 'client/planEstudios/planEstudios.detalle.ng.html',
       controller: 'PlanEstudiosDetalleCtrl as pl',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.turnos', {
       url: '/turnos',
       templateUrl: 'client/turnos/turnos.ng.html',
       controller: 'TurnosCtrl as tn',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.grupos', {
       url: '/grupos',
       templateUrl: 'client/grupos/grupos.ng.html',
       controller: 'GruposCtrl as gp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.grupoDetalle', {
       url: '/gruposDetalle/:grupo_id',
       templateUrl: 'client/grupos/gruposDetalle.ng.html',
       controller: 'GruposDetalleCtrl as gp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.inscripciones', {
       url: '/inscripciones/:id',
       templateUrl: 'client/inscripciones/inscripciones.ng.html',
       controller: 'InscripcionesCtrl as ins',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.pagos', {
       url: '/pagos',
@@ -390,40 +549,64 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/inscripciones/form.ng.html',
       controller: 'NuevaInscripcionCtrl as ins',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
 		.state('root.grupo', {
       url: '/grupo/:id',
       templateUrl: 'client/grupos/form.ng.html',
       controller: 'NuevoGrupoCtrl as gp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.editarGrupo', {
       url: '/grupo',
       templateUrl: 'client/grupos/form.ng.html',
       controller: 'NuevoGrupoCtrl as gp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.generaciones', {
       url: '/generaciones',
       templateUrl: 'client/generaciones/generaciones.ng.html',
       controller: 'GeneracionesCtrl as gen',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.instituciones', {
       url: '/instituciones',
@@ -488,20 +671,32 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/aulas/aulas.ng.html',
       controller: 'AulasCtrl as au',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.maestros', {
       url: '/maestros',
       templateUrl: 'client/maestros/maestros.ng.html',
       controller: 'MaestrosCtrl as maes',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.tareas', {
       url: '/tareas/:id/:maestros_id/:materia_id/:grupo_id',
@@ -518,30 +713,48 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/documentos/documentos.ng.html',
       controller: 'DocumentosCtrl as doc',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.escuela', {
       url: '/escuela',
       templateUrl: 'client/escuela/escuela.ng.html',
       controller: 'EscuelaCtrl as escu',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.trabajadores', {
       url: '/trabajadores',
       templateUrl: 'client/empleados/trabajadores.ng.html',
       controller: 'TrabajadoresCtrl as emp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.nuevoHorario', {
       url: '/nuevoHorario/:id',
@@ -558,20 +771,32 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/rvoe/rvoe.ng.html',
       controller: 'RvoeCtrl as rv',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })     
     .state('root.conceptosPago', {
       url: '/conceptosPago',
       templateUrl: 'client/conceptosPago/conceptosPago.ng.html',
       controller: 'ConceptosPagoCtrl as cp',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.conceptos', {
       url: '/conceptos',
@@ -594,10 +819,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/conceptosComision/conceptosComision.ng.html',
       controller: 'ConceptosComisionCtrl as ccm',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })    
     .state('root.editarHorario', {
       url: '/editarHorario/:id',
@@ -624,70 +855,112 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/gerentesVenta/gerentesVenta.html',
       controller: 'GerentesVentaCtrl as gv',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })       
     .state('root.vendedores', {
       url: '/vendedores',
       templateUrl: 'client/vendedores/vendedores.html',
       controller: 'VendedoresCtrl as v',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.coordinadores', {
       url: '/coordinadores',
       templateUrl: 'client/coordinadores/coordinadores.html',
       controller: 'CoordinadoresCtrl as c',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.prospectos', {
       url: '/prospectos/:vendedor_id/:etapaVenta_id',
       templateUrl: 'client/prospectos/prospectos.html',
       controller: 'ProspectosCtrl as fa',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "vendedor"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.nuevoProspecto', {
       url: '/nuevoProspecto',
       templateUrl: 'client/prospectos/nuevoProspecto.html',
       controller: 'ProspectosCtrl as fa',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "vendedor"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })        
     .state('root.prospecto', {
       url: '/prospecto/:id',
       templateUrl: 'client/prospectos/prospecto.html',
       controller: 'ProspectoCtrl as fa',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "vendedor"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('root.actividades', {
       url: '/actividades',
       templateUrl: 'client/actividades/actividades.html',
       controller: 'ActividadesCtrl as ac',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "vendedor"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })
     .state('anon.pizarron', {
       url: '/pizarron/:grupoId',
@@ -701,10 +974,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/etapasVenta/etapasVenta.html',
       controller: 'EtapasVentaCtrl as ev',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director" || user.roles[0] == "gerenteVenta"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.financiero', {
       url: '/financiero',
@@ -737,10 +1016,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/gastos/gastos.ng.html',
       controller: 'GastosCtrl as gc',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.reporteCobranza', {
       url: '/reporte/cobranza',
@@ -783,9 +1068,15 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/cuentas/cuentas.ng.html',
       controller: 'CuentasCtrl as cc',
       resolve: {
-        "currentUser": ["$meteor", function($meteor){
-          return $meteor.requireUser();
-        }]
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
       }
     })
     .state('root.asistenciaGrupo', {
@@ -1003,7 +1294,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "gerenteVenta"){
+						if(user.roles[0] == "gerenteVenta" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1095,12 +1386,34 @@ angular.module('casserole').config(['$injector', function ($injector) {
     .state('root.tipoPublicidad', {
       url: '/tipoPublicidad',
       templateUrl: 'client/tipoPublicidad/tipoPublicidad.html',
-      controller: 'TipoPublicidadCtrl as tp'
+      controller: 'TipoPublicidadCtrl as tp',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     }) 
     .state('root.mediosPublicidad', {
       url: '/mediosPublicidad',
       templateUrl: 'client/mediosPublicidad/mediosPublicidad.ng.html',
-      controller: 'MediosPublicidadCtrl as mp'
+      controller: 'MediosPublicidadCtrl as mp',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     }) 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1112,40 +1425,64 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/calendarios/form.html',
       controller: 'CalendarioDetalleCtrl as ca',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     }) 
     .state('root.calendarios', {
       url: '/calendarios',
       templateUrl: 'client/calendarios/calendarios.html',
       controller: 'CalendariosCtrl as ca',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.editarCalendario', {
       url: '/editarCalendario/:id',
       templateUrl: 'client/calendarios/form.html',
       controller: 'CalendarioDetalleCtrl as ca',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })    
     .state('root.alumnoMuro', {
       url: '/muro',
       templateUrl: 'client/alumno/muro/muro.html',
       controller: 'AlumnoMuroCtrl as m',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.alumnoPerfil', {
       url: '/alumnoPerfil/:alumno_id',
@@ -1162,30 +1499,48 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/alumno/calendario/calendario.html',
       controller: 'AlumnoCalendarioCtrl as c',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.alumnoKardex', {
       url: '/alumnoKardex',
       templateUrl: 'client/alumno/kardex/kardex.html',
       controller: 'AlumnoKardexCtrl as k',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.alumnoPagos', {
       url: '/alumnoPagos',
       templateUrl: 'client/alumno/pagos/pagos.html',
       controller: 'AlumnoPagosCtrl as p',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     ;
 }]);
