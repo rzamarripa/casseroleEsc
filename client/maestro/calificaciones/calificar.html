@@ -17,19 +17,31 @@
 					<label class="text-center" style="width: 150px;">
 						<strong>Calificación</strong>
 					</label>
-					<p class="project-members" style="margin-left: 175px;">
+					<p class="text-center" style="margin-left: 175px; width: 150px;">
+						<strong>Tipo</strong>
+					</p>
+					<p class="text-center">
 						<strong>Alumno</strong>
 					</p>
 				</li>
 				<li ng-repeat="alumno in ca.capturaCalificaciones.alumnos">
+					
 					<span style="width: 150px; text-align: center;"> 
 						<label>
 							<strong>{{alumno.calificacion}}</strong>
 							<input type="range" min="0" max="10" class="form-control text-center" ng-model="alumno.calificacion" ng-change="masas.validaCalificacion(alumno.calificacion)">
 						</label> 
 					</span>
-					
-					<p class="project-members" style="margin-left: 175px;">
+					<span style="margin-left: 220px;">
+						<label>
+							<select class="form-control" ng-model="alumno.tipo">
+								<option value="Ordinario">Ordinario</option>
+								<option value="Extraordinario">Extraordinario</option>
+								<option value="Equivalencia">Equivalencia</option>
+							</select>
+						</label>
+					</span>
+					<p class="">
 						<img src="{{ca.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" class="project-members" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion >= 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>

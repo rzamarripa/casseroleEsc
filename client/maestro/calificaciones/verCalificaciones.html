@@ -9,7 +9,10 @@
 					<label class="text-center" style="width: 50px;">
 						<strong>Calif.</strong>
 					</label> 
-					<p class="project-members" style="margin-left: 75px;">
+					<label class="text-center" style="width: 50px; margin-left: 100px;">
+						<strong>Tipo</strong>
+					</label> 
+					<p>
 						<strong>Alumno</strong>
 					</p>
 				</li>
@@ -17,7 +20,10 @@
 					<label class="text-center" style="width: 50px;">
 						<strong>{{alumno.calificacion | number:2}}</strong>
 					</label> 
-					<p class="project-members" style="margin-left: 75px;">
+					<label class="text-center" style="width: 50px; margin-left: 100px;">
+						{{alumno.tipo}}
+					</label> 
+					<p>
 						<img src="{{vercal.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion > 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>

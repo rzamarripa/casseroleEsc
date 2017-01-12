@@ -8,6 +8,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   window.rc = rc;
   this.tipoGasto = 'cheques';
   this.gasto = {};
+  this.gasto.fechaLimite = new Date();
   this.semanaActual = moment(new Date()).isoWeek();
   this.diaActual = moment(new Date()).weekday();
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
