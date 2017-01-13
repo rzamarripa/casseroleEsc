@@ -21,12 +21,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanasSeleccionadas = [];
 	
 	this.subscribe("ocupaciones",()=>{
-
 		return [{_id : this.getReactively("ocupacion_id"), estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
 	this.subscribe("planPagos",()=>{
-
 		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
@@ -41,7 +39,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe('inscripciones', () => {
-		
 		return [{
 			alumno_id : $stateParams.alumno_id,
 			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -256,7 +253,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var fechaCobro = new Date(plan[i].fecha);
 		var diasRecargo = Math.floor((fechaActual - fechaCobro) / (1000 * 60 * 60 * 24));
 		var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
-		//console.log(configuracion, plan[i],diasRecargo)
 		var concepto = configuracion.colegiatura[plan[i].tipoPlan];
 		
 		if(cobro.pagada == 1){

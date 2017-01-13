@@ -39,7 +39,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		gastos : () => {
 			var gas = Gastos.find({tipoGasto  : this.getReactively('tipoGasto')}).fetch();
 			if(rc.getReactively("tipoGasto") == "depositos"){
-				console.log("entré")
 				_.each(gas, function(g){
 					g.cuenta = Cuentas.findOne(g.cuenta_id);
 				})
@@ -69,7 +68,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
   this.boton = function(){
     this.nuevo = !this.nuevo;
-    console.log(this.nuevo)
   }
   this.guardar = function(gasto, form){
     if(form.$invalid){

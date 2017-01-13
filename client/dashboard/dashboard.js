@@ -26,7 +26,6 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	
 	this.subscribe('pagosPorSemana',()=>{
 		var query = {campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : parseInt(this.getReactively("semanaActual")), pagada : 1, anioPago : parseInt(this.getReactively("anio"))};
-		console.log(query);
 		return [query]
 	});
 	

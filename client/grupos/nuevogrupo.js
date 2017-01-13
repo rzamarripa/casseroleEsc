@@ -237,7 +237,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 
 					}
 				}
-				console.log("grupo", grupo);
 			return grupo;
 		},
 		grados : () => {

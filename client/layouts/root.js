@@ -37,6 +37,68 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			  return Avisos.find();
 			}
 		});
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "coordinadorFinanciero"){
+		// Coordinador Financiero
+		this.subscribe('campus', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
+		
+		this.subscribe('avisos', function(){
+			return [{
+				estatus : true
+			}]
+		});
+		
+		this.subscribe('secciones', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+			}]
+		});
+				
+		this.helpers({
+			campus : () => {
+			  return Campus.findOne(Meteor.user().profile.campus_id);
+			},
+			seccion : () => {
+			  return Secciones.findOne(Meteor.user().profile.seccion_id);
+			},
+			avisos : () => {
+			  return Avisos.find();
+			}
+		});
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "coordinadorAcademico"){
+		// Coordinador Académico
+		this.subscribe('campus', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+			}]
+		});
+		
+		this.subscribe('avisos', function(){
+			return [{
+				estatus : true
+			}]
+		});
+		
+		this.subscribe('secciones', function(){
+			return [{
+				_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+			}]
+		});
+				
+		this.helpers({
+			campus : () => {
+			  return Campus.findOne(Meteor.user().profile.campus_id);
+			},
+			seccion : () => {
+			  return Secciones.findOne(Meteor.user().profile.seccion_id);
+			},
+			avisos : () => {
+			  return Avisos.find();
+			}
+		});
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "vendedor"){ 
 		// Vendedores
 

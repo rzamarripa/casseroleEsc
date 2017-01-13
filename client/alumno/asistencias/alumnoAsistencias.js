@@ -7,8 +7,6 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	window.rc = rc;
 	this.materia_id = "";
 	this.grupo_id = "";
-	
-	console.log($stateParams)
  
 	this.subscribe('grupos',()=>{
 		return [{_id : $stateParams.grupo_id, estatus:true}]
@@ -74,7 +72,6 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 					})
 			  })
 		  }		  
-		  console.log("transmutar", transmutar)
 			return _.toArray(transmutar);
 
 	  }

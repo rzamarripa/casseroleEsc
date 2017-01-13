@@ -9,24 +9,22 @@
 						</div>
 						<address>
 							<br>
-							<strong>Casserole</strong>
-							<br>
+							<strong>{{pi.seccion.nombreseccion}}</strong>
+							<br><br>
 							{{pi.seccion.direccion}}
-							<br>
-							COL. CENTRO
 							<br/>
 							HMO, SONORA
 							<br>
-							<abbr title="Phone">TEL:</abbr> (662) 212-5152
+							<abbr title="Phone">TEL:</abbr> {{pi.seccion.telefono1}}
 						</address>
 						<div>
 							<div>
-								<strong>RECIBO NO:</strong>{{ pi.pago._id }}
+<!-- 								<strong>RECIBO NO:</strong>{{ pi.pago._id }} -->
 							</div>		
 						</div>
 						<div>
 							<div>
-								<strong>FECHA:</strong>{{ pi.fecha | date:'dd-MM-yyyy'}}
+								<strong>FECHA:</strong> {{ pi.fecha | date:'dd-MM-yyyy'}}
 							</div>		
 						</div>
 						<table class="table">

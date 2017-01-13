@@ -99,6 +99,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    },
     })
+    .state('root.deudores', {
+      url: '/deudores',
+      templateUrl: 'client/deudores/deudores.html',      
+      controller: 'DeudoresCtrl as de',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',
@@ -133,6 +143,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/alumnos/:alumno_id',
       templateUrl: 'client/alumnos/detalle.ng.html',
       controller: 'AlumnosDetalleCtrl as al',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    .state('root.convenios', {
+      url: '/convenios/:alumno_id',
+      templateUrl: 'client/convenios/convenios.html',
+      controller: 'ConveniosCtrl as co',
       resolve: {
 	      "currentUser": ["$meteor", function($meteor){
 	        return $meteor.requireUser();
@@ -1187,5 +1207,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
+    
     ;
 }]);

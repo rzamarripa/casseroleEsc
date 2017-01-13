@@ -1,0 +1,54 @@
+<div class="row">
+	<div class="col-sm-12">
+		
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered">
+			<caption><h4>Listado de Deudores</h4></caption>
+			<thead class="thead">
+				<tr>
+					<th class="text-center">No.</th>
+					<th class="text-center">T</th>
+					<th class="text-center">Matrícula</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center">Teléfono</th>
+					<th class="text-center">USP</th>
+					<th style="width: 100px" class="text-center">Fecha UPR</th>
+					<th class="text-center">Cant.</th>
+					<th class="text-center">Colegiaturas</th>
+					<th class="text-center">Deuda</th>
+					<th class="text-center">Recargos</th>
+					<th class="text-center">Total</th>
+				</tr>
+			</thead>
+			<tbody style="font-size: smaller">
+				<tr ng-repeat="deudor in de.deudores">
+					<th class="text-center">{{$index + 1}}</th>	
+					<th>A</th>
+					<td><a ui-sref="root.alumnoDetalle({alumno_id : deudor.alumno_id})">{{deudor.alumno.profile.matricula}}</a></td>
+					<td><a ui-sref="root.alumnoDetalle({alumno_id : deudor.alumno_id})">{{deudor.alumno.profile.nombreCompleto}}</a></td>
+					<td>{{deudor.alumno.profile.tel1}}</td>	
+					<td class="text-center">{{deudor.colegiaturaUltimoPago}}</td>
+					<td class="text-center">{{deudor.fechaUltimoPago | date:"dd-MM-yyyy"}}</td>
+					<td class="text-center">{{deudor.pagos.length}}</td>
+					<td>
+						<span ng-repeat="deuda in deudor.pagos">
+							<span title="{{deuda.anio}}">| {{deuda.semana}}</span>
+						</span>
+					</td>
+					<td class="text-right">{{deudor.deuda | currency}}</td>
+					<td class="text-right">{{deudor.recargos | currency}}</td>
+					<td class="text-right">{{deudor.total | currency}}</td>
+				</tr>
+				<tr>
+					<td colspan="9" class="text-right negritas">Totales</td>
+					<td class="text-right negritas">{{de.totales.deuda | currency}}</td>
+					<td class="text-right negritas">{{de.totales.recargos | currency}}</td>
+					<td class="text-right negritas">{{de.totales.total | currency}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
