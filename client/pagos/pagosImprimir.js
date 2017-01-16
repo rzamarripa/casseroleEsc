@@ -58,34 +58,10 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 		}
   ]
 */
-	console.log($stateParams)
-	 $stateParams.semanas=JSON.parse($stateParams.semanas)
+	
 	 console.log($stateParams)
-  this.semanas = {};
-  _.each($stateParams.semanas, function(semana){
-	  if(undefined == rc.semanas[semana.tipo]){
-			  rc.semanas[semana.tipo] = [{
-			  numero : semana.numero,
-			  importe : semana.importe,
-			  semana : semana.semana,
-			  tipo : semana.tipo,
-			  anio : semana.anio
-	  	}];
-	  }else{
-		  rc.semanas[semana.tipo].push({
-			  numero : semana.numero,
-			  importe : semana.importe,
-			  semana : semana.semana,
-			  tipo : semana.tipo,
-			  anio : semana.anio
-	  	})
-	  }
-  });
   
-  
-  console.log("resultado",_.toArray(rc.semanas));
-  
-  console.log(this.semanas);
+
 
   this.subTotal = 0.00;
   this.iva = 0.00;
@@ -96,7 +72,7 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   
 	this.subscribe('alumno', () => {
     return [{
-	    id : $stateParams.id
+	    id : $stateParams.alumno_id
     }];
   });
   this.subscribe('secciones', () => {
@@ -104,21 +80,67 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 	    _id : this.getReactively("alumno.profile.seccion_id")
     }];
   });
+
+    this.subscribe('pagosAlumno', () => {
+
+		return [{
+			alumno_id : $stateParams.alumno_id
+		}];
+	});
+    this.subscribe("planPagos",()=>{
+		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	});
+	
     
-  this.helpers({
+  rc.helpers({
+  		semanas :() =>{
+  			var ret ={};
+  			plan=PlanPagos.find({pago_id:$stateParams.pago}).fetch();
+  			//console.log(plan);
+  			/*_.each($stateParams.semanas, function(semana){
+				  rc.subTotal += (semana.importe/1.16);
+				  rc.total += semana.importe;
+				  rc.iva = rc.total-rc.subTotal;
+				  console.log(semana.importe);
+			  });*/
+			_.each(plan,function (pago) {
+				var fechaActual = moment();
+				var fechaCobro = moment(pago.fecha);
+				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
+				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
+
+				if(!ret["Colegiatura"])ret["Colegiatura"]=[];
+				
+				ret["Colegiatura"].push({semana:pago.semana,anio:pago.anio,importe:pago.importe})
+				rc.total =pago.importe;
+				if(pago.tiempoPago==1){
+					if(!ret["Recargo"])ret["Recargo"]=[];
+					ret["Recargo"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeRecargo})
+					rc.total +=pago.importeRecargo;
+				}
+				if(diasDescuento >= pago.diasDescuento){
+					if(!ret["Descuento"])ret["Descuento"]=[];
+					ret["Descuento"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeDescuento})
+					rc.total -=pago.importeDescuento;
+				}
+			})
+			console.log(rc.total, rc.total/1.16)
+			rc.subTotal= rc.total/1.16;
+			rc.iva = rc.total-rc.subTotal;
+			console.log(ret)
+  			return ret
+
+  		},
 		alumno : () => {
-			return Meteor.users.findOne({_id : $stateParams.id});
+			return Meteor.users.findOne({_id : $stateParams.alumno_id});
 		},
 		seccion : () => {
 			return Secciones.findOne();
 		}
   });
+
+
   
-  _.each($stateParams.semanas, function(semana){
-	  rc.subTotal += (semana.importe/1.16);
-	  rc.total += semana.importe;
-	  rc.iva = rc.total-rc.subTotal;
-	  console.log(semana.importe);
-  });
+  
   
 };

@@ -34,42 +34,86 @@ Meteor.methods({
   },
   generaPlanPagos : function(inscripcion) {
 	  console.log("inscripcion", inscripcion);
+	  var mfecha = moment(new Date());
 	  _.each(inscripcion.planPagos.fechas, function(pago){
 		  var nuevoPago = {};
-		  if(pago.pagada == 1){
+		  if(pago.estatus == 1){
 			  nuevoPago = {
-				  alumno_id : inscripcion.alumno_id,
-					inscripcion_id : inscripcion._id,
-					vendedor_id : inscripcion.vendedor_id,
-					seccion_id : inscripcion.seccion_id,
-					campus_id : inscripcion.campus_id,
-					fechaInscripcion : inscripcion.fechaInscripcion,
-					semana : pago.semana,
-					tipoPlan : pago.tipoPlan,
-					numeroPago : pago.numeroPago,
-					mes : pago.mes,
-					anio : pago.anio,
-					fecha : pago.fecha,
-					estatus : true,
-					pagada : 1,
-					fechaPago : new Date()
+				    alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+					semana            : pago.semana,
+					fecha             : pago.fecha,
+					dia               : pago.dia,
+					tipoPlan          : pago.tipoPlan,
+					numeroPago        : pago.numeroPago,
+					importeRecargo    : pago.importeRecargo,
+					importeDescuento  : pago.importeDescuento,
+					importeRegular    : pago.importeRegular,
+					diasRecargo       : pago.diasRecargo,
+					diasDescuento     : pago.diasDescuento,
+					importe           : pago.importe,
+					pago              : pago.pago,
+					fechaPago         : new Date(mfecha.toDate().getTime()),
+					mesPago			  : mfecha.get('month') + 1,
+				    anioPago		  : mfecha.get('year'),
+					semanaPago        : mfecha.isoWeek(),
+					diaPago           : mfecha.weekday(),
+					faltante          : pago.faltante,
+					estatus           : 1,
+					tiempoPago        : 0,
+					modificada        : false,
+					mes               : pago.mes,
+					anio              : pago.anio,
+					pago_id           : inscripcion.pago_id
+					
 				}
+				
 		  }else{
-			  nuevoPago = {
-				  alumno_id : inscripcion.alumno_id,
-					inscripcion_id : inscripcion._id,
-					vendedor_id : inscripcion.vendedor_id,
-					seccion_id : inscripcion.seccion_id,
-					campus_id : inscripcion.campus_id,
-					fechaInscripcion : inscripcion.fechaInscripcion,
-					semana : pago.semana,
-					tipoPlan : pago.tipoPlan,
-					numeroPago : pago.numeroPago,
-					mes : pago.mes,
-					anio : pago.anio,
-					fecha : pago.fecha,
-					estatus : true,
-					pagada : 0
+		  		var fechaActual = moment();
+				var fechaCobro = moment(pago.fecha);
+				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
+				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
+				var tiempoPago =0;
+
+				if(diasRecargo >= pago.diasRecargo)
+					tiempoPago =1;
+				
+
+			    nuevoPago = {
+			  		alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+					semana            : pago.semana,
+					fecha             : pago.fecha,
+					dia               : pago.dia,
+					tipoPlan          : pago.tipoPlan,
+					numeroPago        : pago.numeroPago,
+					importeRecargo    : pago.importeRecargo,
+					importeDescuento  : pago.importeDescuento,
+					importeRegular    : pago.importeRegular,
+					diasRecargo       : pago.diasRecargo,
+					diasDescuento     : pago.diasDescuento,
+					importe           : pago.importe,
+					faltante          : pago.faltante,
+					pago              : 0,
+					mesPago			  : undefined,
+				    anioPago		  : undefined,
+					fechaPago         : undefined,
+					semanaPago        : undefined,
+					diaPago           : undefined,
+					estatus           : pago.estatus,
+					tiempoPago        : tiempoPago,
+					modificada        : false,
+					mes               : pago.mes,
+					anio              : pago.anio,
+					pago_id           : undefined
 				}
 		  }
 		  

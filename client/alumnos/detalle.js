@@ -174,23 +174,30 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	this.calcularImporteU= function(pago, configuracion){
-		if(pago.pagada == 1)
+		if(pago.estatus == 1)
 			return pago.pago;
-		if(pago.pagada == 6 || (pago.pagada == 2 && pago.faltante > 0))
+		if(pago.estatus == 6 || (pago.estatus == 2 && pago.faltante > 0))
 			return pago.faltante;
+
+		if(pago.modificada || pago.tiempoPago==1)
+			return pago.importe;
 		
 		var fechaActual = moment();
 		var fechaCobro = moment(pago.fecha);
 		var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 		var diasDescuento = fechaCobro.diff(fechaActual, 'days')
-		var concepto 			= configuracion.colegiatura[pago.tipoPlan];
-		var importe 			= concepto.importeRegular + (pago.remanente ? pago.remanente : 0);
-		if(diasDescuento >= concepto.diasDescuento){
-			importe -= concepto.importeDescuento;
+		//var concepto 			= configuracion.colegiatura[pago.tipoPlan];
+		var importe 			= pago.importeRegular;
+		if(diasDescuento >= pago.diasDescuento){
+			importe -= pago.importeDescuento;
 		}
-		if(diasRecargo >= concepto.diasRecargo){
-			importe += concepto.importeRecargo;
+		if(diasRecargo >= pago.diasRecargo){
+			importe += pago.importeRecargo;
+			pago.tiempoPago=1;
 		}
+		pago.importe =importe;
+		//pago.retrasada = true;
+
 		return importe
 	}	
 
@@ -213,24 +220,24 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		rc.totalPagar = 0;
 		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
-				if(plan[i].pagada != 1 && plan[i].pagada != 5 ){
+				if(plan[i].estatus != 1 && plan[i].estatus != 3 ){
 					rc.hayParaPagar = false;
-					if(plan[i].pagada == 6 || plan[i].faltante > 0){
+					if(plan[i].estatus == 6 || plan[i].faltante > 0){
 						rc.totalPagar += plan[i].faltante;
 					}
 					else{
 						rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
 					}
 					rc.semanasSeleccionadas.push(plan[i]);
-					plan[i].pagada = 2;
+					plan[i].estatus = 5;
 					//plan[i].pago = this.calcularImporteU(plan,i)
 				}
 		};
 		for (var i = cobro.numeroPago; i < plan.length; i++) {
-			if(plan[i].pagada != 1 && plan[i].pagada != 5 && plan[i].faltante)
-				plan[i].pagada = 6;		
-			if(plan[i].pagada != 1 && plan[i].pagada != 5 && plan[i].pagada != 6){
-				plan[i].pagada = 0;
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante)
+				plan[i].estatus = 6;		
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 6){
+				plan[i].estatus = 0;
 			}
 		}	
 	}
@@ -239,7 +246,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.imprimir = function(semanaSeleccionada){
 		var semanasImprimir = [];
 		_.each(rc.misSemanas, function(semana){
-			if(semana.pagada == 3){
+			if(semana.status == 3){
 				semanasImprimir.push(semana);
 			}
 		});
@@ -249,31 +256,29 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	this.obtenerEstatus = function(cobro, plan, configuracion){
-		var i = cobro.numeroPago - 1;
-		var fechaActual = new Date();
-		var fechaCobro = new Date(plan[i].fecha);
-		var diasRecargo = Math.floor((fechaActual - fechaCobro) / (1000 * 60 * 60 * 24));
-		var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
-		var concepto = configuracion.colegiatura[plan[i].tipoPlan];
+		//var i = cobro.numeroPago - 1;
+		//var fechaActual = new Date();
+		//var fechaCobro = new Date(plan[i].fecha);
+		//var diasRecargo = Math.floor((fechaActual - fechaCobro) / (1000 * 60 * 60 * 24));
+		//var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
+		//var concepto = configuracion.colegiatura[plan[i].tipoPlan];
 		
-		if(cobro.pagada == 1){
+		if(cobro.estatus == 1)
 			return "bg-color-green txt-color-white";
-	 	}
-	 	else if(cobro.pagada == 2){
+	 	if(cobro.estatus == 5)
 		 	return "bg-color-blue txt-color-white";
-	 	}
-	 	else if(cobro.pagada == 5){
+	 	else if(cobro.estatus == 3)
 	 		return "bg-color-blueDark txt-color-white";
-	 	}
-	 	else if(cobro.pagada == 6){
+	 	else if(cobro.estatus == 6)
 	 		return "bg-color-greenLight txt-color-white";
-	 	}
-	 	else if(diasRecargo >= concepto.diasRecargo){
+	 	else if(cobro.tiempoPago == 1)
 	 		return "bg-color-orange txt-color-white";
-		}
+		
 		return "";
+		
 	}
 	
+	/*
 	this.pagarLiquidacion=function(cobro, semanasPagadas){
 		semanasPagadas.push({
 			fechaPago 	: new Date(),
@@ -386,38 +391,59 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 										semanaPago	: this.semanaPago
 			});
 		}
-	}
+	}*/
 	this.pagar = function(planPago, configuracion){
 		if (confirm("Está seguro de realizar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasPagadas = [];
+			diaActual = moment(new Date()).weekday();
+			semanaPago = moment(new Date()).isoWeek();
+			mesPago = moment(new Date()).get('month') + 1;
+			anioPago = moment(new Date()).get('year');
+			pago_id = Pagos.insert({
+							fechaPago 	: new Date(),
+							alumno_id 	: configuracion.alumno_id,
+							grupo_id	: configuracion.grupo_id,
+							seccion_id  : Meteor.user().profile.seccion_id,
+							campus_id 	: Meteor.user().profile.campus_id,
+							estatus 	: 1,
+							usuario_id 	: Meteor.userId(),
+							importe 	: configuracion.importePagado-configuracion.cambio,
+							//cuenta_id   : rc.cuentaInscripcion._id,
+							diaPago     : diaActual,
+							mesPago     : mesPago,
+							semanaPago  : semanaPago,
+							anioPago    : anioPago,
+							inscripcion_id : configuracion._id
+						});
 			_.each(planPago, function(pago){
-					if(pago.pagada == 2 && pago.faltante > 0){
-						rc.pagarLiquidacion(pago, semanasPagadas);
+					if(pago.estatus == 5 && pago.faltante > 0){
+						//rc.pagarLiquidacion(pago, semanasPagadas);
 						pago.pago = pago.pago ? pago.pago : 0 + pago.faltante;
-						pago.pagada = 1;
+						pago.estatus = 1;
 						pago.faltante = 0;
 						pago.fechaPago = new Date();
 						pago.semanaPago = moment().isoWeek();
 						pago.anioPago = moment().get('year');
+						pago.pago_id =pago_id;
+						semanasPagadas.push(pago);
 					}
-					else if(pago.pagada == 2){
-						rc.pagarCobro(pago, semanasPagadas, configuracion);
+					else if(pago.estatus == 5){
+						//rc.pagarCobro(pago, semanasPagadas, configuracion);
 						pago.pago = rc.calcularImporteU(pago, configuracion);
-						pago.pagada = 1;
+						pago.estatus = 1;
 						pago.fechaPago = new Date();
 						pago.semanaPago = moment().isoWeek();
 						pago.anioPago = moment().get('year');
+						pago.pago_id =pago_id;
+						semanasPagadas.push(pago);
 					}
 					var idTemp = pago._id;
 					delete pago._id
 					PlanPagos.update({_id : idTemp}, {$set : pago});
 				});
-			for(var i in semanasPagadas){
-				var semana = semanasPagadas[i];
-				Pagos.insert(semana);
-			}
+			
 			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
-			var url = $state.href("anon.pagosImprimir",{semanas :JSON.stringify(semanasPagadas), id : $stateParams.alumno_id},{newTab : true});
+			var url = $state.href("anon.pagosImprimir",{pago : pago_id,alumno_id:configuracion.alumno_id},{newTab : true});
 			window.open(url,'_blank');
 			// var win = window.open($state.href('anon.pagosImprimir', {semanas : semanasPagadas, id : $stateParams.alumno_id}),'_blank');
 			// win.focus();
@@ -460,30 +486,36 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 */
 	
-	this.condonarPago=function(cobro,semanasCondonadas){
-		semanasCondonadas.push({
-										fechaPago 	: new Date(),
-										alumno_id 	: $stateParams.alumno_id,
-										campus_id 	:Meteor.user().profile.campus_id,
-										numero 		: cobro.numeroPago,
-										semana 		: cobro.semana,
-										anio 		: cobro.anio,
-										estatus 	: 1,
-										concepto 	: 'Colegiatura #' + cobro.numeroPago + ': Condonación',
-										tipo 		: "Condonación",
-										usuario_id 	: Meteor.userId(),
-										condonado : cobro.condonado,
-										importe 	: 0,
-										cuenta_id : this.cuenta._id,
-										weekday : this.diaActual,
-										semanaPago: this.semanaPago
-		});
-	}
+	
 	this.condonar = function(planPagos, configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
+			var diaActual = moment(new Date()).weekday();
+			var semanaPago = moment(new Date()).isoWeek();
+			var mesPago = moment(new Date()).get('month') + 1;
+			var anioPago = moment(new Date()).get('year');
+			var condonado= Pagos.insert({
+							fechaPago 	: new Date(),
+							alumno_id 	: configuracion.alumno_id,
+							grupo_id	: configuracion.grupo_id,
+							seccion_id  : Meteor.user().profile.seccion_id,
+							campus_id 	: Meteor.user().profile.campus_id,
+							estatus 	: 3,
+							usuario_id 	: Meteor.userId(),
+							importe 	: 0,
+							pago        : 0,
+
+							//cuenta_id   : rc.cuentaInscripcion._id,
+							diaPago     : diaActual,
+							mesPago     : mesPago,
+							semanaPago  : semanaPago,
+							anioPago    : anioPago,
+							inscripcion_id : configuracion._id
+						});
+			console.log(planPagos);
 			_.each(planPagos, function(pago) {
-				if(pago.pagada == 2){
+				console.log(pago,pago.estatus)
+				if(pago.estatus == 5){
 					if(pago.faltante){
 						pago.condonado = pago.faltante;
 					}
@@ -491,21 +523,26 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.condonado = rc.calcularImporteU(pago, configuracion);
 						pago.pago = 0;
 					}
-					pago.pagada = 5;					
+					pago.
+					pago.fechaPago = new Date();
+					pago.semanaPago = moment().isoWeek();
+					pago.anioPago = moment().get('year');
+					pago.estatus = 3;		
+					pago.importe = 0;
+					pago.pago_id=condonado
+
 					pago.faltante = 0;
-					rc.condonarPago(pago,semanasCondonadas);
+					//rc.condonarPago(pago,semanasCondonadas);
 					
 					var idTemp = pago._id;
 					delete pago._id;
+					console.log(pago);
 					PlanPagos.update(idTemp, {$set : pago});
 				}
 			});
 			
-			for(var i in semanasCondonadas){
-				var semana = semanasCondonadas[i];
-				Pagos.insert(semana);
-			}
-			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.alumno_id}); 
+			
+			$state.go("anon.pagosImprimir",{pago : condonado,alumno_id 	: configuracion.alumno_id}); 
 		}
 	}
 	this.planPagosSemana =function (inscripcion) {
@@ -519,20 +556,37 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 		for (var i = 0; i <totalPagos; i++) {
 			plan.push({
-				alumno_id : inscripcion.alumno_id,
-				inscripcion_id : inscripcion._id,
-				vendedor_id : inscripcion.vendedor_id,
-				seccion_id : inscripcion.seccion_id,
-				campus_id : inscripcion.campus_id,
-				fechaInscripcion : inscripcion.fechaInscripcion,
-				semana:mfecha.isoWeek(),
-				fecha:angular.copy(mfecha.toDate()),
-				tipoPlan:'Semanal',
-				numeroPago:i+1,
-				mes:mfecha.get('month')+1,
-				anio:mfecha.get('year'),
-				estatus : false,
-				pagada : 0
+				    alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+				   	semana 			    : mfecha.isoWeek(),
+					fecha 			    : new Date(mfecha.toDate().getTime()),
+					dia                 : mfecha.weekday(),
+					tipoPlan 		    : 'Semanal',
+					numeroPago 	        : i + 1,
+				
+					importeRecargo      : inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
+					importeDescuento    : inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
+					importeRegular      : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					diasRecargo         : inscripcion.planPagos.colegiatura.Semanal.diasRecargo,
+					diasDescuento       : inscripcion.planPagos.colegiatura.Semanal.diasDescuento,
+					importe             : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					fechaPago           : undefined,
+					semanaPago          : undefined,
+					diaPago             : undefined,
+					pago                : 0,
+					estatus             : 0,
+					tiempoPago          : 0,
+					modificada          : false,
+					mes					: mfecha.get('month') + 1,
+					anio				: mfecha.get('year'),
+					pago_id            : undefined
+
+
+				
 			});
 			mfecha = mfecha.day(8);
 		}
@@ -560,20 +614,34 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		for (var i = 0; i <totalPagos; i++) {
 
 			plan.push({
-				alumno_id : inscripcion.alumno_id,
-				inscripcion_id : inscripcion._id,
-				vendedor_id : inscripcion.vendedor_id,
-				seccion_id : inscripcion.seccion_id,
-				campus_id : inscripcion.campus_id,
-				fechaInscripcion : inscripcion.fechaInscripcion,
-				semana:mfecha.isoWeek(),
-				fecha:angular.copy(mfecha.toDate()),
-				tipoPlan:'Quincenal',
-				numeroPago:i+1,
-				mes:mfecha.get('month')+1,
-				anio:mfecha.get('year'),
-				estatus : false,
-				pagada : 0
+				alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+				   	semana 			    : mfecha.isoWeek(),
+					fecha 			    : new Date(mfecha.toDate().getTime()),
+					dia                 : mfecha.weekday(),
+					tipoPlan 		    : 'Quincenal',
+					numeroPago 	        : i + 1,
+				
+					importeRecargo      : inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
+					importeDescuento    : inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
+					importeRegular      : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					diasRecargo         : inscripcion.planPagos.colegiatura.Semanal.diasRecargo,
+					diasDescuento       : inscripcion.planPagos.colegiatura.Semanal.diasDescuento,
+					importe             : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					fechaPago           : undefined,
+					semanaPago          : undefined,
+					diaPago             : undefined,
+					pago                : 0,
+					estatus             : 0,
+					tiempoPago          : 0,
+					modificada          : false,
+					mes					: mfecha.get('month') + 1,
+					anio				: mfecha.get('year'),
+					pago_id            : undefined
 			});
 			
 			if(par==1){
@@ -602,20 +670,35 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			mfecha.add(1,'month');
 		for (var i = 0; i <totalPagos; i++) {
 			plan.push({
-				alumno_id : inscripcion.alumno_id,
-				inscripcion_id : inscripcion._id,
-				vendedor_id : inscripcion.vendedor_id,
-				seccion_id : inscripcion.seccion_id,
-				campus_id : inscripcion.campus_id,
-				fechaInscripcion : inscripcion.fechaInscripcion,
-				semana:mfecha.isoWeek(),
-				fecha:angular.copy(mfecha.toDate()),
-				tipoPlan:'Mensual',
-				numeroPago:i+1,
-				mes:mfecha.get('month')+1,
-				anio:mfecha.get('year'),
-				estatus : false,
-				pagada : 0
+
+				alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+				   	semana 			    : mfecha.isoWeek(),
+					fecha 			    : new Date(mfecha.toDate().getTime()),
+					dia                 : mfecha.weekday(),
+					tipoPlan 		    : 'Mensual',
+					numeroPago 	        : i + 1,
+				
+					importeRecargo      : inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
+					importeDescuento    : inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
+					importeRegular      : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					diasRecargo         : inscripcion.planPagos.colegiatura.Semanal.diasRecargo,
+					diasDescuento       : inscripcion.planPagos.colegiatura.Semanal.diasDescuento,
+					importe             : inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+					fechaPago           : undefined,
+					semanaPago          : undefined,
+					diaPago             : undefined,
+					pago                : 0,
+					estatus             : 0,
+					tiempoPago          : 0,
+					modificada          : false,
+					mes					: mfecha.get('month') + 1,
+					anio				: mfecha.get('year'),
+					pago_id            : undefined
 			});
 			
 			mfecha.add(1,'month');
@@ -638,7 +721,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 
 
-			while(fechas.length > 0 && fechas[fechas.length -1].fecha > fechaActual && (!fechas[fechas.length -1].pagada || fechas[fechas.length -1].pagada == 0)){
+			while(fechas.length > 0 && fechas[fechas.length -1].fecha > fechaActual && (!fechas[fechas.length -1].estatus || fechas[fechas.length -1].estatus == 0)){
 				
 				fechaUltima = fechas.pop();
 				//console.log(fechaUltima._id)
