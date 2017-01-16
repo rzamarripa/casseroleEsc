@@ -13,10 +13,8 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	
   Meteor.apply('deudores', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.totales = result[0];
-	  console.log(rc.totales);
 	  result.splice(0, 1);
 	  rc.deudores = result;
-	  console.log("despues", rc.totales)
     $scope.$apply();
   });
   

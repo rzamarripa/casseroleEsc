@@ -491,6 +491,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	
 	this.guardar = function(inscripcion) {
 		var grupo = Grupos.findOne(inscripcion.grupo_id);
+		var campus = Campus.findOne(Meteor.user().profile.campus_id);
 		inscripcion.planEstudios_id=grupo.planEstudios_id;
 		inscripcion.campus_id = Meteor.user().profile.campus_id;
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
@@ -532,8 +533,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				  
 			  }else{
 				  //Se no existen Alumnos generamos la primer matrícula
-				  alumno.username = "e" + anio + Meteor.user().profile.campus_clave + "0001";
-				  alumno.profile.matricula = "e" + anio + Meteor.user().profile.campus_clave + "0001";
+				  alumno.username = "e" + anio + campus.clave + "0001";
+				  alumno.profile.matricula = "e" + anio + campus.clave + "0001";
 				  alumno.password = "123qwe";
 			  }
 

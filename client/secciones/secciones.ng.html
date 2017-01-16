@@ -88,8 +88,18 @@
 							    	<div class="col-sm-8" valida>
 									    <label>Dirección *</label>
 									    <textarea name="direccion" class="form-control" placeholder="Dirección" ng-model="sec.seccion.direccion" required></textarea>
-							    	</div>				    	
-							    </div>					
+							    	</div>	    	
+							    </div>	
+							    <div class="row">
+							    	<div class="col-sm-6" valida>
+									    <label>Ciudad *</label>
+									    <input name="ciudad" type="text" class="form-control" placeholder="Ciudad" ng-model="sec.seccion.ciudad" required="">
+							    	</div>
+							    	<div class="col-sm-6" valida>
+									    <label>Estado *</label>
+									    <input name="estado" type="text" class="form-control" placeholder="Estado" ng-model="sec.seccion.estado" required="">
+							    	</div>
+							    </div>				
 							    <div class="row">
 								    <div class="col-sm-3">
 											<img src="{{sec.seccion.logo}}" height="100" class="thumbnail" style="height: 100px !important"/>

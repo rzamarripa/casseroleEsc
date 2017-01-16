@@ -1,3 +1,4 @@
+/*
 angular
   .module('casserole')
   .controller('CobranzaCtrl', CobranzaCtrl);
@@ -65,3 +66,4 @@ console.log(this.semanasObj);
   	}
   }
 };
+*/

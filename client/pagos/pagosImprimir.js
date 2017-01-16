@@ -101,13 +101,13 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   });
   this.subscribe('secciones', () => {
     return [{
-	    id : this.getReactively("alumno.profile.seccion_id")
+	    _id : this.getReactively("alumno.profile.seccion_id")
     }];
   });
     
   this.helpers({
 		alumno : () => {
-			return Alumnos.findOne();
+			return Meteor.users.findOne({_id : $stateParams.id});
 		},
 		seccion : () => {
 			return Secciones.findOne();

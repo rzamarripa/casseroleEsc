@@ -130,6 +130,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    },
     })
+    .state('root.cobranza', {
+      url: '/cobranza',
+      templateUrl: 'client/cobranza/cobranza.html',      
+      controller: 'CobranzaCtrl as co',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',
@@ -571,7 +581,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1046,16 +1056,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
          });
        }]
     	}
-    })
-    .state('root.reporteCobranza', {
-      url: '/reporte/cobranza',
-      templateUrl: 'client/reportes/cobranza.ng.html',
-      controller: 'CobranzaCtrl as cc',
-      resolve: {
-        "currentUser": ["$meteor", function($meteor){
-          return $meteor.requireUser();
-        }]
-      }
     })
     .state('root.conceptosGasto', {
       url: '/conceptosGasto',

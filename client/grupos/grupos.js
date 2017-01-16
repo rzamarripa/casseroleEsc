@@ -15,7 +15,6 @@ angular.module("casserole")
 	this.periodos_ids = [];
 	this.subCiclos = [];
 	
-	
 	this.subscribe('grupo', () => {
 		
 		return [{_id : $stateParams.id, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];
