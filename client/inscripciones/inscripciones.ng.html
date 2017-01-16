@@ -11,17 +11,21 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<a class="btn btn-primary" href="./nuevaInscripcion">
-		  Nuevo
-		</a>
-<!--
-		<button class="btn btn-primary" ng-click="ins.createCurricula()">
-		  crear curriculas
-		</button>
--->
-	</div>	
+		<div class="input-group">
+			<div class="input-group-btn">
+				<a href="./nuevaInscripcion" class="btn btn-default btn-primary">
+					<i class="fa fa-plus"></i> Nuevo
+				</a>
+			</div>
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="ins.buscar.nombre">
+			<div class="input-group-btn">
+				<a href="#" ng-click="ins.getFocus()" class="btn btn-default">
+					<i class="fa fa-search"></i>
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
-<br/>
 <div class="row">	
 	<div class="col-sm-12">
 		<table class="table table-striped table-bordered">			
@@ -36,6 +40,7 @@
 					<th width="15%"><div class="text-center">Plan de Estudio</div></th>
 					<th width="10%"><div class="text-center">Plan Pago</div></th>
 					<th width="10%"><div class="text-center">Fecha</div></th>
+					<th width="10%" class="text-center">Acciones</th>
 				</tr>
 			</thead>
 			<tbody class="font-sm">				
@@ -49,6 +54,10 @@
 					<td>{{_inscripcion.planEstudio.descripcion}}</td>
 					<td>{{_inscripcion.planPagos.colegiatura.tipoColegiatura}}</td>
 					<td>{{_inscripcion.fechaInscripcion | date:"dd-MM-yyyy"}}</td>
+					<td class="text-center">
+					 <button class="btn btn-primary" ng-click="ins.cambiarEstatus(_inscripcion._id, _inscripcion.estatus)" ng-show="_inscripcion.estatus == 0"><i class="fa fa-check"></i></button>
+					 <button class="btn btn-danger" ng-click="ins.cambiarEstatus(_inscripcion._id, _inscripcion.estatus)" ng-show="_inscripcion.estatus == 1"><i class="fa fa-close"></i></button>
+					</td>
 				</tr>
 			</tbody>
 		</table>

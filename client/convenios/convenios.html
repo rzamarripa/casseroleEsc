@@ -9,12 +9,12 @@
 								<div id="myCarousel" class="carousel profile-carousel">
 									<div class="air air-bottom-right padding-10">
 										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.alumnoDetalle({alumno_id : co.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-user"></i> Ir a mi perfil</a>&nbsp;
-<!-- 										<a href="javascript:void(0);" class="btn txt-color-white bg-color-pinkDark btn-sm"><i class="fa fa-envelope-o"></i> Enviar Mensaje</a> -->
+ 										<a ui-sref="root.editarAlumno({alumno_id : co.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm" ng-show="currentUser.roles[0] == 'director'">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
 									</div>
 									<div class="air air-top-left padding-10">
-										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{co.fechaActual | date:'dd-MM-yyyy'}}
-											<small> <a class="btn btn-primary" href="alumnos/{{co.alumno._id}}" ng-show="currentUser._id == alumno._id">Modificar</a></small>
-										</h4>
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{co.fechaActual | date:'dd-MM-yyyy'}}</h4>
 									</div>
 									<ol class="carousel-indicators">
 									</ol>
@@ -65,14 +65,18 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
+								<a class="btn btn-{{co.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoaula" ng-click="co.nuevoConvenio()">
+								 {{co.nuevo == true ? 'Nueva Colegiatura' : 'Cancelar'}}
+								</a>
 								<div class="collapse" id="collapseExample">
 									<form name="form" class="form-horizontal" role="form" novalidate>
 								  	<div class="well">	    
 									    <div class="row">
-										    <div class="col-sm-4" valida>					    
-										    	<label>Fecha de Pago *</label>
-										    	<input name="fecha" type="date" class="form-control" ng-model="co.pago.fecha" required="">
-									    	</div>
+									    	<div class="col-sm-4" valida>
+													<label for="fechaPago">Fecha de Pago *</label>
+													<input name="fechaPago" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="co.pago.fecha" required="" />
+												</div>
 									    	<div class="col-sm-4" valida>
 										    	<label>Colegiatura *</label>
 										    	<input name="clave" type="text" class="form-control" placeholder="Colegiatura" ng-model="co.pago.semana" required="">
@@ -88,6 +92,10 @@
 									    	<div class="col-sm-4" valida>					    
 										    	<label>Recargo *</label>
 										    	<input name="recargo" type="number" class="form-control" ng-model="co.pago.recargo" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Descuento *</label>
+										    	<input name="descuento" type="number" class="form-control" ng-model="co.pago.descuento" required="">
 									    	</div>
 									    </div> 
 									    <div class="row">
@@ -110,11 +118,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<table class="table table-striped table-bordered table-condensed">
-									<caption>
-										<a class="btn btn-{{co.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
-											href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoaula" ng-click="co.nuevoAula()">
-										 {{co.nuevo == true ? 'Nueva Colegiatura' : 'Cancelar'}}
-										</a>		
+									<caption>												
 										<h4>Listado de Pagos</h4>
 									</caption>
 									<thead class="thead">
@@ -123,17 +127,19 @@
 											<th class="text-center" width="10%">Fecha de Pago</th>
 											<th class="text-center" width="15%">Colegiatura</th>
 											<th class="text-center" width="10%">Importe</th>
+											<th class="text-center" width="10%">Descuento</th>
 											<th class="text-center" width="10%">Recargo</th>
-											<th class="text-center" width="30%">Descripción</th>
+											<th class="text-center" width="20%">Descripción</th>
 											<th class="text-center" width="20%">Acciones</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-class="(pago.pagada == 1) ? 'success' : (pago.fecha < co.fechaActual) ? 'danger' : 'warning'" ng-repeat="pago in co.planPagos">
+										<tr ng-class="(pago.estatus == 1) ? 'success' : (pago.fecha < co.fechaActual && pago.estatus == 0) ? 'warning' : (pago.estatus == 2) ? 'danger' : 'info'" ng-repeat="pago in co.planPagos">
 											<td class="text-center">{{$index + 1}}</td>	
 											<td class="text-center">{{pago.fecha | date:"dd-MM-yyyy"}}</td>
 											<td class="text-center">{{pago.semana}} - {{pago.anio}}</td>
 											<td class="text-right">{{pago.importe | currency}}</td>
+											<td class="text-right">{{pago.descuento | currency}}</td>
 											<td class="text-right">{{pago.recargo | currency}}</td>
 											<td >{{pago.descripcion}}</td>
 											<td class="text-center">

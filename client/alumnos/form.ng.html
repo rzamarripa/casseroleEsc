@@ -12,8 +12,11 @@
 <div class="row">
 	<div class="col-sm-12">
 		<a class="btn btn-primary" ui-sref="root.alumnos">
-		  Listar Alumnos
+		  <i class="fa fa-list"></i> Listar Alumnos
 		</a>
+		<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.alumnoDetalle({alumno_id : co.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
+			<i class="fa fa-user"></i> Ir a mi perfil
+		</a>&nbsp;
 	</div>
 </div>
 <br/>

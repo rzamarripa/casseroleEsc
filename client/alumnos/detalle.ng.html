@@ -8,13 +8,15 @@
 							<div class="col-sm-12">
 								<div id="myCarousel" class="carousel profile-carousel">
 									<div class="air air-bottom-right padding-10">
-										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.convenios({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-cogs"></i> Convenios</a>&nbsp;
-<!-- 										<a href="javascript:void(0);" class="btn txt-color-white bg-color-pinkDark btn-sm"><i class="fa fa-envelope-o"></i> Enviar Mensaje</a> -->
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.convenios({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
+											<i class="fa fa-cogs"></i> Convenios
+										</a>&nbsp;
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
 									</div>
 									<div class="air air-top-left padding-10">
-										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{al.fechaActual | date:'dd-MM-yyyy'}}
-											<small> <a class="btn btn-primary" href="alumnos/{{al.alumno._id}}" ng-show="elMismo(alumno._id)">Modificar</a></small>
-										</h4>
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{al.fechaActual | date:'dd-MM-yyyy'}}</h4>
 									</div>
 									<ol class="carousel-indicators">
 									</ol>

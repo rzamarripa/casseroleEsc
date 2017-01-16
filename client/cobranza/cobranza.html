@@ -25,8 +25,8 @@
 			<tbody style="font-size: smaller">
 				<tr ng-repeat="deudor in grupo.alumnos">
 					<th class="text-center">{{$index + 1}}</th>	
-					<td><a ui-sref="root.alumnoDetalle({alumno_id : deudor.alumno_id})">{{deudor.alumno.profile.matricula}}</a></td>
-					<td><a ui-sref="root.alumnoDetalle({alumno_id : deudor.alumno_id})">{{deudor.alumno.profile.nombreCompleto}}</a></td>
+					<td><a href="/alumnos/{{deudor.alumno_id}}" >{{deudor.alumno.profile.matricula}}</a></td>
+					<td><a href="/alumnos/{{deudor.alumno_id}}">{{deudor.alumno.profile.nombreCompleto}}</a></td>
 					<td>{{deudor.alumno.profile.tel1}}</td>
 					<td class="text-center">{{deudor.colegiaturaUltimoPago}}</td>
 					<td class="text-center">{{deudor.pagos.length}}</td>
@@ -42,14 +42,20 @@
 						{{deudor.modificador | currency}}
 					</td>
 					<td>
-						{{0.00 | currency}}
+						{{deudor.abono | currency}}
 					</td>
 					<td>
-						{{deudor.importeColegiatura * deudor.pagos.length | currency}}
+						{{ (deudor.importeColegiatura * deudor.pagos.length) + deudor.modificador - deudor.abono | currency}}
 					</td>
 				</tr>
 				
 			</tbody>
 		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		
+		
 	</div>
 </div>

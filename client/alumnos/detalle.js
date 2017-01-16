@@ -128,6 +128,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 	
 	this.actualizar = function(alumno,form){
+		console.log(alumno);
 		if(form.$invalid){
 			toastr.error('Error al actualizar los datos.');
 			return;

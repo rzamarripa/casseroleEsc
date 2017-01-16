@@ -8,10 +8,9 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.anioActual = moment().get("year");
   this.deudores = [];
   window.rc = rc;
-  
+
   Meteor.apply('cobranza', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.deudores = result;
-	  console.log(result);
     $scope.$apply();
   });
   

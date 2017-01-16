@@ -78,5 +78,12 @@ Meteor.methods({
 	  inscripcion.planPagos.fechas=undefined;
 
 	  Inscripciones.update({_id:inscripcion._id},{$set:{planPagos:inscripcion.planPagos}});
-  }
+  },
+  reactivarPlanPagos : function(inscripcion) {
+		PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
+	},
+  cancelarPlanPagos : function(inscripcion) {
+		PlanPagos.update({inscripcion_id : inscripcion, estatus : 0}, {$set : { estatus : 2}}, {multi : true});
+	}
+	
 });

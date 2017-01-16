@@ -5,6 +5,9 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 
 	window.rc = rc;
 	var subs = []
+	this.buscar = {};
+	this.buscar.nombre = "";
+	
 	subs.push(this.subscribe('ciclos',()=>{
 		return [{estatus:true,
 		seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
@@ -32,12 +35,26 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		
 		}]
 	}));
+/*
 	subs.push(this.subscribe('inscripciones',() => {
-		return [{
-			estatus : 1,
+		return [{ $or : [{estatus : 1}, {estatus : 0} ],		
 		 	seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 		}]
 	}));
+*/
+	
+	this.subscribe('buscarInscripciones', () => {
+		if(this.getReactively("buscar.nombre").length > 3){
+			return [{
+		    options : { limit: 51 },
+		    where : { 
+					nombreCompleto : this.getReactively('buscar.nombre'), 
+					seccion_id : rc.seccion._id,
+					campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+				} 		   
+	    }];
+		}
+  });
 	
 	
 
@@ -47,6 +64,9 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		},
 	  secciones : () => {
 		  return Secciones.find();
+	  },
+	  seccion : () => {
+		  return Secciones.findOne();
 	  },
 	  tiposIngresos : () => {
 		  return TiposIngresos.find();
@@ -117,5 +137,24 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		})
 		toastr.success("ya")
 	}
+	
+	this.cambiarEstatus = function(inscripcion_id, estatus){
+		console.log(estatus);
+		if(estatus == 0){
+			Inscripciones.update(inscripcion_id, { $set : { estatus : 1 }});
+			Meteor.apply('reactivarPlanPagos', [inscripcion_id], function(error, result){
+			  toastr.success("El alumno ha sido recuperado y su plan de pagos se ha activado");
+		  });
+		}else{
+			Inscripciones.update(inscripcion_id, { $set : { estatus : 0 }});
+			Meteor.apply('cancelarPlanPagos', [inscripcion_id], function(error, result){
+			  toastr.success("El alumno ha sido dado de baja")
+		  });
+		}
+	}
+	
+	this.getFocus = function(){
+	  document.getElementById('buscar').focus();
+  }; 
   
 };

@@ -44,6 +44,10 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.subscribe('cuentas', () => {
     return [{estatus: true, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
   });
+  
+  this.subscribe('grupos', () => {
+		return [{estatus : true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];
+	});
 
   this.helpers({
 	  inscripcionesActivas : () => {
@@ -51,6 +55,72 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  },
 	  campus : () => {
 		  return Campus.findOne();
+	  },
+	  pagosPorGrupo : () => {
+		  var grupos = Grupos.find().fetch();
+		  var arreglo = {};
+		  if(grupos){
+			  _.each(grupos, function(grupo){
+					//Listado de Pagos realizados
+					if(undefined == arreglo[grupo.nombre]){
+						arreglo[grupo.nombre] = {};
+						arreglo[grupo.nombre].name = grupo.nombre;
+						arreglo[grupo.nombre].data = 0.00;
+						_.each(grupo.alumnos, function(alumno){
+							var pagosAlumno = PlanPagos.find({alumno_id : alumno}).fetch();
+							_.each(pagosAlumno, function(pago){
+								arreglo[grupo.nombre].data += pago.importe;
+							});
+						});
+					}else{
+						arreglo[grupo.nombre].name = grupo.nombre;
+						
+						_.each(grupo.alumnos, function(alumno){
+							var pagosAlumno = PlanPagos.find({alumno_id : alumno}).fetch();
+							_.each(pagosAlumno, function(pago){
+								arreglo[grupo.nombre].data += pago.importe;
+							});
+						});
+					}	
+			  });
+			  
+			  arreglo = _.toArray(arreglo);
+			  var valores = _.pluck(arreglo, "data");
+			  var nombreGrupos = _.pluck(arreglo, "name");
+			  console.log(nombreGrupos, valores);
+		  }
+		   $('#pagosPorGrupo').highcharts( {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Pagos por grupo ' + rc.semanaActual
+        },
+        xAxis: {
+            categories: nombreGrupos
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
+            shared: true
+        },
+        plotOptions: {
+            column: {
+                stacking: ''
+            }
+        },
+        series: [{
+            name: 'Pagos',
+            data: valores
+        }]
+    	});
+			console.log(arreglo);
+		  return arreglo;
 	  },
 	  semanales : () => {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Semanal"}).count();
@@ -62,7 +132,8 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
 	  },
 	  pagosPorSemana : () => {
-		  var pagos = PlanPagos.find().fetch();		  
+		  var pagos = PlanPagos.find().fetch();
+		  var pagosPorGrupo = {};
 		  var arreglo = {};
 		  if(pagos){
 			  _.each(pagos, function(pago){
@@ -70,6 +141,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  });
 			  
 				_.each(pagos, function(pago){
+					//Listado de Pagos realizados
 					if(undefined == arreglo[pago.alumno_id]){
 						arreglo[pago.alumno_id] = {};
 						arreglo[pago.alumno_id].semanasPagadas = [];

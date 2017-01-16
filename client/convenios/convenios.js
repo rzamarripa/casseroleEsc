@@ -6,7 +6,7 @@ function ConveniosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr
 	let rc = $reactive(this).attach($scope);
 	this.nuevo = true;
 	this.action = true;
-	this.fechaActual = moment();
+	this.fechaActual = new Date();
   
   this.subscribe('alumno', () => {
 		return [{
@@ -36,6 +36,33 @@ function ConveniosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr
 */
 		}
 	});
+	
+	this.nuevoConvenio = function()
+  {
+    this.action = !this.action;
+    this.nuevo = !this.nuevo;
+    this.pago = {};		
+  };
+  
+  this.guardar = function(convenio,form)
+	{
+			if(form.$invalid){
+        toastr.error('Error al guardar los datos.');
+        return;
+		  }
+			convenio.estatus = 0;
+			convenio.campus_id = Meteor.user().profile.campus_id;
+			convenio.usuarioInserto = Meteor.userId();
+			convenio.alumno_id = rc.alumno._id;
+			PlanPlagos.insert({});
+			toastr.success('Guardado correctamente.');
+			this.escuela = {}; 
+			$('.collapse').collapse('hide');
+			this.nuevo = true;
+			form.$setPristine();
+	    form.$setUntouched();
+		
+	};
 	
 	this.editar = function(pago)
 	{

@@ -16,9 +16,9 @@ angular.module("casserole")
 	this.subCiclos = [];
 	
 	this.subscribe('grupo', () => {
-		
 		return [{_id : $stateParams.id, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];
 	});
+	
 	this.subscribe("secciones",()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	 });
