@@ -442,7 +442,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				});
 			
 			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
-			var url = $state.href("anon.pagosImprimir",{semanas :JSON.stringify(semanasPagadas), id : $stateParams.alumno_id},{newTab : true});
+			var url = $state.href("anon.pagosImprimir",{pago : pago_id,alumno_id:configuracion.alumno_id},{newTab : true});
 			window.open(url,'_blank');
 			// var win = window.open($state.href('anon.pagosImprimir', {semanas : semanasPagadas, id : $stateParams.alumno_id}),'_blank');
 			// win.focus();
@@ -489,6 +489,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.condonar = function(planPagos, configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
+			var diaActual = moment(new Date()).weekday();
+			var semanaPago = moment(new Date()).isoWeek();
+			var mesPago = moment(new Date()).get('month') + 1;
+			var anioPago = moment(new Date()).get('year');
 			var condonado= Pagos.insert({
 							fechaPago 	: new Date(),
 							alumno_id 	: configuracion.alumno_id,
@@ -502,12 +506,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 							//cuenta_id   : rc.cuentaInscripcion._id,
 							diaPago     : diaActual,
-							mesPago     : rmesPago,
+							mesPago     : mesPago,
 							semanaPago  : semanaPago,
 							anioPago    : anioPago,
-							inscripcion_id : configuracion.inscripcion._id
+							inscripcion_id : configuracion._id
 						});
+			console.log(planPagos);
 			_.each(planPagos, function(pago) {
+				console.log(pago,pago.estatus)
 				if(pago.estatus == 5){
 					if(pago.faltante){
 						pago.condonado = pago.faltante;
@@ -525,19 +531,17 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.pago_id=condonado
 
 					pago.faltante = 0;
-					rc.condonarPago(pago,semanasCondonadas);
+					//rc.condonarPago(pago,semanasCondonadas);
 					
 					var idTemp = pago._id;
 					delete pago._id;
+					console.log(pago);
 					PlanPagos.update(idTemp, {$set : pago});
 				}
 			});
 			
-			for(var i in semanasCondonadas){
-				var semana = semanasCondonadas[i];
-				Pagos.insert(semana);
-			}
-			$state.go("anon.pagosImprimir",{semanas : semanasCondonadas, id : $stateParams.alumno_id}); 
+			
+			$state.go("anon.pagosImprimir",{pago : condonado,alumno_id 	: configuracion.alumno_id}); 
 		}
 	}
 	this.planPagosSemana =function (inscripcion) {
