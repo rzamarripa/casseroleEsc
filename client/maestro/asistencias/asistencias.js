@@ -78,9 +78,10 @@ angular
 		alumnos : () => {
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
-				rc.alumnos_id = rc.grupo.alumnos;
+				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 				var grupo = Grupos.findOne({},{ fields : { alumnos : 1 }});
-				return grupo.alumnos;
+				var alumnosIds = _.pluck(grupo.alumnos, "alumno_id");
+				return alumnosIds;
 			}
 		},
 		turno : () => {
@@ -141,16 +142,14 @@ angular
 					console.log("Si se puede");
 					resultado.alumnos = [];
 					resultado.fechaCreacion = new Date();
-					var alumnosGrupo = 
-					_.each(rc.grupo.alumnos, function(alumno){
-						resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
-																																						"profile.nombreCompleto" : 1,
-																																						"profile.matricula" : 1,
-																																						"profile.fotografia" : 1,
-																																						"profile.sexo" : 1,
-																																						_id : 1
-																																				}}).fetch();
-					});
+					resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
+																																					"profile.nombreCompleto" : 1,
+																																					"profile.matricula" : 1,
+																																					"profile.fotografia" : 1,
+																																					"profile.sexo" : 1,
+																																					_id : 1
+																																			}}).fetch();
+					console.log(resultado.alumnos);
 					_.each(resultado.alumnos, function(alumno){
 						alumno.estatus = 1;
 					})

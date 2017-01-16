@@ -39,7 +39,7 @@ Meteor.methods({
 		  var nuevoPago = {};
 		  if(pago.estatus == 1){
 			  nuevoPago = {
-				    alumno_id         : inscripcion.alumno_id,
+				  alumno_id         : inscripcion.alumno_id,
 					inscripcion_id    : inscripcion._id,
 					vendedor_id       : inscripcion.vendedor_id,
 					seccion_id        : inscripcion.seccion_id,
@@ -58,8 +58,8 @@ Meteor.methods({
 					importe           : pago.importe,
 					pago              : pago.pago,
 					fechaPago         : new Date(mfecha.toDate().getTime()),
-					mesPago			  : mfecha.get('month') + 1,
-				    anioPago		  : mfecha.get('year'),
+					mesPago			  		: mfecha.get('month') + 1,
+				  anioPago		  		: mfecha.get('year'),
 					semanaPago        : mfecha.isoWeek(),
 					diaPago           : mfecha.weekday(),
 					faltante          : pago.faltante,

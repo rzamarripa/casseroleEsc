@@ -560,13 +560,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 					  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
 						var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
 						Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
+						inscripcion._id=Inscripciones.insert(inscripcion);
 						if(!grupo.alumnos)
 							grupo.alumnos=[];
-						grupo.alumnos.push(inscripcion.alumno_id);
+							
+						//Se mete el objeto alumno al grupo
+						grupo.alumnos.push({alumno_id : inscripcion.alumno_id, inscripcion_id : inscripcion._id});
 						grupo.inscritos = parseInt(grupo.inscritos) + 1;
 						delete grupo._id;
 						Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
-						inscripcion._id=Inscripciones.insert(inscripcion);
+						
 						inscripcion.pago_id = Pagos.insert({
 							fechaPago 	: new Date(),
 							alumno_id 	: rc.inscripcion.alumno_id,
