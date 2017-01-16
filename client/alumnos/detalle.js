@@ -177,12 +177,15 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return pago.pago;
 		if(pago.pagada == 6 || (pago.pagada == 2 && pago.faltante > 0))
 			return pago.faltante;
+
+		if(pago.modificada)
+			return pago.importe;
 		
 		var fechaActual = moment();
 		var fechaCobro = moment(pago.fecha);
 		var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 		var diasDescuento = fechaCobro.diff(fechaActual, 'days')
-		var concepto 			= configuracion.colegiatura[pago.tipoPlan];
+		//var concepto 			= configuracion.colegiatura[pago.tipoPlan];
 		var importe 			= concepto.importeRegular + (pago.remanente ? pago.remanente : 0);
 		if(diasDescuento >= concepto.diasDescuento){
 			importe -= concepto.importeDescuento;
@@ -190,6 +193,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(diasRecargo >= concepto.diasRecargo){
 			importe += concepto.importeRecargo;
 		}
+		pago.importe =importe;
+		pago.retrasada = true;
+
 		return importe
 	}	
 

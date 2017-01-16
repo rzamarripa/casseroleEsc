@@ -166,10 +166,23 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var plan = [];
 		for (var i = 0; i < totalPagos; i++) {
 			var pago = {
-				semana 			: mfecha.isoWeek(),
-				fecha 			: new Date(mfecha.toDate().getTime()),
-				tipoPlan 		: 'Semanal',
-				numeroPago 	: i + 1,
+				semana 			    : mfecha.isoWeek(),
+				fecha 			    : new Date(mfecha.toDate().getTime()),
+				dia                 : mfecha.weekday(),
+				tipoPlan 		    : 'Semanal',
+				numeroPago 	        : i + 1,
+				
+				importeRecargo      : this.inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
+				importeDescuento    : this.inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
+				importeRegular      : this.inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+				diasRecargo         : this.inscripcion.planPagos.colegiatura.Semanal.diasRecargo,
+				diasDescuento       : this.inscripcion.planPagos.colegiatura.Semanal.diasDescuento,
+				importe             : this.inscripcion.planPagos.colegiatura.Semanal.importeRegular,
+				fechaPago           : undefined,
+				semanaPago          : undefined,
+				estatus             : true,
+				retrasada           : false,
+				modificada          : false,
 				mes					: mfecha.get('month') + 1,
 				anio				: mfecha.get('year')
 			}
@@ -197,10 +210,21 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			mfecha.add(1,'month');
 		for (var i = 0; i < totalPagos; i++) {
 			var pago = {
-				semana 			: mfecha.isoWeek(),
-				fecha 			: new Date(mfecha.toDate().getTime()),
-				tipoPlan 		: 'Mensual',
-				numeroPago 	: i + 1,
+				semana 			    : mfecha.isoWeek(),
+				fecha 			    : new Date(mfecha.toDate().getTime()),
+				dia                 : mfecha.weekday(),
+				tipoPlan 		    : 'Mensual',
+				numeroPago 	        : i + 1,
+				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
+				importeDescuento    : this.inscripcion.planPagos.colegiatura.Mensual.importeDescuento,
+				importeRegular      : this.inscripcion.planPagos.colegiatura.Mensual.importeRegular,
+				diasRecargo         : this.inscripcion.planPagos.colegiatura.Mensual.diasRecargo,
+				diasDescuento       : this.inscripcion.planPagos.colegiatura.Mensual.diasDescuento,
+				importe             : this.inscripcion.planPagos.colegiatura.Mensual.importeRegular,
+				fechaPago           : undefined,
+				estatus             : true,
+				retrasada           : false,
+				modificada          : false,
 				mes					: mfecha.get('month') + 1,
 				anio				: mfecha.get('year')
 			}
@@ -234,10 +258,21 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}
 		for (var i = 0; i < totalPagos; i++) {
 			var pago = {
-				semana 			: mfecha.isoWeek(),
-				fecha 			: new Date(mfecha.toDate().getTime()),
-				tipoPlan 		: 'Quincenal',
-				numeroPago 	: i + 1,
+				semana 			    : mfecha.isoWeek(),
+				fecha 			    : new Date(mfecha.toDate().getTime()),
+				dia                 : mfecha.weekday(),
+				tipoPlan 		    : 'Quincenal',
+				numeroPago 	        : i + 1,
+				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
+				importeDescuento    : this.inscripcion.planPagos.colegiatura.Mensual.importeDescuento,
+				importeRegular      : this.inscripcion.planPagos.colegiatura.Mensual.importeRegular,
+				diasRecargo         : this.inscripcion.planPagos.colegiatura.Mensual.diasRecargo,
+				diasDescuento       : this.inscripcion.planPagos.colegiatura.Mensual.diasDescuento,
+				importe             : this.inscripcion.planPagos.colegiatura.Mensual.importeRegular,
+				fechaPago           : undefined,
+				modificada          : false,
+				retrasada           : false,
+				estatus             : true,
 				mes					: mfecha.get('month') + 1,
 				anio				: mfecha.get('year')
 			}
@@ -355,6 +390,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		if((this.inscripcion.importePagado - cobroObligatorio) >= this.inscripcion.planPagos.inscripcion.importeRegular)
 		{
 			this.inscripcion.planPagos.inscripcion.pagada = 1;
+			this.inscripcion.estatus=true;
 			this.inscripcion.planPagos.inscripcion.pago = this.inscripcion.planPagos.inscripcion.importeRegular;
 			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaInicial);
 			this.llenarPago({nombre : 'inscripcion',importe : this.inscripcion.planPagos.inscripcion.importeRegular},
