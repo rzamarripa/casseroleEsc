@@ -24,9 +24,9 @@
 				  	Agregar campo de descripción</label>
 					</div>
 				</div>
-				<input ng-if="!cgc.nuevo" value="Cancelar" class="btn btn-danger" ng-click="cgc.cancelar()">
-				<input ng-if="cgc.nuevo" value="Guardar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.guardar(cgc.conceptoGasto, form)" valida-form formulario="form">
-				<input ng-if="!cgc.nuevo" value="Actualizar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.actualizar(cgc.conceptoGasto, form)" valida-form formulario="form">
+				<input type="button" ng-if="!cgc.nuevo" value="Cancelar" class="btn btn-danger" ng-click="cgc.cancelar()">
+				<input type="button" ng-if="cgc.nuevo" value="Guardar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.guardar(cgc.conceptoGasto, form)" valida-form formulario="form">
+				<input type="button" ng-if="!cgc.nuevo" value="Actualizar" type="submit" class="btn btn-primary pull-right" ng-click="cgc.actualizar(cgc.conceptoGasto, form)" valida-form formulario="form">
 			</div>
 		</div>
 	</form>

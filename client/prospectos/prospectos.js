@@ -28,7 +28,7 @@ angular.module("casserole")
   }else{
 	  this.subscribe('prospectosPorVendedor', () => {
 	    return [{
-		    "profile.estatus" : 1,
+
 		    "profile.etapaVenta_id" : this.getReactively("buscar.etapaVenta_id"),
 		    "profile.vendedor_id" : Meteor.userId()
 	    }];
@@ -210,16 +210,7 @@ angular.module("casserole")
   
   this.filtrarEtapaVenta = function(etapaVenta_id, etapaNombre){
 	  this.buscar.etapaVenta_id = etapaVenta_id;
-	  if(etapaNombre == "Prospecto"){
-		  this.titulo = "Prospectos";
-	  }else if(etapaNombre == "Negociación"){
-		  this.titulo = "Negociación"
-	  }else if(etapaNombre == "Inscrito"){
-		  this.titulo = "Inscritos";
-	  }else if(etapaNombre == "No Inscrito"){
-		  this.titulo = "No Inscritos"
-	  }
-	  
+	  this.titulo = etapaNombre;
   }
   
   this.tomarFoto = function () {

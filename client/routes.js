@@ -1562,6 +1562,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.prospectosPorMedioPublicidad', {
+      url: '/prospectosPorMedioPublicidad',
+      templateUrl: 'client/gerentesVenta/prospectosPorMedioPublicidad/prospectosPorMedioPublicidad.html',
+      controller: 'ProspectosPorMedioPublicidadCtrl as p',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "gerenteVenta" || user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     
     ;
 }]);

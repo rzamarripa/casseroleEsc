@@ -509,6 +509,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
 		inscripcion.semana = moment(new Date()).isoWeek();
+		inscripcion.abono = 0.00;
 		
 		//Crear alumno a partir del prospecto
 		

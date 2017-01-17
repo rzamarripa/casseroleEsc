@@ -43,8 +43,8 @@ angular
 				_.each(this.getReactively("grupos"), function(grupo){
 					_.each(grupo.asignaciones, function(asignacion){
 						if(asignacion.estatus == true){
-							_.each(grupo.alumnos, function(alumno_id){
-								if(alumno_id == Meteor.userId()){
+							_.each(grupo.alumnos, function(alumno){
+								if(alumno.alumno_id == Meteor.userId()){
 									rc.asignaciones.push({
 										alumno_id : $stateParams.alumno_id,
 										grupo : {
@@ -62,7 +62,6 @@ angular
 					});
 				});
 			}
-			console.log(rc.asignaciones);
 		}
   });
   
