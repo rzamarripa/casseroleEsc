@@ -1,5 +1,5 @@
 Meteor.methods({
-  prospectosPorEtapaVenta: function (fechaInicio, fechaFin) {
+  prospectosPorEtapaVenta: function (fechaInicial, fechaFinal) {
 	  //{fecha : { $lt : new Date(fechaFin), $gte : new Date(fechaInicio)}}
     
     var etapasVenta = EtapasVenta.find().fetch();
@@ -13,7 +13,8 @@ Meteor.methods({
 		    _.each(medios, function(medio){
 			    arreglo[etapaVenta.nombre].medios[medio.nombre] = {};
 					arreglo[etapaVenta.nombre].medios[medio.nombre].nombre = medio.nombre;
-					arreglo[etapaVenta.nombre].medios[medio.nombre].cantidad = Prospectos.find({"profile.medio_id" : medio._id, "profile.etapaVenta_id" : etapaVenta._id}).count();
+					arreglo[etapaVenta.nombre].medios[medio.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal)}, "profile.medio_id" : medio._id, "profile.etapaVenta_id" : etapaVenta._id}).count();
+					console.log(Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal)}, "profile.medio_id" : medio._id, "profile.etapaVenta_id" : etapaVenta._id}).fetch())
 				});
 			}
     });
