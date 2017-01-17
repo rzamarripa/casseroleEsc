@@ -109,16 +109,16 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
 
-				if(!ret["Colegiatura"])ret["Colegiatura"]=[];
+				if(!ret["Colegiatura"] )ret["Colegiatura"]=[];
 				
 				ret["Colegiatura"].push({semana:pago.semana,anio:pago.anio,importe:pago.importe})
 				rc.total =pago.importe;
-				if(pago.tiempoPago==1){
+				if(pago.tiempoPago==1 && pago.importe>0){
 					if(!ret["Recargo"])ret["Recargo"]=[];
 					ret["Recargo"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeRecargo})
 					rc.total +=pago.importeRecargo;
 				}
-				if(diasDescuento >= pago.diasDescuento){
+				if(diasDescuento >= pago.diasDescuento && pago.importe>0){
 					if(!ret["Descuento"])ret["Descuento"]=[];
 					ret["Descuento"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeDescuento})
 					rc.total -=pago.importeDescuento;

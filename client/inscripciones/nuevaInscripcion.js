@@ -4,6 +4,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
 	window.rc = rc;
 	this.inscripcion = {tipoInscripcion:""};
+
 	this.inscripcion.totalPagar = 0.00;
 	this.comisionObligada =0;
 	this.pagosRealizados = [];
@@ -334,11 +335,26 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var conIns = this.inscripcion.planPagos.inscripcion;
 		this.inscripcion.totalPagar = 0;
 		this.comisiones = [];
+		this.inscripcion.pagos={};
+
 		for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
 			var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
 			if(concepto.estatus){
 				this.inscripcion.totalPagar += concepto.importe;
 				this.inscripcion[connceptoId]=false;
+				this.inscripcion.pagos[connceptoId]={
+					_id:connceptoId,
+					importeRegular:concepto.importe,
+					importeDescuento:concepto.importe-conIns.importeDescuento,
+					importeRecargo:concepto.importe+conIns.importeRecargo,
+					estatus:0,
+					nombre:concepto.nombre,
+					pago:0,
+					tiempoPago: 0,
+					fecha: this.inscripcion.fechaInscripcion,
+					fechaRegistro: new Date(),
+					restante:0
+				};
 			}
 			
 		}
@@ -412,6 +428,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
 				if(concepto.estatus){
 					this.inscripcion[connceptoId]=true;
+					this.inscripcion.pagos[connceptoId].pago=this.inscripcion.pagos[connceptoId].importeRegular;
+					this.inscripcion.pagos[connceptoId].estatus=1;
+					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}
 			}
 		}else{
@@ -428,7 +447,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				_acumuladoConcepto+= concepto.importe;
 				if(concepto.estatus && _acumuladoConcepto<= this.inscripcion.importePagado-cobroObligatorio){
 					this.inscripcion[connceptoId]=true;
+					this.inscripcion.pagos[connceptoId].pago=this.inscripcion.pagos[connceptoId].importeRegular;
+					this.inscripcion.pagos[connceptoId].estatus=1;
+					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}
+				else if(concepto.estatus && _acumuladoConcepto > this.inscripcion.importePagado-cobroObligatorio &&
+					_acumuladoConcepto -concepto.importe < this.inscripcion.importePagado-cobroObligatorio) {
+					this.inscripcion.pagos[connceptoId].pago=(this.inscripcion.importePagado-cobroObligatorio)-(_acumuladoConcepto -concepto.importe );
+					this.inscripcion.pagos[connceptoId].estatus=6;
+					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
+				} 
 			}
 		}
 	}
