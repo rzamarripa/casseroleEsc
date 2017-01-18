@@ -75,13 +75,23 @@ angular
 		$state.go("root.grupos");
 	};	
 	
-	this.quitarAlumno = function($index, alumno_id){
-		rc.grupo.alumnos= _.without(rc.grupo.alumnos, $index);
-		var idTemp = rc.grupo._id;
-		delete rc.grupo._id;
-		rc.grupo.inscritos--;
-		Grupos.update({_id : idTemp}, {$set : rc.grupo});
-		toastr.success("Ha eliminado al alumno correctamente");
+	this.quitarAlumno = function(alumno_id){
+		var res = confirm("Está seguro de querer sacar al alumno del grupo");
+		if(res == true){
+			_.each(rc.grupo.alumnos, function(alumno, indice){
+				console.log(indice, alumno.alumno_id);
+				if(alumno.alumno_id == alumno_id){
+					rc.grupo.alumnos.splice(indice, 1);
+				}
+			})
+			//rc.grupo.alumnos = _.without(rc.grupo.alumnos, $index);
+			var idTemp = rc.grupo._id;
+			delete rc.grupo._id;
+			rc.grupo.inscritos--;
+			Grupos.update({_id : idTemp}, {$set : rc.grupo});
+			toastr.success("Ha eliminado al alumno correctamente");
+		}
+		
 	}
 
 	this.agregarAlumno = function(){

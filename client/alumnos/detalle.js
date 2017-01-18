@@ -850,4 +850,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return ocupacion.nombre;
 	}
 	
+	this.regresar = function(){
+		window.history.back();
+	}
+	
 }

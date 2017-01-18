@@ -75,14 +75,17 @@ Meteor.methods({
 				var inscripcion = Inscripciones.findOne(alumno.inscripcion_id);
 				//Validar que el alumno está activo en su inscripción
 				if(inscripcion.estatus == 1){
-					//Obtener los pagos atrasados				
+					//Obtener los pagos atrasados			
+					console.log("alumno_id", alumno.alumno_id);	
 					var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : alumno.alumno_id}, { sort : {fechaPago : -1}});
-					//validar que hay pagado la semana actual
+					console.log("ultimoPago", ultimoPago)
+					//validar que haya pagado la semana actual
 					if(ultimoPago.semana >= semanaActual && ultimoPago.anio == anioActual ){
+						console.log("alumno_id semana actual", alumno.alumno_id);	
 						//Busco la siguiente semana, pero sólo 1
 						var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 1});
-						
-						var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
+						console.log("pago semana actual", pago);
+						var tipoColegiatura = pago.tipoPlan;
 						var fechaPago = moment(pago.fecha);
 					  var diasDiferencia = fechaPago.diff(hoy, "days");
 						if(undefined == arreglo[grupo._id]){
@@ -140,7 +143,7 @@ Meteor.methods({
 						
 					}else{
 						//Busco las semanas trasadas, pero todas
-						var pagos = PlanPagos.find({estatus : true, seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
+						var pagos = PlanPagos.find({seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
 						_.each(pagos, function(pago){
 							var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
 							var fechaPago = moment(pago.fecha);

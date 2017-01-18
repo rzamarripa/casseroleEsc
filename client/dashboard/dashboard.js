@@ -15,6 +15,10 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.conceptos_id = [];	
 	this.semanaActual = moment(new Date()).isoWeek();
 	this.anio = moment().get('year');
+	this.totalPagos = 0.00;
+	this.totalGastos = 0.00;
+	this.graficaGastos = [];
+	this.categorias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 	
   this.subscribe("inscripciones",()=>{
 		return [{estatus : 1, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semana : parseInt(this.getReactively("semanaActual")) }]
@@ -34,7 +38,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	
 	this.subscribe('gastos', () => {
-    return [{estatus: true, semana: parseInt(rc.getReactively("semanaActual")), campus_id: Meteor.user() != undefined ? Meteor.user().profile.campus_id : ''}];
+    return [{estatus: true, semana: parseInt(rc.getReactively("semanaActual")), anio : parseInt(rc.getReactively("anio")), campus_id: Meteor.user() != undefined ? Meteor.user().profile.campus_id : ''}];
   });
   
   this.subscribe('conceptosGasto', () => {
@@ -57,6 +61,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return Campus.findOne();
 	  },
 	  pagosPorGrupo : () => {
+		  //Es la gráfica de pago que hacen los alumnos agrupada por grupos activos
 		  var grupos = Grupos.find().fetch();
 		  var arreglo = {};
 		  if(grupos){
@@ -86,13 +91,16 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  arreglo = _.toArray(arreglo);
 			  var valores = _.pluck(arreglo, "data");
 			  var nombreGrupos = _.pluck(arreglo, "name");
+			  console.log(valores);
+			  rc.totalPagos = _.reduce(valores, function (memo, num) { return memo + num }, 0);
+
 		  }
-		   $('#pagosPorGrupo').highcharts( {
+			$('#pagosPorGrupo').highcharts( {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Pagos por semana ' + rc.semanaActual
+            text: 'Ingresos por colegiatura en la semana ' + rc.semanaActual
         },
         xAxis: {
             categories: nombreGrupos
@@ -128,102 +136,25 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  mensuales : () => {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
 	  },
-	  pagosPorSemana : () => {
-		  var pagos = PlanPagos.find().fetch();
-		  var pagosPorGrupo = {};
-		  var arreglo = {};
-		  if(pagos){
-			  _.each(pagos, function(pago){
-				  rc.alumnos_id.push(pago.alumno_id);
-			  });
-			  
-				_.each(pagos, function(pago){
-					//Listado de Pagos realizados
-					if(undefined == arreglo[pago.alumno_id]){
-						arreglo[pago.alumno_id] = {};
-						arreglo[pago.alumno_id].semanasPagadas = [];
-						arreglo[pago.alumno_id].alumno = Meteor.users.findOne({_id : pago.alumno_id});
-						arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
-						arreglo[pago.alumno_id].tipoPlan = pago.tipoPlan;
-						arreglo[pago.alumno_id].fechaPago = pago.fechaPago;
-					}else{
-						arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
-					}
-				});
-
-		  }
-
-		  return arreglo;
-	  },
-/*
-	  gastosCheque : () => {
-		  var gas = Gastos.find({tipoGasto  : "cheques"}).fetch();
-		  var total = 0.00;
-			if(gas != undefined){
-				_.each(gas, function(g){
-					total += g.importe;
-					rc.conceptos_id.push(g.concepto_id);
-					g.concepto = ConceptosGasto.findOne(g.concepto_id);
-				})
-				gas.push({chequeReferenciado : "Total", importe : total});
-			}
-			return gas;
-	  },
-	  gastosRelaciones : () => {
-		  var gas = Gastos.find({tipoGasto  : "relaciones"}).fetch();
-		  var total = 0.00;
-			if(gas != undefined){
-				_.each(gas, function(g){
-					total += g.importe;
-					rc.conceptos_id.push(g.concepto_id);
-					g.concepto = ConceptosGasto.findOne(g.concepto_id);
-				})
-				gas.push({registros : "Total", importe : total});
-			}
-			return gas;
-	  },
-	  gastosDepositos : () => {
-		  var gas = Gastos.find({tipoGasto  : "depositos"}).fetch();
-		  var total = 0.00;
-			if(gas != undefined){
-				_.each(gas, function(g){
-					total += g.importe;
-					g.cuenta = Cuentas.findOne(g.cuenta_id);
-				})
-				gas.push({cuenta : {nombre : "Total"}, importe : total});
-			}
-			return gas;
-	  },
-	  gastosAdmon : () => {
-		  var gas = Gastos.find({tipoGasto  : "admon"}).fetch();
-		  var total = 0.00;
-			if(gas != undefined){
-				_.each(gas, function(g){
-					total += g.importe;
-					rc.conceptos_id.push(g.concepto_id);
-					g.concepto = ConceptosGasto.findOne(g.concepto_id);
-				})
-				gas.push({concepto : { nombre : "Total"}, importe : total});
-			}
-			return gas;
-	  },
-*/
 	  graficaGastos : () => {
-		  var gastos = Gastos.find({ tipoGasto : {$not : "depositos"}},{ sort : { weekday : 1 }}).fetch();
+		  var gastos = Gastos.find({ tipoGasto : {$not : "Depositos"}},{ sort : { weekday : 1 }}).fetch();
 		  var arreglo = {};
 			_.each(gastos, function(gasto){
 				if(arreglo[gasto.tipoGasto] == undefined){
 					arreglo[gasto.tipoGasto] = {};
+					arreglo[gasto.tipoGasto].total = 0.00;
 					arreglo[gasto.tipoGasto].data = {};
 					for(var i = 1; i <= 7; i++){
 						arreglo[gasto.tipoGasto].data = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
 					}
 					arreglo[gasto.tipoGasto].name = gasto.tipoGasto;
-					arreglo[gasto.tipoGasto].data[gasto.weekday] = gasto.importe;
+					arreglo[gasto.tipoGasto].data[gasto.weekday - 1] = gasto.importe;
+					arreglo[gasto.tipoGasto].total = gasto.importe;
 				}else{
 					var total = (arreglo[gasto.tipoGasto].data[gasto.weekday] != undefined) ? arreglo[gasto.tipoGasto].data[gasto.weekday] : 0.00;
 					total += gasto.importe;
-					arreglo[gasto.tipoGasto].data[gasto.weekday] = total;
+					arreglo[gasto.tipoGasto].data[gasto.weekday - 1] = total;
+					arreglo[gasto.tipoGasto].total += total;
 				}
 			});
 			
@@ -231,7 +162,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  
 		  $('#gastosGrafica').highcharts( {
 			  chart: {
-            type: 'areaspline'
+            type: 'line'
         },
         title: {
             text: 'Relación de Gastos de la Semana ' + this.getReactively("semanaActual"),
@@ -242,7 +173,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
             x: -20
         },
         xAxis: {
-            categories: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            categories: this.categorias,
             plotBands: [{ // visualize the weekend
                 from: 4.5,
                 to: 6.5,
@@ -268,9 +199,29 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
             verticalAlign: 'middle',
             borderWidth: 0
         },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
         series: arreglo
 	    });
+	    console.log(arreglo);
 		  return arreglo;
+	  },
+	  totalGastos : () => {
+		  var gastoTotal = 0.00;
+		  if(rc.graficaGastos != undefined){
+			  _.each(rc.getReactively("graficaGastos"), function(gastos){
+					_.each(gastos.data, function(gasto){
+						gastoTotal += gasto;
+					})
+				});
+		  }
+			return gastoTotal;
 	  }
   });
   

@@ -35,142 +35,32 @@
 		</form>
 	</div>
 </div>
-<!--
 <div class="row">
-	<div class="col-xs-12">
-		<table class="table table-bordered">
+	<div class="col-sm-3 well" style="height: 390px;">
+		<h1 class="text-success"><small>Total: </small>{{da.totalGastos | currency}}</h1>
+		<table class="table table-striped table-bordered table-condensed table-hover" ng-show="da.totalGastos > 0">
 			<tr>
-				<th class="text-center" width="5%">No.</th>
-				<th width="35%">Alumno</th>
-				<th width="20%">Fecha Pago</th>
-				<th width="15%">Tipo Plan</th>
-				<th width="20%">Semana que pagó</th>
+				<th class="text-center">Tipo Gasto</th>
+				<th class="text-center">Monto</th>
 			</tr>
-			<tr ng-repeat="pago in da.pagosPorSemana">
-				<td class="text-center">{{$index + 1}}</td>
-				<td>{{pago.alumno.profile.nombre}} {{pago.alumno.profile.apPaterno}}</td>
-				<td>{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
-				<td>{{pago.tipoPlan}}</td>
-				<td><span ng-repeat="semana in pago.semanasPagadas"> {{semana}} |</span></td>
+			<tr ng-repeat="gastos in da.graficaGastos track by $index">
+				<td>{{gastos.name}}</td>
+				<td class="text-right">{{gastos.total | currency}}</td>
 			</tr>
 		</table>
+		<a type="button" class="btn btn-primary pull-right" ng-show="da.totalGastos > 0" ui-sref="root.detalleGastos({semana : da.semanaActual, anio : da.anio})"><i class="fa fa-eye"></i> Ver Detalle</a>
 	</div>
-</div>
--->
-<!--
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-striped table-bordered">
-			<caption><h4>Listado de Gastos con Cheque</h4></caption>
-			<thead class="thead">
-				<tr>
-					<th width="10%">No.</th>
-					<th width="25%">Fecha</th>
-					<th width="30%">Concepto</th>
-					<th width="15%">No Cheque</th>					
-					<th width="15%">Importe</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="gasto in da.gastosCheque">
-					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
-					<td>{{ gasto.concepto.nombre }}</td>
-					<td ng-class="{'text-right negritas':$last}">{{ gasto.chequeReferenciado }}</td>					
-					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-striped table-bordered">
-			<caption><h4>Listado de Gastos de Relaciones</h4></caption>
-			<thead class="thead">
-				<tr>
-					<th width="10%">No.</th>
-					<th width="25%">Fecha</th>
-					<th width="30%">Concepto</th>
-					<th width="15%">Registros</th>
-					<th width="15%">Importe</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="gasto in da.gastosRelaciones">
-					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
-					<td>{{ gasto.concepto.nombre }}</td>
-					<td ng-class="{'text-right negritas':$last}">{{ gasto.registros }}</td>
-					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-striped table-bordered">
-			<caption><h4>Listado de Gastos por Depósitos</h4></caption>
-			<thead class="thead">
-				<tr>
-					<th width="10%">No.</th>
-					<th width="25%">Fecha</th>
-					<th width="30%">A nombre</th>
-					<th width="20%">Cuenta</th>
-					<th width="15%">Importe</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="gasto in da.gastosDepositos">
-					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
-					<td>{{ gasto.aNombreDe }}</td>
-					<td ng-class="{'text-right negritas':$last}">{{ gasto.cuenta.nombre }}</td>
-					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-striped table-bordered">
-			<caption><h4>Listado de Gastos de Administración</h4></caption>
-			<thead class="thead">
-				<tr>
-					<th width="10%">No.</th>
-					<th width="25%">Fecha</th>
-					<th width="50%">Concepto</th>
-					<th width="15%">Importe</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="gasto in da.gastosAdmon">
-					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
-					<td ng-class="{'text-right negritas':$last}">{{ gasto.concepto.nombre }}</td>
-					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
--->
-<div class="row well">
-	<div class="col-sm-3">
-
-	</div>
-	<div class="col-sm-9">
+	<div class="col-sm-9 well">
 		<div id="gastosGrafica" style="height: 350px;"></div>
 	</div>
 </div>
 <hr>
-<div class="row well">
-	<div class="col-sm-3">
-
+<div class="row">
+	<div class="col-sm-3 well" style="height: 390px;">
+		<h1 class="text-success"><small>Total: </small>{{da.totalPagos | currency}}</h1>
+		<a type="button" class="btn btn-primary pull-right" ng-show="da.totalPagos > 0" ui-sref="root.detallePagos({semana : da.semanaActual, anio : da.anio})"><i class="fa fa-eye"></i> Ver Detalle</a>
 	</div>
-	<div class="col-sm-9">
+	<div class="col-sm-9 well">
 		<div id="pagosPorGrupo" style="height: 350px;"></div>
 	</div>
 </div>

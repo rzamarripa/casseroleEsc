@@ -1,0 +1,34 @@
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3 text-center">
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="semanaActual">Semana</label>
+				<input name="semanaActual" type="number" min="0" max="52" ng-model="de.semanaActual" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="anio">Año</label>
+				<input name="anio" type="number" ng-model="de.anio" class="form-control"/>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-bordered">
+			<tr>
+				<th class="text-center" width="5%">No.</th>
+				<th width="35%">Alumno</th>
+				<th width="20%">Fecha Pago</th>
+				<th width="15%">Tipo Plan</th>
+				<th width="20%">Semana que pagó</th>
+			</tr>
+			<tr ng-repeat="pago in de.pagosPorSemana">
+				<td class="text-center">{{$index + 1}}</td>
+				<td>{{pago.alumno.profile.nombre}} {{pago.alumno.profile.apPaterno}}</td>
+				<td>{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+				<td>{{pago.tipoPlan}}</td>
+				<td><span ng-repeat="semana in pago.semanasPagadas"> {{semana}} |</span></td>
+			</tr>
+		</table>
+	</div>
+</div>

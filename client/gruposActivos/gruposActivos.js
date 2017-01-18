@@ -5,8 +5,6 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	
 	let rc = $reactive(this).attach($scope);
 	
-	window.rc = rc;
-	
   this.action = true;
   this.nuevo = true;  
 	this.grupos_id = [];
@@ -74,7 +72,6 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 				});
 			});
 			
-			console.log("misAsignaciones", _.toArray(misAsignaciones));
 			return _.toArray(misAsignaciones);
 	  }	  
   });
