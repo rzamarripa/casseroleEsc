@@ -409,14 +409,18 @@
 						  </option>
 						</select>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-2">
 	    	 				<label>Importe</label>
 					    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe"  >
 	    	 			</div>	
-	    	 			<div class="col-sm-3"><br/>
+	    	 			<div class="col-sm-2"><br/>
 	    	 			<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >
 	    	 				
-	    	 			</div>	
+	    	 			</div>
+	    	 			<div class="col-sm-2"><br/>
+	    	 			<a ui-sref="root.historialOtrosPagos({alumno_id:al.alumno._id})" class="btn btn-primary">Historial</a>
+	    	 				
+	    	 			</div>		
 		     
 		          </div>
 		        </div>
