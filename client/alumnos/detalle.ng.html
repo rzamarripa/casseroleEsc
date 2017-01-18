@@ -385,7 +385,45 @@
 		        </div>
 		      </div>
 		    </div>
-		  </div>
+		  </div> 
+		   <!-- //////////////////   /////////////////   //////////////////   //////////////////   ////////
+		  //////////////////  //////////////////  //////////////////  //////////////////  ////////////////// -->
+
+		  <div class="row">
+		    <div class="col-sm-12">
+		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
+		        <header>
+		          <h2>Otros</h2>
+		        </header>
+		        <div>
+		          <div class="widget-body">
+		          <div class="col-sm-1">
+	    	 				<label>Cantidad</label>
+					    	<input type="text" class="form-control" placeholder="" ng-model="al.otroPago.cantidad"  >
+	    	 			</div>
+	    	 			<div class="col-sm-3" >
+						<label for="concepto">Concepto</label>
+						<select name="concepto" class="form-control" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" >
+						  <option ng-repeat="concepto in al.conceptosPago" value="{{concepto._id}}">
+						  	{{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div class="col-sm-3">
+	    	 				<label>Importe</label>
+					    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe"  >
+	    	 			</div>	
+	    	 			<div class="col-sm-3"><br/>
+	    	 			<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >
+	    	 				
+	    	 			</div>	
+		     
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>  
+
 		</section>	
 	</div>
 </div>

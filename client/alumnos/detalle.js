@@ -68,6 +68,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			alumno_id : $stateParams.alumno_id
 		}];
 	});
+		this.subscribe('conceptosPago',()=>{
+		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	 });
 		
 	this.helpers({
 		alumno : () => {
@@ -119,7 +122,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				})
 				return Curriculas.find();
 			}			
-		}
+		},
+		conceptosPago : () => {
+		  return ConceptosPago.find({modulo:"otros"});
+	  },
 	});
 
 	this.grupo = function (grupoId){
@@ -841,6 +847,32 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var ocupacion = Ocupaciones.findOne(ocupacion_id);
 		if(ocupacion)
 			return ocupacion.nombre;
-	}
+	};
+    
+    otroPago = {}; 
+	 this.guardarOtroPago = function(pago)
+	{  
+		console.log(pago);
+		var semanasPagadas = [];
+			diaActual = moment(new Date()).weekday();
+			semanaPago = moment(new Date()).isoWeek();
+			anioPago = moment(new Date()).get('year');
+		
+			pago.estatus = true;
+			pago.usuarioAtendio = Meteor.user()._id;
+			pago.inscripcion_id = rc.inscripciones[0]._id
+			pago.dia = diaActual;
+			pago.semana = semanaPago;
+			pago.anio = anioPago;
+			pago.alumno_id = $stateParams.alumno_id;
+
+
+			//this.aula.seccion_id = Meteor.user().profile.seccion_id;
+			//aula.usuarioInserto = Meteor.userId();	
+			PlanPagos.insert(pago);
+			toastr.success('Guardado correctamente.');
+			otroPago = {}; 
+
+	};
 	
 }

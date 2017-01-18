@@ -10,9 +10,12 @@
 			<input name="fechaFinal" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="p.fechaFinal" required="" />
 		</div>
 		<div class="col-sm-2">
-			<button class="btn btn-primary" ng-click="p.getProspectos(p.fechaInicial, p.fechaFinal)">Buscar</button>
+			<button class="btn btn-primary" ng-click="p.getProspectos(p.fechaInicial, p.fechaFinal);p.getEtapas(p.fechaInicial, p.fechaFinal)">Buscar</button>
 		</div>
 	</form>
 </div>
 
-<div id="prospectosPorMediosPublicidad"></div>
+<div id="prospectosPorMediosPublicidad"></div><br/>
+
+
+<div id="prospectosSoloEtapaVenta"></div>

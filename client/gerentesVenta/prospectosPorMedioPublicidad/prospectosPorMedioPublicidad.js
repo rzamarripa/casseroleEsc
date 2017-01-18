@@ -16,12 +16,12 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
 
 
   this.getProspectos = function(fechaInicial, fechaFinal){
-    console.log(fechaInicial, fechaFinal);
+    
     Meteor.apply('prospectosPorEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
       
       var nombres = _.pluck(result, "medio");
       var valores = _.pluck(result, "cantidad");
-      console.log(result);
+      console.log("Zama",result);
       $('#prospectosPorMediosPublicidad').highcharts( {
           chart: {
                 type: 'column'
@@ -61,5 +61,101 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
         $scope.$apply();
     });
   }
-  
+
+
+   this.getEtapas11= function(fechaInicial, fechaFinal){
+
+
+     Meteor.apply('prospectosSoloEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
+      
+      // var nombres = _.pluck(result, "medio");
+      var valores = _.pluck(result, "cantidad");
+      console.log("Jaime",result);
+$('#prospectosSoloEtapaVenta').highcharts( {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Pagos por semana ' + rc.semanaActual
+        },
+        xAxis: {
+            categories: nombreGrupos
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
+            shared: true
+        },
+        plotOptions: {
+            column: {
+                stacking: ''
+            }
+        },
+        series: [{
+            name: 'Pagos',
+            data: valores
+        }]
+        });
+        $scope.$apply();
+    });
+
+  }
+
+
+
+   this.getEtapas= function(fechaInicial, fechaFinal){
+
+     Meteor.apply('prospectosSoloEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
+              
+              // arreglo = _.toArray(arreglo);
+              // var valores = _.pluck(arreglo, "data");
+
+
+
+              var nombreEtapas = _.pluck(result, "etapaVenta");
+               var valores = _.pluck(result, "cantidad");
+               console.log("nombres",nombreEtapas,"valores",valores)
+      console.log("Jaime",result);
+          
+           $('#prospectosSoloEtapaVenta').highcharts( {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Prospectos por Etapas de Venta ' 
+        },
+        xAxis: {
+            categories: nombreEtapas
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.etapaVenta}</span>: <b>{point.y}</b><br/>',
+            shared: true
+        },
+        plotOptions: {
+            column: {
+                stacking: ''
+            }
+        },
+        series: [{
+            etapaVenta: 'Prospectos',
+            data: valores
+        }]
+        });
+       })
+
+    }
+
 };
+
+
