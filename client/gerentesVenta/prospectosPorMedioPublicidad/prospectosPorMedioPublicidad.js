@@ -6,14 +6,8 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
 	let rc = $reactive(this).attach($scope);
 	this.nuevo = true;
 	this.action = true;
-	// this.fechaInicio = new Date();
-	// this.fechaFin = new Date();
-    this.fechaInicial = new Date();
-    this.fechaFinal = new Date();
-
-
-
-
+  this.fechaInicial = new Date();
+  this.fechaFinal = new Date();
 
   this.getProspectos = function(fechaInicial, fechaFinal){
     console.log(fechaInicial, fechaFinal);

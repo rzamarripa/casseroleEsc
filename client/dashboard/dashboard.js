@@ -25,7 +25,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	
 	this.subscribe('pagosPorSemana',()=>{
-		var query = {campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : parseInt(this.getReactively("semanaActual")), pagada : 1, anioPago : parseInt(this.getReactively("anio"))};
+		var query = {campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : parseInt(this.getReactively("semanaActual")), estatus : 1, anioPago : parseInt(this.getReactively("anio"))};
 		return [query]
 	});
 	
@@ -67,16 +67,15 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 						arreglo[grupo.nombre].name = grupo.nombre;
 						arreglo[grupo.nombre].data = 0.00;
 						_.each(grupo.alumnos, function(alumno){
-							var pagosAlumno = PlanPagos.find({alumno_id : alumno}).fetch();
+							var pagosAlumno = PlanPagos.find({alumno_id : alumno.alumno_id}).fetch();
 							_.each(pagosAlumno, function(pago){
 								arreglo[grupo.nombre].data += pago.importe;
 							});
 						});
 					}else{
 						arreglo[grupo.nombre].name = grupo.nombre;
-						
 						_.each(grupo.alumnos, function(alumno){
-							var pagosAlumno = PlanPagos.find({alumno_id : alumno}).fetch();
+							var pagosAlumno = PlanPagos.find({alumno_id : alumno.alumno_id}).fetch();
 							_.each(pagosAlumno, function(pago){
 								arreglo[grupo.nombre].data += pago.importe;
 							});
@@ -87,14 +86,13 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  arreglo = _.toArray(arreglo);
 			  var valores = _.pluck(arreglo, "data");
 			  var nombreGrupos = _.pluck(arreglo, "name");
-			  console.log(nombreGrupos, valores);
 		  }
 		   $('#pagosPorGrupo').highcharts( {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Pagos por grupo ' + rc.semanaActual
+            text: 'Pagos por semana ' + rc.semanaActual
         },
         xAxis: {
             categories: nombreGrupos
@@ -119,7 +117,6 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
             data: valores
         }]
     	});
-			console.log(arreglo);
 		  return arreglo;
 	  },
 	  semanales : () => {

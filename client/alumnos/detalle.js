@@ -68,6 +68,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			alumno_id : $stateParams.alumno_id
 		}];
 	});
+	
+	this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	});
 		
 	this.helpers({
 		alumno : () => {
@@ -119,6 +123,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				})
 				return Curriculas.find();
 			}			
+		},
+		mediosPublicidad : () => {
+			return MediosPublicidad.find();
 		}
 	});
 
