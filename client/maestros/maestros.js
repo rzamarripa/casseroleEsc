@@ -11,6 +11,10 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	this.subscribe('maestros',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
+	this.subscribe('campus', ()=>{
+		return [{estatus:true, _id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+	});
 
 	this.helpers({
 	  maestros : () => {
@@ -23,6 +27,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		  if(this.getReactively("maestro") && Meteor.user() && this.action == true){
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
+			  var campus = Campus.findOne(Meteor.user().profile.campus_id);
 			  if(this.getReactively("cantidad") > 0){
 				  var ultimo = Maestros.findOne({}, {sort: {fechaCreacion:-1}});
 				  if(ultimo){
@@ -32,7 +37,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 					  rc.maestro.nombreUsuario = usuarioAnterior;
 				  }
 			  }else{
-				  rc.maestro.nombreUsuario = "m" + anio + Meteor.user().profile.campus_clave + "001";
+				  rc.maestro.nombreUsuario = "m" + anio + campus.clave + "001";
 			  }
 		  }
 	  }

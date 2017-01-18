@@ -238,4 +238,10 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 		  return foto;
 	  }
   };
+  
+  this.calcularSemana = function(w, y) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    rc.fechaInicial = new Date(simple);
+    rc.fechaFinal = new Date(moment(simple).add(7,"days"));
+	}
 };

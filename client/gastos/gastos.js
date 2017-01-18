@@ -6,10 +6,11 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
   this.nuevo = false;
   window.rc = rc;
-  this.tipoGasto = 'cheques';
+  this.tipoGasto = 'Cheques';
   this.gasto = {};
   this.gasto.fechaLimite = new Date();
   this.semanaActual = moment(new Date()).isoWeek();
+  this.anioActual = moment().get("year");
   this.diaActual = moment(new Date()).weekday();
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
@@ -38,7 +39,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.helpers({
 		gastos : () => {
 			var gas = Gastos.find({tipoGasto  : this.getReactively('tipoGasto')}).fetch();
-			if(rc.getReactively("tipoGasto") == "depositos"){
+			if(rc.getReactively("tipoGasto") == "Depositos"){
 				_.each(gas, function(g){
 					g.cuenta = Cuentas.findOne(g.cuenta_id);
 				})
@@ -51,7 +52,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     cuentas : ()=>{
       _cuentas = Cuentas.find().fetch();
       _.each(_cuentas,function(cuenta){
-        cuenta.depositos = Gastos.find({tipoGasto:"depositos",cuenta_id: cuenta._id}).fetch();
+        cuenta.depositos = Gastos.find({tipoGasto:"Depositos",cuenta_id: cuenta._id}).fetch();
         cuenta.totalDepositos = _.reduce(cuenta.depositos, function(memo, deposito){return memo + deposito.importe},0);
       });
       return _cuentas;
@@ -76,6 +77,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     }
     gasto.estatus = true;
     gasto.semana = this.semanaActual;
+    gasto.anio = this.anioActual;    
     gasto.campus_id = Meteor.user().profile.campus_id;
     gasto.seccion_id = Meteor.user().profile.seccion_id;
     gasto.tipoGasto = this.tipoGasto;
@@ -162,7 +164,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
   this.gastosRelaciones = function(cuenta_id){
     comisiones = Comisiones.find({modulo:"colegiatura", cuenta_id:cuenta_id}).fetch();
-    gastos = Gastos.find({tipoGasto:"relaciones"}).fetch();
+    gastos = Gastos.find({tipoGasto:"Relaciones"}).fetch();
     totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
     totalGastos = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
     return totalComisiones + totalGastos;
