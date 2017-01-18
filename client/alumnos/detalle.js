@@ -68,16 +68,13 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			alumno_id : $stateParams.alumno_id
 		}];
 	});
-<<<<<<< HEAD
 		this.subscribe('conceptosPago',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	 });
-=======
 	
 	this.subscribe("mediosPublicidad",()=>{
 		return [{estatus:true }]
 	});
->>>>>>> eac4a68c4311f1d4a44df3837ea5120148710617
 		
 	this.helpers({
 		alumno : () => {
@@ -130,15 +127,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				return Curriculas.find();
 			}			
 		},
-<<<<<<< HEAD
 		conceptosPago : () => {
 		  return ConceptosPago.find({modulo:"otros"});
 	  },
-=======
 		mediosPublicidad : () => {
 			return MediosPublicidad.find();
 		}
->>>>>>> eac4a68c4311f1d4a44df3837ea5120148710617
 	});
 
 	this.grupo = function (grupoId){
