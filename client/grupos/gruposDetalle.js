@@ -101,7 +101,6 @@ angular
 			Grupos.update({_id : idTemp}, {$set : rc.grupo});
 			toastr.success("Ha eliminado al alumno correctamente");
 		}
-		
 	}
 
 	this.agregarAlumno = function(){
