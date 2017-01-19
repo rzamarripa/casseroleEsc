@@ -125,9 +125,9 @@ function ConveniosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr
 	  
 	  _.each(pagosPendientes, function(pago){
 		  PlanPagos.update({_id : pago._id},
-		  		{ $set : { importe : modificacion.importe, importeRecargo : modificacion.recargo, importeDescuento : modificacion.descuento, descripcion : modificacion.descripcion}});
+		  		{ $set : { modificada : true, pagoTiempo : 0, importeRegular : modificacion.importeRegular, importe : modificacion.importeRegular, importeRecargo : modificacion.recargo, importeDescuento : modificacion.descuento, descripcion : modificacion.descripcion}});
 	  })
-	  toastr.success('Se modificaron correctamente los ' + pagosPendientes + ' pagos');
+	  toastr.success('Se modificaron correctamente los ' + pagosPendientes.length + ' pagos');
 	  this.modificacion = {};
 	  $('#collapseMasiva').collapse('hide');
 	  this.nuevoMasivo = !this.nuevoMasivo;

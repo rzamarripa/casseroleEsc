@@ -56,6 +56,12 @@ angular.module('casserole').config(['$injector', function ($injector) {
           );
         }]
       }
+    })
+    .state('anon.pagosImprimir', {
+      url: '/pagosImprimir/:pago/:alumno_id',
+      templateUrl: 'client/pagos/pagosImprimir.ng.html',
+      controller: 'PagosImprimirCtrl as pi',
+     // params: { 'semanas': ':semanas' , 'id' : ':id'},
     });
   /***************************
    * Login Users Routes
@@ -124,6 +130,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    },
     })
+    .state('root.otrosCobros', {
+      url: '/otrosCobros',
+      templateUrl: 'client/planPagos/otrosCobros/otrosCobros.html',      
+      controller: 'OtrosCobrosCtrl as oc',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',
@@ -179,7 +195,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1370,11 +1386,11 @@ angular.module('casserole').config(['$injector', function ($injector) {
     .state('root.detalleGastos', {
       url: '/detalleGastos/:semana/:anio',
       templateUrl: 'client/gastos/detalleGastos.html',
-      controller: 'DetalleGastosCtrl as da',
+      controller: 'DPagosCtrl as da',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1383,14 +1399,14 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
-    .state('root.detallePagos', {
-      url: '/detallePagos/:semana/:anio',
-      templateUrl: 'client/planPagos/detallePagos/detallePagos.html',
-      controller: 'DetallePagosCtrl as de',
+    .state('root.pagosSemana', {
+      url: '/pagosSemana/:semana/:anio',
+      templateUrl: 'client/planPagos/pagosSemana/pagosSemana.html',
+      controller: 'PagosSemanaCtrl as de',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

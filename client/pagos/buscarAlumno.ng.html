@@ -1,0 +1,40 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i> 
+				Alumnos 
+			<span>&gt; 
+				Buscar
+			</span>
+		</h1>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<label>Buscar: <input ng-model="pa.buscar.nombre" class="form-control"></label>
+	</div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <h6 class="description">Nuestros Alumnos</h6>
+    <div class="row pt-md">
+      <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 profile well-mini" ng-repeat="alumno in pa.alumnos">
+        <div class="img-box">
+          <img ng-src="{{pa.tieneFoto(alumno.sexo, alumno.fotografia)}}" class="img-responsive img-thumbnail">
+          <ul class="text-center">
+            <a href="/alumnos/{{alumno._id}}"><li><i class="fa fa-eye"></i></li></a>
+            <a href="/pagos/{{alumno._id}}"><li><i class="fa fa-dollar"></i></li></a>
+            <a href="/asistencias/{{alumno._id}}"><li><i class="fa fa-list"></i></li></a>
+            <a href="/editarAlumno/{{alumno._id}}"><li><i class="fa fa-pencil"></i></li></a>
+          </ul>
+        </div>
+        <h1>{{alumno.nombreCompleto}}</h1>
+        <h2>Matrícula: {{alumno.matricula}}</h2>
+        <h2>Teléfono: {{alumno.tel1}}</h2>
+        <h2>Correo: {{alumno.correo}}</h2>
+      </div>            
+    </div>
+  </div>
+</div>

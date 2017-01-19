@@ -20,9 +20,6 @@ angular
 	this.fechaFin.setHours(24,0,0,0);
 	this.alumnos_id = [];
 	
-	console.log(this.semana);
-	console.log($stateParams);
-	
 	if($stateParams.id){
 		this.subscribe('asistencias', ()  => {
 			return [{ _id : $stateParams.id }]

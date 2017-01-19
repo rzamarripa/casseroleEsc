@@ -1,0 +1,69 @@
+
+	<div class="container">
+		<div class="widget-body no-padding">
+			<div class="padding-10">
+				<div class="row text-center">
+					<div class="col-sm-4 col-sm-offset-4">
+						<div>
+							<img src="{{pi.seccion.logo}}" width="200" alt="recibo icon">
+						</div>
+						<address>
+							<br>
+							<strong>{{pi.seccion.nombreseccion}}</strong>
+							<br><br>
+							{{pi.seccion.direccion}}
+							<br/>
+							{{pi.seccion.ciudad}}, {{pi.seccion.estado}}
+							<br>
+							<abbr title="Phone">TEL:</abbr> {{pi.seccion.telefono1}}
+						</address>
+						<div>
+							<div>
+<!-- 								<strong>RECIBO NO:</strong>{{ pi.pago._id }} -->
+							</div>		
+						</div>
+						<div>
+							<div>
+								<strong>FECHA:</strong> {{ pi.fecha | date:'dd-MM-yyyy'}}
+							</div>		
+						</div>
+						<table class="table">
+							<tr>
+								<td>CONCEPTO</td>
+								<td>DESCRIPCIÓN</td>
+							</tr>
+							<tr ng-repeat="(key, value) in pi.semanas">
+								<td ><strong>{{key}}</strong></td>
+								<td>
+									<table class="table">
+										<tr>
+											<th>Número</th>
+											<th>Importe</th>
+										</tr>
+										<tr ng-repeat="semana in value">
+											<td class="text-right">{{semana.semana}} / {{semana.anio}}</td>
+											<td>{{semana.importe | currency}}</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: right"><strong>Subtotal:</strong></td>
+								<td style="text-align: right">{{pi.subTotal | currency}}</td>
+							</tr>
+							<tr>
+								<td style="text-align: right"><strong>IVA:</strong></td>
+								<td style="text-align: right">{{0.00 | currency}}</td>
+							</tr>
+							<tr>
+								<td style="text-align: right"><strong>Total:</strong></td>
+								<td style="text-align: right">{{pi.subTotal | currency}}</td>
+							</tr>
+						</table>						
+						<hr/>
+						<h3>RECUERDA PAGAR A TIEMPO PARA EVITAR RECARGOS!!</h3>
+					</div>
+				</div>
+			</div>		
+		</div>
+	</div>

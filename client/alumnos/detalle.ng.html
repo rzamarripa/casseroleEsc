@@ -105,9 +105,6 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<ul class="nav nav-tabs">
-											<a class="btn btn-primary" href back-button>
-												Regresar
-											</a>
 											<li class="pull-right">
 												<a ng-click="al.masInformacion()" role="button" data-toggle="collapse"
 			href="#masInformacion" aria-expanded="false" aria-controls="masInformacion"><i class="fa fa-{{al.masInfo == true ? 'plus':'minus'}} fa-lg"></i></a>
@@ -244,14 +241,26 @@
 													</div>
 												</div>
 											</div>
-										</header>		
+										</header>	
 										<div >
+											<h2> Conceptos de inscripción : </h2>	
+											<fieldset>
+												<div class="row">
+												<section class="col col-2" ng-click="al.seleccionarConcepto(cobro,curso)" ng-repeat = "cobro in curso.pagos" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+													<label class="input">
+														<input class="font-xs" ng-class="al.obtenerEstatus(cobro)"  type="text" value="{{cobro.nombre}}" disabled="" title="">
+													</label>
+												</section>
+												</div>
+											</fieldset>
+										</div>	
+										<div  ng-class="{desactivado: !al.inscripcionCompleta(curso)}">
 											<h2> Colegiatura : </h2>	
 											<fieldset>
 												<div class="row">
-												<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso.planPagos)" ng-repeat = "cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso)" ng-repeat = "cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 													<label class="input">
-														<input class="font-xs" ng-class="al.obtenerEstatus(cobro, al.planPagos[curso._id], curso.planPagos)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
+														<input class="font-xs" ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
 													</label>
 												</section>
 												</div>
@@ -291,25 +300,77 @@
 												</section>
 											</div>
 										</fieldset>
-										<div class="well well-sm  bg-color-darken txt-color-white no-border">
-											<div class="fa-lg">
-												Total a Pagar :
-												<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
-											</div>														
+										<div class="row" style="margin-right: 2px;">
+											<div class="col-sm-9">
+												
+											</div>
+											<div class="col-sm-3">
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total abonado :
+													<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
+												</p>
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total a pagar :
+													<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
+												</p>
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total :
+													<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+												</p>
+											</div>
+											
+<!--
+											<div class="col-sm-3" style="padding: 30px;">
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total abonado :
+														<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
+													</div>
+												</div>
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total a pagar :
+														<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
+													</div>			
+												</div>
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total  :
+														<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+													</div>			
+												</div>
+											</div>
+-->
+											
 										</div>
-										<div class="pull-left" style="margin:20px;">
-											<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+										
+
+										<div ng-if="al.inscripcionCompleta(curso)">
+											<div class="pull-left" style="margin:20px;" >
+												<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+											</div>
+											
+											<div class="pull-right" style="margin:20px;">
+												
+												<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Pagar</a>
+											</div>
+											
+											
 										</div>
-										
-										<div class="pull-right" style="margin:20px;">
-											<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Pagar</a>
-<!-- 											<a target="_blank" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPagos" ng-disabled="al.hayParaPagar">Pagar</a> -->
-										</div>
-										
-										
-										
-										<div class="pull-right" style="margin:20px;">
-											<button type="button" class="btn btn-primary btn-lg" ng-click="al.imprimir()" ng-disabled="al.hayParaImprimir">Imprimir</button>
+
+										<div ng-if="!al.inscripcionCompleta(curso)">
+											<div class="pull-left" style="margin:20px;" >
+												<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+											</div>
+											
+											<div class="pull-right" style="margin:20px;">
+												<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagarConcepto(curso)" ng-disabled="al.hayParaPagar">Pagar</a>
+	<!-- 											<a target="_blank" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPagos" ng-disabled="al.hayParaPagar">Pagar</a> -->
+											</div>
+											
+											
+											
+											
 										</div>
 										
 									</form>		
@@ -340,7 +401,7 @@
 															  <div class="form-group">
 															    <input type="number" class="form-control" ng-model="al.pagaCon" placeholder="Paga Con">
 															  </div>
-															  <button ng-click="al.pagar(al.planPagos[curso._id], curso.planPagos)" class="btn btn-default">Pagar</button>
+															  <button ng-click="al.pagar(al.planPagos[curso._id], curso)" class="btn btn-default">Pagar</button>
 															</form>
 											      </div>
 											      <div class="modal-footer">
@@ -386,9 +447,6 @@
 		      </div>
 		    </div>
 		  </div> 
-		   <!-- //////////////////   /////////////////   //////////////////   //////////////////   ////////
-		  //////////////////  //////////////////  //////////////////  //////////////////  ////////////////// -->
-
 		  <div class="row">
 		    <div class="col-sm-12">
 		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
@@ -397,6 +455,7 @@
 		        </header>
 		        <div>
 		          <div class="widget-body">
+<<<<<<< HEAD
 		          <div class="col-sm-1">
 	    	 				<label>Cantidad</label>
 					    	<input type="text" class="form-control" placeholder="" ng-model="al.otroPago.cantidad"  >
@@ -422,6 +481,31 @@
 	    	 				
 	    	 			</div>		
 		     
+=======
+			          <div class="col-sm-1">
+		    	 				<label>Cantidad</label>
+						    	<input type="number" class="form-control" min="0" placeholder="Cant." ng-model="al.otroPago.cantidad" ng-change="al.calcularImporteOtrosPagos()" >
+		    	 			</div>
+		    	 			<div class="col-sm-3" >
+									<label for="concepto">Concepto</label>
+									<select name="concepto" class="form-control select2" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" ng-change="al.getConceptoPago(al.otroPago.concepto_id)" >
+									  <option ng-repeat="concepto in al.conceptosPago" value="{{concepto._id}}">
+									  	{{concepto.nombre}}
+									  </option>
+									</select>
+								</div>
+								<div class="col-sm-1">
+		    	 				<label>Precio Unitario</label>
+						    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe" ng-change="al.calcularImporteOtrosPagos()">
+		    	 			</div>
+								<div class="col-sm-3">
+		    	 				<label>Importe</label>
+						    	<input type="number" class="form-control" placeholder="Total" ng-model="al.otroPago.total" ng-disabled="" >
+		    	 			</div>	
+		    	 			<div class="col-sm-3"><br/>
+		    	 				<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >
+	    	 				</div>	
+>>>>>>> ad26846b6dc3fd1a959a5f687bf0863625c9da3a
 		          </div>
 		        </div>
 		      </div>

@@ -11,23 +11,28 @@
 			</div>
 		</form>
 	</div>
+	<div class="col-sm-3">
+		<button class="btn btn-primary pull-right" ng-click="de.imprimir('pagadores')"><i class="fa fa-print"></i> Imprimir</button>
+	</div>
 </div>
-<div class="row">
+<div class="row" id="pagadores">
 	<div class="col-xs-12">
 		<table class="table table-bordered">
 			<tr>
 				<th class="text-center" width="5%">No.</th>
-				<th width="35%">Alumno</th>
-				<th width="20%">Fecha Pago</th>
-				<th width="15%">Tipo Plan</th>
-				<th width="20%">Semana que pagó</th>
+				<th class="text-center" width="25%">Alumno</th>
+				<th class="text-center" width="20%">Fecha Pago</th>
+				<th class="text-center" width="15%">Tipo Plan</th>
+				<th class="text-center" width="15%">Semana que pagó</th>
+				<th class="text-center" width="20%">Usuario</th>
 			</tr>
 			<tr ng-repeat="pago in de.pagosPorSemana">
 				<td class="text-center">{{$index + 1}}</td>
-				<td>{{pago.alumno.profile.nombre}} {{pago.alumno.profile.apPaterno}}</td>
-				<td>{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
-				<td>{{pago.tipoPlan}}</td>
+				<td>{{pago.alumno.profile.nombreCompleto}}</td>
+				<td class="text-center">{{pago.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+				<td class="text-center">{{pago.tipoPlan}}</td>
 				<td><span ng-repeat="semana in pago.semanasPagadas"> {{semana}} |</span></td>
+				<td class="text-center">{{pago.usuario.profile.nombreCompleto}}</td>
 			</tr>
 		</table>
 	</div>
