@@ -64,41 +64,30 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
-								<table class="table table-striped table-bordered table-condensed">
-									<caption>												
-										<h4>Listado de Pagos</h4>
-									</caption>
+								<table class="table table-striped table-bordered">
+									<caption><h4>Listado de otros Cobros</h4></caption>
 									<thead class="thead">
 										<tr>
-											<th class="text-center" width="5%">No.</th>
-											<th class="text-center" width="10%">Fecha de Pago</th>
-											<th class="text-center" width="15%">Colegiatura</th>
-											<th class="text-center" width="10%">Importe</th>
-											<th class="text-center" width="10%">Descuento</th>
-											<th class="text-center" width="10%">Recargo</th>
-											<th class="text-center" width="20%">Descripción</th>
-											<th class="text-center" width="20%">Acciones</th>
+											<th class="text-center">No.</th>
+											<th class="text-center">Fecha</th>
+											<th class="text-center">Cant.</th>
+											<th class="text-center">Concepto</th>
+											<th class="text-center">Precio Unitario</th>
+											<th class="text-center">Importe</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr ng-class="(pago.estatus == 1) ? 'success' : (pago.fecha < co.fechaActual && pago.estatus == 0) ? 'warning' : (pago.estatus == 2) ? 'danger' : 'info'" ng-repeat="pago in co.planPagos">
+									<tbody style="font-size: smaller">
+										<tr ng-repeat="cobro in co.planPagos">
 											<td class="text-center">{{$index + 1}}</td>	
-											<td class="text-center">{{pago.fecha | date:"dd-MM-yyyy"}}</td>
-											<td class="text-center">{{pago.semana}} - {{pago.anio}}</td>
-											<td class="text-right">{{pago.importe | currency}}</td>
-											<td class="text-right">{{pago.importeDescuento | currency}}</td>
-											<td class="text-right">{{pago.importeRecargo | currency}}</td>
-											<td >{{pago.descripcion}}</td>
-											<td class="text-center">
-												<span ng-if="pago.estatus != 1">
-													<button class="btn btn-warning btn-xs" ng-click="co.editar(pago)"><i class="fa fa-pencil"></i> Editar</button>
-													<button class="btn btn-danger  btn-xs" ng-click="co.eliminar(pago)"><i class="fa fa-trash"></i> Eliminar</button>
-												</span>
-											</td>
+											<td class="text-center">{{cobro.fechaPago | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+											<td class="text-center">{{cobro.cantidad}}</td>
+											<td class="text-center">{{cobro.concepto.nombre}}</td>
+											<td class="text-right">{{cobro.importe | currency}}</td>
+											<td class="text-right">{{cobro.total | currency}}</td>
 										</tr>
 									</tbody>
 								</table>
-							</div>b
+							</div>
 						</div>
 					</div>
 				</div>

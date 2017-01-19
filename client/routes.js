@@ -1590,6 +1590,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+       .state('root.historialOtrosPagos', {
+      url: '/historialOtrosPagos/:alumno_id',
+      templateUrl: 'client/planPagos/historial/historialOtrosPagos.html',
+      controller: 'HistorialOtrosPagosCtrl as co',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
     
     ;
 }]);

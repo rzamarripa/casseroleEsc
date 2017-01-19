@@ -69,6 +69,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		}];
 	});
 	
+	
 	this.subscribe('conceptosPago',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
@@ -142,6 +143,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 	
 	this.actualizar = function(alumno,form){
+
+		console.log(alumno);
+		var alumnoTemp = Meteor.users.findOne({_id : alumno._id});
+		this.alumno.password = alumnoTemp.password;
+		this.alumno.repeatPassword = alumnoTemp.password;
+		console.log(this.alumno.password)
+		//document.getElementById("contra").value = this.alumno.password;
+
 		if(form.$invalid){
 			toastr.error('Error al actualizar los datos.');
 			return;
@@ -1071,6 +1080,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
     
 	this.guardarOtroPago = function(pago)
 	{  
+
 		var semanasPagadas = [];
 		var conceptoActual = ConceptosPago.findOne(pago.concepto_id);
 		diaActual = moment(new Date()).weekday();
@@ -1094,6 +1104,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		PlanPagos.insert(pago);
 		toastr.success('Guardado correctamente.');
 		this.otroPago = {}; 
+
 
 	};
 	
