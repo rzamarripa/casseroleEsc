@@ -455,7 +455,6 @@
 		        </header>
 		        <div>
 		          <div class="widget-body">
-<<<<<<< HEAD
 		          <div class="col-sm-1">
 	    	 				<label>Cantidad</label>
 					    	<input type="text" class="form-control" placeholder="" ng-model="al.otroPago.cantidad"  >
@@ -480,32 +479,7 @@
 	    	 			<a ui-sref="root.historialOtrosPagos({alumno_id:al.alumno._id})" class="btn btn-primary">Historial</a>
 	    	 				
 	    	 			</div>		
-		     
-=======
-			          <div class="col-sm-1">
-		    	 				<label>Cantidad</label>
-						    	<input type="number" class="form-control" min="0" placeholder="Cant." ng-model="al.otroPago.cantidad" ng-change="al.calcularImporteOtrosPagos()" >
-		    	 			</div>
-		    	 			<div class="col-sm-3" >
-									<label for="concepto">Concepto</label>
-									<select name="concepto" class="form-control select2" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" ng-change="al.getConceptoPago(al.otroPago.concepto_id)" >
-									  <option ng-repeat="concepto in al.conceptosPago" value="{{concepto._id}}">
-									  	{{concepto.nombre}}
-									  </option>
-									</select>
-								</div>
-								<div class="col-sm-1">
-		    	 				<label>Precio Unitario</label>
-						    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe" ng-change="al.calcularImporteOtrosPagos()">
-		    	 			</div>
-								<div class="col-sm-3">
-		    	 				<label>Importe</label>
-						    	<input type="number" class="form-control" placeholder="Total" ng-model="al.otroPago.total" ng-disabled="" >
-		    	 			</div>	
-		    	 			<div class="col-sm-3"><br/>
-		    	 				<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >
-	    	 				</div>	
->>>>>>> ad26846b6dc3fd1a959a5f687bf0863625c9da3a
+
 		          </div>
 		        </div>
 		      </div>
