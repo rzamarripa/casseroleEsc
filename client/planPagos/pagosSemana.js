@@ -42,8 +42,6 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 		  var pagosPorGrupo = {};
 		  var arreglo = {};
 		  if(this.getReactively("pagos")){
-			  
-			  
 				_.each(rc.getReactively("pagos"), function(pago){
 					//Listado de Pagos realizados
 					if(undefined == arreglo[pago.alumno_id]){

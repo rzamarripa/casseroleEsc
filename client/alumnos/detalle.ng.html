@@ -301,10 +301,10 @@
 											</div>
 										</fieldset>
 										<div class="row" style="margin-right: 2px;">
-											<div class="col-sm-9">
+											<div class="col-sm-8">
 												
 											</div>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
 												<p class="font-lg bg-color-darken txt-color-white no-border">
 													Total abonado :
 													<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
@@ -317,60 +317,27 @@
 													Total :
 													<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
 												</p>
-											</div>
-											
-<!--
-											<div class="col-sm-3" style="padding: 30px;">
-												<div class="well well-sm  bg-color-darken txt-color-white no-border">
-													<div class="fa-lg">
-														Total abonado :
-														<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
-													</div>
-												</div>
-												<div class="well well-sm  bg-color-darken txt-color-white no-border">
-													<div class="fa-lg">
-														Total a pagar :
-														<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
-													</div>			
-												</div>
-												<div class="well well-sm  bg-color-darken txt-color-white no-border">
-													<div class="fa-lg">
-														Total  :
-														<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
-													</div>			
-												</div>
-											</div>
--->
-											
+											</div>	
 										</div>
-										
 
 										<div ng-if="al.inscripcionCompleta(curso)">
 											<div class="pull-left" style="margin:20px;" >
 												<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Condonar</button>
 											</div>
-											
 											<div class="pull-right" style="margin:20px;">
 												
 												<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Pagar</a>
 											</div>
-											
-											
 										</div>
 
 										<div ng-if="!al.inscripcionCompleta(curso)">
 											<div class="pull-left" style="margin:20px;" >
 												<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
 											</div>
-											
 											<div class="pull-right" style="margin:20px;">
 												<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagarConcepto(curso)" ng-disabled="al.hayParaPagar">Pagar</a>
 	<!-- 											<a target="_blank" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPagos" ng-disabled="al.hayParaPagar">Pagar</a> -->
 											</div>
-											
-											
-											
-											
 										</div>
 										
 									</form>		
@@ -455,7 +422,7 @@
 		        </header>
 		        <div>
 		          <div class="widget-body">
-			          <div class="col-sm-1">
+			          <div class="col-sm-2">
 		    	 				<label>Cantidad</label>
 						    	<input type="number" class="form-control" min="0" placeholder="Cant." ng-model="al.otroPago.cantidad" ng-change="al.calcularImporteOtrosPagos()" >
 		    	 			</div>
@@ -467,7 +434,7 @@
 									  </option>
 									</select>
 								</div>
-								<div class="col-sm-1">
+								<div class="col-sm-3">
 		    	 				<label>Precio Unitario</label>
 						    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe" ng-change="al.calcularImporteOtrosPagos()">
 		    	 			</div>
