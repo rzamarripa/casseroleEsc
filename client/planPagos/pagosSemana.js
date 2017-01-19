@@ -9,6 +9,7 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 	this.semanaActual = parseInt($stateParams.semana);
 	this.anio = parseInt($stateParams.anio);
 	this.totalPagos = 0.00;
+	this.pagos = [];
 	
 	this.subscribe('pagosPorSemana',()=>{
 		var query = {campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : parseInt(this.getReactively("semanaActual")), estatus : 1, anioPago : parseInt(this.getReactively("anio"))};
@@ -27,17 +28,23 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 	});
 
   this.helpers({
-	  pagosPorSemana : () => {
+	  pagos : () => {
 		  var pagos = PlanPagos.find().fetch();
+		  _.each(pagos, function(pago){
+			  rc.alumnos_id.push(pago.usuarioInserto_id);
+			  rc.alumnos_id.push(pago.alumno_id);
+		  });
+		  
+		  return pagos;
+	  },
+	  pagosPorSemana : () => {
+		  
 		  var pagosPorGrupo = {};
 		  var arreglo = {};
-		  if(pagos){
-			  _.each(pagos, function(pago){
-				  rc.alumnos_id.push(pago.alumno_id);
-				  rc.alumnos_id.push(pago.usuarioInserto_id);
-			  });
+		  if(this.getReactively("pagos")){
 			  
-				_.each(pagos, function(pago){
+			  
+				_.each(rc.getReactively("pagos"), function(pago){
 					//Listado de Pagos realizados
 					if(undefined == arreglo[pago.alumno_id]){
 						arreglo[pago.alumno_id] = {};
@@ -53,7 +60,7 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 				});
 
 		  }
-
+			
 		  return arreglo;
 	  },
   });
