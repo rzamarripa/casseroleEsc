@@ -148,7 +148,7 @@
 									    	</div>
 									    	<div class="col-sm-4" valida>					    
 										    	<label>Importe *</label>
-										    	<input name="importeMasivo" type="number" class="form-control" placeholder="Nuevo costo colegiatura" ng-model="co.modificacion.importe" required="">
+										    	<input name="importeMasivo" type="number" class="form-control" placeholder="Nuevo costo colegiatura" ng-model="co.modificacion.importeRegular" required="">
 									    	</div>
 									    	<div class="col-sm-4" valida>					    
 										    	<label>Recargo *</label>
@@ -198,7 +198,7 @@
 											<td class="text-center">{{$index + 1}}</td>	
 											<td class="text-center">{{pago.fecha | date:"dd-MM-yyyy"}}</td>
 											<td class="text-center">{{pago.semana}} - {{pago.anio}}</td>
-											<td class="text-right">{{pago.importe | currency}}</td>
+											<td class="text-right">{{pago.importeRegular | currency}}</td>
 											<td class="text-right">{{pago.importeDescuento | currency}}</td>
 											<td class="text-right">{{pago.importeRecargo | currency}}</td>
 											<td >{{pago.descripcion}}</td>

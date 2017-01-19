@@ -1386,11 +1386,11 @@ angular.module('casserole').config(['$injector', function ($injector) {
     .state('root.detalleGastos', {
       url: '/detalleGastos/:semana/:anio',
       templateUrl: 'client/gastos/detalleGastos.html',
-      controller: 'DetalleGastosCtrl as da',
+      controller: 'DPagosCtrl as da',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1399,14 +1399,14 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
-    .state('root.detallePagos', {
-      url: '/detallePagos/:semana/:anio',
-      templateUrl: 'client/planPagos/detallePagos/detallePagos.html',
-      controller: 'DetallePagosCtrl as de',
+    .state('root.pagosSemana', {
+      url: '/pagosSemana/:semana/:anio',
+      templateUrl: 'client/planPagos/pagosSemana/pagosSemana.html',
+      controller: 'PagosSemanaCtrl as de',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

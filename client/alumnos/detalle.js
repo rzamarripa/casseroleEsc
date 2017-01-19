@@ -198,24 +198,32 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return pago.pago;
 		if(pago.estatus == 6 || (pago.estatus == 2 && pago.faltante > 0))
 			return pago.faltante;
-
-		if(pago.modificada || pago.tiempoPago==1)
-			return pago.importe;
+			
+/*
+		if(pago.modificada = true || pago.tiempoPago == 1)
+			return pago.importeRegular + ;
 		
+*/
 		var fechaActual = moment();
 		var fechaCobro = moment(pago.fecha);
 		var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 		var diasDescuento = fechaCobro.diff(fechaActual, 'days')
+		//Aquí modifiqué francisco
+		var fechaPago = moment(pago.fecha).add(-1, "days");
+		var diasDiferencia = fechaPago.diff(new Date(), "days");
 		//var concepto 			= configuracion.colegiatura[pago.tipoPlan];
 		var importe 			= pago.importeRegular;
-		if(diasDescuento >= pago.diasDescuento){
+		
+		if(diasDiferencia >= pago.diasDescuento){
 			importe -= pago.importeDescuento;
 		}
-		if(diasRecargo >= pago.diasRecargo){
+		if(diasDiferencia <= pago.diasRecargo * -1){
 			importe += pago.importeRecargo;
 			pago.tiempoPago=1;
 		}
-		pago.importe =importe;
+		
+		console.log(diasDiferencia, pago.semana, pago.fecha, importe);
+		pago.importe = importe;
 		//pago.retrasada = true;
 
 		return importe
@@ -277,18 +285,18 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		rc.totalPagar = 0;
 		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
-				if(plan[i].estatus != 1 && plan[i].estatus != 3 ){
-					rc.hayParaPagar = false;
-					if(plan[i].estatus == 6 || plan[i].faltante > 0){
-						rc.totalPagar += plan[i].faltante;
-					}
-					else{
-						rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
-					}
-					rc.semanasSeleccionadas.push(plan[i]);
-					plan[i].estatus = 5;
-					//plan[i].pago = this.calcularImporteU(plan,i)
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 ){
+				rc.hayParaPagar = false;
+				if(plan[i].estatus == 6 || plan[i].faltante > 0){
+					rc.totalPagar += plan[i].faltante;
 				}
+				else{
+					rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
+				}
+				rc.semanasSeleccionadas.push(plan[i]);
+				plan[i].estatus = 5;
+				//plan[i].pago = this.calcularImporteU(plan,i)
+			}
 		};
 		for (var i = cobro.numeroPago; i < plan.length; i++) {
 			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante)
