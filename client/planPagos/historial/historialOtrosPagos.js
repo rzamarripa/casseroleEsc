@@ -26,7 +26,7 @@ function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	});
 	
 	this.subscribe("planPagos",()=>{
-		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+		return [{alumno_id : $stateParams.alumno_id }]
 	});
 	
 	this.subscribe("turnos",()=>{
@@ -89,16 +89,27 @@ function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		},
 	
 		planPagos : () => {
-			 var raw = PlanPagos.find({modulo:"Otro"}).fetch();
-			 var planes = [];
-			 for(var id in raw){
-			 	pago = raw[id];
-			 	if(!planes[pago.inscripcion_id])
-			 		planes[pago.inscripcion_id]=[];
-			 	planes[pago.inscripcion_id].push(pago);
+			 // var raw = 
+			 // var planes = [];
+			 // for(var id in raw){
+			 // 	pago = raw[id];
+			 // 	if(!planes[pago.inscripcion_id])
+			 // 		planes[pago.inscripcion_id]=[];
+			 // 	planes[pago.inscripcion_id].push(pago);
 
-			 }
-			 return planes;
+			 // }
+
+
+		 var pagos = PlanPagos.find({modulo:"Otro"}).fetch();
+		  	if (pagos) {
+		  		_.each(pagos, function(pago){
+		  			pago.concepto = ConceptosPago.findOne(pago.concepto_id)
+
+		  	});
+	  	}
+	  	console.log(pagos);
+
+			 return pagos
 		},
 		inscripciones : () =>{
 			var inscripciones = Inscripciones.find({
@@ -123,44 +134,8 @@ function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		}
 	});
 
-	this.grupo = function (grupoId){
-		var _grupo = Grupos.findOne(grupoId);
-		return _grupo;
-	}
-	
-	this.actualizar = function(alumno,form){
-		console.log(alumno);
-		if(form.$invalid){
-			toastr.error('Error al actualizar los datos.');
-			return;
-		}
-		var nombre = alumno.profile.nombre != undefined ? alumno.profile.nombre + " " : "";
-		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
-		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
-		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
-		delete alumno.profile.repeatPassword;
-		Meteor.call('updateGerenteVenta', rc.alumno, "alumno");
-		toastr.success('Actualizado correctamente.');
-		$('.collapse').collapse('hide');
-		this.nuevo = true;
-		form.$setPristine();
-		form.$setUntouched();
-		$state.go('root.alumnos');
-	};
-	
-	this.tomarFoto = function () {
-		$meteor.getPicture().then(function(data){
-			rc.alumno.profile.fotografia = data;
-		});
-	};
-	
-	this.totalPagado = function(){
-		var temp = 0.00;
-		_.each(this.misPagos, function(pago){	
-			temp += parseFloat(pago.importe);		
-		});
-		return temp;
-	}
+
+
 	
 
 

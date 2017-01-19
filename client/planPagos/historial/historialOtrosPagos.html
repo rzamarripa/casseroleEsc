@@ -78,11 +78,11 @@
 										</tr>
 									</thead>
 									<tbody style="font-size: smaller">
-										<tr ng-repeat="cobro in co.otrosCobros">
-											<th class="text-center">{{$index + 1}}</th>	
-											<th class="text-center">{{cobro.fecha | date:"dd-MM-yyyy"}}</th>
+										<tr ng-repeat="cobro in co.planPagos">
+											<td class="text-center">{{$index + 1}}</td>	
+											<td class="text-center">{{cobro.fechaActual | date:"dd-MM-yyyy"}}</td>
 											<td class="text-center">{{cobro.cantidad}}</td>
-											<td >{{cobro.concepto.nombre}}</td>
+											<td class="text-center">{{cobro.concepto.nombre}}</td>
 											<td class="text-right">{{cobro.importe | currency}}</td>
 										</tr>
 									</tbody>

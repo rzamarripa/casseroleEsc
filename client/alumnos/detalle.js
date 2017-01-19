@@ -145,6 +145,13 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.actualizar = function(alumno,form){
 		console.log(alumno);
+		var alumnoTemp = Meteor.users.findOne({_id : alumno._id});
+		this.alumno.password = alumnoTemp.password;
+		this.alumno.repeatPassword = alumnoTemp.password;
+		console.log(this.alumno.password)
+		//document.getElementById("contra").value = this.alumno.password;
+		   
+	
 		if(form.$invalid){
 			toastr.error('Error al actualizar los datos.');
 			return;
@@ -861,7 +868,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
     
 	this.guardarOtroPago = function(pago)
 	{  
-		var semanasPagadas = [];
+		console.log(pago)
+	
 			diaActual = moment(new Date()).weekday();
 			semanaPago = moment(new Date()).isoWeek();
 			anioPago = moment(new Date()).get('year');
@@ -874,13 +882,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			pago.anio = anioPago;
 			pago.alumno_id = $stateParams.alumno_id;
 			pago.modulo = "Otro";
+			pago.fechaActual = new Date();
 
 
 			//this.aula.seccion_id = Meteor.user().profile.seccion_id;
 			//aula.usuarioInserto = Meteor.userId();	
 			PlanPagos.insert(pago);
 			toastr.success('Guardado correctamente.');
-			otroPago = {}; 
+			this.otroPago = {}; 
 
 	};
 	
