@@ -34,7 +34,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 	
 	this.subscribe("curriculas",()=>{
-
 		return [{estatus:true, alumno_id : $stateParams.alumno_id, planEstudios_id : { $in : this.getCollectionReactively("planEstudios_id")}}]
 	});
 
@@ -53,22 +52,18 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe("cuentas",()=>{
-
 		return [{activo:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
 
 	this.subscribe("grupos",() => {
-
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
 	});
 	
 	this.subscribe('pagosAlumno', () => {
-
 		return [{
 			alumno_id : $stateParams.alumno_id
 		}];
 	});
-	
 	
 	this.subscribe('conceptosPago',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
@@ -294,7 +289,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		rc.totalPagar = 0;
 		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 ){
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 2){
 				rc.hayParaPagar = false;
 				if(plan[i].estatus == 6 || plan[i].faltante > 0){
 					rc.totalPagar += plan[i].faltante;
@@ -308,9 +303,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		};
 		for (var i = cobro.numeroPago; i < plan.length; i++) {
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante)
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante && plan[i].estatus != 2)
 				plan[i].estatus = 6;		
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 6){
+			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 6 && plan[i].estatus != 2){
 				plan[i].estatus = 0;
 			}
 		}	
@@ -347,6 +342,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		 	return "bg-color-blue txt-color-white";
 	 	else if(cobro.estatus == 3)
 	 		return "bg-color-blueDark txt-color-white";
+	 	else if(cobro.estatus == 2)
+	 		return "bg-color-red txt-color-white";
 	 	else if(cobro.estatus == 6)
 	 		return "bg-color-greenLight txt-color-white";
 	 	else if(cobro.tiempoPago == 1)
@@ -730,23 +727,23 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				rc.abono=0
 
 			var condonado= Pagos.insert({
-							fechaPago 	: new Date(),
-							alumno_id 	: configuracion.alumno_id,
-							grupo_id	: configuracion.grupo_id,
-							seccion_id  : Meteor.user().profile.seccion_id,
-							campus_id 	: Meteor.user().profile.campus_id,
-							estatus 	: 1,
-							usuario_id 	: Meteor.userId(),
-							importe 	: this.ppago,
-							pago        : this.ppago,
+				fechaPago 	: new Date(),
+				alumno_id 	: configuracion.alumno_id,
+				grupo_id	: configuracion.grupo_id,
+				seccion_id  : Meteor.user().profile.seccion_id,
+				campus_id 	: Meteor.user().profile.campus_id,
+				estatus 	: 1,
+				usuario_id 	: Meteor.userId(),
+				importe 	: this.ppago,
+				pago        : this.ppago,
 
-							//cuenta_id   : rc.cuentaInscripcion._id,
-							diaPago     : diaActual,
-							mesPago     : mesPago,
-							semanaPago  : semanaPago,
-							anioPago    : anioPago,
-							inscripcion_id : configuracion._id
-						});
+				//cuenta_id   : rc.cuentaInscripcion._id,
+				diaPago     : diaActual,
+				mesPago     : mesPago,
+				semanaPago  : semanaPago,
+				anioPago    : anioPago,
+				inscripcion_id : configuracion._id
+			});
 			
 			_.each(configuracion.pagos, function(pago) {
 				if(pago.tmpestatus == 5){

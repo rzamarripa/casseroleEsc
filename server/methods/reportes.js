@@ -58,13 +58,24 @@ Meteor.methods({
 		arregl = _.toArray(arreglo);
     return _.toArray(arreglo);
   },
-  historialOtrosCobros : function (fechaInicial, fechaFinal, seccion_id, usuario_id) {
+  historialCobranza : function (fechaInicial, fechaFinal, seccion_id, usuario_id, modulo) {
 	  fechaInicial = moment(fechaInicial).add(-1, "days");
+	  var query = {};
 	  if(usuario_id == "todos" || usuario_id == undefined){
-		 var otrosPagos = PlanPagos.find({seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}).fetch(); 
+		  if(modulo == "todos"){
+			  query = {seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  }else{
+			  query = {modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  }
 	  }else{
-		  var otrosPagos = PlanPagos.find({usuarioInserto_id : usuario_id, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}).fetch();
-	  }
+		  if(modulo == "todos"){
+			  query = {usuarioInserto_id : usuario_id, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  }else{
+			  query = {usuarioInserto_id : usuario_id, modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  }
+	  }	  
+	  
+		 var otrosPagos = PlanPagos.find(query).fetch(); 
 	  
 	  _.each(otrosPagos, function(pago){
 		  pago.concepto = ConceptosPago.findOne({_id : pago.concepto_id});

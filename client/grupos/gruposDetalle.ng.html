@@ -33,20 +33,20 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th width="5%">No.</th>
-					<th>Foto</th>
-					<th>Matrícula</th>
-					<th>Nombre</th>
-					<th>Acciones</th>
+					<th class="text-center" width="5%">No.</th>
+					<th class="text-center" width="10%">Foto</th>
+					<th class="text-center" width="15%">Matrícula</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center" width="10%">Acciones</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="alumno in gp.alumnos">
 					<td class="text-center">{{$index + 1}}</td>
-					<td class="col-sm-1">
+					<td class="text-center">
 						<img src="{{gp.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 70px;border-left: 4px solid #fff;">
 					</td>
-					<td>{{alumno.profile.matricula}}</td>
+					<td class="text-center">{{alumno.profile.matricula}}</td>
 					<td><a href="/alumnos/{{alumno._id}}">{{alumno.profile.nombreCompleto}}</a></td>
 					<td>
 						<div class="text-center">

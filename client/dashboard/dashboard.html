@@ -4,22 +4,6 @@
 			<i class="fa-fw fa fa-home"></i> {{da.campus.nombre}} - Semana {{da.semanaActual}} - Año {{da.anio}}
 		</h1>		
 	</div>
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<ul id="sparks" class="">
-			<li class="sparks-info">
-				<h5> Inscritos <span class="txt-color-blue"><i class="fa fa-graduation-cap"></i>&nbsp;{{da.inscripcionesActivas | number}}</span></h5>
-			</li>
-			<li class="sparks-info">
-				<h5> Semanal <span class="txt-color-purple"><i class="fa fa-calendar-check-o"></i>&nbsp;{{da.semanales | number}}</span></h5>
-			</li>
-			<li class="sparks-info">
-				<h5> Quincenal <span class="txt-color-teal"><i class="fa fa-calendar-o"></i>&nbsp;{{da.quincenales | number}}</span></h5>
-			</li>
-			<li class="sparks-info">
-				<h5> Mensual <span class="txt-color-greenDark"><i class="fa fa-calendar"></i>&nbsp;{{da.mensuales | number}}</span></h5>
-			</li>
-		</ul>
-	</div>
 </div>
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3 text-center">
@@ -35,6 +19,44 @@
 		</form>
 	</div>
 </div>
+<hr>
+<div class="row well">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<p class="lead">Activos</p>
+		<ul id="sparks" class="pull-left">
+			<li class="sparks-info">
+				<h5> Inscritos <span class="txt-color-blue"><i class="fa fa-graduation-cap"></i>&nbsp;{{da.cantidadAlumnosActivos | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Semanal <span class="txt-color-purple"><i class="fa fa-calendar-check-o"></i>&nbsp;{{da.semanales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Quincenal <span class="txt-color-teal"><i class="fa fa-calendar-o"></i>&nbsp;{{da.quincenales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Mensual <span class="txt-color-greenDark"><i class="fa fa-calendar"></i>&nbsp;{{da.mensuales | number}}</span></h5>
+			</li>
+		</ul>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<p class="lead text-right">Activos de la semana</p>
+		<ul id="sparks" class="">
+			<li class="sparks-info">
+				<h5> Inscritos <span class="txt-color-blue"><i class="fa fa-graduation-cap"></i>&nbsp;{{da.inscripcionesActivasSemanaActual | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Semanal <span class="txt-color-purple"><i class="fa fa-calendar-check-o"></i>&nbsp;{{da.semanales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Quincenal <span class="txt-color-teal"><i class="fa fa-calendar-o"></i>&nbsp;{{da.quincenales | number}}</span></h5>
+			</li>
+			<li class="sparks-info">
+				<h5> Mensual <span class="txt-color-greenDark"><i class="fa fa-calendar"></i>&nbsp;{{da.mensuales | number}}</span></h5>
+			</li>
+		</ul>
+	</div>
+</div>
+<hr>
 <div class="row">
 	<div class="col-sm-3 well" style="height: 390px;">
 		<h1 class="text-success"><small>Total: </small>{{da.totalGastos | currency}}</h1>

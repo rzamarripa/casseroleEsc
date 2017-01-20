@@ -21,7 +21,7 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.categorias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 	
   this.subscribe("inscripciones",()=>{
-		return [{estatus : 1, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semana : parseInt(this.getReactively("semanaActual")) }]
+		return [{estatus : 1, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
 	});
 	
 	this.subscribe('campus',()=>{
@@ -54,8 +54,8 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 
   this.helpers({
-	  inscripcionesActivas : () => {
-		  return Inscripciones.find().count();
+	  inscripcionesActivasSemanaActual : () => {
+		  return Inscripciones.find({semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
 	  campus : () => {
 		  return Campus.findOne();
@@ -127,14 +127,14 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
     	});
 		  return arreglo;
 	  },
-	  semanales : () => {
-		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Semanal"}).count();
+	  semanalesSemana : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Semanal", semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
-	  quincenales : () => {
-		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Quincenal"}).count();
+	  quincenalesSemana : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Quincenal", semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
-	  mensuales : () => {
-		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
+	  mensualesSemana : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual", semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
 	  graficaGastos : () => {
 		  var gastos = Gastos.find({ tipoGasto : {$not : "Depositos"}},{ sort : { weekday : 1 }}).fetch();
@@ -194,9 +194,9 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
             valueSuffix: ' Pesos'
         },
         legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
             borderWidth: 0
         },
         plotOptions: {
@@ -222,7 +222,19 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 				});
 		  }
 			return gastoTotal;
-	  }
+	  },
+	  cantidadAlumnosActivos : () => {
+		  return Inscripciones.find().count();
+	  },
+	  semanales : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Semanal"}).count();
+	  },
+	  quincenales : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Quincenal"}).count();
+	  },
+	  mensuales : () => {
+		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual"}).count();
+	  },
   });
   
  

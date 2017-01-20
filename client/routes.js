@@ -85,7 +85,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "gerenteVenta" || user.roles[0] == "vendedor" || user.roles[0] == "maestro"){
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "gerenteVenta" || user.roles[0] == "vendedor" || user.roles[0] == "maestro" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -101,44 +101,62 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
-						}
+						}					 	
          });
        }]
-      }
+    	}
     })
     .state('root.deudores', {
       url: '/deudores',
       templateUrl: 'client/planPagos/deudores/deudores.html',      
       controller: 'DeudoresCtrl as de',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    },
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
+    .state('root.deudoresGrupo', {
+      url: '/deudoresGrupo',
+      templateUrl: 'client/planPagos/deudoresGrupo/deudoresGrupo.html',      
+      controller: 'DeudoresGrupoCtrl as co',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.cobranza', {
       url: '/cobranza',
       templateUrl: 'client/planPagos/cobranza/cobranza.html',      
-      controller: 'CobranzaCtrl as co',
+      controller: 'CobranzaCtrl as oc',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    },
-    })
-    .state('root.otrosCobros', {
-      url: '/otrosCobros',
-      templateUrl: 'client/planPagos/otrosCobros/otrosCobros.html',      
-      controller: 'OtrosCobrosCtrl as oc',
-      resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    },
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.alumnos', {
       url: '/alumnos',
@@ -147,7 +165,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -179,7 +197,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -195,7 +213,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -209,10 +227,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
       templateUrl: 'client/planPagos/convenios/convenios.html',
       controller: 'ConveniosCtrl as co',
       resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.ciclos', {
       url: '/ciclos',
@@ -503,7 +527,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == 'recepcionista'){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -535,7 +559,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -561,7 +585,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -750,10 +774,10 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
-    .state('root.trabajadores', {
-      url: '/trabajadores',
-      templateUrl: 'client/empleados/trabajadores.ng.html',
-      controller: 'TrabajadoresCtrl as emp',
+    .state('root.recepcionistas', {
+      url: '/recepcionistas',
+      templateUrl: 'client/recepcionistas/recepcionistas.html',
+      controller: 'RecepcionistasCtrl as re',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
@@ -999,11 +1023,17 @@ angular.module('casserole').config(['$injector', function ($injector) {
       url: '/financiero',
       templateUrl: 'client/gastos/financiero.ng.html',
       controller: 'FinancieroCtrl as fc',
-      resolve: {
-	      "currentUser": ["$meteor", function($meteor){
-	        return $meteor.requireUser();
-	      }]
-	    }
+     resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "director" || user.roles[0] == "gerenteVenta" || user.roles[0] == 'recepcionista'){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
     })
     .state('root.bitacora', {
       url: '/bitacora',
@@ -1028,7 +1058,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == 'recepcionista'){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1374,7 +1404,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1386,17 +1416,17 @@ angular.module('casserole').config(['$injector', function ($injector) {
     .state('root.detalleGastos', {
       url: '/detalleGastos/:semana/:anio',
       templateUrl: 'client/gastos/detalleGastos.html',
-      controller: 'DPagosCtrl as da',
+      controller: 'DetalleGastosCtrl as da',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
-						}
-         });
-       }]
+						}					 	
+         	});
+       	}]
     	}
     })
     .state('root.pagosSemana', {
@@ -1406,14 +1436,14 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
-						}
-         });
-       }]
-    	}
+						}					 	
+					});
+				}]
+			}
     })
     .state('root.tipoPublicidad', {
       url: '/tipoPublicidad',
@@ -1597,7 +1627,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
         "currentUser": ["$meteor", "toastr", function($meteor, toastr){
           return $meteor.requireValidUser(function(user) {
-            if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director"){
+            if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
               return true;
             }else{
               return 'UNAUTHORIZED'; 

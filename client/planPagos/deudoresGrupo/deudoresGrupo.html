@@ -1,0 +1,64 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<h1 class="page-title txt-color-blueDark">
+			<i class="fa-fw fa fa-dollar"></i> Listado de Cobranza hasta la Semana {{co.semanaActual}}
+		</h1>		
+	</div>
+</div>
+<div class="row" id="{{grupo.grupo.nombre}}" ng-repeat="grupo in co.deudores">
+	<div class="col-sm-12">
+		
+		<table class="table table-striped table-bordered">
+			<caption><h4>Grupo: {{grupo.grupo.nombre}} {{grupo.grupo.turno.nombre}} <button class="btn btn-primary pull-right" ng-click="co.imprimirGrupo(grupo.grupo.nombre)"><i class="fa fa-print"></i></button></h4></caption>
+			<thead class="thead">
+				<tr>
+					<th width="5%" class="text-center">No.</th>
+					<th width="10%" class="text-center">Matrícula</th>
+					<th width="20%" class="text-center">Nombre</th>
+					<th width="10%" class="text-center">Teléfono</th>
+					<th width="5%" class="text-center">USP</th>
+					<th width="5%" class="text-center">Cant.</th>
+					<th width="45%" class="text-center">Colegiaturas</th>
+					<th width="45%" class="text-center">Importe</th>
+					<th width="45%" class="text-center">Desc/Rec</th>
+					<th width="45%" class="text-center">Abono</th>
+					<th width="45%" class="text-center">Total</th>
+				</tr>
+			</thead>
+			<tbody style="font-size: smaller">
+				<tr ng-repeat="deudor in grupo.alumnos">
+					<th class="text-center">{{$index + 1}}</th>	
+					<td><a href="/alumnos/{{deudor.alumno_id}}" >{{deudor.alumno.profile.matricula}}</a></td>
+					<td><a href="/alumnos/{{deudor.alumno_id}}">{{deudor.alumno.profile.nombreCompleto}}</a></td>
+					<td>{{deudor.alumno.profile.tel1}}</td>
+					<td class="text-center">{{deudor.colegiaturaUltimoPago}}</td>
+					<td class="text-center">{{deudor.pagos.length}}</td>
+					<td>
+						<span ng-repeat="deuda in deudor.pagos">
+							<span title="{{deuda.fecha | date:'dd-MM-yyyy'}}" class="{{deuda.className}}">| {{deuda.semana}}</span>
+						</span>
+					</td>
+					<td>
+						{{deudor.importeColegiatura | currency}}
+					</td>
+					<td>
+						{{deudor.modificador | currency}}
+					</td>
+					<td>
+						{{deudor.abono | currency}}
+					</td>
+					<td>
+						{{ (deudor.importeColegiatura * deudor.pagos.length) + deudor.modificador - deudor.abono | currency}}
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		
+		
+	</div>
+</div>

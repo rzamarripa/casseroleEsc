@@ -84,6 +84,14 @@ function ConveniosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr
 	    this.nuevo = false;
 	};
 	
+	this.cambiarEstatus = function(pago, estatus, tipoMov){
+		var res = confirm("Está seguro que quiere " + tipoMov + " el pago?");
+		if(res == true){
+			PlanPagos.update(pago._id, { $set : {estatus : estatus}});
+			toastr.success('Cancelado correctamente.');
+		}
+	}
+	
 	this.actualizar = function(pago,form)
 	{
 		if(form.$invalid){

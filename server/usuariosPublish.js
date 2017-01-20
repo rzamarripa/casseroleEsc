@@ -19,5 +19,5 @@ Meteor.publish("todosUsuarios", function(options){
 });
 
 Meteor.publish("validaUsuarios", function(){
-	return Roles.getUsersInRole( ['director', 'coordinadorFinanciero', 'coordinadorAcademico', 'gerenteVenta', 'vendedor'] );
+	return Roles.getUsersInRole( ['director', 'coordinadorFinanciero', 'coordinadorAcademico', 'gerenteVenta', 'vendedor', 'recepcionista'] );
 });

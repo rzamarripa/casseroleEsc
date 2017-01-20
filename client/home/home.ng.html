@@ -6,5 +6,6 @@
 	<div ng-include="'client/home/_maestro.html'" ng-if="currentUser.roles[0] == 'maestro'"></div>
 	<div ng-include="'client/home/_gerenteVenta.html'" ng-if="currentUser.roles[0] == 'gerenteVenta'"></div>
 	<div ng-include="'client/home/_vendedor.html'" ng-if="currentUser.roles[0] == 'vendedor'"></div>
+	<div ng-include="'client/home/_recepcionista.html'" ng-if="currentUser.roles[0] == 'recepcionista'"></div>
 	<div ng-include="'client/home/_alumno.html'" ng-if="currentUser.roles[0] == 'alumno'"></div>
 </nav>

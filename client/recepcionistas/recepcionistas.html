@@ -1,0 +1,145 @@
+<h2>Recepcionistas</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{re.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="re.nuevoRecepcionista()">
+			{{re.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate >
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>	
+				    	<label>Usuario *</label>
+				    	<div class="input-group">					    	
+								<input type="text" class="form-control" name="usuario" ng-model="re.recepcionista.username" ng-change="re.validarUsuario(re.recepcionista.username)" required>
+								<span class="input-group-addon">
+									<i class="fa fa-{{re.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
+								</span>
+							</div>	
+							<div class="note note-success" ng-if="!re.validaUsuario == true">Este usuario no está disponible.</div>
+			    	</div>
+			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
+				    	<label>Contraseña *</label>
+				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="re.recepcionista.password" 
+				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)" required>
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="re.recepcionista.confirmarContrasena" 
+				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)" required>
+				    	<div class="note note-success" ng-if="!re.validaContrasena == true">Las contraseñas no coinciden.</div>
+						</div>
+			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+			    		<label>Nombre *</label>
+				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="re.recepcionista.profile.nombre" required="">
+			    	</div>
+
+			    	<div class="col-sm-4" valida>
+			    		<label>Apellido Paterno *</label>
+				    	<input name="apellidoPaterno" type="text" class="form-control" placeholder="Apellido Paterno" ng-model="re.recepcionista.profile.apPaterno" required="">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Apellido Materno</label>
+				    	<input type="text" class="form-control" placeholder="Apellido Materno" ng-model="re.recepcionista.profile.apMaterno">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Dirección</label>
+				    	<input type="text" class="form-control" placeholder="Dirección" ng-model="re.recepcionista.profile.direccion">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Teléfono</label>
+				    	<input type="text" class="form-control" placeholder="Teléfono" ng-model="re.recepcionista.profile.telefono">
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Correo</label>
+				    	<input type="text" class="form-control" placeholder="Correo" ng-model="re.recepcionista.profile.correo">
+			    	</div>
+			    	<div class="col-sm-4">
+						<label for="talla">Fotografía</label>
+						<button class="btn btn-primary" ng-click="re.tomarFoto()"><i class="fa fa-camera"></i></button>
+						<img width="100px" ng-src="{{re.recepcionista.profile.fotografia}}" ng-class="{'img-thumbnail': !!recepcionista.profile.fotografia}" />
+					</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="re.guardar(re.recepcionista,form)" value="Guardar" class="btn btn-primary" ng-show="re.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="re.actualizar(re.recepcionista,form)" value="Actualizar" class="btn btn-primary" ng-show="!re.action" valida-form formulario="form"/>				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="5%"><div class="text-center">No.</div></th>
+					<th width="15%"><div class="text-center">Foto</div></th>
+					<th width="15%"><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Dirección </div></th>
+					<th width="10%"><div class="text-center">Teléfono</div></th>
+					<th width="20%"><div class="text-center">correo</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="recepcionista in re.recepcionistas">
+			    <td>{{$index + 1}}</td>
+		    	<td><img width="100px" ng-src="{{recepcionista.profile.fotografia}}" ng-class="{'img-thumbnail': !!recepcionista.profile.fotografia}"/> </td>
+			    <td>{{recepcionista.profile.nombre}} {{recepcionista.profile.apPaterno}} {{recepcionista.profile.apMaterno}}</td>
+			    <td>{{recepcionista.profile.direccion}} </td>
+			    <td>{{recepcionista.profile.telefono}} </td>
+			    <td>{{recepcionista.profile.correo}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="recepcionista.profile.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!recepcionista.profile.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="re.editar(recepcionista._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="re.cambiarEstatus(recepcionista._id)">
+							    				<i class="fa fa-{{recepcionista.profile.estatus ? 'trash' : 'check' }}"></i> {{recepcionista.profile.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
