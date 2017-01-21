@@ -84,4 +84,17 @@ Meteor.methods({
 		
 		Accounts.setPassword(user._id, usuario.password, {logout: false});		
 	},
+	updateDirector: function (usuario, rol) {		
+		console.log("usuario", usuario)
+		var usuarioViejo = Meteor.users.findOne({"profile.seccion_id" : usuario.profile.seccion_id});
+		var idTemp = usuarioViejo._id;
+		console.log("usuario viejo", usuarioViejo);
+	  Meteor.users.update({_id: idTemp}, {$set:{
+			username: usuario.username,
+			roles: [rol],
+			profile: usuario.profile
+		}});
+		
+		Accounts.setPassword(idTemp, usuario.password, {logout: false});		
+	},
 });

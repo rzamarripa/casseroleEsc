@@ -470,7 +470,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.pagar = function(planPago, configuracion){
 		if (confirm("Está seguro de realizar el cobro por $" + parseFloat(rc.ttotalpagar))) {
 			var semanasPagadas = [];
-			var diaActual = moment(new Date()).weekday();
+			var diaSemana = moment(new Date()).weekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
@@ -500,19 +500,21 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 							mesPago     : mesPago,
 							semanaPago  : semanaPago,
 							anioPago    : anioPago,
-							inscripcion_id : configuracion._id
+							inscripcion_id : configuracion._id,
+							diaSemana		: diaSemana,
+							cuenta_id		: rc.cuenta._id
 						});
 			_.each(planPago, function(pago){
 					if(pago.estatus == 5 && pago.faltante > 0){
 						//rc.pagarLiquidacion(pago, semanasPagadas);
 						pago.pago = pago.pago ? pago.pago : 0 + pago.faltante;
-						pago.estatus = 1;
-						pago.faltante = 0;
-						pago.fechaPago = new Date();
+						pago.estatus 		= 1;
+						pago.faltante 	= 0;
+						pago.fechaPago 	= new Date();
 						pago.semanaPago = moment().isoWeek();
-						pago.cuenta_id   = rc.cuenta._id,
-						pago.anioPago = moment().get('year');
-						pago.pago_id =pago_id;
+						pago.cuenta_id  = rc.cuenta._id,
+						pago.anioPago 	= moment().get('year');
+						pago.pago_id 		= pago_id;
 						pago.usuarioInserto_id = Meteor.userId();
 						semanasPagadas.push(pago);
 					}
@@ -524,7 +526,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.semanaPago = moment().isoWeek();
 						pago.anioPago = moment().get('year');
 						pago.cuenta_id   = rc.cuenta._id,
-						pago.pago_id =pago_id;
+						pago.pago_id = pago_id;
 						pago.usuarioInserto_id = Meteor.userId();
 						semanasPagadas.push(pago);
 					}
@@ -582,39 +584,40 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.condonar = function(planPagos, configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
-			var diaActual = moment(new Date()).weekday();
+			var diaSemana = moment(new Date()).weekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
-			this.ppago =this.totalPagar-configuracion.abono;
-			this.ppago =this.totalPagar-configuracion.abono;
-			if(this.ppago<=0){
-				configuracion.abono-= this.totalPagar;
+			var diaActual = moment(new Date()).get('date');
+			this.ppago = this.totalPagar-configuracion.abono;
+			this.ppago = this.totalPagar-configuracion.abono;
+			if(this.ppago <= 0){
+				configuracion.abono -= this.totalPagar;
 				this.ppago = 0;
 			}
 			else
-				configuracion.abono=0
+				configuracion.abono = 0;
 
 			if(rc.abono<0)
 				rc.abono=0
-			var condonado= Pagos.insert({
-							fechaPago 	: new Date(),
-							alumno_id 	: configuracion.alumno_id,
-							grupo_id	: configuracion.grupo_id,
-							seccion_id  : Meteor.user().profile.seccion_id,
-							campus_id 	: Meteor.user().profile.campus_id,
-							estatus 	: 1,
-							usuario_id 	: Meteor.userId(),
-							importe 	: 0,
-							pago        : 0,
-
-							//cuenta_id   : rc.cuentaInscripcion._id,
-							diaPago     : diaActual,
-							mesPago     : mesPago,
-							semanaPago  : semanaPago,
-							anioPago    : anioPago,
-							inscripcion_id : configuracion._id
-						});
+			var condonado = Pagos.insert({
+				fechaPago 	: new Date(),
+				alumno_id 	: configuracion.alumno_id,
+				grupo_id		: configuracion.grupo_id,
+				seccion_id  : Meteor.user().profile.seccion_id,
+				campus_id 	: Meteor.user().profile.campus_id,
+				estatus 		: 1,
+				usuario_id 	: Meteor.userId(),
+				importe 		: 0,
+				pago        : 0,
+				diaPago     : diaActual,
+				mesPago     : mesPago,
+				semanaPago  : semanaPago,
+				anioPago    : anioPago,
+				inscripcion_id : configuracion._id,
+				diaSemana		: diaSemana,
+				cuenta_id		: rc.cuenta._id
+			});
 
 			_.each(planPagos, function(pago) {
 				if(pago.estatus == 5){
@@ -632,8 +635,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.diaPago = moment().weekday();
 					pago.estatus = 3;		
 					pago.importe = 0;
-					pago.pago_id=condonado
-
+					pago.pago_id = condonado
 					pago.faltante = 0;
 					//rc.condonarPago(pago,semanasCondonadas);
 					
@@ -656,23 +658,23 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
 			var condonado= Pagos.insert({
-							fechaPago 	: new Date(),
-							alumno_id 	: configuracion.alumno_id,
-							grupo_id	: configuracion.grupo_id,
-							seccion_id  : Meteor.user().profile.seccion_id,
-							campus_id 	: Meteor.user().profile.campus_id,
-							estatus 	: 3,
-							usuario_id 	: Meteor.userId(),
-							importe 	: 0,
-							pago        : 0,
+				fechaPago 	: new Date(),
+				alumno_id 	: configuracion.alumno_id,
+				grupo_id	: configuracion.grupo_id,
+				seccion_id  : Meteor.user().profile.seccion_id,
+				campus_id 	: Meteor.user().profile.campus_id,
+				estatus 	: 3,
+				usuario_id 	: Meteor.userId(),
+				importe 	: 0,
+				pago        : 0,
 
-							//cuenta_id   : rc.cuentaInscripcion._id,
-							diaPago     : diaActual,
-							mesPago     : mesPago,
-							semanaPago  : semanaPago,
-							anioPago    : anioPago,
-							inscripcion_id : configuracion._id
-						});
+				//cuenta_id   : rc.cuentaInscripcion._id,
+				diaPago     : diaActual,
+				mesPago     : mesPago,
+				semanaPago  : semanaPago,
+				anioPago    : anioPago,
+				inscripcion_id : configuracion._id
+			});
 			
 			_.each(configuracion.pagos, function(pago) {
 				if(pago.tmpestatus == 5){

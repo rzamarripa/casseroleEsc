@@ -8,7 +8,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   window.rc = rc;
   this.tipoGasto = 'Cheques';
   this.gasto = {};
-  this.gasto.fechaLimite = new Date();
+  this.gasto.fecha = new Date();
   this.semanaActual = moment(new Date()).isoWeek();
   this.anioActual = moment().get("year");
   this.diaActual = moment(new Date()).weekday();
@@ -52,12 +52,12 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     cuentas : ()=>{
       _cuentas = Cuentas.find().fetch();
       _.each(_cuentas,function(cuenta){
-        cuenta.depositos = Gastos.find({tipoGasto:"Depositos",cuenta_id: cuenta._id}).fetch();
+        cuenta.depositos = Gastos.find({tipoGasto:"Depositos", cuenta_id: cuenta._id}).fetch();
         cuenta.totalDepositos = _.reduce(cuenta.depositos, function(memo, deposito){return memo + deposito.importe},0);
       });
       return _cuentas;
     },
-    cuentaInscripcion : () =>{
+    cuentaActiva : () =>{
       return Cuentas.findOne({inscripcion:true});
     }
   });
@@ -81,7 +81,9 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     gasto.campus_id = Meteor.user().profile.campus_id;
     gasto.seccion_id = Meteor.user().profile.seccion_id;
     gasto.tipoGasto = this.tipoGasto;
-    gasto.weekday = this.diaActual;
+    gasto.diaSemana = this.diaActual;
+    if(gasto.tipoGasto != "Depositos")
+	    gasto.cuenta_id = this.cuentaActiva._id;
     Gastos.insert(gasto);
     form.$setPristine();
     form.$setUntouched();
@@ -132,27 +134,27 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
 ////////Depositos
   this.importeDiarioPagos = function(dia, cuenta_id){
-    pagos = Pagos.find({weekday:dia, cuenta_id:cuenta_id}).fetch();
+    pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
-    return importe
+    return importe;
   }
 
   this.importeSemanalPagos = function(cuenta_id){
     pagos = Pagos.find({cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
-    return importe
+    return importe;
   }
 
   this.importeDiarioGastos = function(dia, cuenta_id){
-    gastos = Gastos.find({weekday:dia, cuenta_id:cuenta_id}).fetch();  
+    gastos = Gastos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();  
     importe = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
-    return importe
+    return importe;
   }
 
   this.importeSemanalGastos = function(cuenta_id){
     gastos = Gastos.find({cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
-    return importe
+    return importe;
   }
 
   this.porDepositar = function(cuenta_id){
@@ -160,19 +162,21 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     gastos = Gastos.find({cuenta_id:cuenta_id}).fetch();
     totalPagos = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
     totalGastos = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
-    return totalPagos - totalGastos
+    return totalPagos - totalGastos;
   }
   this.gastosRelaciones = function(cuenta_id){
-    comisiones = Comisiones.find({modulo:"colegiatura", cuenta_id:cuenta_id}).fetch();
-    gastos = Gastos.find({tipoGasto:"Relaciones"}).fetch();
-    totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
+    //comisiones = Comisiones.find({modulo:"colegiatura", cuenta_id:cuenta_id}).fetch();
+    gastos = Gastos.find({tipoGasto:"Relaciones", cuenta_id : cuenta_id}).fetch();
+    admon = Gastos.find({tipoGasto:"Admon", cuenta_id : cuenta_id}).fetch();
+    //totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
     totalGastos = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
-    return totalComisiones + totalGastos;
+    totalGastos += _.reduce(admon, function(memo, gasto){return memo + gasto.importe},0);
+    return totalGastos;
   }
   this.restosInscripcion = function(cuenta_id){
     comisiones = Comisiones.find({modulo:"inscripcion", cuenta_id:cuenta_id}).fetch();
     totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
-    return totalComisiones
+    return totalComisiones;
   }
 ////////////////////////
 ///////////relaciones

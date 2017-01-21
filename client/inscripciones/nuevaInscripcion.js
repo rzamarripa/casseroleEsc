@@ -4,7 +4,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
 	window.rc = rc;
 	this.inscripcion = {tipoInscripcion:""};
-
 	this.inscripcion.totalPagar = 0.00;
 	this.comisionObligada =0;
 	this.pagosRealizados = [];
@@ -19,9 +18,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.prospecto = {};
 
 	this.subscribe('prospectosPorInscribir',()=>{
-
 		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.nombre":1}}]
-
 	});
 	
 	this.subscribe('vendedores');
@@ -35,9 +32,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			seccion_id : this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):""
 		}];
 	});
+	
 	this.subscribe("tiposingresos",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
 	this.subscribe("grupos", () => {
 		return [{
 		 estatus:true,
@@ -45,12 +44,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		 ciclo_id : this.getReactively('inscripcion.ciclo_id') ? this.getReactively('inscripcion.ciclo_id'):"",
 		}]
 	});
+	
 	this.subscribe("planesEstudios",() => {
 		return [{
 			estatus:true,
 			seccion_id :  this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):""
 		}]
 	});
+	
 	this.subscribe('cuentas', ()=>{
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
 	});
@@ -89,7 +90,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			return vendedores;
 		},
 		prospectos : () => {
-			return Prospectos.find();
+			return Prospectos.find({},{sort : {"profile.nombre" : 1}});
 		},
 		grupos : () => {
 			return Grupos.find();
@@ -549,8 +550,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
 		inscripcion.semana = moment(new Date()).isoWeek();
-
-		//inscripcion.abono = 0.00;
 		
 		//Crear alumno a partir del prospecto
 		
@@ -575,6 +574,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				var matriculaAnterior = 0;
 			  anio = '' + new Date().getFullYear();
 			  anio = anio.substring(2,4);
+			  
 			  //Si existen Alumnos generamos la matrícula siguiente
 				if(rc.cantidadAlumnos > 0){
 			  	var matriculaOriginal = anio + rc.campus.clave + "0000";
@@ -662,9 +662,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		for (var i = 0; i < this.pagosRealizados.length; i++) {
 			Pagos.insert(this.pagosRealizados[i]);
 		}
+/*
 		for (var i = 0; i < this.comisiones.length; i++) {
 			Comisiones.insert(this.comisiones[i]);
 		}
+*/
 
 		$state.go("root.inscripciones");
 	}

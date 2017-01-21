@@ -111,49 +111,47 @@ function SeccionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams)
 	
 	this.editar = function(id)
 	{
-			this.seccion = Secciones.findOne({_id:id});
-	    this.action = false;
-	    $('.collapse').collapse('show');
-	    this.nuevo = false;
-		
+		this.seccion = Secciones.findOne({_id:id});
+    this.action = false;
+    $('.collapse').collapse('show');
+    this.nuevo = false;		
 	};
 	
 	this.actualizar = function(seccion,form)
 	{
-			if(form.$invalid){
-	      toastr.error('Error al actualizar los datos.');
-	      return;
-		  }
-		  
-			var idTemp = seccion._id;
-			delete seccion._id;		
-			Secciones.update({_id:idTemp},{$set:seccion});
-			var nombre = seccion.nombre != undefined ? seccion.nombre + " " : "";
-			var apPaterno = seccion.apPaterno != undefined ? seccion.apPaterno + " " : "";
-			var apMaterno = seccion.apMaterno != undefined ? seccion.apMaterno : ""
-			seccion.nombreCompleto = nombre + apPaterno + apMaterno;
-			var usuario = {
-				username : seccion.username,
-				password : seccion.password,
-				profile : {
-					nombre : seccion.nombre,
-					apPaterno : seccion.apPaterno,
-					apMaterno : seccion.apMaterno,
-					nombreCompleto : nombre + apPaterno + apMaterno,
-					campus_id : $stateParams.campus_id,
-					campus_clave : rc.campus.clave,
-					seccion_id : idTemp,
-					estatus : true,
-					sexo : seccion.sexo
-				}
+		if(form.$invalid){
+      toastr.error('Error al actualizar los datos.');
+      return;
+	  }
+	  console.log(seccion);
+		var idTemp = seccion._id;
+		delete seccion._id;		
+		Secciones.update({_id:idTemp},{$set:seccion});
+		var nombre = seccion.nombre != undefined ? seccion.nombre + " " : "";
+		var apPaterno = seccion.apPaterno != undefined ? seccion.apPaterno + " " : "";
+		var apMaterno = seccion.apMaterno != undefined ? seccion.apMaterno : "";
+		seccion.nombreCompleto = nombre + apPaterno + apMaterno;
+		var usuario = {
+			username : seccion.username,
+			password : seccion.password,
+			profile : {
+				nombre : seccion.nombre,
+				apPaterno : seccion.apPaterno,
+				apMaterno : seccion.apMaterno,
+				nombreCompleto : nombre + apPaterno + apMaterno,
+				campus_id : $stateParams.campus_id,
+				campus_clave : rc.campus.clave,
+				seccion_id : idTemp,
+				estatus : true,
+				sexo : seccion.sexo
 			}
-			Meteor.call('updateGerenteVenta', usuario, 'director');
-			toastr.success('Actualizado correctamente.');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
-		
+		}
+		Meteor.call('updateDirector', usuario, 'director');
+		toastr.success('Actualizado correctamente.');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();		
 	};
 
 	this.cambiarEstatus = function(id)

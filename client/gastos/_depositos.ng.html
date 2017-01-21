@@ -11,8 +11,8 @@
 				  	<div class="form-control">{{gc.semanaActual}}</div>
 					</div>
 					<div class="form-group col-sm-4" valida>
-						<label for="fechaLimite">Fecha</label>
-						<input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
+						<label for="fecha">Fecha</label>
+						<input date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
 					</div>
 					<div class="form-group col-sm-4" valida>
 					  <label>Cuenta a nombre de</label>
@@ -36,12 +36,13 @@
 </div>
 
 <div class="row">
-	<div ng-repeat="cuenta in gc.cuentas" class="col-sm-4">
-		<table class="table table-striped table-bordered table-list">
+	<div ng-repeat="cuenta in gc.cuentas" class="col-sm-6">
+		{{cuenta.nombre}} {{cuenta._id}}
+		<table class="table table-striped table-bordered">
 	    <thead>
 	      <tr class="success">
-	        <th align="center" colspan="2" class="hidden-xs"><h4 align="center">Cobranza {{cuenta.nombre}}</h4></th>
-	      </tr> 
+	        <th align="center" colspan="2"><h4 align="center">Cobranza {{cuenta.nombre}}</h4></th>
+	      </tr>
 	    </thead>
 	    <tbody>
 	      <tr ng-repeat="(key, dia) in gc.diasActuales track by $index">
@@ -55,10 +56,10 @@
 	    </tbody>
 	  </table>
 
-	  <table class="table table-striped table-bordered table-list">
+	  <table class="table table-striped table-bordered">
 	  	<thead>
 	  		<tr class="success">
-	        <th align="center" colspan="4" class="hidden-xs"><h4 align="center">Depósitos {{cuenta.nombre}}</h4></th>
+	        <th align="center" colspan="4"><h4 align="center">Depósitos {{cuenta.nombre}}</h4></th>
 	      </tr> 
 	  		<tr ng-if="cuenta.depositos.length > 0">
 	  			<th width="10%"></th>
@@ -86,7 +87,7 @@
 	      </tr>
 	      <tr ng-if="cuenta.inscripcion">
 	      	<td>Gastos de R.P y Adtvo.</td>
-	      	<td align="right">{{ gc.gastosRelaciones(cuenta._id) | currency}} </td>
+	      	<td align="right">{{ gc.gastosRelaciones(cuenta._id) | currency}} + </td>
 	      </tr>
 	    	<tr>
 	      	<td><strong>Total:</strong></td>
@@ -106,22 +107,22 @@
 			<caption><h4>Listado de Depósitos</h4></caption>
 			<thead class="thead">
 				<tr>
-					<th>No.</th>
-					<th>Fecha</th>
-					<th>A nombre</th>
-					<th>Cuenta</th>
-					<th>Tipo Gasto</th>
-					<th>Importe</th>
+					<th class="text-center">No.</th>
+					<th class="text-center">Fecha</th>
+					<th class="text-center">A nombre</th>
+					<th class="text-center">Cuenta</th>
+					<th class="text-center">Tipo Gasto</th>
+					<th class="text-center">Importe</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="gasto in gc.gastos">
-					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
+					<td class="text-center">{{$index + 1}}</td>
+					<td class="text-center">{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
 					<td>{{ gasto.aNombreDe }}</td>
-					<td>{{ gasto.cuenta.nombre }}</td>
-					<td>Depósitos</td>
-					<td>{{ gasto.importe | currency }}</td>
+					<td class="text-center">{{ gasto.cuenta.nombre }}</td>
+					<td class="text-center">Depósitos</td>
+					<td class="text-center">{{ gasto.importe | currency }}</td>
 				</tr>
 			</tbody>
 		</table>

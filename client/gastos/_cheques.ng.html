@@ -15,8 +15,8 @@
 				  	<input name="importe" type="number" class="form-control" ng-model="gc.gasto.importe" required>
 					</div>
 					<div class="form-group col-sm-4" valida>
-						<label for="fechaLimite">Fecha Límite</label>
-						<input name="fechaLimite" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fechaLimite" required/>
+						<label for="fecha">Fecha</label>
+						<input name="fecha" format="dd-MM-yyyy" date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fecha" required/>
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="concepto">Concepto</label>
@@ -46,7 +46,7 @@
 	    <thead>
 	      <tr>
 					<th width="5%"><div class="text-center">No.</div></th>
-					<th width="10%"><div class="text-center"></div></th>
+					<th width="10%"><div class="text-center">Acción</div></th>
 					<th width="20%"><div class="text-center hidden-xs">No. Factura</div></th>
 					<th width="25%"><div class="text-center">Concepto</div></th>
 					<th width="20%"><div class="text-center">Fecha Límite</div></th>
@@ -55,13 +55,13 @@
 	    </thead>
 	    <tbody>
 	      <tr ng-repeat="gasto in gc.gastos">
-		      <td>{{$index + 1}}</td>
+		      <td class="text-center">{{$index + 1}}</td>
 	      	<td align="center">
 	          <a ng-click="gc.cambiarEstatus(gasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
 	        </td>
-	        <td class="hidden-xs">{{gasto.numeroFactura}}</td>
+	        <td class="hidden-xs text-center">{{gasto.numeroFactura}}</td>
 	        <td>{{gc.getConcepto(gasto.concepto_id)}}</td>
-	        <td>{{gasto.fechaLimite | date:"dd/MM/yyyy"}}</td>
+	        <td class="text-center">{{gasto.fechaLimite | date:"dd/MM/yyyy"}}</td>
 	        <td align="right">{{gasto.importe | currency}}</td>
 	      </tr>
 	    </tbody>
