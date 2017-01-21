@@ -19,14 +19,14 @@ angular
 	this.fechaFin = new Date();
 	this.fechaFin.setHours(24,0,0,0);
 	this.alumnos_id = [];
-	
+	console.log($stateParams)
 	if($stateParams.id){
 		this.subscribe('asistencias', ()  => {
-			return [{ _id : $stateParams.id }]
+			return [{ _id : $stateParams.id }];
 		});
 	}else{
 		this.subscribe('asistencias', ()  => {
-			return [{ grupo_id : $stateParams.grupo_id, semana : this.semana }]
+			return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id}]
 		});
 	}
 		

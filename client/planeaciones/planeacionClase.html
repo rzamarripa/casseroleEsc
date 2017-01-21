@@ -128,7 +128,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<input type="submit" ng-click="pc.guardar(pc.planeacion,form)" value="Guardar" class="btn btn-primary" ng-show="pc.action" valida-form formulario="form"/>
-						<input type="submit" ng-click="pc.actualizar(pc.planeacion,form)" value="Actualizar" class="btn btn-primary" ng-show="!pc.action" valida-form formulario="form"/>				
+						<input ng-show="(currentUser.roles[0] == 'maestro' && pc.planeacion.estatus <= 1 && !pc.action) ? true : (currenUser.roles[0] == 'coordinadorAcademico' && pc.planeacion.estatus > 1 && !pc.action) ? true : false" type="submit" ng-click="pc.actualizar(pc.planeacion,form)" value="Actualizar" class="btn btn-primary" ng-show="!pc.action" valida-form formulario="form"/>				
 					</div>
 				</div>	  
 		  </form>

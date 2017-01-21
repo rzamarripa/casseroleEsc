@@ -65,6 +65,7 @@ function RevisarPlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 		planeacion = {};
 	  toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
+		this.nuevo = true;
 	}
 	
 	this.editar = function(planeacion){

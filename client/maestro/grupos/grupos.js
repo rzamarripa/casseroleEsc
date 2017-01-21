@@ -17,8 +17,7 @@ angular
 		}]
 	});
 	
-	this.subscribe('alumnos', () => {		
-		console.log("reacitvo")
+	this.subscribe('alumnos', () => {
 		return [{
 			_id : { $in : rc.getCollectionReactively("alumnos_id")}
 		}]
@@ -38,11 +37,10 @@ angular
 				_.each(grupo.asignaciones, function(asignacion){
 					if(asignacion.maestro_id == Meteor.user().profile.maestro_id && asignacion.estatus == true){
 						
-						rc.alumnos_id = rc.alumnos_id.concat(grupo.alumnos ? grupo.alumnos : []);
-
+						rc.alumnos_id = rc.alumnos_id.concat(grupo.alumnos ? _.pluck(grupo.alumnos, "alumno_id") : []);
 						misAsignaciones.push({"grupo" : grupo,
 																	"asignacion" : asignacion,
-																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos ? grupo.alumnos : [] }, 
+																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos ? _.pluck(grupo.alumnos, "alumno_id") : [] }, 
 																		roles : ["alumno"]},{ fields : { 
 																				"profile.nombreCompleto" : 1,
 																				"profile.nombre" : 1,

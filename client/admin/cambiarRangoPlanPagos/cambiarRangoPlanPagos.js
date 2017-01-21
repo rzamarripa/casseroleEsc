@@ -12,6 +12,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 	this.buscar = {};
 	this.buscar.nombre = "";
 	this.alumno_id = "";
+	this.planPagos = [];
 	window.rc = rc;
   
   this.subscribe('buscarAlumnosAdmin', () => {
@@ -32,6 +33,10 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		return [{alumno_id : this.getReactively("alumno_id")}]
 	});
 	
+	this.subscribe("inscripciones",()=>{
+		return [{alumno_id : this.getReactively("alumno_id")}]
+	});
+	
 	this.helpers({
 		alumnos : () => {
 			return Meteor.users.find({roles : ["alumno"]});
@@ -39,27 +44,45 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		alumno : () => {
 			return Meteor.users.findOne({_id : this.getReactively("alumno_id")});
 		},
-		planPagos : () => {
+		planPagosViejo : () => {
 			 return PlanPagos.find().fetch();
+		},
+		inscripcion : () => {
+			return Inscripciones.findOne({alumno_id : this.getReactively("alumno_id")});
 		}
 	});
 	
 	this.nuevoConvenio = function()
   {
-    this.action = !this.action;
     this.nuevo = !this.nuevo;
-    this.pago = {};		
     this.nuevoMasivo = true;
+    this.nuevoMasivoSemanas = true;
+    this.action = !this.action;
+    this.pago = {};
     $('#collapseMasiva').collapse('hide');
+    $('#collapseMasivaSemanas').collapse('hide');
   };
   
   this.nuevoConvenioMasivo = function()
   {
+	  this.nuevo = true;
     this.nuevoMasivo = !this.nuevoMasivo;
-    this.modificacion = {};
-		this.nuevo = true;
+    this.nuevoMasivoSemanas = true;
+    this.modificacion = {};		
 		this.action = false;
     $('#collapseExample').collapse('hide');
+    $('#collapseMasivaSemanas').collapse('hide');
+  };
+  
+  this.nuevoConvenioMasivoSemanas = function()
+  {
+    this.nuevo = true;
+    this.nuevoMasivo = true;
+    this.nuevoMasivoSemanas = !this.nuevoMasivoSemanas;
+    this.modificacion = {};
+		this.action = false;
+    $('#collapseExample').collapse('hide');
+    $('#collapseMasiva').collapse('hide');
   };
   
   this.guardar = function(convenio,form)
@@ -154,4 +177,62 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
   this.seleccionarAlumno = function(alumno_id){
 		rc.alumno_id = alumno_id;
   }
+  
+  this.planPagosSemana =function () {
+	  if(form.$invalid){
+      toastr.error('Error al calcular el nuevo plan de pagos, llene todos los campos.');
+      return;
+	  }
+	  rc.planPagos = [];
+		var dia = 1;
+		var mfecha = moment(this.cambioSemanasPlanPagos.fechaInicial);
+		mfecha = mfecha.day(dia);
+		var inicio = mfecha.toDate();
+		
+		var plan = [];
+		for (var i = 0; i < this.cambioSemanasPlanPagos.totalPagos; i++) {
+			var pago = {
+				semana 			    : mfecha.isoWeek(),
+				fecha 			    : new Date(mfecha.toDate().getTime()),
+				dia                 : mfecha.weekday(),
+				tipoPlan 		    : 'Semanal',
+				numeroPago 	        : i + 1,
+				importeRegular      : this.cambioSemanasPlanPagos.importeRegular,
+				importeRecargo      : this.cambioSemanasPlanPagos.importeRecargo,
+				importeDescuento    : this.cambioSemanasPlanPagos.importeDescuento,
+				diasRecargo         : this.cambioSemanasPlanPagos.diasRecargo,
+				diasDescuento       : this.cambioSemanasPlanPagos.diasDescuento,
+				importe             : this.cambioSemanasPlanPagos.importeRegular,
+				alumno_id						: this.alumno_id,
+				fechaPago           : undefined,
+				semanaPago          : undefined,
+				diaPago             : undefined,
+				pago                : 0,
+				estatus             : 0,
+				tiempoPago          : 0,
+				modificada          : false,
+				mes					: mfecha.get('month') + 1,
+				anio				: mfecha.get('year')
+			}
+			
+			if(i == 0){
+				pago.pagada = 1;
+			}
+			
+			rc.planPagos.push(pago);
+			mfecha = mfecha.day(8);
+		}
+
+		return plan;
+	}
+	
+	this.confirmarCambio = function(){
+		Meteor.apply('modificarSemanasPlanPagos', [this.alumno_id, this.planPagos], function(error, result){
+		  if(result == "hecho"){
+			  toastr.success('Se modificaron correctamente los ' + rc.planPagos.length + ' pagos');
+			  rc.planPagos = [];
+		  }
+	    $scope.$apply();
+	  });
+	}
 };

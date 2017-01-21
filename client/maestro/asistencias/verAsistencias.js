@@ -7,6 +7,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	window.rc = rc;
 	this.materia_id = "";
 	this.grupo_id = "";
+	this.fechaActual = new Date();
 	
 	console.log($stateParams)
  
@@ -23,7 +24,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	});
 	
 	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id }]
+		return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id}]
 	});
 
 	this.helpers({

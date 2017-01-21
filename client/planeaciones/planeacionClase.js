@@ -89,6 +89,7 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 		planeacion = {};
 	  toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
+		this.nuevo = true;
 	}
 	
 	this.getMateria = function(materia_id){
@@ -123,7 +124,7 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 	
 	this.duplicar = function(planeacion){
 		delete planeacion._id;
-		rc.planeacion = planeacion;
+		rc.planeacion = angular.copy(planeacion);
 		rc.planeacion.estatus = 1;
 		$('.collapse').collapse('show');
 	}

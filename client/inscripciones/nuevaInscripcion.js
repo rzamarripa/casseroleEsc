@@ -175,8 +175,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				fecha 			    : new Date(mfecha.toDate().getTime()),
 				dia                 : mfecha.weekday(),
 				tipoPlan 		    : 'Semanal',
-				numeroPago 	        : i + 1,
-				
+				numeroPago 	        : i + 1,				
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
 				importeDescuento    : this.inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
 				importeRegular      : this.inscripcion.planPagos.colegiatura.Semanal.importeRegular,
