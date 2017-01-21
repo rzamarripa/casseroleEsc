@@ -1620,7 +1620,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
-       .state('root.historialOtrosPagos', {
+    .state('root.historialOtrosPagos', {
       url: '/historialOtrosPagos/:alumno_id',
       templateUrl: 'client/planPagos/historial/historialOtrosPagos.html',
       controller: 'HistorialOtrosPagosCtrl as co',
@@ -1628,6 +1628,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
         "currentUser": ["$meteor", "toastr", function($meteor, toastr){
           return $meteor.requireValidUser(function(user) {
             if(user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
+    .state('root.cambiarRangoPlanPagos', {
+      url: '/cambiarRangoPlanPagos',
+      templateUrl: 'client/admin/cambiarRangoPlanPagos/cambiarRangoPlanPagos.html',
+      controller: 'CambiarRangoPlanPagosCtrl as cpp',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "director" || user.roles[0] == "admin"){
               return true;
             }else{
               return 'UNAUTHORIZED'; 

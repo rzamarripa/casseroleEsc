@@ -1,0 +1,283 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+				Alumnos &gt; Buscar
+		</h1>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="input-group">
+			<div class="input-group-btn">
+				<a href="#" ng-click="cpp.getFocus()" class="btn btn-default btn-primary">
+					<i class="fa fa-search"></i>
+				</a>
+			</div>
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="cpp.buscar.nombre">
+		</div>
+	</div>
+</div>
+<!-- Detalle de los alumnos encontrados -->
+<div class="row">
+	<div class="col-lg-3" ng-repeat="alumno in cpp.alumnos" ng-show="cpp.planPagos.length == 0">
+      <div class="contact-box center-version">
+
+          <a href="#" ng-click="cpp.alumno_id = alumno._id" style="text-decoration: none;">
+
+              <img alt="image" class="img-circle" ng-src="{{cpp.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}">
+
+
+              <p class="lead font-xs text-center"><strong>{{alumno.profile.nombre}} <br/> {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}</strong></p>
+
+              <div class="font-bold">{{alumno.username}}</div>
+              <address class="font-xs">
+                  <strong>Alumno</strong><br>
+                  {{alumno.profile.calleNum}}<br>
+                  {{alumno.profile.colonia}}<br>
+                  <abbr title="Teléfono">T:</abbr> {{alumno.profile.tel1}}
+              </address>
+
+          </a>
+          <div class="contact-box-footer">
+              <div class="m-t-xs btn-group">
+                  <a href="/alumnos/{{alumno._id}}" class="btn btn-xs btn-white"><i class="fa fa-eye"></i> Ver </a>
+                  <a href="/editarAlumno/{{alumno._id}}" class="btn btn-xs btn-white"><i class="fa fa-pencil"></i> Editar</a>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+<!-- Cabecera del perfil de alumno seleccionado -->
+<div class="row" ng-show="cpp.alumno.profile != undefined">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.alumnoDetalle({alumno_id : cpp.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-user"></i> Ir a mi perfil</a>&nbsp;
+ 										<a ui-sref="root.editarAlumno({alumno_id : cpp.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm" ng-show="currentUser.roles[0] == 'director'">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{cpp.fechaActual | date:'dd-MM-yyyy'}}</h4>
+									</div>
+									<ol class="carousel-indicators">
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
+										<img style="max-width:200px;" src="{{cpp.tieneFoto(cpp.alumno.profile.sexo, cpp.alumno.profile.fotografia)}}" >
+									</div>
+									<div class="col-sm-6">
+										<h1>{{cpp.alumno.profile.nombre}} <span class="semi-bold">{{cpp.alumno.profile.apPaterno}} {{cpp.alumno.profile.apMaterno}}</span>
+										
+										<small> (Alumno)</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-key fa-lg"></i>&nbsp;&nbsp;
+													<span class="txt-color-darken">
+														<strong>{{cpp.alumno.profile.matricula}}</strong>
+													</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{cpp.alumno.profile.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope fa-lg"></i>&nbsp;&nbsp;<a href="mailto:{{cpp.alumno.profile.correo}}">{{cpp.alumno.profile.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{cpp.alumno.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<a class="btn btn-{{cpp.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="cpp.nuevoConvenio()">
+								 {{cpp.nuevo == true ? 'Agregar Colegiatura' : 'Cancelar'}}
+								</a>
+								<a class="btn btn-{{cpp.nuevoMasivo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseMasiva" aria-expanded="false" aria-controls="collapseExample" ng-click="cpp.nuevoConvenioMasivo()">
+								 {{cpp.nuevoMasivo == true ? 'Modificación Masiva de Importes' : 'Cancelar'}}
+								</a>
+								<a class="btn btn-{{cpp.nuevoMasivoSemanas == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseMasivaSemanas" aria-expanded="false" aria-controls="collapseExample" ng-click="cpp.nuevoConvenioMasivoSemanas()">
+								 {{cpp.nuevoMasivoSemanas == true ? 'Modificación Masiva de Semanas' : 'Cancelar'}}
+								</a>
+								<div class="collapse" id="collapseExample">
+									<form name="form" class="form-horizontal" role="form" novalidate>
+								  	<div class="well">	    
+									    <div class="row">
+									    	<div class="col-sm-4" valida>
+													<label for="fechaPago">Fecha de Pago *</label>
+													<input name="fechaPago" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="cpp.pago.fecha" required="" />
+												</div>
+									    	<div class="col-sm-4" valida>
+										    	<label>Colegiatura *</label>
+										    	<input name="clave" type="text" class="form-control" placeholder="Colegiatura" ng-model="cpp.pago.semana" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Año *</label>
+										    	<input name="anio" type="text" class="form-control" placeholder="Año" ng-model="cpp.pago.anio" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Importe *</label>
+										    	<input name="importe" type="number" class="form-control" ng-model="cpp.pago.importe" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Recargo *</label>
+										    	<input name="recargo" type="number" class="form-control" ng-model="cpp.pago.importeRecargo" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Descuento *</label>
+										    	<input name="descuento" type="number" class="form-control" ng-model="cpp.pago.importeDescuento" required="">
+									    	</div>
+									    </div> 
+									    <div class="row">
+									    	<div class="col-sm-12">
+											    <label>Descripción</label>
+											    <textarea name="descripcion" class="form-control" placeholder="Descripción" ng-model="cpp.pago.descripcion" required=""></textarea>
+									    	</div>
+									    </div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="submit" ng-click="cpp.guardar(cpp.pago,form)" value="Guardar" class="btn btn-primary" ng-show="cpp.action" valida-form formulario="form">
+												<input type="submit" ng-click="cpp.actualizar(cpp.pago,form)" value="Actualizar" class="btn btn-primary" ng-show="!cpp.action" valida-form formulario="form">				
+											</div>
+										</div>	  
+								  </form>
+								</div>
+							</div>
+						</div>
+						<div class="row"> 
+							<div class="col-sm-12">
+								
+								<div class="collapse" id="collapseMasiva">
+									<form name="formMasivo" class="form-horizontal" role="form" novalidate>
+								  	<div class="well">	    
+									  	<div class="row">
+									  		<div class="col-sm-12">
+									  			<div class="alert alert-warning">
+									  			 <p><i class="fa-fw fa fa-warning"></i> La <strong>actualización masiva</strong> es una herramienta que actualizará el importe, recargo y descuento en un rango de semanas dadas, por favor asegúrese de hacerlo correctamente.</p>
+									  			 <p><strong>No se pueden modificar colegiaturas pagadas</strong></p>
+									  			</div>
+									  		</div>
+									  	</div>
+									    <div class="row">
+									    	<div class="col-sm-4" valida>
+										    	<label>Semana Inicial *</label>
+										    	<input name="semanaIncialMasiva" type="number" class="form-control" placeholder="De la semana" ng-model="cpp.modificacion.semanaInicial" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>
+										    	<label>Semana Final *</label>
+										    	<input name="semanaFinalMasiva" type="number" class="form-control" placeholder="A la semana" ng-model="cpp.modificacion.semanaFinal" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Año *</label>
+										    	<input name="anioMasiva" type="number" class="form-control" placeholder="En el año" ng-model="cpp.modificacion.anio" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Importe *</label>
+										    	<input name="importeMasivo" type="number" class="form-control" placeholder="Nuevo costo colegiatura" ng-model="cpp.modificacion.importeRegular" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Recargo *</label>
+										    	<input name="recargoMasivo" type="number" class="form-control" placeholder="Monto recargo" ng-model="cpp.modificacion.recargo" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Descuento *</label>
+										    	<input name="descuentoMasivo" type="number" class="form-control" placeholder="Monto descuento" ng-model="cpp.modificacion.descuento" required="">
+									    	</div>
+									    </div> 
+									    <div class="row">
+									    	<div class="col-sm-12" valida>
+											    <label>Descripción</label>
+											    <textarea name="descripcionMasiva" class="form-control" placeholder="Descripción" ng-model="cpp.modificacion.descripcion" required=""></textarea>
+									    	</div>
+									    </div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="submit" ng-click="cpp.modificacionMasiva(cpp.modificacion,formMasivo)" value="Modificar" class="btn btn-primary" valida-form formulario="formMasivo">	
+											</div>
+										</div>	  
+								  </form>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-striped table-bordered table-condensed">
+									<caption>												
+										<h4>Listado de Pagos</h4>
+									</caption>
+									<thead class="thead">
+										<tr>
+											<th class="text-center" width="5%">No.</th>
+											<th class="text-center" width="10%">Fecha de Pago</th>
+											<th class="text-center" width="15%">Colegiatura</th>
+											<th class="text-center" width="10%">Importe</th>
+											<th class="text-center" width="10%">Descuento</th>
+											<th class="text-center" width="10%">Recargo</th>
+											<th class="text-center" width="20%">Descripción</th>
+											<th class="text-center" width="20%">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-class="(pago.estatus == 1) ? 'success' : (pago.fecha < cpp.fechaActual && pago.estatus == 0) ? 'warning' : (pago.estatus == 2) ? 'danger' : 'info'" ng-repeat="pago in cpp.planPagos">
+											<td class="text-center">{{$index + 1}}</td>	
+											<td class="text-center">{{pago.fecha | date:"dd-MM-yyyy"}}</td>
+											<td class="text-center">{{pago.semana}} - {{pago.anio}}</td>
+											<td class="text-right">{{pago.importeRegular | currency}}</td>
+											<td class="text-right">{{pago.importeDescuento | currency}}</td>
+											<td class="text-right">{{pago.importeRecargo | currency}}</td>
+											<td >{{pago.descripcion}}</td>
+											<td class="text-center">
+												<span ng-if="pago.estatus == 0">
+													<button class="btn btn-warning btn-xs" ng-click="cpp.editar(pago)"><i class="fa fa-pencil"></i> Editar</button>
+													<button class="btn btn-danger  btn-xs" ng-click="cpp.cambiarEstatus(pago, 2, 'eliminar')"><i class="fa fa-trash"></i> Eliminar</button>
+												</span>
+												<span ng-if="pago.estatus == 2">
+													<button class="btn btn-success btn-xs" ng-click="cpp.cambiarEstatus(pago, 0, 'activar')"><i class="fa fa-check"></i> Activar</button>
+												</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
