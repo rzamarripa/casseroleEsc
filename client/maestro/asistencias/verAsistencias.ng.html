@@ -49,8 +49,12 @@
 		    </thead>
 		    <tbody>
 		      <tr ng-repeat="alumno in mast.alumnosAsistidos" style="font-size: 10px;">
+						<td class="cell"><a href="/alumnos/{{alumno._id}}">{{alumno.matricula}}</a></td>
+						<td class="cell"><a href="/alumnos/{{alumno._id}}">{{alumno.nombre}}</a></td>
+<!--
 						<td class="cell">{{alumno.matricula}}</td>
 						<td class="cell">{{alumno.nombre}}</td>
+-->
 					  <td class="cell text-center" ng-repeat="asistencia in alumno.dias track by $index">
 						  <span ng-if="asistencia == 0" class="label label-danger">&nbsp;</span>
 							<span ng-if="asistencia == 1" class="label label-success">&nbsp;</span>
