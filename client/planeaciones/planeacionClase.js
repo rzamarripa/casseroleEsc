@@ -129,7 +129,11 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 	}
 	
 	this.ver = function(planeacion){
-		
+		console.log(planeacion);
+		rc.planeacion = planeacion;
+		rc.nuevo = false;
+		rc.action = false;
+		$('.collapse').collapse('show');
 	}
 
 };

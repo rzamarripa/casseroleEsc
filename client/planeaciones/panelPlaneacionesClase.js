@@ -8,6 +8,7 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 	this.action = true;
 	this.nuevo = true;
 	this.maestrosReactivos = [];
+	window.rc = rc;
 	
 	console.log($stateParams);
 	

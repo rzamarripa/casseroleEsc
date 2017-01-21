@@ -7,6 +7,7 @@ function RevisarPlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 	this.planeacion.fechaCreacion = new Date();
 	this.action = true;
 	this.nuevo = true;
+	window.rc = rc;
 	
 	this.subscribe('planeaciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id, grupo_id : $stateParams.grupo_id }]
