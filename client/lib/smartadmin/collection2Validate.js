@@ -11,10 +11,7 @@ angular.module('smartadmin').directive('collection2Validate', ['$rootScope', fun
       var modelName = inputForm.data('collection2-schema');
       var ngModelName = attributes.ngModel.split(".")[attributes.ngModel.split(".").length-1];
       var methodValidation = (modelName+ngModelName+"Validation").toLowerCase();
-      //console.log(ctrl);
-      //console.log(scope);
 
-      //console.log(ctrl);
       if ('undefined' != typeof  element.attr(methodValidation)) {
           return 
       }

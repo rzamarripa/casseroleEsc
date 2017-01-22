@@ -78,7 +78,6 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 
 	this.editar = function(id)
 	{
-		//console.log(id);
 	  this.maestro = Maestros.findOne({_id:id});
 	  this.action = false;
 	  $('.collapse').collapse('show');

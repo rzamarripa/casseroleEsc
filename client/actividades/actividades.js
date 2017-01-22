@@ -11,7 +11,6 @@ angular.module("casserole")
   this.llamadas = [];
   this.reuniones = [];
   this.tareas = [];
-  window.rc = rc;
   
 	this.subscribe('llamadas', function(){
 		return [{

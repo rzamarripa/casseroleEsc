@@ -64,14 +64,12 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
   } 
 
   this.guardar = function(planeacion){
-	  console.log("planeacion");
 	  planeacion.estatus = 1;
 	  planeacion.grupo_id = $stateParams.grupo_id;
 	  planeacion.maestro_id = $stateParams.maestro_id;
 	  planeacion.materia_id = $stateParams.materia_id;
 	  planeacion.campus_id = Meteor.user().profile.campus_id;
 		planeacion.seccion_id = Meteor.user().profile.seccion_id;
-		console.log(planeacion);
 	  Planeaciones.insert(planeacion);
 	  planeacion = {};
 	  toastr.success('Guardado correctamente como borrador.');
@@ -79,12 +77,10 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 		rc.nuevo = true;
 	}
 	
-	this.actualizar = function(planeacion){		
-		console.log(planeacion);
+	this.actualizar = function(planeacion){
 		idTemp = planeacion._id;
 		delete planeacion._id;
 		delete planeacion.$$hashKey;
-		console.log(planeacion);
 		Planeaciones.update({_id:idTemp}, {$set : planeacion});
 		planeacion = {};
 	  toastr.success('Actualizado correctamente.');
@@ -130,7 +126,6 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 	}
 	
 	this.ver = function(planeacion){
-		console.log(planeacion);
 		rc.planeacion = planeacion;
 		rc.nuevo = false;
 		rc.action = false;

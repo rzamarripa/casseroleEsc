@@ -108,7 +108,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			if(inscripciones.length > 0){
 				_.each(inscripciones, function(inscripcion){
 					inscripcion.grupo = Grupos.findOne(inscripcion.grupo_id);
-					inscripcion.grupo.turno = Turnos.findOne(inscripcion.grupo.turno_id);
+					if(inscripcion.grupo)
+						inscripcion.grupo.turno = Turnos.findOne(inscripcion.grupo.turno_id);
 				})
 			}
 			return inscripciones;
@@ -138,12 +139,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 	
 	this.actualizar = function(alumno,form){
-
-		console.log(alumno);
 		var alumnoTemp = Meteor.users.findOne({_id : alumno._id});
 		this.alumno.password = alumnoTemp.password;
 		this.alumno.repeatPassword = alumnoTemp.password;
-		console.log(this.alumno.password)
 		//document.getElementById("contra").value = this.alumno.password;
 
 		if(form.$invalid){
@@ -225,8 +223,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			importe += pago.importeRecargo;
 			pago.tiempoPago=1;
 		}
-		
-		console.log(diasDiferencia, pago.semana, pago.fecha, importe);
 		pago.importe = importe;
 		//pago.retrasada = true;
 
@@ -568,7 +564,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				delete inscripcion._id;
 				Inscripciones.update({_id:inscripcion_id},{$set:inscripcion});
 			}
-			//console.log(semanasPagadas);
 			for(var i in semanasPagadas){
 				var semana = semanasPagadas[i];
 				Pagos.insert(semana);
@@ -1125,5 +1120,20 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			this.otroPago.cantidad = 1;
 		}
 		this.otroPago.total = this.otroPago.cantidad * this.otroPago.importe;
+	}
+	
+	this.guardarComentario = function(alumno_id){
+		semanaActual = moment(new Date()).isoWeek();
+		diaActual = moment(new Date()).weekday();
+		this.comentario.fechaCreacion = new Date();
+		this.comentario.estatus = true;
+		this.comentario.usuarioInserto_id = Meteor.userId();
+		this.comentario.alumno_id = alumno_id;
+		this.comentario.semana = semanaActual;
+		this.comentario.dia = diaActual;
+		
+		ComentariosAlumnos.insert(this.comentario);
+		this.comentario = {};
+		toastr.success('Guardado correctamente.');
 	}
 }

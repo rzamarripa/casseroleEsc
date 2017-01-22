@@ -4,7 +4,6 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	
 	let rc=$reactive(this).attach($scope);
 	var alumnos_id = [];
-	window.rc = rc;
 	this.materia_id = "";
 	this.grupo_id = "";
  

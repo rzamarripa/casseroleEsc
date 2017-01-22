@@ -37,7 +37,6 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		ciclo.campus_id = Meteor.user().profile.campus_id;
 		ciclo.seccion_id = Meteor.user().profile.seccion_id;
 		ciclo.usuarioInserto = Meteor.userId();
-		console.log(ciclo);
 		Ciclos.insert(ciclo);
 		toastr.success('Guardado correctamente.');
 		ciclo = {};
@@ -67,7 +66,6 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		ciclo.usuarioActualizo = Meteor.userId(); 
 		Ciclos.update({_id:idTemp},{$set:ciclo});
 		toastr.success('Actualizado correctamente.');
-		console.log(ciclo);
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 		form.$setPristine();

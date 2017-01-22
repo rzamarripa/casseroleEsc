@@ -38,6 +38,8 @@
 				    	ng-change="v.validarContrasena(v.vendedor.password, v.vendedor.confirmarContrasena)" required>
 				    	<div class="note note-success" ng-if="!v.validaContrasena == true">Las contraseñas no coinciden.</div>
 						</div>
+			    </div>
+			    <div class="row">
 			    	<div class="col-sm-4" valida>
 			    		<label>Nombre *</label>
 				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="v.vendedor.profile.nombre" required>
@@ -51,6 +53,8 @@
 			    		<label>Apellido Materno</label>
 				    	<input type="text" class="form-control" placeholder="Apellido Materno" ng-model="v.vendedor.profile.apMaterno">
 			    	</div>
+			    </div>
+			    <div class="row">
 			    	<div class="col-sm-4">
 			    		<label>Dirección</label>
 				    	<input type="text" class="form-control" placeholder="Dirección" ng-model="v.vendedor.profile.direccion">
@@ -63,6 +67,8 @@
 			    		<label>Correo *</label>
 				    	<input name="correo" type="email" class="form-control" placeholder="Correo" ng-model="v.vendedor.profile.correo" required>
 			    	</div>
+			    </div>
+			    <div class="row">
 			    	<div class="col-sm-4" valida>
 					    <label for="sexo">Sexo *</label>
 					    <select name="sexo" ng-model="v.vendedor.profile.sexo" data-placeholder="Seleccione" class="form-control" required>

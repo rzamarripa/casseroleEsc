@@ -2,7 +2,6 @@ angular.module("casserole")
 .controller("AlumnoMuroCtrl",AlumnoMuroCtrl)
 function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	this.usuarioActual = null;
 	var eventosTotales = [];
 	this.calendario = {};
@@ -155,7 +154,6 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
   } 
   
   this.agregarAmigo = function(alumno_id){
-	  console.log(alumno_id);
 	  Meteor.users.update(Meteor.userId(), { $push : { "profile.friends" : alumno_id }});
 	  toastr.info("Ahora tienes un nuevo amigo");
   }

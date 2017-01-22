@@ -5,8 +5,6 @@ angular
 function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	rc = $reactive(this).attach($scope);
-	
-	window.rc = rc;
 		
 	this.masInfo = true;
 	this.totalPagar = 0.00;
@@ -107,7 +105,6 @@ function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $st
 
 		  	});
 	  	}
-	  	console.log(pagos);
 
 			 return pagos
 		},

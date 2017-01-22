@@ -109,7 +109,6 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 				delete plan.grados[i][j].$$hashKey;
 			};
 		};
-		console.log(plan);
 		plan.usuarioInserto = Meteor.userId();
 		PlanesEstudios.insert(plan);	
 		toastr.success('Guardado correctamente.');	
@@ -127,7 +126,6 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	    rc.action = false;
 	    $('.collapse').coll
 	    rc.nuevo = false;
-	    console.log(rc.plan );
 	};
 
 	rc.actualizar = function(plan,form)

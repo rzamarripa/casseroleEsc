@@ -19,7 +19,6 @@ function ConceptosGastoCtrl($scope, $meteor, $reactive, $state, toastr) {
   });
 
   this.editar = function(conceptoGasto){
-    console.log(conceptoGasto)
     this.conceptoGasto = conceptoGasto;
     this.nuevo = false;
   }

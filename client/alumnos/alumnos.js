@@ -5,7 +5,6 @@ angular
  
 function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
-	window.rc = rc;
   this.action = true;
   this.alumno = {};
   this.alumno.profile = {};

@@ -82,7 +82,6 @@ function prospectosPorVendedorCtrl($scope, $meteor, $reactive,  $state, $statePa
   }
   
   this.getProspectos = function(vendedor_id){
-	  console.log(vendedor_id);
 	  return Prospectos.find({vendedor_id : vendedor_id}).fetch();
   }
   

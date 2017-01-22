@@ -3,7 +3,6 @@ angular.module("casserole")
 function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   let rc = $reactive(this).attach($scope);
 
-	window.rc = rc;
 	var subs = []
 	this.buscar = {};
 	this.buscar.nombre = "";

@@ -2,7 +2,6 @@ angular.module("casserole")
 .controller("ForosCtrl",ForosCtrl)
 function ForosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	
 	this.action = true;
 	this.foro = {};

@@ -5,9 +5,6 @@ angular
 
  	let rc = $reactive(this).attach($scope);
  	
- 	window.rc = rc;
- 	
- 	
  	this.hoy = new Date();
 	this.asistencia = {};
 	this.sePuede = false;
@@ -19,7 +16,6 @@ angular
 	this.fechaFin = new Date();
 	this.fechaFin.setHours(24,0,0,0);
 	this.alumnos_id = [];
-	console.log($stateParams)
 	if($stateParams.id){
 		this.subscribe('asistencias', ()  => {
 			return [{ _id : $stateParams.id }];
@@ -86,10 +82,8 @@ angular
 		},
 		existeAsistencia : () => {
 			if($stateParams.id != ""){
-				console.log("gorety");
 				return Asistencias.findOne();
 			}else{
-				console.log("soy maestro");
 				return Asistencias.findOne({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}});
 			}			
 		},
@@ -106,16 +100,13 @@ angular
 			var resultado = {};
 			
 			if(this.getReactively("existeAsistencia") != undefined && this.getReactively("alumnos")){
-				console.log("entre aquí");
 				rc.sePuede = true;
 				rc.existe = true;
-				console.log(rc.existeAsistencia);
 				if(rc.existeAsistencia.alumnos.length > 0){
 					_.each(rc.existeAsistencia.alumnos, function(alumno){						
 						var al = Meteor.users.findOne(alumno._id);
 						if(al){
 							if(al.profile.fotografia === undefined){
-								console.log("undefined")
 							  if(al.profile.sexo === "masculino")
 								  al.profile.fotografia = "img/badmenprofile.jpeg";
 								else if(al.profile.sexo === "femenino"){
@@ -128,15 +119,11 @@ angular
 							}					}
 							//alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
 					});
-				}				
-				console.log("asistencia actualizar", rc.existeAsistencia);
+				}
 				return rc.existeAsistencia;				
 			}else{
-				console.log("no existe");
 				rc.existe = false;
-				console.log("no existe");
 				if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
-					console.log("Si se puede");
 					resultado.alumnos = [];
 					resultado.fechaCreacion = new Date();
 					resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
@@ -146,18 +133,14 @@ angular
 																																					"profile.sexo" : 1,
 																																					_id : 1
 																																			}}).fetch();
-					console.log(resultado.alumnos);
 					_.each(resultado.alumnos, function(alumno){
 						alumno.estatus = 1;
 					})
 					rc.sePuede = true;
 				}else{
-					console.log("No se puede");
 					rc.sePuede = false;
 				}
 			}
-			
-			console.log("nueva asistencia", resultado);
 			return resultado;
 		}
   });
@@ -194,8 +177,6 @@ angular
 	  }else if(estatus == 2){
 		  rc.listaAsistencia.alumnos[$index].estatus = 0;
 	  }
-	  console.log(estatus, $index);
-	  console.log(rc.listaAsistencia.alumnos[$index])
   }
   
   this.getColor = function(estatus, $index){
@@ -206,7 +187,6 @@ angular
 		}else if(estatus == 2){
 			return 'away';
 		}
-		console.log("tiene", estatus);
   }
   
   this.getColorFondo = function(estatus, $index){
@@ -217,7 +197,6 @@ angular
 		}else if(estatus == 2){
 			return 'bg-color-yellow';
 		}
-		console.log("tiene", estatus);
   }
   
   this.tieneFoto = function(sexo, foto){

@@ -5,8 +5,6 @@ function TareasCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 $reactive(this).attach($scope);
   this.action = true;
 
-	console.log($stateParams);
-
 	this.subscribe('grupos',()=>{
 		return [{estatus:true}]
 	 })
@@ -45,7 +43,6 @@ $reactive(this).attach($scope);
 
 	    tarea.grupo_id = $stateParams.id;
 		this.tarea.estatus = true;
-		console.log(this.tarea);
 		Tareas.insert(this.tarea);
 		toastr.success('Tarea guardada.');
 		this.tarea = {};
@@ -58,7 +55,6 @@ $reactive(this).attach($scope);
 
    this.mostrarArchivos= function(id)
 	{
-		console.log(id);
 		rc.nada = nombre;
 		this.grupo_id = id;
 	};

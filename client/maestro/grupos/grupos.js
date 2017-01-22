@@ -4,7 +4,6 @@ angular
  function MaestroGruposCtrl($scope, $meteor, $reactive , $state, $stateParams){
 
  	let rc = $reactive(this).attach($scope);
- 	window.rc = rc;
 	this.grupos = [];
 	this.alumnos_id = [];
 	moment.locale("es");

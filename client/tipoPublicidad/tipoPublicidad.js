@@ -60,7 +60,6 @@ angular.module("casserole")
         toastr.error('Error al actualizar los datos del Turno.');
         return;
 		  }
-		  console.log(tipoPublicidad);
 			var idTemp = tipoPublicidad._id;
 			delete tipoPublicidad._id;		
 			tipoPublicidad.usuarioActualizo = Meteor.userId(); 

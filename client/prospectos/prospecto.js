@@ -115,7 +115,6 @@ angular.module("casserole")
 			prospecto.profile.estatus = 1;
 		}
 		prospecto.profile.fechaUltimoContacto = new Date();
-		console.log("prospecto", prospecto);
 		Prospectos.update({_id:idTemp},{$set:prospecto});
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
@@ -139,7 +138,6 @@ angular.module("casserole")
 	};
 	
 	this.cambiarEtapaVenta = function(etapaVenta){
-		console.log(etapaVenta);
 	};
   
   // Llamadas

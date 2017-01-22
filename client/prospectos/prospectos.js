@@ -7,13 +7,10 @@ angular.module("casserole")
   
   this.prospecto = {};
   this.prospecto.profile = {};
-  window.rc = rc;
   this.buscar = {};
   this.buscar.nombre = '';
   this.buscar.etapaVenta_id = '';
   this.titulo = "";
-  
-  console.log("state", $stateParams);
   
   if($stateParams.vendedor_id){
 	  
@@ -89,7 +86,6 @@ angular.module("casserole")
 	    "profile.apPaterno": prospecto.profile.apPaterno
 	  }).fetch();
 	  
-	  console.log(repetidos);
 	  
 	  //Hay repetidos
 	  if(repetidos.length > 0){
@@ -99,9 +95,6 @@ angular.module("casserole")
 	    var fechaNacimiento = mes + '-' + 
 														prospecto.profile.fechaNac.getDate() + '-' +
 														prospecto.profile.fechaNac.getFullYear();
-														
-														
-			console.log("fechaNacimiento", fechaNacimiento);
 			
 			//Recorrer repetidos para comparar la fecha de nacimiento
 		  _.each(repetidos, function(repetido){
@@ -117,7 +110,6 @@ angular.module("casserole")
 				  //Ver si ya pasaron más de 3 días que correponden a 259200000 milisegundos
 				  var ms = moment(new Date(),"YYYY/MM/DD").diff(moment(repetido.profile.fechaUltimoContacto,"YYYY/MM/DD"));
 				  toastr.error(repetido.profile.nombre + " " + repetido.profile.apPaterno + ' ya está asignado.');
-				  console.log("ms",ms)
 				  if(ms >= 259200000 && Meteor.userId() != repetido.profile.vendedor_id){
 					  toastr.success(repetido.profile.nombre + " " + repetido.profile.apPaterno + ' es tuyo.');
 					  //Proponer quitarle el prospecto al vendedor anterior

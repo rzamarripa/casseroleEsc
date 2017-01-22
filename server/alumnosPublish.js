@@ -13,7 +13,6 @@ Meteor.publish("buscarAlumnos",function(options){
 });
 
 Meteor.publish("buscarAlumnosAdmin",function(options){
-	console.log(options);
 	if(options.where.nombreCompleto.length > 0){
 		let selector = {
 	  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },

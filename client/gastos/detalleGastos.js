@@ -4,7 +4,6 @@ angular
  
 function DetalleGastosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 
 	this.semanas = [];
 	for(var i = 1; i <= 52; i++){

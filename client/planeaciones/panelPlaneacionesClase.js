@@ -8,9 +8,6 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 	this.action = true;
 	this.nuevo = true;
 	this.maestrosReactivos = [];
-	window.rc = rc;
-	
-	console.log($stateParams);
 	
 	this.subscribe('planeaciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
@@ -39,7 +36,6 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 					}
 				})
 			});
-			console.log(asignaciones)
 			if(asignaciones != undefined){
 				_.each(asignaciones, function(mmg){
 					mmg.alumnos = [];
@@ -59,7 +55,6 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 		},
 		maestros : () => {
 			rc.maestrosReactivos = _.pluck(Maestros.find().fetch(), "_id");
-			console.log(rc.maestrosReactivos);
 		  return Maestros.find();
 	  },
 	  materias : () => {

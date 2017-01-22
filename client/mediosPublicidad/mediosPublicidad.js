@@ -34,19 +34,9 @@ function MediosPublicidadCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    this.medios = {};
     
   };
-/*
-  this.submit = function(){
-  		console.log("entro al submit");
-  		this.submitted=true;
-  		console.log(this.validForm);
-  		if(this.validForm)
-  			this.guardar(this.medios)
-  }
-*/
-  
+
   this.guardar = function(medios)
 	{
-		console.log(this.medios)
 			medios.estatus = true;
 			//medios.usuarioInserto = Meteor.userId();
 			MediosPublicidad.insert(this.medios);

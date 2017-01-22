@@ -26,8 +26,6 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
 			}
 		}
 	});	
-	
-	window.rc = rc;
   
   /* Render Tooltip */
 

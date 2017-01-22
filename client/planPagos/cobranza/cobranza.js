@@ -40,7 +40,6 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
     }
 		this.totales = 0.00;
 		Meteor.apply('historialCobranza', [this.fechaInicial, this.fechaFinal, Meteor.user().profile.seccion_id, usuario_id, this.modulo], function(error, result){
-			console.log(result);
 		  _.each(result, function(cobro){
 			  rc.totales += cobro.importe;
 		  })

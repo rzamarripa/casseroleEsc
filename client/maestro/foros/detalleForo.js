@@ -7,8 +7,6 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	this.comentario = {};
 	this.alumnos_id = [];
 	
-	window.rc = rc;
-	
 	$(document).ready(function() {
 	  $('#summernote').summernote({
 		  height : 250

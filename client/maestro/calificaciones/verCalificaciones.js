@@ -95,15 +95,12 @@ angular
 			if(this.getReactively("calificaciones")){
 				_.each(rc.calificaciones, function(calificacion){
 					if(calificacion.materia_id == $stateParams.materia_id && calificacion.grupo_id == $stateParams.grupo_id){
-						console.log("mismo día");
 						rc.sePuede = true;
 						rc.existe = true;
 						resultado = calificacion;
 					}
 				})
-				console.log(rc.existe);
 				if(!rc.existe){
-					console.log("no existe calificacion")
 					rc.sePuede = true;
 					resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
 																										"profile.nombreCompleto" : 1,
@@ -115,7 +112,6 @@ angular
 				}
 			}
 			
-			console.log("resultado", resultado);
 			return resultado;
 		}
   });

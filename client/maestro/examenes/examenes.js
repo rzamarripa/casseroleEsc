@@ -35,7 +35,6 @@ $reactive(this).attach($scope);
 	{
 	
 		this.examen.estatus = true;
-		console.log(this.examen);
 		Tareas.insert(this.examen);
 		toastr.success('Examen guardada.');
 		this.examen = {};

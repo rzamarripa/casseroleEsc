@@ -2,7 +2,6 @@ angular.module("casserole")
 .controller("AlumnoPagosCtrl",AlumnoPagosCtrl)
 function AlumnoPagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	
 	this.subscribe('inscripciones', () => {
 		return [{
@@ -40,7 +39,6 @@ function AlumnoPagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 					inscripcion.pagos = PlanPagos.find({inscripcion_id : inscripcion._id}).fetch();
 				})
 			}
-			console.log("ins", ins);
 			return ins;
 		}
 	});

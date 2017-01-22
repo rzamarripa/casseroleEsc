@@ -4,7 +4,6 @@ angular
 function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
   let rc = $reactive(this).attach($scope);
-  window.rc = rc;
   this.action = true;
   this.nuevo = true;
   this.vendedor_id = "";
@@ -70,7 +69,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 					"profile.fecha" : { $gte : rc.getReactively("fechaInicial"), $lt: rc.getReactively("fechaFinal")}}).count());
 			  });
 		  }
-		  console.log(cantidadProspectos);
 		  return cantidadProspectos;
 	  },
 	  cantidadInscritosPorVendedor : () => {

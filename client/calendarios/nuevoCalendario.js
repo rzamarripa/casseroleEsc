@@ -35,7 +35,6 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
 			},
 			eventSources : () => {
 				if(this.getReactively("calendario")){
-					console.log([rc.calendario.eventos, rc.calendario.eventos.length])
 					return [rc.calendario.eventos, rc.calendario.eventos.length];
 				}else{
 					return [[],0]
@@ -48,8 +47,6 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
 	  rc.calendario.estatus = true;
 	  rc.action = true;
 	}
-	
-	window.rc = rc;
 	
   this.agregarEvento = function(evento, form){
   	if(form.$invalid){

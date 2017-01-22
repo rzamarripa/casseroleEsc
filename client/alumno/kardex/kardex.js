@@ -4,7 +4,6 @@ angular
  
 function AlumnoKardexCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	
 	this.planEstudios_id = [];
 	

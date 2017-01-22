@@ -383,7 +383,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			_.each(rango, function(ra){
 				ra += cantVacaciones;
 				_.each(vacaciones, function(vaca){
-					console.log(ra, rc.grupo.anio, vaca.semana, vaca.anio)
 					if(ra == vaca.semana && rc.grupo.anio == vaca.anio){
 						cantVacaciones++;
 						ra++;
@@ -405,7 +404,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 			_.each(rango, function(ra){
 				ra += cantVacaciones;
 				_.each(vacaciones, function(vaca){
-					//console.log(ra, rc.grupo.anio, vaca.semana, vaca.anio)
 					if(ra == vaca.semana && rc.grupo.anio == vaca.anio){
 						cantVacaciones++;
 						ra++;
@@ -419,7 +417,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 				}
 			})			
 		}
-		console.log(asignacion);
 		rc.grupo.asignaciones.push(asignacion);
 		rc.grupo.ultimaSemanaPlaneada = _.last(asignacion.semanas)
 		rc.asignacion = {};

@@ -4,7 +4,6 @@ angular
 function ResumenAcademicoCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	
 	let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	this.maestros_id = [];
 	this.subscribe('asistenciasr', ()  => {
 			return [{},{maestro_id:1,grupo_id:1,semana:1}]

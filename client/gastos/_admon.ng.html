@@ -16,7 +16,7 @@
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="concepto">Concepto</label>
-						<select class="form-control select2" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" required>
+						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" required>
 						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
 						  	{{concepto.nombre}}
 						  </option>

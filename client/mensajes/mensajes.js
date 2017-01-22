@@ -15,13 +15,11 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
       fechaEnvio: -1
     };
 	
-	window.rc = rc;
-	
 	$(document).ready(function() {
  	  $('#summernote').summernote({
 	 	  	height:200
- 	  }); 	  
- 	  $(".select2").select2();
+ 	  });
+	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
  	});
  	
 	this.selTodos = false;	
@@ -46,7 +44,6 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return Mensajes.find({estatus : 1});
 	  },
 	  mensajesCount() {
-	  	console.log(Counts.get('numberOfMensajes'))
         return Counts.get('numberOfMensajes');
       }
   });
@@ -125,7 +122,6 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 				_.each(mensajesEliminados, function(mensaje){
 				  Mensajes.remove({_id:mensaje._id});
 			  })
-			  console.log(mensajesEliminados);
 			  toastr.success('Se elminaron los mensajes correctamente.');
 			}else{
 				toastr.success('No se seleccionaron mensajes.');
@@ -145,7 +141,6 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 				else
 					Mensajes.update({_id:mensaje._id},{ $set : { importante : 1 }});
 		  });
-		  console.log(mensajesImportantes);
 		  toastr.success('Se modificaron los mensajes correctamente.');
 		}else{
 			toastr.success('No se seleccionaron mensajes.');

@@ -32,7 +32,6 @@ angular
 	});
 	
 	this.subscribe('secciones', () => {
-		console.log(this.getReactively("seccion_id"));
 		return [{
 			_id : this.getReactively("seccion_id")
 		}]
@@ -116,7 +115,6 @@ angular
 						resultado = calificacion;
 					}
 				})
-				console.log(rc.existe);
 				if(!rc.existe){
 					resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
 															"profile.nombreCompleto" : 1,
@@ -127,8 +125,6 @@ angular
 													}}).fetch();
 				}
 			}
-			
-			console.log("resultado", resultado);
 			return resultado;
 		}
   });
@@ -162,9 +158,7 @@ angular
 		  var idTemp = curricula._id;
 		  delete curricula._id;
 		  Curriculas.update({_id : idTemp}, { $set : curricula})
-		  console.log("curricula", curricula)
 	  })
-	  console.log("calificacion", calificacion);
 	  toastr.success('Ha calificado correctamente.');
   }
   
@@ -194,9 +188,7 @@ angular
 		  var idTemp = curricula._id;
 		  delete curricula._id;
 		  Curriculas.update({_id : idTemp}, { $set : curricula})
-		  console.log("curricula", curricula)
 	  })
-	  console.log("calificacion", calificacion);
 	  toastr.success('Ha actualizado la calificación correctamente.');
   }
   

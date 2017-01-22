@@ -32,20 +32,15 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		        toastr.error('Error al guardar los datos.');
 		        return;
 		  }
-		  	console.log(titulo);
 		  	Meteor.call("saveFile",[rc.archivo],function(error,result){
-		  		console.log("resultado ",result);
-                console.log("error ",error);
-                if(error){
-                	toastr.error('Error al guardar los datos.');
-                	return;
-                }
-                console.log(titulo);
-                titulo.estatus = true;
+        if(error){
+        	toastr.error('Error al guardar los datos.');
+        	return;
+        }
+        titulo.estatus = true;
 				titulo.campus_id = Meteor.user().profile.campus_id;
 				titulo.usuarioInserto = Meteor.userId();
 				titulo.archivo=result;
-				console.log(titulo);
 				Titulos.insert(titulo);
 				toastr.success('Guardado correctamente.');
 				rc.titulo = {};
@@ -69,11 +64,7 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		if(this.titulo.archivo){
 			
 			Meteor.call("loadFile",this.titulo.archivo,function(error,result){
-				console.log(rc.titulo)
-				console.log(this.titulo)
-				
 				rc.muestra=result;
-				//console.log(rc.archivo); 
 			})
 		}
 	    this.action = false;
@@ -89,12 +80,10 @@ function TitulosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		        return;
 		    }
 		    Meteor.call("saveFile",rc.archivo,function(error,result){
-		  		console.log("resultado ",result);
-                console.log("error ",error);
-                if(error){
-                	toastr.error('Error al guardar los datos.');
-                	return;
-                }
+        if(error){
+        	toastr.error('Error al guardar los datos.');
+        	return;
+        }
 				var idTemp = titulo._id;
 				delete titulo._id;	
 				titulo.archivo=result;

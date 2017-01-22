@@ -123,7 +123,6 @@ function SeccionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams)
       toastr.error('Error al actualizar los datos.');
       return;
 	  }
-	  console.log(seccion);
 		var idTemp = seccion._id;
 		delete seccion._id;		
 		Secciones.update({_id:idTemp},{$set:seccion});

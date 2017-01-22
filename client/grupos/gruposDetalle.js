@@ -4,7 +4,6 @@ angular
  function GruposDetalleCtrl($scope, $meteor, $reactive , $state, $stateParams, toastr){
 	 
  	let rc = $reactive(this).attach($scope);
- 	window.rc = rc;
  	this.grupo = {};
   this.action = true;
   this.alumnos_id = [];
@@ -13,11 +12,9 @@ angular
   this.buscar = {};
   this.buscar.nombre = "";
   this.alumno_id = "";
-  
   $(document).ready(function(){
-	  $("select").select2();
-  })
-  
+	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
+	})
   this.subscribe('alumnos', () => {		
 		return [{
 			_id : { $in : this.getCollectionReactively('alumnos_id')}
@@ -89,7 +86,6 @@ angular
 		var res = confirm("Está seguro de querer sacar al alumno del grupo");
 		if(res == true){
 			_.each(rc.grupo.alumnos, function(alumno, indice){
-				console.log(indice, alumno.alumno_id);
 				if(alumno.alumno_id == alumno_id){
 					rc.grupo.alumnos.splice(indice, 1);
 				}
@@ -106,17 +102,14 @@ angular
 	this.agregarAlumno = function(){
 		this.alumno_id = rc.alumnose;
 		rc.alumnos_id.push(this.alumno_id);
-		console.log("alumno_id", this.alumno_id);
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
 		var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
-		console.log("alumnos ids", rc.alumnos_id);
 		var x = alumnos_id.indexOf(rc.alumno_id);
 		if(x==-1){
 			var inscripcion = {};
 			if(rc.getReactively("alumno_id") != undefined){
 				var ins = Inscripciones.findOne({alumno_id : rc.alumno_id});
-				console.log("inscripcion", ins);
 				rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : ins._id})
 				rc.grupo.inscritos++;
 				var idTemp = rc.grupo._id;

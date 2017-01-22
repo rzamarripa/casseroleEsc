@@ -31,7 +31,6 @@ angular.module("casserole")
 			escuela.estatus = true;
 			escuela.campus_id = Meteor.user().profile.campus_id;
 			escuela.usuarioInserto = Meteor.userId();
-			console.log(this.escuela);
 			Escuelas.insert(escuela);
 			toastr.success('Guardado correctamente.');
 			this.escuela = {}; 

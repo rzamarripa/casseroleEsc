@@ -13,10 +13,9 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 	this.buscar.nombre = "";
 	this.alumno_id = "";
 	this.planPagos = [];
-	window.rc = rc;
+	
   
   this.subscribe('buscarAlumnosAdmin', () => {
-	  console.log(this.buscar.nombre);
 		if(this.getReactively("buscar.nombre").length > 3){
 			return [{
 		    options : { limit: 50 },

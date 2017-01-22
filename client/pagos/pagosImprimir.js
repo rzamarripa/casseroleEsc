@@ -8,7 +8,6 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   this.buscar = {};
   this.buscar.nombre = "";
   this.fecha = new Date();
-  window.rc = rc;
   
 /*
   
@@ -59,9 +58,6 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   ]
 */
 	
-	 console.log($stateParams)
-  
-
 
   this.subTotal = 0.00;
   this.iva = 0.00;
@@ -103,31 +99,29 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 				  rc.iva = rc.total-rc.subTotal;
 				  console.log(semana.importe);
 			  });*/
-			_.each(plan,function (pago) {
-				var fechaActual = moment();
-				var fechaCobro = moment(pago.fecha);
-				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
-				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
-
-				if(!ret["Colegiatura"] )ret["Colegiatura"]=[];
-				
-				ret["Colegiatura"].push({semana:pago.semana,anio:pago.anio,importe:pago.importe})
-				rc.total =pago.importe;
-				if(pago.tiempoPago==1 && pago.importe>0){
-					if(!ret["Recargo"])ret["Recargo"]=[];
-					ret["Recargo"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeRecargo})
-					rc.total +=pago.importeRecargo;
-				}
-				if(diasDescuento >= pago.diasDescuento && pago.importe>0){
-					if(!ret["Descuento"])ret["Descuento"]=[];
-					ret["Descuento"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeDescuento})
-					rc.total -=pago.importeDescuento;
-				}
-			})
-			console.log(rc.total, rc.total/1.16)
-			rc.subTotal= rc.total/1.16;
-			rc.iva = rc.total-rc.subTotal;
-			console.log(ret)
+				_.each(plan,function (pago) {
+					var fechaActual = moment();
+					var fechaCobro = moment(pago.fecha);
+					var diasRecargo = fechaActual.diff(fechaCobro, 'days')
+					var diasDescuento = fechaCobro.diff(fechaActual, 'days')
+	
+					if(!ret["Colegiatura"] )ret["Colegiatura"]=[];
+					
+					ret["Colegiatura"].push({semana:pago.semana,anio:pago.anio,importe:pago.importe})
+					rc.total =pago.importe;
+					if(pago.tiempoPago==1 && pago.importe>0){
+						if(!ret["Recargo"])ret["Recargo"]=[];
+						ret["Recargo"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeRecargo})
+						rc.total +=pago.importeRecargo;
+					}
+					if(diasDescuento >= pago.diasDescuento && pago.importe>0){
+						if(!ret["Descuento"])ret["Descuento"]=[];
+						ret["Descuento"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeDescuento})
+						rc.total -=pago.importeDescuento;
+					}
+				})
+				rc.subTotal= rc.total/1.16;
+				rc.iva = rc.total-rc.subTotal;
   			return ret
 
   		},

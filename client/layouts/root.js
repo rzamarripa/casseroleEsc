@@ -156,7 +156,6 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 							}
 						})
 					});
-					console.log(gruposMaestros);
 					return gruposMaestros;
 				}
 				

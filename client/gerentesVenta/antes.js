@@ -39,13 +39,11 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	  vendedores : () => {
 		  if(Meteor.user()){
 			  var usuarios = Meteor.users.find({roles : ["vendedor"]}).fetch();
-			  console.log("usuario",usuarios);
 			  var vendedoresDelGerente = [];
 			  _.each(usuarios, function(usuario){
 					  vendedoresDelGerente.push(usuario);
 			  });
 			  rc.vendedores_id = _.pluck(vendedoresDelGerente, "_id");
-				console.log("vdg", vendedoresDelGerente)
 			  return vendedoresDelGerente;
 		  }
 	  },
@@ -67,7 +65,6 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 			  });
 		  }
 		  
-		  console.log("data",data);
 		  var datos = {
         chart: {
           type: 'column'

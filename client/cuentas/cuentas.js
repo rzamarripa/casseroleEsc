@@ -29,7 +29,6 @@ function CuentasCtrl($scope, $meteor, $reactive, $state, toastr) {
       toastr.error('Error al guardar los datos de la cuenta.');
       return;
     }
-    console.log(this.cuentas.length)
     if(this.cuentas.length == 0){
     	cuenta.activo = true;
     	cuenta.inscripcion = true;

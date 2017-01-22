@@ -106,7 +106,6 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	}
 	
 	this.validarUsuario = function(username){
-		console.log(username);
 		if(this.nuevo){
 			var existeUsuario = Meteor.users.find({username : username}).count();
 			if(existeUsuario){
@@ -115,11 +114,9 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 				rc.validaUsuario = true;
 			}
 		}else{
-			console.log(rc.usernameSeleccionado);
 			var existeUsuario = Meteor.users.find({username : username}).count();
 			if(existeUsuario){
 				var usuario = Meteor.users.findOne({username : username});
-				console.log(usuario)
 				if(rc.usernameSeleccionado == usuario.username){
 					rc.validaUsuario = true;
 				}else{

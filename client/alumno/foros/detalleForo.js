@@ -2,7 +2,6 @@ angular.module("casserole")
 .controller("DetalleForoCtrl",DetalleForoCtrl)
 function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	
 	this.action = true;
 

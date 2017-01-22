@@ -119,7 +119,6 @@ function PizarronCtrl($scope, $meteor, $reactive, $stateParams, $state, toastr) 
 				
 			}
 		};
-		console.log("entre aquí");
 		// Touch Events
 		myCanvas.addEventListener('touchstart', draw.start, false);
 		myCanvas.addEventListener('touchend', draw.end, false);

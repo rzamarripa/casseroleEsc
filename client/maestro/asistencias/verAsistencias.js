@@ -4,13 +4,10 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	
 	let rc=$reactive(this).attach($scope);
 	var alumnos_id = [];
-	window.rc = rc;
 	this.materia_id = "";
 	this.grupo_id = "";
 	this.fechaActual = new Date();
 	
-	console.log($stateParams)
- 
 	this.subscribe('grupos',()=>{
 		return [{_id : $stateParams.grupo_id, estatus:true}]
 	});
@@ -73,14 +70,9 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 							transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
 						})
 			  })
-		  }/*
-else{
-			  toastr.success('No hay asistencias que mostrar.');
 		  }
-*/
+
 		  
-		  
-		  console.log("transmutar", transmutar)
 			return _.toArray(transmutar);
 
 	  }

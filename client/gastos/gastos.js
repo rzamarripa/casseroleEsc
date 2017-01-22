@@ -5,7 +5,6 @@ angular
 function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
   this.nuevo = false;
-  window.rc = rc;
   this.tipoGasto = 'Cheques';
   this.gasto = {};
   this.gasto.fecha = new Date();
@@ -15,6 +14,8 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
   for(i = 0; i < this.diaActual; i++){this.diasActuales.push(dias[i])};
+  
+  
 
   this.subscribe('gastos', () => {
     return [{estatus: true, semana: this.semanaActual, campus_id: Meteor.user() != undefined ? Meteor.user().profile.campus_id : ''}];

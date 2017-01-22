@@ -3,7 +3,6 @@ angular
 .controller("PagosSemanaCtrl", PagosSemanaCtrl);
 function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr) {
 	let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 	
 	this.alumnos_id = [];
 	this.semanaActual = parseInt($stateParams.semana);
@@ -13,7 +12,6 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 	
 	this.subscribe('pagosPorSemana',()=>{
 		var query = {campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", semanaPago : parseInt(this.getReactively("semanaActual")), estatus : 1, anioPago : parseInt(this.getReactively("anio"))};
-		console.log(query);
 		return [query]
 	});
 	  

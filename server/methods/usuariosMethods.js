@@ -41,7 +41,6 @@ Meteor.methods({
 		}
 	  
 	  if(usuario.maestro_id != undefined){
-		  console.log("es diferetne")
 		  profile.maestro_id = id;
 	  }
 			

@@ -9,6 +9,8 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.alumnos_id = [];
   this.deudores = [];
   this.totales = [];
+  
+  
 	
   Meteor.apply('deudores', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.totales = result[0];

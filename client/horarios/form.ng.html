@@ -33,7 +33,7 @@
 				<fieldset>
 					<div class="form-group" valida>
 						<label for="materia">Materia *</label>
-						<select name="materia_id" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.materia_id" required="">
+						<select name="materia_id" class="form-control" placeholder="Seleccione" ng-model="ho.clase.materia_id" required="">
 							<option value=""></option>
 						  <option ng-repeat="materia in ho.materias" value="{{materia._id}}">
 						  	{{materia.nombreCorto}}
@@ -43,7 +43,7 @@
 
 					<div class="form-group" valida>
 						<label >Maestro *</label>
-						<select name="maestro_id" ng-change="ho.muestraMateriasMaestro(ho.clase.maestro_id)" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.maestro_id" required>
+						<select name="maestro_id" ng-change="ho.muestraMateriasMaestro(ho.clase.maestro_id)" class="form-control" placeholder="Seleccione" ng-model="ho.clase.maestro_id" required>
 							<option value=""></option>
 						  <option ng-repeat="maestro in ho.maestros" value="{{maestro._id}}">
 						  	{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}
@@ -52,7 +52,7 @@
 					</div>
 					<div class="form-group">
 						<label>Aulas</label>
-						<select name="aula_id" ng-change="ho.muestraAulasMaestro(ho.clase.aula_id)" class="form-control select2" placeholder="Seleccione" ng-model="ho.clase.aula_id">
+						<select name="aula_id" ng-change="ho.muestraAulasMaestro(ho.clase.aula_id)" class="form-control" placeholder="Seleccione" ng-model="ho.clase.aula_id">
 							<option value=""></option>
 						  <option ng-repeat="aula in ho.aulas" value="{{aula._id}}">
 						  	{{aula.nombre}}

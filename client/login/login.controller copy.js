@@ -19,7 +19,6 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      function () {
 		      toastr.success("Bienvenido al Sistema");
 		      if(Meteor.user().roles[0] == "alumno"){
-			      console.log(Meteor.user().profile.campus_id);
 			      $state.go('root.alumnoMuro',{campus_id : Meteor.user().profile.campus_id});
 		      }else{
 			      $state.go('root.home');

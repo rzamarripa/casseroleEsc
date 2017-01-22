@@ -15,7 +15,6 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
       
       var nombres = _.pluck(result, "medio");
       var valores = _.pluck(result, "cantidad");
-      console.log("Zama",result);
       $('#prospectosPorMediosPublicidad').highcharts( {
           chart: {
                 type: 'column'
@@ -64,7 +63,6 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
       
       // var nombres = _.pluck(result, "medio");
       var valores = _.pluck(result, "cantidad");
-      console.log("Jaime",result);
 $('#prospectosSoloEtapaVenta').highcharts( {
         chart: {
             type: 'column'
@@ -113,8 +111,6 @@ $('#prospectosSoloEtapaVenta').highcharts( {
 
               var nombreEtapas = _.pluck(result, "etapaVenta");
                var valores = _.pluck(result, "cantidad");
-               console.log("nombres",nombreEtapas,"valores",valores)
-      console.log("Jaime",result);
           
            $('#prospectosSoloEtapaVenta').highcharts( {
         chart: {

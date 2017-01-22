@@ -23,7 +23,6 @@ angular.module("casserole")
   this.guardar = function(turno)
 	{
 		this.turno.estatus = true;
-		console.log(this.turno);
 		Turnos.insert(this.turno);
 		toastr.success('Turno guardado.');
 		this.turno = {}; 

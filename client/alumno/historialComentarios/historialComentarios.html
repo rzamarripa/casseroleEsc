@@ -1,0 +1,97 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.alumnoDetalle({alumno_id : hc.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-user"></i> Ir a mi perfil</a>&nbsp;
+ 										<a ui-sref="root.editarAlumno({alumno_id : hc.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm" ng-show="currentUser.roles[0] == 'director'">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{hc.fechaActual | date:'dd-MM-yyyy'}}</h4>
+									</div>
+									<ol class="carousel-indicators">
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
+										<img style="max-width:200px;" src="{{hc.tieneFoto(hc.alumno.profile.sexo, hc.alumno.profile.fotografia)}}" >
+									</div>
+									<div class="col-sm-6">
+										<h1>{{hc.alumno.profile.nombre}} <span class="semi-bold">{{hc.alumno.profile.apPaterno}} {{hc.alumno.profile.apMaterno}}</span>
+										<small> (Alumno)</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-key fa-lg"></i>&nbsp;&nbsp;
+													<span class="txt-color-darken">
+														<strong>{{hc.alumno.profile.matricula}}</strong>
+													</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{hc.alumno.profile.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope fa-lg"></i>&nbsp;&nbsp;<a href="mailto:{{hc.alumno.profile.correo}}">{{hc.alumno.profile.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{hc.alumno.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-striped table-bordered">
+									<caption><h4>Listado de comentarios</h4></caption>
+									<thead class="thead">
+										<tr>
+											<th class="text-center">No.</th>
+											<th class="text-center">Fecha</th>
+											<th class="text-center">Tipo Respuesta</th>
+											<th class="text-center">Comentario</th>
+											<th class="text-center">Usuario Insertó</th>
+										</tr>
+									</thead>
+									<tbody style="font-size: smaller">
+										<tr ng-repeat="comentario in hc.comentarios">
+											<td class="text-center">{{$index + 1}}</td>	
+											<td class="text-center">{{comentario.fechaCreacion | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+											<td class="text-center">{{comentario.tipoRespuesta}}</td>
+											<td class="text-center">{{comentario.comentario}}</td>
+											<td class="text-center">{{comentario.usuarioInserto.profile.nombreCompleto}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

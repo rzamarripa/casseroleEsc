@@ -4,7 +4,6 @@ angular
  
 function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
-	window.rc = rc;
 
 	this.semanas = [];
 	for(var i = 1; i <= 52; i++){
@@ -91,7 +90,6 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 			  arreglo = _.toArray(arreglo);
 			  var valores = _.pluck(arreglo, "data");
 			  var nombreGrupos = _.pluck(arreglo, "name");
-			  console.log(valores);
 			  rc.totalPagos = _.reduce(valores, function (memo, num) { return memo + num }, 0);
 
 		  }
@@ -209,7 +207,6 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
         },
         series: arreglo
 	    });
-	    console.log(arreglo);
 		  return arreglo;
 	  },
 	  totalGastos : () => {

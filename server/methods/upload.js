@@ -22,11 +22,8 @@ Meteor.methods({
 
   },
   loadFile:function (fileName){
-  	
   		var  x = fs.readFileSync(fileName, "binary");
-  		//console.log(fileName,x);
   		return x;
-  	
   } 
 });
 

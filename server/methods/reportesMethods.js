@@ -163,7 +163,14 @@ Meteor.methods({
 					//validar que haya pagado la semana actual
 					if(ultimoPago.semana >= semanaActual && ultimoPago.anio == anioActual ){
 						//Busco la siguiente semana, pero sólo 1
-						var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 1});
+						if(ultimoPago.tipoPlan == "Semanal"){
+							var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 1, anio : ultimoPago.anio});
+						}else if(ultimoPago.tipoPlan == "Quincenal"){
+							var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 2, anio : ultimoPago.anio});
+						}else if(ultimoPago.tipoPlan == "Mensual"){
+							var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 4, anio : ultimoPago.anio});
+						}
+						
 						var tipoColegiatura = pago.tipoPlan;
 						var fechaPago = moment(pago.fecha);
 					  var diasDiferencia = fechaPago.diff(hoy, "days");

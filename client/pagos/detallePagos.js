@@ -4,9 +4,9 @@ angular
  
 function DetallePagosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	rc = $reactive(this).attach($scope);
-	$(document).ready(function() {
-	  $(".select2").select2();
-	});
+	$(document).ready(function(){
+	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
+	})
 	
 	window = this.pago;
 	
