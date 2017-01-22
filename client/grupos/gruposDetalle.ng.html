@@ -22,8 +22,12 @@
 		</select>
 	</div>
 	<div class="col-sm-1">
-		<button type="button" class="btn btn-primary"  ng-click="gp.agregarAlumno()">
-			<span class="fa fa-plus fa-fw" aria-hidden="true"></span>
+		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		<button type="button" class="btn btn-primary" ng-click="gp.agregarAlumno()" ng-show="gp.confirmar == false;">
+			<i class="fa fa-plus fa-fw"></i> Agregar</span>
+		</button>
+		<button type="button" class="btn btn-primary" ng-click="gp.agregarAlumno()" ng-show="gp.confirmar == true;">
+			<i class="fa fa-check fa-fw"></i> Confirmar</span>
 		</button>
 	</div>
 </div>

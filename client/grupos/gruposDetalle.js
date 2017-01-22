@@ -12,6 +12,10 @@ angular
   this.buscar = {};
   this.buscar.nombre = "";
   this.alumno_id = "";
+  this.ins = "";
+  this.confirmar = false;
+  window.rc = rc;
+  
   $(document).ready(function(){
 	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
 	})
@@ -22,8 +26,9 @@ angular
 	});
 	
 	this.subscribe('inscripciones', () => {		
+		console.log(rc.getReactively("alumno_id"));
 		return [{
-			alumno_id : { $in : this.getCollectionReactively('alumnos_id')}
+			alumno_id : this.getReactively('alumno_id')
 		}]
 	});
 	
@@ -64,13 +69,13 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-		  return Meteor.users.find({_id : { $in : this.getReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.matricula" : 1}});
+		  return Meteor.users.find({_id : { $in : this.getCollectionReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.matricula" : 1}});
 	  },
 	  balumnos : ()=>{
 	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});
 	  },
-	  inscripciones : () => {
-		  return Inscripciones.find().fetch();
+	  inscripcion : () => {
+		  return Inscripciones.findOne();
 	  }
   });
   
@@ -100,22 +105,26 @@ angular
 	}
 
 	this.agregarAlumno = function(){
-		this.alumno_id = rc.alumnose;
+		this.confirmar = !this.confirmar;
+		rc.alumno_id = rc.alumnose;
 		rc.alumnos_id.push(this.alumno_id);
 		if(!rc.grupo.alumnos)
 			rc.grupo.alumnos=[];
 		var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 		var x = alumnos_id.indexOf(rc.alumno_id);
 		if(x==-1){
-			var inscripcion = {};
-			if(rc.getReactively("alumno_id") != undefined){
-				var ins = Inscripciones.findOne({alumno_id : rc.alumno_id});
-				rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : ins._id})
-				rc.grupo.inscritos++;
-				var idTemp = rc.grupo._id;
-				delete rc.grupo._id;
-				Grupos.update({_id : idTemp}, {$set : rc.grupo});
-				toastr.success("Ha insertado al alumno correctamente");
+			if(this.getReactively("alumnose")){
+				if(this.getReactively("inscripcion")){
+					rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : rc.inscripcion._id})
+					rc.grupo.inscritos++;
+					console.log(rc.grupo);
+					var idTemp = rc.grupo._id;
+					console.log(idTemp);
+					delete rc.grupo._id;
+					console.log(rc.grupo);
+					Grupos.update({_id : idTemp}, {$set : rc.grupo});
+					toastr.success("Ha insertado al alumno correctamente");
+				}				
 			}			
 		}
 	}
