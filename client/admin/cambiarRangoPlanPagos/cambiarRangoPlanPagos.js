@@ -182,6 +182,10 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
       toastr.error('Error al calcular el nuevo plan de pagos, llene todos los campos.');
       return;
 	  }
+	  
+	  var modeloPago = PlanPagos.findOne({alumno_id : this.alumno_id});
+	  console.log(modeloPago);
+	  
 	  rc.planPagos = [];
 		var dia = 1;
 		var mfecha = moment(this.cambioSemanasPlanPagos.fechaInicial);
@@ -196,22 +200,33 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 				dia                 : mfecha.weekday(),
 				tipoPlan 		    : 'Semanal',
 				numeroPago 	        : i + 1,
+				alumno_id						: this.alumno_id,
+				inscripcion_id			: modeloPago.inscripcion_id,
+				vendedor_id					: modeloPago.vendedor_id,
+				seccion_id					: modeloPago.seccion_id,
+				campus_id						: modeloPago.campus_id,
+				cuenta_id						: modeloPago.cuenta_id,
+				fechaInscripcion		: modeloPago.fechaInscripcion,
 				importeRegular      : this.cambioSemanasPlanPagos.importeRegular,
 				importeRecargo      : this.cambioSemanasPlanPagos.importeRecargo,
 				importeDescuento    : this.cambioSemanasPlanPagos.importeDescuento,
 				diasRecargo         : this.cambioSemanasPlanPagos.diasRecargo,
 				diasDescuento       : this.cambioSemanasPlanPagos.diasDescuento,
-				importe             : this.cambioSemanasPlanPagos.importeRegular,
-				alumno_id						: this.alumno_id,
-				fechaPago           : undefined,
-				semanaPago          : undefined,
-				diaPago             : undefined,
+				importe             : this.cambioSemanasPlanPagos.importeRegular,		
+				faltante						: null,
+				fechaPago           : null,
+				anioPago						: null,
+				mesPago							: null,
+				semanaPago          : null,
+				diaPago             : null,
+				fechaPago						: null,
 				pago                : 0,
 				estatus             : 0,
 				tiempoPago          : 0,
-				modificada          : false,
+				modificada          : true,
 				mes					: mfecha.get('month') + 1,
-				anio				: mfecha.get('year')
+				anio				: mfecha.get('year'),
+				modulo							: "colegiatura"
 			}
 			
 			if(i == 0){

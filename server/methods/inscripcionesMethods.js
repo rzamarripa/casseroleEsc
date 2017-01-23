@@ -1,30 +1,29 @@
 Meteor.methods({
-  getInscripciones: function (query) {
-    query = query || {};
-    
-    var inscripciones = Inscripciones.find(query).fetch();
-
-    var alumnos 	= Alumnos.find().fetch();
-    var grupos 		= Grupos.find().fetch();
-    var secciones = Secciones.find().fetch();
-    var ciclos	 	= Ciclos.find().fetch();
-    var planesEstudios = PlanesEstudios.find().fetch();
-
-    inscripciones.forEach(function (inscripcion) {
-      inscripcion.alumno = findInCollection(alumnos, inscripcion.alumno_id);
-      inscripcion.grupo = findInCollection(grupos, inscripcion.grupo_id);
-      inscripcion.seccion = findInCollection(secciones, inscripcion.seccion_id);
-      inscripcion.ciclo = findInCollection(ciclos, inscripcion.ciclo_id);
-      inscripcion.planEstudio = findInCollection(planesEstudios, inscripcion.planEstudio_id);
-    });
-    
-    return inscripciones;
-
-    function findInCollection(lista, valor) {
-      return _.find(lista, function (x) {
-        return x._id == valor;
-      });
-    }
+  getInscripciones: function (options) {
+    if(options.where.nombreCompleto.length > 3){
+			let selector = {
+		  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
+		  	"profile.seccion_id": options.where.seccion_id,
+		  	roles : ["alumno"]
+			}
+			
+			var alumnos 				= Meteor.users.find(selector, options.options).fetch();
+			console.log(alumnos.length)
+			var alumnos_ids = _.pluck(alumnos, "_id");
+			
+			console.log("alumnos ", alumnos_ids)
+			var inscripciones = Inscripciones.find({alumno_id : { $in : alumnos_ids}}).fetch();
+			console.log(inscripciones.length);
+	    inscripciones.forEach(function (inscripcion) {
+	      inscripcion.alumno 			= Meteor.users.findOne({_id : inscripcion.alumno_id});
+	      inscripcion.grupo 			= Grupos.findOne({_id : inscripcion.grupo_id});
+	      inscripcion.seccion 		= Secciones.findOne({_id : inscripcion.seccion_id});
+	      inscripcion.ciclo 			= Ciclos.findOne({_id : inscripcion.ciclo_id});
+	      inscripcion.planEstudio = PlanesEstudios.findOne({_id : inscripcion.planEstudios_id});
+	    });
+			
+	    return inscripciones;   
+	  }
   },
   cantidadAlumnos : function(campus_id) {
 	  var cantidad = Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus_id}).count();
@@ -136,10 +135,29 @@ Meteor.methods({
 	  Inscripciones.update({_id:inscripcion._id},{$set:{pagos:inscripcion.pagos,planPagos:inscripcion.planPagos}});
   },
   reactivarPlanPagos : function(inscripcion) {
-		PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
+		//PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
 	},
   cancelarPlanPagos : function(inscripcion) {
-		PlanPagos.update({inscripcion_id : inscripcion, estatus : 0}, {$set : { estatus : 2}}, {multi : true});
+	  var inscripcion = Inscripciones.findOne(inscripcion);
+		//PlanPagos.update({inscripcion_id : inscripcion, estatus : 0}, {$set : { estatus : 2}}, {multi : true});
+		var grupos = Grupos.find(
+		   { "alumnos.alumno_id": inscripcion.alumno_id }
+		).fetch();
+		console.log("alumno_id", inscripcion.alumno_id)
+		console.log("grupos", grupos);
+		_.each(grupos, function(grupo, indexGrupo){
+			_.each(grupo.alumnos, function(alumno, indexAlumno){
+				if(alumno.alumno_id == inscripcion.alumno_id){
+					console.log("Aquí estoy ", alumno);
+					grupo.alumnos.splice(indexAlumno, 1);
+					var idTemp = grupo._id;
+					Grupos.update({_id : idTemp}, { $set : grupo});
+				}
+			})
+			
+		});
+		
+		console.log(grupos);
 	}
 	
 });

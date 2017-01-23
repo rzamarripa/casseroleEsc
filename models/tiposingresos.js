@@ -1,6 +1,6 @@
 TiposIngresos					= new Mongo.Collection("tiposIngresos");
 TiposIngresos.allow({
-	insert: function () { return true; },
-	update: function () { return true; },
-	remove: function () { return true; }
+  insert: function (userId, doc) { return !Roles.userIsInRole(userId, 'alumno'); },
+  update: function (userId, doc) { return !Roles.userIsInRole(userId, 'alumno'); },
+  remove: function (userId, doc) { return !Roles.userIsInRole(userId, 'alumno'); }
 });

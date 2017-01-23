@@ -8,11 +8,9 @@
 							<div class="col-sm-12">
 								<div id="myCarousel" class="carousel profile-carousel">
 									<div class="air air-bottom-right padding-10">
-<!--
 										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.convenios({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
-											<i class="fa fa-cogs"></i> Convenios
+											<i class="fa fa-cogs"></i> Nueva Inscripción
 										</a>&nbsp;
--->
 										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
 	 										<i class="fa fa-pencil"></i> Modificar
 	 									</a> 
@@ -221,7 +219,7 @@
 		    <div class="col-sm-12">
 		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
 		        <header>
-		          <h2>Pagos</h2>
+		          <h2>Inscripción {{ $index + 1 }}</h2>
 		        </header>
 		        <div>
 		          <div class="widget-body">
@@ -385,40 +383,32 @@
 											</div>
 										</div>
 									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<h2> Currícula : </h2>
+											<table class="table table-bordered table-responsive" ng-repeat="planEstudio in al.curriculas">						
+												<tr ng-repeat="(key, value) in planEstudio.grados" >
+													<th width="5%"><div class="text-center">{{key + 1}}</div></th>
+													<td ng-repeat="_materia in planEstudio.grados[key]" 
+															ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : _materia.aprobado != undefined ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
+														<div class="row">
+															<div class="col-sm-8" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
+																<strong>{{_materia.materia.nombreCorto}}</strong>
+															</div>
+														</div>
+														<p style="margin-bottom: 0px !important;" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>{{_materia.materia.nombre}}</small></p>	
+														<p style="margin-bottom: 0px !important;" ng-if="_materia.aprobado != undefined" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>Calif. {{_materia.calificacion}}</small></p>	
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
 			          </div>						
 		          </div>
 		        </div>
 		      </div>
 		    </div>
 		  </div>
-		  <div class="row">
-		    <div class="col-sm-12">
-		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
-		        <header>
-		          <h2>Currícula</h2>
-		        </header>
-		        <div>
-		          <div class="widget-body">
-		            <table class="table table-bordered table-responsive" ng-repeat="planEstudio in al.curriculas">						
-									<tr ng-repeat="(key, value) in planEstudio.grados" >
-										<th width="5%"><div class="text-center">{{key + 1}}</div></th>
-										<td ng-repeat="_materia in planEstudio.grados[key]" 
-												ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : _materia.aprobado != undefined ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
-											<div class="row">
-												<div class="col-sm-8" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
-													<strong>{{_materia.materia.nombreCorto}}</strong>
-												</div>
-											</div>
-											<p style="margin-bottom: 0px !important;" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>{{_materia.materia.nombre}}</small></p>	
-											<p style="margin-bottom: 0px !important;" ng-if="_materia.aprobado != undefined" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>Calif. {{_materia.calificacion}}</small></p>	
-										</td>
-									</tr>
-								</table>
-		          </div>
-		        </div>
-		      </div>
-		    </div>
-		  </div> 
 		  <div class="row">
 		    <div class="col-sm-12">
 		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">

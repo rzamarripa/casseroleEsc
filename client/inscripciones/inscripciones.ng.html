@@ -17,9 +17,9 @@
 					<i class="fa fa-plus"></i> Nuevo
 				</a>
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="ins.buscar.nombre">
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="ins.buscar.nombre" ng-change="ins.getInscripciones()">
 			<div class="input-group-btn">
-				<a href="#" ng-click="ins.getFocus()" class="btn btn-default">
+				<a href="#" ng-click="ins.getInscripciones()" class="btn btn-default">
 					<i class="fa fa-search"></i>
 				</a>
 			</div>
