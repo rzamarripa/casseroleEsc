@@ -19,8 +19,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   this.objeto = {};
   moment.locale("es");
 	
-	let vend = this.subscribe('vendedores',()=>{
-		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
+	let vend = this.subscribe('vendedoresGerentes',()=>{
+		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 
 	this.subscribe('etapasVenta',()=>{

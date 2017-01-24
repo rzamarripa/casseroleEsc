@@ -9,31 +9,6 @@
 			<form name="form" class="form-horizontal" role="form" novalidate >
 		  	<div class="well">	    
 			    <div class="row">
-			    	<div class="col-sm-4" valida>	
-				    	<label>Usuario *</label>
-				    	<div class="input-group">					    	
-								<input type="text" class="form-control" name="usuario" ng-model="re.recepcionista.username" ng-change="re.validarUsuario(re.recepcionista.username)" required>
-								<span class="input-group-addon">
-									<i class="fa fa-{{re.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
-								</span>
-							</div>	
-							<div class="note note-success" ng-if="!re.validaUsuario == true">Este usuario no está disponible.</div>
-			    	</div>
-			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
-				    	<label>Contraseña *</label>
-				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
-				    	ng-model="re.recepcionista.password" 
-				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)" required>
-			    	</div>		    				    	    
-			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
-				    	<label>Confirmar Contraseña *</label>
-				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
-				    	ng-model="re.recepcionista.confirmarContrasena" 
-				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)" required>
-				    	<div class="note note-success" ng-if="!re.validaContrasena == true">Las contraseñas no coinciden.</div>
-						</div>
-			    </div>
-			    <div class="row">
 			    	<div class="col-sm-4" valida>
 			    		<label>Nombre *</label>
 				    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="re.recepcionista.profile.nombre" required="">
@@ -86,6 +61,7 @@
 					<th width="5%"><div class="text-center">No.</div></th>
 					<th width="15%"><div class="text-center">Foto</div></th>
 					<th width="15%"><div class="text-center">Nombre</div></th>
+					<th width="15%"><div class="text-center">Usuario</div></th>
 					<th width="15%"><div class="text-center">Dirección </div></th>
 					<th width="10%"><div class="text-center">Teléfono</div></th>
 					<th width="20%"><div class="text-center">correo</div></th>
@@ -106,6 +82,7 @@
 			    <td>{{$index + 1}}</td>
 		    	<td><img width="100px" ng-src="{{recepcionista.profile.fotografia}}" ng-class="{'img-thumbnail': !!recepcionista.profile.fotografia}"/> </td>
 			    <td>{{recepcionista.profile.nombre}} {{recepcionista.profile.apPaterno}} {{recepcionista.profile.apMaterno}}</td>
+			    <td>{{recepcionista.username}} </td>
 			    <td>{{recepcionista.profile.direccion}} </td>
 			    <td>{{recepcionista.profile.telefono}} </td>
 			    <td>{{recepcionista.profile.correo}} </td>

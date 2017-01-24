@@ -6,18 +6,15 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;
-  this.validaUsuario = false;
-  this.validaContrasena = false;
-  this.usernameSeleccionado = "";
-  
-	this.subscribe('validaUsuarios',()=>{
-		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
-	
+  	
 	this.subscribe('secciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
-
+	
+	this.subscribe('coordinadores', ()=>{
+		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["coordinadorAcademico", "coordinadorFinanciero"]}}]
+	});	
+	
   this.helpers({
 	  coordinadores : () => {
 		  var usuarios = Meteor.users.find().fetch();
@@ -62,25 +59,28 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
  
 	this.guardar = function(coordinador,form)
 	{		
-		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+		if(form.$invalid){
       toastr.error('Error al guardar los datos.');
       return;
 	  }
 		coordinador.profile.estatus = true;
 		coordinador.profile.campus_id = Meteor.user().profile.campus_id;
 		coordinador.profile.seccion_id = Meteor.user().profile.seccion_id;
-		coordinador.usuarioInserto = Meteor.userId();
+		coordinador.profile.usuarioInserto = Meteor.userId();
 		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? coordinador.profile.apMaterno : "");
-		Meteor.call('createGerenteVenta', coordinador, coordinador.profile.role);
-	  toastr.success('Guardado correctamente.');
-		this.nuevo = true;
-		this.coordinador = {};
-		$('.collapse').collapse('hide');
-		this.nuevo = true;	
-		form.$setPristine();
-		form.$setUntouched();	
-		this.validaUsuario = false;
-		this.validaContrasena = false;
+		Meteor.call('generarUsuario', "c", coordinador, coordinador.profile.role, function(error, result){
+			if(error){
+				toastr.error('Error al guardar los datos.');
+				console.log(error);
+			}else{
+				toastr.success('Guardado correctamente.');
+				rc.nuevo = true;
+				rc.coordinador = {};
+				$('.collapse').collapse('hide');
+				form.$setPristine();
+				form.$setUntouched();	
+			}
+		});
 	};
 	
 	this.editar = function(id)
@@ -89,18 +89,16 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
     this.action = false;
     $('.collapse').collapse('show');
     this.nuevo = false;
-    this.usernameSeleccionado = this.coordinador.username;
-    this.validaUsuario = true;
 	};
 	
 	this.actualizar = function(coordinador,form)
 	{
-		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+		if(form.$invalid){
       toastr.error('Error al actualizar los datos.');
       return;
 		}
 		coordinador.profile.nombreCompleto = coordinador.profile.nombre  + " " + coordinador.profile.apPaterno + " " + (coordinador.profile.apMaterno ? coordinador.profile.apMaterno : "");
-		Meteor.call('updateGerenteVenta', coordinador, coordinador.profile.role);
+		Meteor.call('modificarUsuario', coordinador, coordinador.profile.role);
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
@@ -115,39 +113,5 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			rc.coordinador.profile.fotografia = data;
 		});
 	};
-	
-	this.validarUsuario = function(username){
-		if(this.nuevo){
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				rc.validaUsuario = false;
-			}else{
-				rc.validaUsuario = true;
-			}
-		}else{
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				var usuario = Meteor.users.findOne({username : username});
-				if(rc.usernameSeleccionado == usuario.username){
-					rc.validaUsuario = true;
-				}else{
-					rc.validaUsuario = false;
-				}
-			}else{
-				rc.validaUsuario = true;
-			}
-		}		
-	}
-	
-	this.validarContrasena = function(contrasena, confirmarContrasena){
-		if(contrasena && confirmarContrasena){
-			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
-				rc.validaContrasena = true;
-			}else{
-				rc.validaContrasena = false;
-			}
-		}
-	}
-	
 	
 };

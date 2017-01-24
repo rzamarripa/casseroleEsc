@@ -34,7 +34,7 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
  
 	this.guardar = function(recepcionista,form)
 	{		
-		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+		if(form.$invalid){
       toastr.error('Error al guardar los datos.');
       return;
 	  }
@@ -42,19 +42,22 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 		recepcionista.profile.estatus = true;
 		recepcionista.profile.campus_id = Meteor.user().profile.campus_id;
 		recepcionista.profile.seccion_id = Meteor.user().profile.seccion_id;
-		recepcionista.usuarioInserto = Meteor.userId();
+		recepcionista.profile.usuarioInserto = Meteor.userId();
 		recepcionista.profile.nombreCompleto = recepcionista.profile.nombre  + " " + recepcionista.profile.apPaterno + " " + (recepcionista.profile.apMaterno ? recepcionista.profile.apMaterno : "");
 		
-		Meteor.call('createGerenteVenta', recepcionista, "recepcionista");
-	  toastr.success('Guardado correctamente.');
-		this.nuevo = true;
-		this.recepcionista = {};
-		$('.collapse').collapse('hide');
-		this.nuevo = true;	
-		form.$setPristine();
-		form.$setUntouched();	
-		this.validaUsuario = false;
-		this.validaContrasena = false;
+		Meteor.call('generarUsuario', "r", recepcionista, 'recepcionista', function(error, result){
+			if(error){
+				toastr.error('Error al guardar los datos.');
+				console.log(error);
+			}else{
+				toastr.success('Guardado correctamente.');
+				rc.nuevo = true;
+				rc.recepcionista = {};
+				$('.collapse').collapse('hide');
+				form.$setPristine();
+				form.$setUntouched();	
+			}
+		});
 	};
 	
 	this.editar = function(id)
@@ -69,12 +72,12 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 	
 	this.actualizar = function(recepcionista,form)
 	{
-		if(form.$invalid || !rc.validaUsuario || !rc.validaContrasena){
+		if(form.$invalid){
       toastr.error('Error al actualizar los datos.');
       return;
 		}
 		recepcionista.profile.nombreCompleto = recepcionista.profile.nombre  + " " + recepcionista.profile.apPaterno + " " + (recepcionista.profile.apMaterno ? recepcionista.profile.apMaterno : "");
-		Meteor.call('updateGerenteVenta', recepcionista, "recepcionista");
+		Meteor.call('modificarUsuario', recepcionista, "recepcionista");
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
@@ -88,40 +91,6 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 		$meteor.getPicture({width:200, height: 200, quality: 50}).then(function(data){
 			rc.recepcionista.profile.fotografia = data;
 		});
-	};
-	
-	this.validarUsuario = function(username){
-		if(this.nuevo){
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				rc.validaUsuario = false;
-			}else{
-				rc.validaUsuario = true;
-			}
-		}else{
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				var usuario = Meteor.users.findOne({username : username});
-				if(rc.usernameSeleccionado == usuario.username){
-					rc.validaUsuario = true;
-				}else{
-					rc.validaUsuario = false;
-				}
-			}else{
-				rc.validaUsuario = true;
-			}
-		}		
-	}
-	
-	this.validarContrasena = function(contrasena, confirmarContrasena){
-		if(contrasena && confirmarContrasena){
-			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
-				rc.validaContrasena = true;
-			}else{
-				rc.validaContrasena = false;
-			}
-		}
-	}
-	
+	};	
 	
 };

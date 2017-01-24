@@ -21,3 +21,11 @@ Meteor.publish("todosUsuarios", function(options){
 Meteor.publish("validaUsuarios", function(){
 	return Roles.getUsersInRole( ['director', 'coordinadorFinanciero', 'coordinadorAcademico', 'gerenteVenta', 'vendedor', 'recepcionista'] );
 });
+
+Meteor.publish("gerentesVenta", function(options){
+	return Meteor.users.find(options)
+});
+
+Meteor.publish("coordinadores", function(options){
+	return Meteor.users.find(options)
+});

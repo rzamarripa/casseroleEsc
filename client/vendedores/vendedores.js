@@ -6,35 +6,25 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;  
-  this.validaUsuario = false;
-  this.validaContrasena = false;
-  this.usernameSeleccionado = "";
-  
-	this.subscribe('validaUsuarios',()=>{
-		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
+  this.cantidadVendedores = 0;
+  	
+	this.subscribe('campus', ()=>{
+		return [{estatus:true, _id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+	});	
 	
+	this.subscribe('vendedoresGerentes', ()=>{
+		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["vendedor", "gerenteVenta"]}}]
+	});	
  
   this.helpers({
 	  vendedores : () => {
-		  var usuarios = Meteor.users.find().fetch();
-		  var vendedores = [];
-		  _.each(usuarios, function(usuario){
-			  if(usuario.roles[0] == "vendedor" && usuario.profile.campus_id == (Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" )){
-				  vendedores.push(usuario);
-			  }
-		  });
-		  return vendedores;
+		  return Meteor.users.find({roles : ["vendedor"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});
 	  },
+	  campus : () => {
+			return Campus.findOne();
+		},
 	  gerentesVenta : () => {
-		  var usuarios = Meteor.users.find().fetch();
-		  var gerentes = [];
-		  _.each(usuarios, function(usuario){
-			  if(usuario.roles[0] == "gerenteVenta" && usuario.profile.campus_id == (Meteor.user() != undefined ? Meteor.user().profile.campus_id : "")){
-				  gerentes.push(usuario);
-			  }
-		  });
-		  return gerentes;
+		  return Meteor.users.find({roles : ["gerenteVenta"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});	  
 	  }
   });  
   
@@ -52,18 +42,25 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
       toastr.error('Error al guardar los datos.');
       return;
     }
-		vendedor.profile.estatus = true;
+    
+    vendedor.profile.estatus = true;
 		vendedor.profile.campus_id = Meteor.user().profile.campus_id;
-		//vendedor.profile.seccion_id = Meteor.user().profile.seccion_id;
-		vendedor.usuarioInserto = Meteor.userId();
-		Meteor.call('createGerenteVenta', vendedor, 'vendedor');
-	  toastr.success('Guardado correctamente.');
-		this.nuevo = true;
-		this.vendedor = {};
-		$('.collapse').collapse('hide');
-		this.nuevo = true;	
-		form.$setPristine();
-		form.$setUntouched();	
+		vendedor.profile.seccion_id = Meteor.user().profile.seccion_id;
+		vendedor.profile.usuarioInserto = Meteor.userId();
+		Meteor.call('generarUsuario', "v", vendedor, 'vendedor', function(error, result){
+			if(error){
+				toastr.error('Error al guardar los datos.');
+				console.log(error);
+			}else{
+				toastr.success('Guardado correctamente.');
+				rc.nuevo = true;
+				rc.vendedor = {};
+				$('.collapse').collapse('hide');
+				form.$setPristine();
+				form.$setUntouched();	
+			}
+		});
+		
 	};
 	
 	this.editar = function(id)
@@ -78,17 +75,17 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	
 	this.actualizar = function(vendedor,form)
 	{
-			if(form.$invalid){
-		        toastr.error('Error al actualizar los datos.');
-		        return;
-		  }
-			
-			Meteor.call('updateGerenteVenta', vendedor, 'vendedor');
-			toastr.success('Actualizado correctamente.');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-			form.$setUntouched();
+		if(form.$invalid){
+      toastr.error('Error al actualizar los datos.');
+      return;
+	  }
+		
+		Meteor.call('modificarUsuario', vendedor, 'vendedor');
+		toastr.success('Actualizado correctamente.');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+		form.$setUntouched();
 	};
 		
 	this.tomarFoto = function(){
@@ -105,36 +102,4 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 			
 	}
 	
-	this.validarUsuario = function(username){
-		if(this.nuevo){
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				rc.validaUsuario = false;
-			}else{
-				rc.validaUsuario = true;
-			}
-		}else{
-			var existeUsuario = Meteor.users.find({username : username}).count();
-			if(existeUsuario){
-				var usuario = Meteor.users.findOne({username : username});
-				if(rc.usernameSeleccionado == usuario.username){
-					rc.validaUsuario = true;
-				}else{
-					rc.validaUsuario = false;
-				}
-			}else{
-				rc.validaUsuario = true;
-			}
-		}		
-	}
-	
-	this.validarContrasena = function(contrasena, confirmarContrasena){
-		if(contrasena && confirmarContrasena){
-			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
-				rc.validaContrasena = true;
-			}else{
-				rc.validaContrasena = false;
-			}
-		}
-	}
 };

@@ -1,3 +1,3 @@
-Meteor.publish("vendedores", function(){
-	return Roles.getUsersInRole( ['vendedor','gerenteVenta']);
+Meteor.publish("vendedoresGerentes", function(options){
+	return Meteor.users.find(options)
 });

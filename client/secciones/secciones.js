@@ -22,6 +22,7 @@ function SeccionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams)
   this.subscribe("deptosAcademicos",()=>{
 		return [{estatus:true, campus_id : this.getReactively("parametros.campus_id") }]
 	});
+	
   this.subscribe("turnos",()=>{
 		return [{estatus:true, campus_id : this.getReactively("parametros.campus_id") }]
 	});

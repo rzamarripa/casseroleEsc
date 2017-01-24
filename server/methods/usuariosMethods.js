@@ -96,4 +96,60 @@ Meteor.methods({
 		
 		Accounts.setPassword(idTemp, usuario.password, {logout: false});		
 	},
+	cantidadVendedores : function(campus_id) {
+	  var cantidad = Meteor.users.find({roles : ["vendedor"], "profile.campus_id" : campus_id}).count();
+	  return cantidad;
+  },
+  generarUsuario : function (prefijo, usuario, rol){
+	  
+	  //Reviso cuantos usuario hay con el rol asignado de ese campus
+	  var cantidadUsuarios = 0;
+	  if(prefijo == "c"){
+		  cantidadUsuarios = Meteor.users.find({"profile.campus_id": usuario.profile.campus_id, roles : { $in : ["coordinadorAcademico", "coordinadorFinanciero"]}}).count();
+	  }else{
+		  cantidadUsuarios = Meteor.users.find({"profile.campus_id": usuario.profile.campus_id, roles : [rol]}).count();
+	  }
+	  	  
+	  var campus = Campus.findOne({_id : usuario.profile.campus_id});
+		var usuarioAnterior = 0;
+	  anio = '' + new Date().getFullYear();
+	  anio = anio.substring(2,4);
+	  
+	  //Si existen Usuarios generamos el usuario siguiente
+		if(cantidadUsuarios > 0){
+	  	var usuarioOriginal = anio + campus.clave + "0000";
+	  	var usuarioOriginalN = parseInt(usuarioOriginal);
+	  	var usuarioNuevo = usuarioOriginalN + cantidadUsuarios + 1;
+	  	usuarioNuevo = prefijo + usuarioNuevo;
+			usuario.username = usuarioNuevo;
+		  usuario.profile.usuario = usuarioNuevo;
+		  usuario.password = "123qwe";
+		  
+	  }else{
+		  
+		  //Si no existen Usuarios generamos al primero
+		  usuario.username = prefijo + anio + campus.clave + "0001";
+		  usuario.profile.usuario = prefijo + anio + campus.clave + "0001";
+		  usuario.password = "123qwe";
+	  }
+
+	  var usuario_id = Accounts.createUser({
+			username: usuario.username,
+			password: usuario.password,
+			profile: usuario.profile
+		});
+		
+		Roles.addUsersToRoles(usuario_id, rol);
+	  
+  },
+  modificarUsuario: function (usuario, rol) {		
+		var user = Meteor.users.findOne(usuario._id);
+	  Meteor.users.update({_id: user._id}, {$set:{
+			username: usuario.username,
+			roles: [rol],
+			profile: usuario.profile
+		}});
+		
+		Accounts.setPassword(user._id, usuario.password, {logout: false});		
+	},
 });

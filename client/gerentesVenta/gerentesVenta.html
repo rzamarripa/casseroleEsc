@@ -7,32 +7,7 @@
 		</a>
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form" novalidate >
-		  	<div class="well">	    
-			    <div class="row">
-			    	<div class="col-sm-4" valida>	
-				    	<label>Usuario *</label>
-				    	<div class="input-group">					    	
-								<input type="text" class="form-control" name="usuario" ng-model="gv.gerenteVenta.username" ng-change="gv.validarUsuario(gv.gerenteVenta.username)" required>
-								<span class="input-group-addon">
-									<i class="fa fa-{{gv.validaUsuario ? 'check text-success' : 'remove text-danger'}}"></i>
-								</span>
-							</div>	
-							<div class="note note-success" ng-if="!gv.validaUsuario == true">Este usuario no está disponible.</div>
-			    	</div>
-			    	<div class="col-sm-4" ng-class="!gv.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
-				    	<label>Contraseña *</label>
-				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
-				    	ng-model="gv.gerenteVenta.password" 
-				    	ng-change="gv.validarContrasena(gv.gerenteVenta.password, gv.gerenteVenta.confirmarContrasena)" required>
-			    	</div>		    				    	    
-			    	<div class="col-sm-4" ng-class="!gv.validaContrasena == true ? 'has-error' : 'has-success'" valida>					    
-				    	<label>Confirmar Contraseña *</label>
-				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
-				    	ng-model="gv.gerenteVenta.confirmarContrasena" 
-				    	ng-change="gv.validarContrasena(gv.gerenteVenta.password, gv.gerenteVenta.confirmarContrasena)" required>
-				    	<div class="note note-success" ng-if="!gv.validaContrasena == true">Las contraseñas no coinciden.</div>
-						</div>
-			    </div>
+		  	<div class="well">
 			    <div class="row">
 			    	<div class="col-sm-4" valida>
 			    		<label>Nombre *</label>
