@@ -124,6 +124,16 @@ angular.module('casserole').config(['$injector', function ($injector) {
 	      }]
 	    },
     })
+    .state('root.otrosCobros', {
+      url: '/otrosCobros',
+      templateUrl: 'client/planPagos/otrosCobros/otrosCobros.html',      
+      controller: 'OtrosCobrosCtrl as oc',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    },
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',

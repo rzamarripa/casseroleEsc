@@ -6,8 +6,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	rc = $reactive(this).attach($scope);
 	
-	window.rc = rc;
-		
 	this.masInfo = true;
 	this.totalPagar = 0.00;
 	this.alumno = {};
@@ -864,22 +862,21 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			diaActual = moment(new Date()).weekday();
 			semanaPago = moment(new Date()).isoWeek();
 			anioPago = moment(new Date()).get('year');
-		
 			pago.estatus = 1;
-			pago.usuarioAtendio = Meteor.user()._id;
-			pago.inscripcion_id = rc.inscripciones[0]._id
+			pago.usuarioInserto = Meteor.user()._id;
+			pago.inscripcion_id = rc.inscripciones[0]._id;
+			pago.campus_id = rc.alumno.profile.campus_id;
+			pago.seccion_id = rc.alumno.profile.seccion_id;
 			pago.dia = diaActual;
 			pago.semana = semanaPago;
 			pago.anio = anioPago;
 			pago.alumno_id = $stateParams.alumno_id;
 			pago.modulo = "Otro";
-
-
-			//this.aula.seccion_id = Meteor.user().profile.seccion_id;
-			//aula.usuarioInserto = Meteor.userId();	
+			pago.fecha = new Date();
+			
 			PlanPagos.insert(pago);
 			toastr.success('Guardado correctamente.');
-			otroPago = {}; 
+			this.otroPago = {}; 
 
 	};
 	

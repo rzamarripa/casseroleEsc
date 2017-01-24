@@ -205,9 +205,6 @@ Meteor.methods({
 						})
 					}
 				}
-				
-				//Recorrer los pagados de cada alumno de cada grupo
-				
 			})
 		})
 		
@@ -215,28 +212,8 @@ Meteor.methods({
 		_.each(arreglo,function(obj){
 			obj.alumnos = _.toArray(obj.alumnos);
 		});
-	  //arreglo.push({deuda : totalDeuda, recargos : totalRecargos, total : total});
-	  //arreglo = _.sortBy(arreglo, "total");
-	  //arreglo = arreglo.reverse();
+		
 		return arreglo;
 	}
 })
 
-
-/*
-
-{
-	_id : "a90324alsdjfsdfj",
-	alumnos : [
-		{
-			alumno_id : "2340298klajsdfal",
-			inscripcion_id : "2034lkasjdfañlsjf"
-		},
-		{
-			alumno_id : "asdlkfjaf20234",
-			inscripcion_id : "heiwpm3042nfjd"
-		}
-	],
-	anio : 2016
-}
-*/
