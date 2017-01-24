@@ -96,7 +96,6 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		maestro.usuarioActualizo = Meteor.userId();
 		var id = Maestros.update({_id:idTemp},{$set:maestro});
 		maestro.maestro_id = idTemp;
-		console.log(idTemp);
 		Meteor.call('updateUsuario', maestro, idTemp, 'maestro');
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
@@ -141,11 +140,9 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 				rc.validaUsuario = true;
 			}
 		}else{
-			console.log(rc.usernameSeleccionado);
 			var existeUsuario = Meteor.users.find({username : username}).count();
 			if(existeUsuario){
 				var usuario = Meteor.users.findOne({username : username});
-				console.log(usuario)
 				if(rc.usernameSeleccionado == usuario.username){
 					rc.validaUsuario = true;
 				}else{

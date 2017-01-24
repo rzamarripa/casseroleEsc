@@ -549,6 +549,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 		inscripcion.estatus = 1;
 		inscripcion.semana = moment(new Date()).isoWeek();
+
 		//inscripcion.abono = 0.00;
 		
 		//Crear alumno a partir del prospecto
@@ -614,18 +615,20 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 						inscripcion.pago_id = Pagos.insert({
 							fechaPago 	: new Date(),
 							alumno_id 	: rc.inscripcion.alumno_id,
-							grupo_id	: rc.inscripcion.grupo_id,
+							grupo_id		: rc.inscripcion.grupo_id,
 							seccion_id  : Meteor.user().profile.seccion_id,
 							campus_id 	: Meteor.user().profile.campus_id,
-							estatus 	: 1,
-							usuario_id 	: Meteor.userId(),
-							importe 	: rc.inscripcion.importePagado-rc.inscripcion.cambio,
+							estatus 		: 1,
+							usuarioInserto_id 	: Meteor.userId(),
+							importe 		: rc.inscripcion.importePagado-rc.inscripcion.cambio,
 							cuenta_id   : rc.cuentaInscripcion._id,
 							diaPago     : rc.diaActual,
 							mesPago     : rc.mesPago,
 							semanaPago  : rc.semanaPago,
 							anioPago    : rc.anioPago,
-							inscripcion_id : inscripcion._id
+							inscripcion_id : inscripcion._id,
+							modulo 			: "inscripcion",
+							descripcion : "inscripcion"
 						});
 						Meteor.call("generaPlanPagos", inscripcion,  (err, res) => {
 							if(err){

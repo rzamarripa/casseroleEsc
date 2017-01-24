@@ -27,14 +27,13 @@ Meteor.methods({
     }
   },
   cantidadAlumnos : function(campus_id) {
-	  console.log("campus", campus_id);
 	  var cantidad = Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus_id}).count();
-	  console.log("cantidadAlumnos", cantidad)
 	  return cantidad;
   },
   generaPlanPagos : function(inscripcion) {
 	 
 	  var mfecha = moment(new Date());
+	  var cuentaActiva = Cuentas.findOne({estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""});
 	  _.each(inscripcion.planPagos.fechas, function(pago){
 		  var nuevoPago = {};
 		  if(pago.estatus == 1){
@@ -59,7 +58,7 @@ Meteor.methods({
 					pago              : pago.pago,
 					fechaPago         : new Date(mfecha.toDate().getTime()),
 					mesPago			  		: mfecha.get('month') + 1,
-				    anioPago		  		: mfecha.get('year'),
+				  anioPago		  		: mfecha.get('year'),
 					semanaPago        : mfecha.isoWeek(),
 					diaPago           : mfecha.weekday(),
 					faltante          : pago.importeRegular-pago.pago,
@@ -68,12 +67,15 @@ Meteor.methods({
 					modificada        : false,
 					mes               : pago.mes,
 					anio              : pago.anio,
-					pago_id           : inscripcion.pago_id
-					
+					pago_id           : inscripcion.pago_id,
+					modulo						: "colegiatura",
+					cuenta_id					: cuentaActiva._id,
+					descripcion				: "Colegiatura",
+					usuarioInserto_id : Meteor.userId()
 				}
 				
 		  }else{
-		  		var fechaActual = moment();
+		  	var fechaActual = moment();
 				var fechaCobro = moment(pago.fecha);
 				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
@@ -86,8 +88,8 @@ Meteor.methods({
 				}
 				
 
-			    nuevoPago = {
-			  		alumno_id         : inscripcion.alumno_id,
+		    nuevoPago = {
+		  		alumno_id         : inscripcion.alumno_id,
 					inscripcion_id    : inscripcion._id,
 					vendedor_id       : inscripcion.vendedor_id,
 					seccion_id        : inscripcion.seccion_id,
@@ -106,8 +108,8 @@ Meteor.methods({
 					importe           : pesos,
 					faltante          : pago.faltante,
 					pago              : 0,
-					mesPago			  : undefined,
-				    anioPago		  : undefined,
+					mesPago					  : undefined,
+				  anioPago				  : undefined,
 					fechaPago         : undefined,
 					semanaPago        : undefined,
 					diaPago           : undefined,
@@ -116,19 +118,21 @@ Meteor.methods({
 					modificada        : false,
 					mes               : pago.mes,
 					anio              : pago.anio,
-					pago_id           : undefined
+					pago_id           : undefined,
+					modulo						: "colegiatura",
+					cuenta_id					: cuentaActiva._id,
+					descripcion				: "Colegiatura"			
 				}
-		  }
+	  	}
 		  
 			PlanPagos.insert(nuevoPago);
 		})
-	  inscripcion.planPagos.fechas=undefined;
+	  inscripcion.planPagos.fechas = undefined;
 
 	  for(var idd in inscripcion.pagos){
-	  	if(inscripcion.pagos[idd].estatus!=0)
+	  	if(inscripcion.pagos[idd].estatus != 0)
 	  		inscripcion.pagos[idd].pago_id = inscripcion.pago_id;
 	  }
-	   console.log("inscripcion", inscripcion);
 	  Inscripciones.update({_id:inscripcion._id},{$set:{pagos:inscripcion.pagos,planPagos:inscripcion.planPagos}});
   },
   reactivarPlanPagos : function(inscripcion) {

@@ -243,7 +243,7 @@
 											</div>
 										</header>	
 										<div >
-											<h2> Conceptos de inscripcion : </h2>	
+											<h2> Conceptos de inscripción : </h2>	
 											<fieldset>
 												<div class="row">
 												<section class="col col-2" ng-click="al.seleccionarConcepto(cobro,curso)" ng-repeat = "cobro in curso.pagos" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
@@ -300,33 +300,50 @@
 												</section>
 											</div>
 										</fieldset>
-										<div class="well well-sm  bg-color-darken txt-color-white no-border">
-											<div class="fa-lg">
+										<div class="row" style="margin-right: 2px;">
+											<div class="col-sm-9">
 												
-												Total abonado :
-												<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
-												
-											</div>			
-
+											</div>
+											<div class="col-sm-3">
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total abonado :
+													<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
+												</p>
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total a pagar :
+													<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
+												</p>
+												<p class="font-lg bg-color-darken txt-color-white no-border">
+													Total :
+													<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+												</p>
+											</div>
+											
+<!--
+											<div class="col-sm-3" style="padding: 30px;">
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total abonado :
+														<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
+													</div>
+												</div>
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total a pagar :
+														<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
+													</div>			
+												</div>
+												<div class="well well-sm  bg-color-darken txt-color-white no-border">
+													<div class="fa-lg">
+														Total  :
+														<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+													</div>			
+												</div>
+											</div>
+-->
+											
 										</div>
-										<div class="well well-sm  bg-color-darken txt-color-white no-border">
-											<div class="fa-lg">
-												
-												Total a Pagar :
-												<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
-												
-											</div>			
-
-										</div>
-										<div class="well well-sm  bg-color-darken txt-color-white no-border">
-											<div class="fa-lg">
-												
-												Total  :
-												<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
-												
-											</div>			
-
-										</div>
+										
 
 										<div ng-if="al.inscripcionCompleta(curso)">
 											<div class="pull-left" style="margin:20px;" >
@@ -440,19 +457,23 @@
 		          <div class="widget-body">
 			          <div class="col-sm-1">
 		    	 				<label>Cantidad</label>
-						    	<input type="text" class="form-control" placeholder="" ng-model="al.otroPago.cantidad"  >
+						    	<input type="number" class="form-control" min="0" placeholder="Cant." ng-model="al.otroPago.cantidad" ng-change="al.calcularImporteOtrosPagos()" >
 		    	 			</div>
 		    	 			<div class="col-sm-3" >
 									<label for="concepto">Concepto</label>
-									<select name="concepto" class="form-control" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" >
+									<select name="concepto" class="form-control select2" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" ng-change="al.getConceptoPago(al.otroPago.concepto_id)" >
 									  <option ng-repeat="concepto in al.conceptosPago" value="{{concepto._id}}">
 									  	{{concepto.nombre}}
 									  </option>
 									</select>
 								</div>
+								<div class="col-sm-1">
+		    	 				<label>Precio Unitario</label>
+						    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe" ng-change="al.calcularImporteOtrosPagos()">
+		    	 			</div>
 								<div class="col-sm-3">
 		    	 				<label>Importe</label>
-						    	<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe"  >
+						    	<input type="number" class="form-control" placeholder="Total" ng-model="al.otroPago.total" ng-disabled="" >
 		    	 			</div>	
 		    	 			<div class="col-sm-3"><br/>
 		    	 				<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >

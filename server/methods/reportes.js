@@ -14,7 +14,6 @@ Meteor.methods({
 			    arreglo[etapaVenta.nombre].medios[medio.nombre] = {};
 					arreglo[etapaVenta.nombre].medios[medio.nombre].nombre = medio.nombre;
 					arreglo[etapaVenta.nombre].medios[medio.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lte: new Date(fechaFinal)}, "profile.medio_id" : medio._id, "profile.etapaVenta_id" : etapaVenta._id}).count();
-					// console.log(Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal)}, "profile.medio_id" : medio._id, "profile.etapaVenta_id" : etapaVenta._id}).fetch())
 				});
 			}
     });
@@ -50,7 +49,7 @@ Meteor.methods({
 	    if(arreglo[etapaVenta.nombre] == undefined){
 				arreglo[etapaVenta.nombre] = {};
 				arreglo[etapaVenta.nombre].etapaVenta = etapaVenta.nombre;
-				arreglo[etapaVenta.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lte: new Date(fechaFinal)}, "profile.etapaVenta_id" : etapaVenta._id}).count();
+				arreglo[etapaVenta.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial.setHours(24)), $lte: new Date(fechaFinal)}, "profile.etapaVenta_id" : etapaVenta._id}).count();
 			}
     });
     
@@ -59,11 +58,19 @@ Meteor.methods({
 		arregl = _.toArray(arreglo);
     return _.toArray(arreglo);
   },
-  historialOtrosCobros : function (fechaInicial, fechaFinal, seccion_id) {
+  historialOtrosCobros : function (fechaInicial, fechaFinal, seccion_id, usuario_id) {
 	  fechaInicial = moment(fechaInicial).add(-1, "days");
-	  var otrosPagos = PlanPagos.find({seccion_id : seccion_id, fecha : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal)}}).fetch();
+	  if(usuario_id == "todos" || usuario_id == undefined){
+		 var otrosPagos = PlanPagos.find({seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}).fetch(); 
+	  }else{
+		  var otrosPagos = PlanPagos.find({usuarioInserto_id : usuario_id, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}).fetch();
+	  }
+	  
 	  _.each(otrosPagos, function(pago){
 		  pago.concepto = ConceptosPago.findOne({_id : pago.concepto_id});
+		  pago.alumno = Meteor.users.findOne({_id : pago.alumno_id});
+		  pago.cuenta = Cuentas.findOne({_id : pago.cuenta_id});
+		  pago.usuarioInserto = Meteor.users.findOne({_id : pago.usuarioInserto_id});
 	  })
 	  return otrosPagos;
   }

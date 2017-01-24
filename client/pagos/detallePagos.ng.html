@@ -1,0 +1,53 @@
+<div class="row">
+	<div class="col-sm-12">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i> 
+				{{pa.alumno.nombreCompleto}}
+			<saln>&gt; 
+				Pagos
+			</saln>
+		</h1>
+	</div>
+</div>
+<div class="row" style="padding: 50px;">
+	<div class="col-sm-12">
+		<article class="sortable-grid ui-sortable">
+			<div class="jarviswidget jarviswidget-color-blueDark jarviswidget-sortable" id="wid-id-3" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-togglebutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" role="widget">
+				
+				<header role="heading"><div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-delete-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Delete"><i class="fa fa-times"></i></a></div>
+					<span class="widget-icon"> <i class="fa fa-dollar"></i> </span>
+					<h2>Lista de pagos realizados al momento</h2>		
+				<span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
+				<div role="content">
+					<table class="table table-bordered table-striped table-hover">
+						<tr>
+							<th>No.</th>
+							<th>Fecha</th>
+							<th>Semana</th>
+							<th>Descripción</th>
+							<th>Importe</th>
+							<th>Acciones</th>
+						</tr>
+						<tr ng-repeat="pago in pa.misPagos">
+							<td>{{$index+1}}</td>
+							<td>{{pago.fecha | date: short}}</td>
+							<td>{{pago.semana}}</td>
+							<td>{{pago.descripcion}}</td>
+							<td class="text-right">{{pago.importe | currency}}</td>
+							<td class="text-center">
+								<button class="btn btn-danger" ng-click="pa.eliminar($index, pago)"><i class="fa fa-trash white"></i></button>
+								<button class="btn btn-warning" ng-click="pa.editar(pago)"><i class="fa fa-pencil white"></i></button>
+								<button class="btn btn-primary" ng-click="pa.imprimir(pago)"><i class="fa fa-print white"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">Total</td>
+							<td class="text-right">{{pa.totalPagado() | currency}}</td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</article>
+	</div>
+</div>

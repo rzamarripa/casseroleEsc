@@ -10,12 +10,32 @@ function OtrosCobrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
   this.fechaFinal = new Date();
   this.otrosCobros = [];
   this.totales = 0.00;
-  window.rc = rc;
+  
+  this.subscribe('todosUsuarios',()=>{
+		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
+	});
 	
-	this.calcularCobros = function(fechaInicial, fechaFinal){
+	this.helpers({
+		usuarios : () => {
+			var usuarios = Meteor.users.find().fetch();
+			if(usuarios != undefined){
+				_.each(usuarios, function(usuario, index){
+					if(usuario.profile.seccion_id != Meteor.user().profile.seccion_id){
+						usuarios.splice(index, 1);
+					}
+				})
+			}
+			return usuarios;			
+		}
+	});
+	
+	this.calcularCobros = function(fechaInicial, fechaFinal, usuario_id, form){
+		if(form.$invalid){
+			toastr.error('Error al enviar los datos, por favor llene todos los campos.');
+			return;
+    }
 		this.totales = 0.00;
-		Meteor.apply('historialOtrosCobros', [this.fechaInicial, this.fechaFinal, Meteor.user().profile.seccion_id], function(error, result){
-		  console.log(result);
+		Meteor.apply('historialOtrosCobros', [this.fechaInicial, this.fechaFinal, Meteor.user().profile.seccion_id, usuario_id], function(error, result){
 		  _.each(result, function(cobro){
 			  rc.totales += cobro.importe;
 		  })

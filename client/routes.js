@@ -56,6 +56,12 @@ angular.module('casserole').config(['$injector', function ($injector) {
           );
         }]
       }
+    })
+    .state('anon.pagosImprimir', {
+      url: '/pagosImprimir/:pago/:alumno_id',
+      templateUrl: 'client/pagos/pagosImprimir.ng.html',
+      controller: 'PagosImprimirCtrl as pi',
+     // params: { 'semanas': ':semanas' , 'id' : ':id'},
     });
   /***************************
    * Login Users Routes
@@ -189,7 +195,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
