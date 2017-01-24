@@ -33,7 +33,7 @@ Meteor.methods({
 	  return cantidad;
   },
   generaPlanPagos : function(inscripcion) {
-	  console.log("inscripcion", inscripcion);
+	 
 	  var mfecha = moment(new Date());
 	  _.each(inscripcion.planPagos.fechas, function(pago){
 		  var nuevoPago = {};
@@ -55,14 +55,14 @@ Meteor.methods({
 					importeRegular    : pago.importeRegular,
 					diasRecargo       : pago.diasRecargo,
 					diasDescuento     : pago.diasDescuento,
-					importe           : pago.importe,
+					importe           : pago.importeRegular,
 					pago              : pago.pago,
 					fechaPago         : new Date(mfecha.toDate().getTime()),
 					mesPago			  		: mfecha.get('month') + 1,
-				  anioPago		  		: mfecha.get('year'),
+				    anioPago		  		: mfecha.get('year'),
 					semanaPago        : mfecha.isoWeek(),
 					diaPago           : mfecha.weekday(),
-					faltante          : pago.faltante,
+					faltante          : pago.importeRegular-pago.pago,
 					estatus           : 1,
 					tiempoPago        : 0,
 					modificada        : false,
@@ -78,9 +78,12 @@ Meteor.methods({
 				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
 				var tiempoPago =0;
+				var pesos = pago.importeRegular;
 
-				if(diasRecargo >= pago.diasRecargo)
+				if(diasRecargo >= pago.diasRecargo){
+					pesos = pago.importeRegular+pago.importeRecargo;
 					tiempoPago =1;
+				}
 				
 
 			    nuevoPago = {
@@ -100,7 +103,7 @@ Meteor.methods({
 					importeRegular    : pago.importeRegular,
 					diasRecargo       : pago.diasRecargo,
 					diasDescuento     : pago.diasDescuento,
-					importe           : pago.importe,
+					importe           : pesos,
 					faltante          : pago.faltante,
 					pago              : 0,
 					mesPago			  : undefined,
@@ -121,7 +124,12 @@ Meteor.methods({
 		})
 	  inscripcion.planPagos.fechas=undefined;
 
-	  Inscripciones.update({_id:inscripcion._id},{$set:{planPagos:inscripcion.planPagos}});
+	  for(var idd in inscripcion.pagos){
+	  	if(inscripcion.pagos[idd].estatus!=0)
+	  		inscripcion.pagos[idd].pago_id = inscripcion.pago_id;
+	  }
+	   console.log("inscripcion", inscripcion);
+	  Inscripciones.update({_id:inscripcion._id},{$set:{pagos:inscripcion.pagos,planPagos:inscripcion.planPagos}});
   },
   reactivarPlanPagos : function(inscripcion) {
 		PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
