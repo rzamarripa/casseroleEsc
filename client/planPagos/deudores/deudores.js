@@ -9,7 +9,6 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.alumnos_id = [];
   this.deudores = [];
   this.totales = [];
-  window.rc = rc;
 	
   Meteor.apply('deudores', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.totales = result[0];
@@ -17,5 +16,4 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	  rc.deudores = result;
     $scope.$apply();
   });
-  
 };

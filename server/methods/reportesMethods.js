@@ -1,6 +1,6 @@
 Meteor.methods({
   deudores: function (seccion_id) {
-		var pagosPendientes = PlanPagos.find({estatus : true, seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0 }).fetch();
+		var pagosPendientes = PlanPagos.find({estatus : 0, modulo : "colegiatura", seccion_id : seccion_id, fecha : { $lt : new Date() } }).fetch();
 	  var arreglo = {};
 	  if(pagosPendientes != undefined){
 		  var totalDeuda = 0.00;
@@ -8,9 +8,8 @@ Meteor.methods({
 		  var total = 0.00;
 		  var hoy = moment();
 		  _.each(pagosPendientes, function(pago){
-			  var fechaPago = moment(pago.fecha);
+			  var fechaPago = moment(pago.fecha).add(-1, "days");
 			  var diasDiferencia = fechaPago.diff(hoy, "days");
-			  console.log(pago.alumno_id, diasDiferencia);
 			  var inscripcion = Inscripciones.findOne(pago.inscripcion_id);
 				var tipoColegiatura = pago.tipoPlan;
 			  if(undefined == arreglo[pago.alumno_id]){
@@ -31,13 +30,12 @@ Meteor.methods({
 				  arreglo[pago.alumno_id].pagos.push(pago);
 				  arreglo[pago.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
 				  var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : pago.alumno_id}, { sort : {fechaPago : -1}});
-				  console.log(pago.alumno_id, ultimoPago);
 				  arreglo[pago.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 				  arreglo[pago.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;
 				  arreglo[pago.alumno_id].deuda = pago.importe;
 				  totalDeuda += pago.importe;				  
 			  }else{
-				  if(( diasDiferencia * -1) > inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo){
+				  if(( diasDiferencia * -1) > pago.diasRecargo){
 					  arreglo[pago.alumno_id].modificador += pago.importeRecargo;
 					  arreglo[pago.alumno_id].total += pago.importe + pago.importeRecargo;
 					  totalRecargos += pago.importeRecargo;
@@ -77,15 +75,11 @@ Meteor.methods({
 				//Validar que el alumno está activo en su inscripción
 				if(inscripcion.estatus == 1){
 					//Obtener los pagos atrasados			
-					console.log("alumno_id", alumno.alumno_id);	
-					var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : alumno.alumno_id}, { sort : {fechaPago : -1}});
-					console.log("ultimoPago", ultimoPago)
+					var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : alumno.alumno_id, modulo : "colegiatura"}, { sort : {fechaPago : -1}});
 					//validar que haya pagado la semana actual
 					if(ultimoPago.semana >= semanaActual && ultimoPago.anio == anioActual ){
-						console.log("alumno_id semana actual", alumno.alumno_id);	
 						//Busco la siguiente semana, pero sólo 1
 						var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 1});
-						console.log("pago semana actual", pago);
 						var tipoColegiatura = pago.tipoPlan;
 						var fechaPago = moment(pago.fecha);
 					  var diasDiferencia = fechaPago.diff(hoy, "days");
@@ -101,17 +95,17 @@ Meteor.methods({
 						  arreglo[grupo._id].alumnos[alumno.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
 						  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos = [];
 						  
-						  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-							  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento * -1;
-						  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-							  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo * -1;
+						  if(parseInt(diasDiferencia) <= parseInt(pago.diasDescuento)){
+							  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = pago.importeDescuento;
+						  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+							  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = pago.importeRecargo;
 						  }
 						  
 							arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 							arreglo[grupo._id].alumnos[alumno.alumno_id].total = pago.importe;
 						  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 						  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
-							arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
+							arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = pago.importeRegular;
 					  }else{
 						  if(arreglo[grupo._id].alumnos[alumno.alumno_id] == undefined){
 	
@@ -122,21 +116,21 @@ Meteor.methods({
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos = [];
 							  
 							  // Si en ese pago tiene descuento se aplica el descuento, pero si tiene retraso se aplica el recargo
-							  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento;
-							  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo;
+							  if(parseInt(pago.diasDescuento) <= parseInt(diasDiferencia)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= pago.importeDescuento;
+							  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += pago.importeRecargo;
 							  }
 							  
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
-								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
+								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = pago.importeRegular;
 						  }else{
-							  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento * -1;
-							  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo * -1;
+							  if(parseInt(pago.diasDescuento) <= parseInt(diasDiferencia)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= pago.importeDescuento;
+							  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += pago.importeRecargo;
 							  }
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 						  }
@@ -144,10 +138,10 @@ Meteor.methods({
 						
 					}else{
 						//Busco las semanas trasadas, pero todas
-						var pagos = PlanPagos.find({seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
+						var pagos = PlanPagos.find({modulo : "colegiatura", seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
 						_.each(pagos, function(pago){
-							var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
-							var fechaPago = moment(pago.fecha);
+							var tipoColegiatura = pago.tipoPlan;
+							var fechaPago = moment(pago.fecha).add(-1, "days");
 						  var diasDiferencia = fechaPago.diff(hoy, "days");
 							
 							if(undefined == arreglo[grupo._id]){
@@ -162,17 +156,18 @@ Meteor.methods({
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos = [];
 							  
-							  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento * -1;
-							  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo * -1;
+							  if(parseInt(pago.diasDescuento) <= parseInt(diasDiferencia)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = pago.importeDescuento;
+							  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = pago.importeRecargo;
+								  pago.className = "text-danger";
 							  }
 							  
 								arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
-								arreglo[grupo._id].alumnos[alumno.alumno_id].total = pago.importe;
+								arreglo[grupo._id].alumnos[alumno.alumno_id].total = pago.importeRegular;
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
-								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
+								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = pago.importeRegular;
 						  }else{
 							  if(arreglo[grupo._id].alumnos[alumno.alumno_id] == undefined){
 		
@@ -180,24 +175,27 @@ Meteor.methods({
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].alumno_id = pago.alumno_id;
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].abono = inscripcion.abono;
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador = 0.00;
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos = [];
 								  
 								  // Si en ese pago tiene descuento se aplica el descuento, pero si tiene retraso se aplica el recargo
-								  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento * -1;
-								  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo * -1;
+								  if(parseInt(pago.diasDescuento) <= parseInt(diasDiferencia)){
+									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= pago.importeDescuento;
+								  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += pago.importeRecargo;
+									  pago.className = "text-danger";
 								  }
 								  
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
-									arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
+									arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = pago.importeRegular;
 							  }else{
-								  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
-									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= inscripcion.planPagos.colegiatura[tipoColegiatura].importeDescuento * -1;
-								  }else if(( diasDiferencia * -1) > parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo)){
-									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += inscripcion.planPagos.colegiatura[tipoColegiatura].importeRecargo * -1;
+								  if(parseInt(pago.diasDescuento) <= parseInt(diasDiferencia)){
+									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador -= pago.importeDescuento;
+								  }else if(( diasDiferencia * -1) > parseInt(pago.diasRecargo)){
+									  arreglo[grupo._id].alumnos[alumno.alumno_id].modificador += pago.importeRecargo;
+									  pago.className = "text-danger";
 								  }
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 							  }
