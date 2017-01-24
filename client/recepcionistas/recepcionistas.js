@@ -6,17 +6,14 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;
-  this.validaUsuario = false;
-  this.validaContrasena = false;
-  this.usernameSeleccionado = "";
-  
-	this.subscribe('validaUsuarios',()=>{
-		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
-	});
 	
 	this.subscribe('secciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
+	this.subscribe('recepcionistas', ()=>{
+		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["recepcionista"]}}]
+	});	
 
   this.helpers({
 	  recepcionistas : () => {
