@@ -11,6 +11,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.mesPago = moment(new Date()).get('month') + 1;
 	this.anioPago = moment(new Date()).get('year');
 	this.esNuevaInscripcion = true;
+	this.alumno = {};
 	window.rc = rc;
 
 	this.inscripcion.fechaInscripcion = new Date();
@@ -18,6 +19,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.cantidadAlumnos = 0;
 	this.prospecto = {};
 	this.alumno_id = $stateParams.alumno_id;
+	this.inscripcion.alumno_id = this.alumno_id;
 	
 	$(document).ready(function(){
 	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
@@ -82,7 +84,12 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 
 	this.helpers({
 		alumno : () => {
-			return Meteor.users.findOne({roles : ["alumno"], _id : $stateParams.alumno_id});
+			var alumno = Meteor.users.findOne({roles : ["alumno"], _id : $stateParams.alumno_id});
+			if(alumno){
+				this.inscripcion.vendedor_id = alumno.profile.vendedor_id;
+				return alumno;
+			}
+			
 		},
 		cuentaActiva : () =>{
 			return Cuentas.findOne({activo: true});
@@ -91,7 +98,6 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			return Cuentas.findOne({inscripcion: true});
 		},
 		vendedores : () => {
-			this.inscripcion.vendedor_id = rc.getReactively("alumno.profile.vendedor_id");
 			return Meteor.users.find({roles : ["vendedor"]}).fetch();
 		},
 		grupos : () => {
@@ -112,8 +118,8 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		ocupaciones :  () => {
 			return Ocupaciones.find({estatus : true});
 		},
-	   mediosPublicidad : () => {
-		  return MediosPublicidad.find();
+	  mediosPublicidad : () => {
+			return MediosPublicidad.find();
 	  }
 	});
 
@@ -372,7 +378,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
 			if(concepto.estatus){
 				this.inscripcion.totalPagar += concepto.importe;
-				this.inscripcion[connceptoId]=false;
+				//this.inscripcion[connceptoId]=false;
 				this.inscripcion.pagos[connceptoId]={
 					_id:connceptoId,
 					importeRegular:concepto.importe,
@@ -583,6 +589,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		inscripcion.estatus = 1;
 		inscripcion.semana = moment(new Date()).isoWeek();
 		var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
+		
 		Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
 		
 		inscripcion._id=Inscripciones.insert(inscripcion);

@@ -13,6 +13,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.fechaActual = new Date();
 	this.diaActual = moment(new Date()).weekday();
 	this.semanaPago = moment(new Date()).isoWeek();
+	this.anioActual = moment().get("year");
 	this.hayParaPagar = true;
 	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
 	this.planEstudios_id = [];
@@ -304,8 +305,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		}	
 		rc.pagaCon =rc.totalPagar-configuracion.abono;
-		if(rc.pagaCon <0)
-			rc.pagaCon =0;
+		if(rc.pagaCon < 0)
+			rc.pagaCon = 0;
 		rc.ttotalpagar = rc.pagaCon
 	}
 
@@ -330,6 +331,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		//var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
 		//var concepto = configuracion.colegiatura[plan[i].tipoPlan];
 		
+		
+		/* 
+			estatus 0 => Debe
+			estatus 1 => Pagada
+			estatus 2 => Cancelada
+			estatus 3 => Condonada
+			tiempoPago 1 => Atrasada
+		*/
 		if(cobro.estatus == 1)
 			return "bg-color-green txt-color-white";
 	 	if(cobro.estatus == 5 || cobro.tmpestatus==5)
@@ -340,7 +349,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	 		return "bg-color-red txt-color-white";
 	 	else if(cobro.estatus == 6)
 	 		return "bg-color-greenLight txt-color-white";
-	 	else if(cobro.tiempoPago == 1)
+	 	else if(cobro.tiempoPago == 1 || (cobro.semana < this.semanaPago && cobro.anio <= this.anioActual))
 	 		return "bg-color-orange txt-color-white";
 		
 		return "";

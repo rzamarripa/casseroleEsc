@@ -26,7 +26,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		return [{"profile.estatus" : 2, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}, {sort: {"profile.nombre":1}}]
 	});
 	
-	this.subscribe('vendedores');
+	this.subscribe('vendedores', () => {
+		return [{roles : ["vendedor"], "profile.estatus":true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
+	});
 	
 	this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
@@ -85,14 +87,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			return Cuentas.findOne({inscripcion: true});
 		},
 		vendedores : () => {
-			var usuarios = Meteor.users.find().fetch();
-			var vendedores = [];
-			_.each(usuarios, function(usuario){
-				if(usuario.roles[0] == "vendedor"&& usuario.profile.campus_id == Meteor.user().profile.campus_id ){
-					vendedores.push(usuario);
-				}
-			});
-			return vendedores;
+			return Meteor.users.find({roles : ["vendedor"]}).fetch();
 		},
 		prospectos : () => {
 			return Prospectos.find({},{sort : {"profile.nombre" : 1}});
@@ -370,12 +365,12 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		this.comisiones = [];
 		this.inscripcion.pagos={};
 		this.inscripcion.abono=0;
-
+		console.log()
 		for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
 			var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
 			if(concepto.estatus){
 				this.inscripcion.totalPagar += concepto.importe;
-				this.inscripcion[connceptoId]=false;
+				//this.inscripcion[connceptoId]=false;
 				this.inscripcion.pagos[connceptoId]={
 					_id:connceptoId,
 					importeRegular:concepto.importe,
@@ -564,7 +559,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 
 	this.cambioTipoColegiatura = function  (value) {
 		this.inscripcion.importePagado = 0.00;
-		
 		if(value=='Semanal')
 			this.inscripcion.planPagos.fechas = this.planPagosSemana()
 		if(value=='Quincenal')
@@ -581,6 +575,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			var grupo = Grupos.findOne(inscripcion.grupo_id);
 			var campus = Campus.findOne(Meteor.user().profile.campus_id);
 			inscripcion.planEstudios_id = grupo.planEstudios_id;
+			var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
 			inscripcion.campus_id = Meteor.user().profile.campus_id;
 			inscripcion.seccion_id = Meteor.user().profile.seccion_id;
 			inscripcion.estatus = 1;
@@ -635,9 +630,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 					  }else{
 						  inscripcion.alumno_id = result;
 						  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
-							var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
+							
 							Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
-							inscripcion._id=Inscripciones.insert(inscripcion);
+							inscripcion._id = Inscripciones.insert(inscripcion);
 							if(!grupo.alumnos)
 								grupo.alumnos=[];
 								

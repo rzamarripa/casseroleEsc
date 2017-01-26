@@ -44,39 +44,39 @@ angular.module("casserole")
 	
 	this.editar = function(id)
 	{
-	    this.turno = Turnos.findOne({_id:id});
-	    this.action = false;
-	    $('.collapse').collapse('show');
-	    this.nuevo = false;
+    this.turno = Turnos.findOne({_id:id});
+    this.action = false;
+    $('.collapse').collapse('show');
+    this.nuevo = false;
 	};
 	
 	this.actualizar = function(turno,form)
 	{
-			if(form.$invalid){
-        toastr.error('Error al actualizar los datos del Turno.');
-        return;
-	    }
-			var idTemp = turno._id;
-			delete turno._id;		
-			turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
-			turno.usuarioActualizo = Meteor.userId(); 
-			Turnos.update({_id:idTemp},{$set:turno});
-			toastr.success('Actualizado correctamente.');
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
+		if(form.$invalid){
+      toastr.error('Error al actualizar los datos del Turno.');
+      return;
+    }
+		var idTemp = turno._id;
+		delete turno._id;		
+		turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
+		turno.usuarioActualizo = Meteor.userId(); 
+		Turnos.update({_id:idTemp},{$set:turno});
+		toastr.success('Actualizado correctamente.');
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();
 	};
 
 	this.cambiarEstatus = function(id)
 	{
-			var turno = Turnos.findOne({_id:id});
-			if(turno.estatus == true)
-				turno.estatus = false;
-			else
-				turno.estatus = true;
-			
-			Turnos.update({_id: id},{$set :  {estatus : turno.estatus}});
+		var turno = Turnos.findOne({_id:id});
+		if(turno.estatus == true)
+			turno.estatus = false;
+		else
+			turno.estatus = true;
+		
+		Turnos.update({_id: id},{$set :  {estatus : turno.estatus}});
   };
 	
 };
