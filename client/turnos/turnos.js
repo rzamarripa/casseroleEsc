@@ -16,30 +16,30 @@ angular.module("casserole")
   this.nuevo = true;	  
   this.nuevoTurno = function()
   {
-	    this.action = true;
-	    this.nuevo = !this.nuevo;
-	    this.turno = {};		
+    this.action = true;
+    this.nuevo = !this.nuevo;
+    this.turno = {};		
   };
   
   this.guardar = function(turno,form)
 	{
-			if(form.$invalid){
-		        toastr.error('Error al guardar los datos.');
-		        return;
-		  }
-			turno.estatus = true;
-			turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
-			turno.campus_id = Meteor.user().profile.campus_id;
-			//this.turno.seccion_id = Meteor.user().profile.seccion_id;
-			turno.usuarioInserto = Meteor.userId();
-			Turnos.insert(turno);
-			toastr.success('Guardado correctamente.');
-			this.turno = {}; 
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-	    form.$setUntouched();
-			$state.go('root.turnos')
+		if(form.$invalid){
+	        toastr.error('Error al guardar los datos.');
+	        return;
+	  }
+		turno.estatus = true;
+		turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
+		turno.campus_id = Meteor.user().profile.campus_id;
+		//this.turno.seccion_id = Meteor.user().profile.seccion_id;
+		turno.usuarioInserto = Meteor.userId();
+		Turnos.insert(turno);
+		toastr.success('Guardado correctamente.');
+		this.turno = {}; 
+		$('.collapse').collapse('hide');
+		this.nuevo = true;
+		form.$setPristine();
+    form.$setUntouched();
+		$state.go('root.turnos')
 	};
 	
 	this.editar = function(id)
@@ -58,6 +58,7 @@ angular.module("casserole")
 	    }
 			var idTemp = turno._id;
 			delete turno._id;		
+			turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
 			turno.usuarioActualizo = Meteor.userId(); 
 			Turnos.update({_id:idTemp},{$set:turno});
 			toastr.success('Actualizado correctamente.');
