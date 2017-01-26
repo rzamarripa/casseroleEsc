@@ -594,6 +594,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.agregarInscripcion', {
+      url: '/agregarInscripcion/:alumno_id',
+      templateUrl: 'client/inscripciones/formAgregarInscripcion.ng.html',
+      controller: 'AgregarInscripcionCtrl as ins',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
 		.state('root.grupo', {
       url: '/grupo/:id',
       templateUrl: 'client/grupos/form.ng.html',

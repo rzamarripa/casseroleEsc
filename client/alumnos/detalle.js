@@ -100,8 +100,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		},
 		inscripciones : () =>{
 			var inscripciones = Inscripciones.find({
-				alumno_id : $stateParams.alumno_id,
-				campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+				alumno_id : $stateParams.alumno_id
 			}).fetch();
 			
 			if(inscripciones.length > 0){

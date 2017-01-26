@@ -16,6 +16,7 @@ angular
 	this.fechaFin = new Date();
 	this.fechaFin.setHours(24,0,0,0);
 	this.alumnos_id = [];
+	console.log($stateParams)
 	if($stateParams.id){
 		this.subscribe('asistencias', ()  => {
 			return [{ _id : $stateParams.id }];
@@ -26,14 +27,12 @@ angular
 		});
 	}
 		
-/*
-	this.subscribe('grupos', () => {		
+	this.subscribe('grupo', () => {		
 		return [{
 			_id : $stateParams.grupo_id
 		}]
 	});
 	
-*/
 	this.subscribe('alumnos', () => {		
 		return [{
 			_id : { $in : this.getCollectionReactively("alumnos_id")}
