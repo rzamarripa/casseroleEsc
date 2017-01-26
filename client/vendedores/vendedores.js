@@ -6,7 +6,9 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;  
-  this.cantidadVendedores = 0;
+  
+  this.validaContrasena = false;
+	this.cambiarPassword = true;
   	
 	this.subscribe('campus', ()=>{
 		return [{estatus:true, _id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
@@ -100,6 +102,27 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 			return gerente.profile.nombre + " " + gerente.profile.apPaterno+ " " + gerente.profile.apMaterno;
 		}
 			
+	}
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
+	
+	this.cambiarContrasena = function(){
+		this.cambiarPassword = !this.cambiarPassword;
+		if(this.vendedor.cambiarContrasena == false){
+			rc.vendedor.password = undefined;
+			rc.vendedor.confirmarContrasena = undefined;
+		}else{
+			rc.vendedor.password = "";
+			rc.vendedor.confirmarContrasena = "";
+		}
 	}
 	
 };

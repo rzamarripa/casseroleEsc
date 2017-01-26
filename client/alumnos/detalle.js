@@ -29,7 +29,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 	
 	this.subscribe("turnos",()=>{
-
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	

@@ -300,10 +300,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}
 		for (var i = 0; i < totalPagos; i++) {
 			var pago = {
-				semana 			    : mfecha.isoWeek(),
-				fecha 			    : new Date(mfecha.toDate().getTime()),
+				semana 			    		: mfecha.isoWeek(),
+				fecha 			    		: new Date(mfecha.toDate().getTime()),
 				dia                 : mfecha.weekday(),
-				tipoPlan 		    : 'Quincenal',
+				tipoPlan 		    		: 'Quincenal',
 				numeroPago 	        : i + 1,
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
 				importeDescuento    : this.inscripcion.planPagos.colegiatura.Mensual.importeDescuento,
@@ -318,8 +318,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				estatus             : 0,
 				tiempoPago          : 0,
 				modificada          : false,
-				mes					: mfecha.get('month') + 1,
-				anio				: mfecha.get('year')
+				mes									: mfecha.get('month') + 1,
+				anio								: mfecha.get('year')
 			}
 			
 			if(i == 0){

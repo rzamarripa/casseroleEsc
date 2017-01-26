@@ -60,6 +60,26 @@
 							<img width="100px" ng-src="{{v.vendedor.profile.fotografia}}" ng-class="{'img-thumbnail': !v.vendedor.profile.fotografia}" />
 						</div>
 			    </div>
+			    <div class="row">
+			    	<div class="col-sm-4" ng-class="!v.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="v.vendedor.password" 
+				    	ng-disabled="v.cambiarPassword"
+				    	ng-change="v.validarContrasena(v.vendedor.password, v.vendedor.confirmarContrasena)">
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" ng-class="!v.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="v.vendedor.confirmarContrasena" 
+				    	ng-disabled="v.cambiarPassword"
+				    	ng-change="v.validarContrasena(v.vendedor.password, v.vendedor.confirmarContrasena)">
+				    	<div class="note note-success" ng-if="!v.validaContrasena == true && v.vendedor.confirmarContrasena.length > 0">Las contraseñas no coinciden.</div>
+						</div>
+						<div class="col-sm-4"> 
+							<button class="btn btn-primary btn-sm" ng-click="v.cambiarContrasena()">{{(v.cambiarPassword == true) ? 'Cambiar Contraseña' : 'No cambiar'}}</button>
+						</div>
+			    </div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">

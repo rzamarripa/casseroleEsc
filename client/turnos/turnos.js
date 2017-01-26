@@ -11,7 +11,6 @@ angular.module("casserole")
 	  turnos : () => {
 		  return Turnos.find({campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" });
 	  }
-	 
   });
   	  
   this.nuevo = true;	  
@@ -29,6 +28,7 @@ angular.module("casserole")
 		        return;
 		  }
 			turno.estatus = true;
+			turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
 			turno.campus_id = Meteor.user().profile.campus_id;
 			//this.turno.seccion_id = Meteor.user().profile.seccion_id;
 			turno.usuarioInserto = Meteor.userId();

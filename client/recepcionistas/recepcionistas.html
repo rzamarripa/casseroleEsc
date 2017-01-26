@@ -7,7 +7,7 @@
 		</a>
 		<div class="collapse" id="collapseExample">
 			<form name="form" class="form-horizontal" role="form" novalidate >
-		  	<div class="well">	    
+		  	<div class="well">
 			    <div class="row">
 			    	<div class="col-sm-4" valida>
 			    		<label>Nombre *</label>
@@ -35,12 +35,32 @@
 				    	<input type="text" class="form-control" placeholder="Correo" ng-model="re.recepcionista.profile.correo">
 			    	</div>
 			    	<div class="col-sm-4">
-						<label for="talla">Fotografía</label>
-						<button class="btn btn-primary" ng-click="re.tomarFoto()"><i class="fa fa-camera"></i></button>
-						<img width="100px" ng-src="{{re.recepcionista.profile.fotografia}}" ng-class="{'img-thumbnail': !!recepcionista.profile.fotografia}" />
-					</div>
+							<label for="talla">Fotografía</label>
+							<button class="btn btn-primary" ng-click="re.tomarFoto()"><i class="fa fa-camera"></i></button>
+							<img width="100px" ng-src="{{re.recepcionista.profile.fotografia}}" ng-class="{'img-thumbnail': !!recepcionista.profile.fotografia}" />
+						</div>
 			    </div>
-				</div>
+			    <div class="row">
+			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="re.recepcionista.password" 
+				    	ng-disabled="re.cambiarPassword"
+				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)">
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" ng-class="!re.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="re.recepcionista.confirmarContrasena" 
+				    	ng-disabled="re.cambiarPassword"
+				    	ng-change="re.validarContrasena(re.recepcionista.password, re.recepcionista.confirmarContrasena)">
+				    	<div class="note note-success" ng-if="!re.validaContrasena == true && re.recepcionista.confirmarContrasena.length > 0">Las contraseñas no coinciden.</div>
+						</div>
+						<div class="col-sm-4"> 
+							<button class="btn btn-primary btn-sm" ng-click="re.cambiarContrasena()">{{(re.cambiarPassword == true) ? 'Cambiar Contraseña' : 'No cambiar'}}</button>
+						</div>
+			    </div>
+				</div>				
 				<div class="row">
 					<div class="col-sm-12">
 						<input type="submit" ng-click="re.guardar(re.recepcionista,form)" value="Guardar" class="btn btn-primary" ng-show="re.action" valida-form formulario="form"/>

@@ -6,13 +6,16 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;
+  
+	this.validaContrasena = false;
+	this.cambiarPassword = true;
 	
 	this.subscribe('secciones',()=>{
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
 	this.subscribe('recepcionistas', ()=>{
-		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["recepcionista"]}}]
+		return [{"profile.seccion_id" : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "", roles : { $in : ["recepcionista"]}}]
 	});	
 
   this.helpers({
@@ -89,5 +92,26 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 			rc.recepcionista.profile.fotografia = data;
 		});
 	};	
+	
+	this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
+	
+	this.cambiarContrasena = function(){
+		this.cambiarPassword = !this.cambiarPassword;
+		if(this.recepcionista.cambiarContrasena == false){
+			rc.recepcionista.password = undefined;
+			rc.recepcionista.confirmarContrasena = undefined;
+		}else{
+			rc.recepcionista.password = "";
+			rc.recepcionista.confirmarContrasena = "";
+		}
+	}
 	
 };

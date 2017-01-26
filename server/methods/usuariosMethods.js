@@ -150,6 +150,8 @@ Meteor.methods({
 			profile: usuario.profile
 		}});
 		
-		Accounts.setPassword(user._id, usuario.password, {logout: false});		
+		if(usuario.password != undefined){
+			Accounts.setPassword(user._id, usuario.password, {logout: false});		
+		}
 	},
 });

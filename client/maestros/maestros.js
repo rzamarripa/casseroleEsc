@@ -40,7 +40,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 					  rc.maestro.nombreUsuario = usuarioAnterior;
 				  }
 			  }else{
-				  rc.maestro.nombreUsuario = "m" + rc.getReactively("campus.clave") + "001";
+				  rc.maestro.nombreUsuario = "m" + anio + rc.getReactively("campus.clave") + "001";
 			  }
 		  }
 	  }

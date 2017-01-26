@@ -58,7 +58,27 @@
 							<img width="100px" ng-src="{{c.coordinador.profile.fotografia}}" ng-class="{'img-thumbnail': !c.coordinador.profile.fotografia}" />
 						</div>
 			    </div>
-				</div>
+			    <div class="row">
+			    	<div class="col-sm-4" ng-class="!c.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="c.coordinador.password" 
+				    	ng-disabled="c.cambiarPassword"
+				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)">
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" ng-class="!c.validaContrasena == true ? 'has-error' : 'has-success'">					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    	ng-model="c.coordinador.confirmarContrasena" 
+				    	ng-disabled="c.cambiarPassword"
+				    	ng-change="c.validarContrasena(c.coordinador.password, c.coordinador.confirmarContrasena)">
+				    	<div class="note note-success" ng-if="!c.validaContrasena == true && c.coordinador.confirmarContrasena.length > 0">Las contraseñas no coinciden.</div>
+						</div>
+						<div class="col-sm-4"> 
+							<button class="btn btn-primary btn-sm" ng-click="c.cambiarPassword = !c.cambiarPassword">{{(c.cambiarPassword == true) ? 'Cambiar Contraseña' : 'No cambiar'}}</button>
+						</div>
+			    </div>
+				</div>				
 				<div class="row">
 					<div class="col-sm-12">
 						<input type="submit" ng-click="c.guardar(c.coordinador,form)" value="Guardar" class="btn btn-primary" ng-show="c.action" valida-form formulario="form" />

@@ -10,8 +10,28 @@
 		  	<div class="well">	    
 			    <div class="row">
 			    <div class="col-sm-2" valida>
-				    <label>Turno *</label>
-			    	<input name="turno" type="text" class="form-control" placeholder="Turno" ng-model="tn.turno.nombre" required="">
+				    <label>Día Inicial *</label>
+				    <select ng-model="tn.turno.diaInicial" class="form-control">
+					    <option value="L">L</option>
+					    <option value="Ma">Ma</option>
+					    <option value="Mi">Mi</option>
+					    <option value="J">J</option>
+					    <option value="V">V</option>
+					    <option value="S">S</option>
+					    <option value="D">D</option>
+				    </select>
+			    </div>
+			    <div class="col-sm-2" valida>
+				    <label>Día Final *</label>
+				    <select ng-model="tn.turno.diaFinal" class="form-control">
+					    <option value="L">L</option>
+					    <option value="Ma">Ma</option>
+					    <option value="Mi">Mi</option>
+					    <option value="J">J</option>
+					    <option value="V">V</option>
+					    <option value="S">S</option>
+					    <option value="D">D</option>
+				    </select>
 			    </div>
 			    <div class="col-sm-3" valida>
 				    <label>Cant. Asistencias *</label>
