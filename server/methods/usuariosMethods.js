@@ -53,8 +53,7 @@ Meteor.methods({
 		Accounts.setPassword(user._id, usuario.contrasena, {logout: false});
 	},
 	createGerenteVenta: function (usuario, rol) {
-	  console.log(usuario);
-	  console.log(rol);
+	  console.log("Inscribir Alumno");
 	  
 	  usuario.profile.friends = [];
 	  

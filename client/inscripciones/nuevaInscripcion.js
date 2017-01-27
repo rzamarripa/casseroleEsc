@@ -572,114 +572,16 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.guardar = function(inscripcion) {
 		var res = confirm("Revise que la Carga Inicial esté activada en caso de inscribir alumnos ya existentes, o desactivada para inscribir un alumno a un grupo nuevo.?");
 		if(res == true){
-			var grupo = Grupos.findOne(inscripcion.grupo_id);
-			var campus = Campus.findOne(Meteor.user().profile.campus_id);
-			inscripcion.planEstudios_id = grupo.planEstudios_id;
-			var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
-			inscripcion.campus_id = Meteor.user().profile.campus_id;
-			inscripcion.seccion_id = Meteor.user().profile.seccion_id;
-			inscripcion.estatus = 1;
-			inscripcion.semana = moment(new Date()).isoWeek();
-			
-			//Crear alumno a partir del prospecto
-			
-			var prospecto = Prospectos.findOne({_id : inscripcion.prospecto_id});
-			delete prospecto._id;
-			delete prospecto.estatus;
-			var alumno = prospecto;
-			var nombre = alumno.profile.nombre != undefined ? alumno.profile.nombre + " " : "";
-			var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
-			var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
-			alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
-			alumno.profile.fechaCreacion = new Date();
-			alumno.profile.campus_id = inscripcion.campus_id;
-			alumno.profile.seccion_id = inscripcion.seccion_id;
-			alumno.profile.usuarioInserto = Meteor.userId();
-			alumno.profile.estatus = true;
-			Meteor.call('cantidadAlumnos', inscripcion.campus_id, function(error, result){
+						
+			console.log(inscripcion);
+			Meteor.call('inscribirAlumno', inscripcion, function(error, result){
 				if(error){
-					alert('Error');
+					console.log(error);
 				}else{
-					rc.cantidadAlumnos = result;
-					var matriculaAnterior = 0;
-				  anio = '' + new Date().getFullYear();
-				  anio = anio.substring(2,4);
-				  
-				  //Si existen Alumnos generamos la matrícula siguiente
-					if(rc.cantidadAlumnos > 0){
-				  	var matriculaOriginal = anio + rc.campus.clave + "0000";
-				  	var matriculaOriginalN = parseInt(matriculaOriginal);
-				  	var matriculaNueva = matriculaOriginalN+rc.cantidadAlumnos+1;
-				  	matriculaNueva = 'e'+matriculaNueva
-						alumno.username = matriculaNueva;
-					  alumno.profile.matricula = matriculaNueva;
-					  alumno.password = "123qwe";
-					  
-				  }else{
-					  //Si no existen Alumnos generamos la primer matrícula
-					  alumno.username = "e" + anio + campus.clave + "0001";
-					  alumno.profile.matricula = "e" + anio + campus.clave + "0001";
-					  alumno.password = "123qwe";
-				  }
-	
-				  //Se crea el usuario del alumno
-	
-				  Meteor.call('createGerenteVenta', alumno, 'alumno', function(error, result){
-					  if(error){
-						  console.log(error);
-					  }else{
-						  inscripcion.alumno_id = result;
-						  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
-							
-							Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
-							inscripcion._id = Inscripciones.insert(inscripcion);
-							if(!grupo.alumnos)
-								grupo.alumnos=[];
-								
-							//Se mete el objeto alumno al grupo
-							grupo.alumnos.push({alumno_id : inscripcion.alumno_id, inscripcion_id : inscripcion._id});
-							grupo.inscritos = parseInt(grupo.inscritos) + 1;
-							delete grupo._id;
-							Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
-							
-							inscripcion.pago_id = Pagos.insert({
-								fechaPago 	: new Date(),
-								alumno_id 	: rc.inscripcion.alumno_id,
-								grupo_id		: rc.inscripcion.grupo_id,
-								seccion_id  : Meteor.user().profile.seccion_id,
-								campus_id 	: Meteor.user().profile.campus_id,
-								estatus 		: 1,
-								usuarioInserto_id 	: Meteor.userId(),
-								importe 		: rc.inscripcion.importePagado-rc.inscripcion.cambio,
-								cuenta_id   : rc.cuentaInscripcion._id,
-								diaPago     : rc.diaActual,
-								mesPago     : rc.mesPago,
-								semanaPago  : rc.semanaPago,
-								anioPago    : rc.anioPago,
-								inscripcion_id : inscripcion._id,
-								modulo 			: "inscripcion",
-								descripcion : "inscripcion"
-							});
-							Meteor.call("generaPlanPagos", inscripcion,  (err, res) => {
-								if(err){
-									console.log(alert);
-								}else{
-									//success
-									toastr.success('Alumno Inscrito');
-									//Generar los pagos realizados
-									/*for (var i = 0; i < rc.pagosRealizados.length; i++) {
-										Pagos.insert(rc.pagosRealizados[i]);
-									}*/
-									for (var i = 0; i < rc.comisiones.length; i++) {
-										rc.comisiones[i].alumno_id = inscripcion.alumno_id;
-										Comisiones.insert(rc.comisiones[i]);
-									}
-							
-									$state.go("root.alumnoDetalle",{alumno_id : inscripcion.alumno_id});
-								}
-							});
-					  }
-				  });
+					if(result){
+						toastr.success('Alumno Inscrito');
+						$state.go("root.alumnoDetalle",{alumno_id : result});
+					}
 				}
 			});
 			
@@ -693,9 +595,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			for (var i = 0; i < this.comisiones.length; i++) {
 				Comisiones.insert(this.comisiones[i]);
 			}
-	*/
+
 	
 			$state.go("root.inscripciones");
+*/
 		}
 	}
 	

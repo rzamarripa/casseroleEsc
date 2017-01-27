@@ -31,6 +31,7 @@ function ConceptosComisionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			toastr.error('Error al guardar los datos.');
 			return;
 		}
+		conceptoComision.nombre = conceptoComision.cantInicial + conceptoComision.signo + conceptoComision.cantFinal;
 		conceptoComision.estatus = true;
 		conceptoComision.campus_id = Meteor.user().profile.campus_id;
 		conceptoComision.seccion_id = Meteor.user().profile.seccion_id;
@@ -61,6 +62,7 @@ function ConceptosComisionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}
 		var idTemp = conceptoComision._id;
 		delete conceptoComision._id;
+		conceptoComision.nombre = conceptoComision.cantInicial + conceptoComision.signo + conceptoComision.cantFinal;
 		conceptoComision.usuarioActualizo = Meteor.userId();
 		ConceptosComision.update({_id:idTemp},{$set:conceptoComision});
 		toastr.success('Actualizado correctamente.');
@@ -80,4 +82,24 @@ function ConceptosComisionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		
 		ConceptosComision.update({_id:id}, {$set : {estatus : conceptoComision.estatus}});
 	};
+	
+	self.probar = function(){
+		cant = this.cantInscritos;
+		console.log(cant);
+		conceptos = ConceptosComision.find({estatus : true}).fetch();
+		_.each(conceptos, function(concepto){
+			switch(concepto.signo){
+				case "<=" :
+					if(cant >= concepto.cantInicial && cant <= concepto.cantFinal){
+						self.mensaje = "Entró en la categoría de mayor o igual a " + concepto.cantInicial + " y menor o igual a " + concepto.cantFinal;
+					}
+					break;
+				case ">=" :
+					if(cant >= concepto.cantInicial && cant >= concepto.cantFinal){
+						self.mensaje = "Entró en la categoría de mayor o igual a " + concepto.cantInicial + " y mayor o igual a " + concepto.cantFinal;
+					}
+					break;
+			}
+		})
+	}
 }

@@ -7,6 +7,7 @@
 		</a>
 		
 		<div class="collapse" id="collapseExample">
+<!--
 			<form name="form" class="form-horizontal" role="form" novalidate>
 		  	<div class="well">	    
 			    <div class="row">
@@ -50,6 +51,47 @@
 					</div>
 				</div>	  
 		  </form>
+-->
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-2">
+				    	<label>Cant. Inicial *</label>
+					    <input name="cantIncial" type="number" class="form-control" ng-model="ccm.conceptoComision.cantInicial" required=""/>
+			    	</div>
+			    	<div class="col-sm-2">
+			    		<label>Signo *</label>
+			    		<select name="signoInicial" class="form-control" ng-model="ccm.conceptoComision.signo" required>
+				    		<option value=">">Mayor</option>
+				    		<option value=">=">Mayor igual</option>
+				    		<option value="<">Menor</option>
+				    		<option value="<=">Menor igual</option>
+			    		</select>
+			    	</div>
+			    	<div class="col-sm-2">
+				    	<label>Cant. Final *</label>
+					    <input name="cantFinal" type="number" class="form-control" ng-model="ccm.conceptoComision.cantFinal" required=""/>
+			    	</div>
+			    	<div class="col-sm-2" valida>
+				    	<label>Importe *</label>
+					    <input name="importe" type="number" class="form-control" ng-model="ccm.conceptoComision.importe" required=""/>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<label>Beneficiario</label>
+			    		<select class="form-control" ng-model="ccm.conceptoComision.beneficiario">
+				    		<option value="vendedor">Vendedor</option>
+				    		<option value="gerente">Gerente de Ventas</option>
+			    		</select>
+			    	</div>
+			    </div>				  
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="ccm.guardar(ccm.conceptoComision,form)" class="btn btn-primary" ng-show="ccm.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="ccm.actualizar(ccm.conceptoComision,form)" value="Actualizar" class="btn btn-primary" ng-show="!ccm.action" valida-form formulario="form" />				
+					</div>
+				</div>	  
+		  </form>
 		</div>
 	</div>
 </div>
@@ -60,11 +102,9 @@
 			<thead>
 				<tr>
 					<th width="5%"><div class="text-center">No.</div></th>
-					<th width="5%"><div class="text-center">Prioridad</div></th>
 					<th width="20%"><div class="text-center">Nombre</div></th>
-					<th width="20%"><div class="text-center">Beneficiario</div></th>
 					<th width="10%"><div class="text-center">Importe</div></th>
-					<th width="20%"><div class="text-center">Módulo</div></th>
+					<th width="20%"><div class="text-center">Beneficiario</div></th>
 					<th width="10%">
 						<div class="text-center">
 							Estatus
@@ -79,12 +119,10 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="conceptoComision in ccm.conceptosComision">
-			    <td>{{$index + 1}}</td>
-			    <td>{{conceptoComision.prioridad}}</td>
-			    <td>{{conceptoComision.nombre}}</td>
-			    <td>{{conceptoComision.beneficiario}}</td>
+			    <td class="text-center">{{$index + 1}}</td>
+			    <td class="text-center">{{conceptoComision.nombre}}</td>
 			    <td class="text-right">{{conceptoComision.importe | currency}} </td>
-			    <td>{{conceptoComision.modulo}}</td>
+			    <td>{{conceptoComision.beneficiario}}</td>
  			    <td>
 				    <div class="text-center">
 				    	<span ng-if="conceptoComision.estatus" class="label label-success">
@@ -103,10 +141,13 @@
 							    <span class="sr-only">Toggle Dropdown</span>
 							  </button>
 							  <ul class="dropdown-menu text-left dropdown-menu-right">
-							    <li><a href="#" ng-click="ccm.editar(conceptoComision._id)"><i class="fa fa-pencil"></i> Editar</a></li>
-							    <li><a href="#" ng-click="ccm.cambiarEstatus(conceptoComision._id)">
-							    				<i class="fa fa-{{conceptoComision.estatus ? 'trash' : 'check' }}"></i> {{conceptoComision.estatus ? "Desactivar" : "Activar" }}
-							    		</a>
+							    <li>
+							    	<a href="#" ng-click="ccm.editar(conceptoComision._id)"><i class="fa fa-pencil"></i> Editar</a>
+							    </li>
+							    <li>
+							    	<a href="#" ng-click="ccm.cambiarEstatus(conceptoComision._id)">
+						    			<i class="fa fa-{{conceptoComision.estatus ? 'trash' : 'check' }}"></i> {{conceptoComision.estatus ? "Desactivar" : "Activar" }}
+						    		</a>
 							    </li>
 							  </ul>
 							</div>
@@ -117,5 +158,16 @@
 		</table>
 	</div>
 </div>
-
-
+<div class="row">
+	<div class="alert alert-info">Por favor, pruebe antes de continuar si la cantidad de inscritos cae justo en el rango programado</div>
+	<div class="col-sm-2">
+  	<label>Cant. Inscritos *</label>
+    <input type="number" class="form-control" ng-model="ccm.cantInscritos"/>
+	</div>
+	<div class="col-sm-2">
+		<button class="btn btn-primary" ng-click="ccm.probar(ccm.cantInscritos)">Probar</button>
+	</div>
+	<div class="col-sm-8">
+		<h2>{{ ccm.mensaje}}</h2>
+	</div>
+</div>

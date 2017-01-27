@@ -158,6 +158,144 @@ Meteor.methods({
 		});
 		
 		console.log(grupos);
+	},
+	inscribirAlumno : function (inscripcion) {
+		
+		//VARIABLES REUTILIZABLES
+		var diaActual 	= moment(new Date()).weekday();
+		var semanaPago 	= moment(new Date()).isoWeek();
+		var mesPago 		= moment(new Date()).get('month') + 1;
+		var anioPago 		= moment(new Date()).get('year');
+		
+		//OBTENER LOS OBJETOS CON LOS QUE SE LLENARÁ LA INSCRIPCIÓN
+		var grupo 						= Grupos.findOne(inscripcion.grupo_id);
+		var planEstudio 			= PlanesEstudios.findOne(grupo.planEstudios_id)
+		var campus	 					= Campus.findOne(Meteor.user().profile.campus_id);
+		console.log("campus", campus._id);
+		var cantidadAlumnos 	= Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus._id}).count();
+		console.log(cantidadAlumnos);
+		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
+		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
+		
+		//PREPARAR AL ALUMNO
+		var prospecto = Prospectos.findOne({_id : inscripcion.prospecto_id});
+		delete prospecto._id;
+		delete prospecto.estatus;
+		var alumno 		= prospecto;
+		var nombre 		= alumno.profile.nombre 	 != undefined ? alumno.profile.nombre + " " : "";
+		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
+		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
+		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
+		alumno.profile.fechaCreacion 	= new Date();
+		alumno.profile.campus_id 			= Meteor.user().profile.campus_id;
+		alumno.profile.seccion_id 		= Meteor.user().profile.seccion_id;
+		alumno.profile.usuarioInserto = Meteor.userId();
+		alumno.profile.estatus 				= true;
+		
+		
+		//PREPARAR LA INSCRIPCIÓN
+		inscripcion.planEstudios_id = grupo.planEstudios_id;		
+		inscripcion.campus_id 			= Meteor.user().profile.campus_id;
+		inscripcion.seccion_id 			= Meteor.user().profile.seccion_id;
+		inscripcion.estatus 				= 1;
+		inscripcion.semana 					= moment(new Date()).isoWeek();
+		
+		var matriculaAnterior = 0;
+	  var anio = '' + new Date().getFullYear();
+	  anio = anio.substring(2,4);
+	  
+	  //Si existen Alumnos generamos la matrícula siguiente
+		if(cantidadAlumnos > 0){
+			console.log("entre aqui")
+	  	var matriculaOriginal 		= anio + campus.clave + "0000";
+	  	var matriculaOriginalN 		= parseInt(matriculaOriginal);
+	  	var matriculaNueva 				= matriculaOriginalN + cantidadAlumnos + 1;
+	  	matriculaNueva 						= 'e'+ matriculaNueva
+			alumno.username 					= matriculaNueva;
+		  alumno.profile.matricula 	= matriculaNueva;
+		  alumno.password 					= matriculaNueva;
+		  
+	  }else{
+		  //Si no existen Alumnos generamos la primer matrícula
+		  console.log("entre aca")
+		  alumno.username 					= "e" + anio + campus.clave + "0001";
+		  alumno.profile.matricula 	= "e" + anio + campus.clave + "0001";
+		  alumno.password 					= alumno.profile.matricula;
+	  }
+
+	  //CREAR EL USUARIO ALUMNO
+	  alumno.profile.friends = [];	 		
+		var usuario_id = Accounts.createUser({
+			username: alumno.username,
+			password: alumno.password,			
+			profile: alumno.profile
+		});
+		
+		//ASIGNAR ROL DE ALUMNO
+		Roles.addUsersToRoles(usuario_id, "alumno");
+		
+	  inscripcion.alumno_id = usuario_id;
+	  Prospectos.update(inscripcion.prospecto_id, { $set : { "profile.estatus" : 3 }})
+		Curriculas.insert({estatus : true, alumno_id : inscripcion.alumno_id, planEstudios_id : inscripcion.planEstudios_id, grados : planEstudio.grados });
+		
+		//SE INSERTA LA INSCRIPCIÓN UNA VEZ QUE SABEMOS EL ID DEL ALUMNO
+		inscripcion._id = Inscripciones.insert(inscripcion);
+		if(!grupo.alumnos)
+			grupo.alumnos=[];
+			
+		//AGREGAR ALUMNO AL GRUPO
+		grupo.alumnos.push({alumno_id : inscripcion.alumno_id, inscripcion_id : inscripcion._id});
+		grupo.inscritos = parseInt(grupo.inscritos) + 1;
+		delete grupo._id;
+		Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
+		
+		//REGISTRAR EL PAGO REALIZADO
+		inscripcion.pago_id = Pagos.insert({
+			fechaPago 	: new Date(),
+			alumno_id 	: inscripcion.alumno_id,
+			grupo_id		: inscripcion.grupo_id,
+			seccion_id  : Meteor.user().profile.seccion_id,
+			campus_id 	: Meteor.user().profile.campus_id,
+			estatus 		: 1,
+			usuarioInserto_id 	: Meteor.userId(),
+			importe 		: inscripcion.importePagado - inscripcion.cambio,
+			cuenta_id   : cuentaInscripcion._id,
+			diaPago     : diaActual,
+			mesPago     : mesPago,
+			semanaPago  : semanaPago,
+			anioPago    : anioPago,
+			inscripcion_id : inscripcion._id,
+			modulo 			: "inscripcion",
+			descripcion : "inscripcion"
+		});
+		
+		//GENERAR PLAN DE PAGOS
+	  Meteor.call("generaPlanPagos", inscripcion);
+	  
+	  //GENERAR COMISIÓN	  
+	  var tipoPlanPagos = inscripcion.planPagos.colegiatura.tipoColegiatura;
+		Comisiones.insert({
+			alumno_id : inscripcion.alumno_id,
+			cantidad 	: 1,
+			inscripcion_id 	: inscripcion._id,
+			importePagado 	: inscripcion.importePagado,
+			grupo_id		: inscripcion.grupo_id,
+			seccion_id  : Meteor.user().profile.seccion_id,
+			campus_id 	: Meteor.user().profile.campus_id,
+			fechaPago 	: new Date(),
+			diaPago     : diaActual,
+			mesPago     : mesPago,
+			semanaPago  : semanaPago,
+			anioPago    : anioPago,
+			vendedor_id : inscripcion.vendedor_id,
+			importeColegiatura : inscripcion.planPagos.colegiatura[tipoPlanPagos].importeRegular,
+			gerente_id 	: vendedor.profile.gerenteVenta_id,
+			estatus			: 1,
+			cuenta_id 	: cuentaInscripcion._id
+		});
+		
+		//RETORNAMOS EL ID DEL ALUMNO PARA SU REDIRECCIONAMIENTO A LA VISTA PERFIL
+		return inscripcion.alumno_id;
 	}
 	
 });
