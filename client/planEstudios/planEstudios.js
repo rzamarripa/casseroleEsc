@@ -56,10 +56,6 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	  },
   });	
   	
-	rc.getSeccionById = function(id){ 
-		return Secciones.getSeccionById(id)
-	};
-	
 	function crearGrados(gradosActuales){
 		if(gradosActuales <1 ){
 			rc.plan.grados = [];
@@ -72,8 +68,8 @@ function PlanEstudiosIndexCtrl($scope, $meteor, $reactive, $state, $stateParams,
 			};
 		}
 		
-		while(gradosActuales<rc.plan.grados.length)rc.plan.grados.pop();
-		while(gradosActuales>rc.plan.grados.length)rc.plan.grados.push([]);
+		while(gradosActuales < rc.plan.grados.length)rc.plan.grados.pop();
+		while(gradosActuales > rc.plan.grados.length)rc.plan.grados.push([]);
 	}
 	
 	rc.getGrados = function() {

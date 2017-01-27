@@ -26,7 +26,6 @@
 					<th width="5%"><div class="text-center">No.</div></th>					
 					<th width="10%"><div class="text-center">Clave</div></th>
 					<th width="30%"><div class="text-center">Descripción</div></th>
-					<th width="15%"><div class="text-center">Sección</div></th>
 					<th width="10%"><div class="text-center">Tipo</div></th>					
 					<th width="10%"><div class="text-center">Grados</div></th>	
 					<th width="10%">
@@ -43,13 +42,11 @@
 			</thead>
 			<tbody>
 		    <tr ng-repeat="_plan in pl.planesEstudios">
-			    <td> {{$index + 1}}</td>			    
-			    <td> {{_plan.clave}}</td>
-			    <td> {{_plan.descripcion}}</td>
-			    <td> {{pl.getSeccionById(_plan.seccion_id).descripcionCorta}}</td>
-			    
-			    <td> {{_plan.tipo=='Baja'? 'Interno':'Externo'}}</td>
-			    <td> {{_plan.grado}}</td>
+			    <td class="text-center"> {{$index + 1}}</td>			    
+			    <td class="text-center"> {{_plan.clave}}</td>
+			    <td> {{_plan.descripcion}}</td>			    
+			    <td class="text-center"> {{_plan.tipo=='Baja'? 'Interno':'Externo'}}</td>
+			    <td class="text-center"> {{_plan.grado}}</td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="_plan.estatus" class="label label-success">

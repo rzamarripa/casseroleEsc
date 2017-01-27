@@ -1,0 +1,114 @@
+<form class="smart-form"  novalidate> 
+	<header>
+		<div class="row">
+			<div class="col-sm-3 col-sm-offset-9 pull-right">
+				<div class="form-group">
+					<label for="repeatSelect">Tipo de Plan de Pago:</label>
+					<select class="form-control" name="repeatSelect" id="repeatSelect" 
+						ng-model="curso.planPagos.colegiatura.tipoColegiatura" 
+						ng-change="al.cambioTipoColegiatura(curso.planPagos.colegiatura.tipoColegiatura,'{{curso.planPagos.colegiatura.tipoColegiatura}}', curso)" >
+						<option ng-repeat="plan in al.tipoPlanes" value="{{plan}}">{{plan}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</header>	
+	<div >
+		<h2> Conceptos de inscripción : </h2>	
+		<fieldset>
+			<div class="row">
+			<section class="col col-2" ng-click="al.seleccionarConcepto(cobro,curso)" ng-repeat = "cobro in curso.pagos" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input class="font-xs" ng-class="al.obtenerEstatus(cobro)"  type="text" value="{{cobro.nombre}}" disabled="" title="">
+				</label>
+			</section>
+			</div>
+		</fieldset>
+	</div>	
+	<div  ng-class="{desactivado: !al.inscripcionCompleta(curso)}">
+		<h2> Colegiatura : </h2>	
+		<fieldset>
+			<div class="row">
+			<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso)" ng-repeat = "cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input class="font-xs" ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
+				</label>
+			</section>
+			</div>
+		</fieldset>
+	</div>
+	<fieldset>
+		<div class="row">
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Seleccionados" disabled="" class="bg-color-blue txt-color-white">
+				</label>
+			</section>
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Recargos" disabled="" class="bg-color-orange txt-color-white">
+				</label>
+			</section>
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Pagados" disabled="" class="bg-color-green txt-color-white">
+				</label>
+			</section>
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Condonados" disabled="" class="bg-color-blueDark txt-color-white">
+				</label>
+			</section>
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Abonados" disabled="" class="bg-color-greenLight txt-color-white">
+				</label>
+			</section>
+			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+				<label class="input">
+					<input  type="text" value="Pendientes" disabled="" class="">
+				</label>
+			</section>
+		</div>
+	</fieldset>
+	<div class="row" style="margin-right: 2px;">
+		<div class="col-sm-8">
+			
+		</div>
+		<div class="col-sm-4">
+			<p class="font-lg bg-color-darken txt-color-white no-border">
+				Total abonado :
+				<span class="pull-right"> {{curso.abono | currency}} Pesos </span>
+			</p>
+			<p class="font-lg bg-color-darken txt-color-white no-border">
+				Total a pagar :
+				<span class="pull-right"> {{al.ttotalpagar | currency}} Pesos </span>
+			</p>
+			<p class="font-lg bg-color-darken txt-color-white no-border">
+				Total :
+				<span class="pull-right"> {{al.totalPagar | currency}} Pesos </span>
+			</p>
+		</div>	
+	</div>
+
+	<div ng-if="al.inscripcionCompleta(curso)">
+		<div class="pull-left" style="margin:20px;" >
+			<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+		</div>
+		<div class="pull-right" style="margin:20px;">
+			
+			<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Pagar</a>
+		</div>
+	</div>
+
+	<div ng-if="!al.inscripcionCompleta(curso)">
+		<div class="pull-left" style="margin:20px;" >
+			<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+		</div>
+		<div class="pull-right" style="margin:20px;">
+			<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagarConcepto(curso)" ng-disabled="al.hayParaPagar">Pagar</a>
+<!-- 											<a target="_blank" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalPagos" ng-disabled="al.hayParaPagar">Pagar</a> -->
+		</div>
+	</div>
+	
+</form>		

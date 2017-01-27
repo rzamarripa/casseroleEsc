@@ -1,88 +1,94 @@
 <h2>Ciclos</h2>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<a class="btn btn-{{cl.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
 			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevociclo" ng-click="cl.nuevoCiclo()">
 		  {{cl.nuevo == true ? 'Nuevo' : 'Cancelar'}}
 		</a>
 	</div>
+</div>
+<div class="row">
 	<div class="collapse" id="collapseExample">
 		<div class="col-sm-7">
-				<form name="form" class="form-horizontal" role="form" novalidate>
-			  	<div class="well">	    
-				    <div class="row">
-				    	<div class="col-sm-4" valida>
-					    	<label>Nombre *</label>
-						    <input name="nombre" type="text" class="form-control" ng-model="cl.ciclo.nombre" required>
-				    	</div>
-				    	<div class="col-sm-4">
-					    	<label>Fecha Inicio</label>
-						    <input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="cl.ciclo.fechaInicio"/>
-				    	</div>
-				    	<div class="col-sm-4">
-					    	<label>Fecha Fin</label>
-						    <input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="cl.ciclo.fechaFin"/>
-				    	</div>
-				    </div>				  
+			<br/>
+			<form name="form" class="form-horizontal" role="form" novalidate>
+				<h4>Información del ciclo</h4>
+		  	<div class="well">
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="cl.ciclo.nombre" required>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label>Fecha Inicio</label>
+					    <input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="cl.ciclo.fechaInicio"/>
+			    	</div>
+			    	<div class="col-sm-4">
+				    	<label>Fecha Fin</label>
+					    <input date-time class="form-control" view="year" max-view="year" min-view="date" ng-model="cl.ciclo.fechaFin"/>
+			    	</div>
+			    </div>				  
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="cl.guardar(cl.ciclo,form)" class="btn btn-primary" ng-show="cl.action" valida-form formulario="form">
+						<input type="submit" ng-click="cl.actualizar(cl.ciclo,form)" value="Actualizar" class="btn btn-primary" ng-show="!cl.action" valida-form formulario="form">				
 					</div>
-					<div class="row">
-						<div class="col-sm-12">
-							<input type="submit" value="Guardar" ng-click="cl.guardar(cl.ciclo,form)" class="btn btn-primary" ng-show="cl.action" valida-form formulario="form">
-							<input type="submit" ng-click="cl.actualizar(cl.ciclo,form)" value="Actualizar" class="btn btn-primary" ng-show="!cl.action" valida-form formulario="form">				
-						</div>
-					</div>	  
-			  </form>		  
+				</div>	  
+		  </form>		  
 		</div>
 		<div class="col-sm-5">
-				<form name="formVacaciones" class="form-horizontal" role="form" novalidate>
-				  <div class="well">
-						<div class="row">
-				    	<div class="col-sm-4" valida>
-					    	<label>Semana *</label>
-						    <input name="semana" type="number" class="form-control" ng-model="cl.vaca.semana" required>
-				    	</div>
-				    	<div class="col-sm-4" valida>
-					    	<label>Año *</label>
-						    <input name="anio" type="number" class="form-control" ng-model="cl.vaca.anio" required>
-				    	</div>
-				    	<div class="col-sm-4">
-				    		<input type="submit" value="Agregar" ng-click="cl.agregarVacaciones(cl.vaca,formVacaciones)" class="btn btn-primary" ng-show="cl.nuevasVacaciones" valida-form formulario="formVacaciones">
-				    		<input type="submit" value="Agregar" ng-click="cl.agregarVacaciones(cl.vaca,formVacaciones)" class="btn btn-primary" ng-show="!cl.nuevasVacaciones" valida-form formulario="formVacaciones">
-				    	</div>
-				    </div>	
-				    <br/>
-				    <table class="table table-bordered">
-							<thead>
-								<tr>
-									<th width="5%"><div class="text-center">No.</div></th>
-									<th width="35%"><div class="text-center">Semana</div></th>
-									<th width="20%"><div class="text-center">Año</div></th>	
-									<th width="10%" class="text-center">
-										Acciones									
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-						    <tr ng-repeat="vacaciones in cl.ciclo.vacaciones">
-							    <td class="text-center">{{$index + 1}}</td>
-							    <td class="text-center">
-								    <span ng-hide="vacaciones.editando">{{vacaciones.semana}}</span>
-								    <input type="number" class="form-control" ng-model="vacaciones.semana" ng-show="vacaciones.editando">
-								  </td>
-							    <td class="text-center">
-								    <span ng-hide="vacaciones.editando">{{vacaciones.anio}}</span>
-								    <input type="number" class="form-control" ng-model="vacaciones.anio" ng-show="vacaciones.editando">
-								  </td>
-							    <td class="text-center">
-								    <button class="btn btn-primary btn-xs" ng-click="cl.confirmarVacaciones(vacaciones)" ng-show="vacaciones.editando == true;"><i class="fa fa-check"></i></button>
-								    <button class="btn btn-warning btn-xs" ng-click="cl.editarVacaciones(vacaciones)" ng-show="vacaciones.editando == false || vacaciones.editando == undefined"><i class="fa fa-pencil"></i></button>
-								    <button class="btn btn-danger btn-xs" ng-click="cl.quitarVacaciones(vacaciones, $index)"><i class="fa fa-trash"></i></button>
-							    </td>
-						    </tr>
-							</tbody>
-						</table>
-					</div>
-			  </form>
+			<br/>
+			<form name="formVacaciones" class="form-horizontal" role="form" novalidate>
+				<h4>Agregue las vacaciones</h4>
+			  <div class="well">
+					<div class="row">
+			    	<div class="col-sm-4" valida>
+				    	<label>Semana *</label>
+					    <input name="semana" type="number" class="form-control" ng-model="cl.vaca.semana" required>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+				    	<label>Año *</label>
+					    <input name="anio" type="number" class="form-control" ng-model="cl.vaca.anio" required>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type="submit" value="Agregar" ng-click="cl.agregarVacaciones(cl.vaca,formVacaciones)" class="btn btn-primary" ng-show="cl.nuevasVacaciones" valida-form formulario="formVacaciones">
+			    		<input type="submit" value="Agregar" ng-click="cl.agregarVacaciones(cl.vaca,formVacaciones)" class="btn btn-primary" ng-show="!cl.nuevasVacaciones" valida-form formulario="formVacaciones">
+			    	</div>
+			    </div>	
+			    <br/>
+			    <table class="table table-bordered">
+						<thead>
+							<tr>
+								<th width="5%"><div class="text-center">No.</div></th>
+								<th width="35%"><div class="text-center">Semana</div></th>
+								<th width="20%"><div class="text-center">Año</div></th>	
+								<th width="10%" class="text-center">
+									Acciones									
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+					    <tr ng-repeat="vacaciones in cl.ciclo.vacaciones">
+						    <td class="text-center">{{$index + 1}}</td>
+						    <td class="text-center">
+							    <span ng-hide="vacaciones.editando">{{vacaciones.semana}}</span>
+							    <input type="number" class="form-control" ng-model="vacaciones.semana" ng-show="vacaciones.editando">
+							  </td>
+						    <td class="text-center">
+							    <span ng-hide="vacaciones.editando">{{vacaciones.anio}}</span>
+							    <input type="number" class="form-control" ng-model="vacaciones.anio" ng-show="vacaciones.editando">
+							  </td>
+						    <td class="text-center">
+							    <button class="btn btn-primary btn-xs" ng-click="cl.confirmarVacaciones(vacaciones)" ng-show="vacaciones.editando == true;"><i class="fa fa-check"></i></button>
+							    <button class="btn btn-warning btn-xs" ng-click="cl.editarVacaciones(vacaciones)" ng-show="vacaciones.editando == false || vacaciones.editando == undefined"><i class="fa fa-pencil"></i></button>
+							    <button class="btn btn-danger btn-xs" ng-click="cl.quitarVacaciones(vacaciones, $index)"><i class="fa fa-trash"></i></button>
+						    </td>
+					    </tr>
+						</tbody>
+					</table>
+				</div>
+		  </form>
 		</div>
 	</div>
 </div>

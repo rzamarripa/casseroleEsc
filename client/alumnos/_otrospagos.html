@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
+      <header>
+        <h2>Otros Pagos</h2>
+      </header>
+      <div>
+        <div class="widget-body">
+					<div class="col-sm-2">
+							<label>Cantidad</label>
+						<input type="number" class="form-control" min="0" placeholder="Cant." ng-model="al.otroPago.cantidad" ng-change="al.calcularImporteOtrosPagos()" >
+					</div>
+					<div class="col-sm-3" >
+						<label for="concepto">Concepto</label>
+						<select name="concepto" class="form-control" placeholder="Seleccione" ng-model="al.otroPago.concepto_id" ng-change="al.getConceptoPago(al.otroPago.concepto_id)" >
+						  <option ng-repeat="concepto in al.conceptosPago" value="{{concepto._id}}">
+						  	{{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<label>Precio Unitario</label>
+						<input type="number" class="form-control" placeholder="Importe" ng-model="al.otroPago.importe" ng-change="al.calcularImporteOtrosPagos()">
+					</div>
+					<div class="col-sm-2">
+						<label>Importe</label>
+						<input type="number" class="form-control" placeholder="Total" ng-model="al.otroPago.total" readonly="">
+					</div>	
+					<div class="col-sm-1">
+						<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<input type="submit" ng-click="al.guardarOtroPago(al.otroPago)" value="Guardar" class="btn btn-primary" >
+					</div>	&nbsp;&nbsp;&nbsp;
+					<div class="col-sm-1">
+						<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<a ui-sref="root.historialOtrosPagos({alumno_id:al.alumno._id})" class="btn btn-primary">Historial</a>
+					</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,12 +8,9 @@ Meteor.methods({
 			}
 			
 			var alumnos 				= Meteor.users.find(selector, options.options).fetch();
-			console.log(alumnos.length)
 			var alumnos_ids = _.pluck(alumnos, "_id");
 			
-			console.log("alumnos ", alumnos_ids)
 			var inscripciones = Inscripciones.find({alumno_id : { $in : alumnos_ids}}).fetch();
-			console.log(inscripciones.length);
 	    inscripciones.forEach(function (inscripcion) {
 	      inscripcion.alumno 			= Meteor.users.findOne({_id : inscripcion.alumno_id});
 	      inscripcion.grupo 			= Grupos.findOne({_id : inscripcion.grupo_id});
@@ -143,12 +140,9 @@ Meteor.methods({
 		var grupos = Grupos.find(
 		   { "alumnos.alumno_id": inscripcion.alumno_id }
 		).fetch();
-		console.log("alumno_id", inscripcion.alumno_id)
-		console.log("grupos", grupos);
 		_.each(grupos, function(grupo, indexGrupo){
 			_.each(grupo.alumnos, function(alumno, indexAlumno){
 				if(alumno.alumno_id == inscripcion.alumno_id){
-					console.log("Aquí estoy ", alumno);
 					grupo.alumnos.splice(indexAlumno, 1);
 					var idTemp = grupo._id;
 					Grupos.update({_id : idTemp}, { $set : grupo});
@@ -156,11 +150,8 @@ Meteor.methods({
 			})
 			
 		});
-		
-		console.log(grupos);
 	},
 	inscribirAlumno : function (inscripcion) {
-		
 		//VARIABLES REUTILIZABLES
 		var diaActual 	= moment(new Date()).weekday();
 		var semanaPago 	= moment(new Date()).isoWeek();
@@ -171,9 +162,7 @@ Meteor.methods({
 		var grupo 						= Grupos.findOne(inscripcion.grupo_id);
 		var planEstudio 			= PlanesEstudios.findOne(grupo.planEstudios_id)
 		var campus	 					= Campus.findOne(Meteor.user().profile.campus_id);
-		console.log("campus", campus._id);
 		var cantidadAlumnos 	= Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus._id}).count();
-		console.log(cantidadAlumnos);
 		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
 		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
 		
@@ -192,7 +181,6 @@ Meteor.methods({
 		alumno.profile.usuarioInserto = Meteor.userId();
 		alumno.profile.estatus 				= true;
 		
-		
 		//PREPARAR LA INSCRIPCIÓN
 		inscripcion.planEstudios_id = grupo.planEstudios_id;		
 		inscripcion.campus_id 			= Meteor.user().profile.campus_id;
@@ -206,7 +194,6 @@ Meteor.methods({
 	  
 	  //Si existen Alumnos generamos la matrícula siguiente
 		if(cantidadAlumnos > 0){
-			console.log("entre aqui")
 	  	var matriculaOriginal 		= anio + campus.clave + "0000";
 	  	var matriculaOriginalN 		= parseInt(matriculaOriginal);
 	  	var matriculaNueva 				= matriculaOriginalN + cantidadAlumnos + 1;
@@ -217,7 +204,6 @@ Meteor.methods({
 		  
 	  }else{
 		  //Si no existen Alumnos generamos la primer matrícula
-		  console.log("entre aca")
 		  alumno.username 					= "e" + anio + campus.clave + "0001";
 		  alumno.profile.matricula 	= "e" + anio + campus.clave + "0001";
 		  alumno.password 					= alumno.profile.matricula;

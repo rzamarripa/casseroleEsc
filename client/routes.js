@@ -442,7 +442,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.planEstudio', {
       url: '/planEstudios',
-      templateUrl: 'client/planEstudios/planEstudios.index.ng.html',
+      templateUrl: 'client/planEstudios/planEstudios.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -458,7 +458,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.nuevoPlanEstudio', {
       url: '/nuevoPlanEstudios',
-      templateUrl: 'client/planEstudios/planEstudios.form.ng.html',
+      templateUrl: 'client/planEstudios/form.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -474,7 +474,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.editarPlanEstudio', {
       url: '/editarPlanEstudios/:id',
-      templateUrl: 'client/planEstudios/planEstudios.form.ng.html',
+      templateUrl: 'client/planEstudios/form.html',
       controller: 'PlanEstudiosIndexCtrl as pl',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -490,7 +490,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.planEstudioDetalle', {
       url: '/planEstudios/:id',
-      templateUrl: 'client/planEstudios/planEstudios.detalle.ng.html',
+      templateUrl: 'client/planEstudios/detalle.html',
       controller: 'PlanEstudiosDetalleCtrl as pl',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
