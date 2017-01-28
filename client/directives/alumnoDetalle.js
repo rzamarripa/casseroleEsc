@@ -40,3 +40,10 @@ angular.module('casserole').directive('historialalumno', historialalumno);
     templateUrl: 'client/alumnos/_historialalumno.html'
   }
 }
+angular.module('casserole').directive('modalabonar', modalabonar);
+	function modalabonar () {
+  return {
+    restrict: 'E',
+    templateUrl: 'client/alumnos/_modalabonar.html'
+  }
+}

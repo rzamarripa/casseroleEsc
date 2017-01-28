@@ -1144,4 +1144,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		this.comentario = {};
 		toastr.success('Guardado correctamente.');
 	}
+	
+	this.abonar = function(inscripcion_id, abono){
+		var inscripcion = Inscripciones.findOne(inscripcion_id);
+		var abonoSumado = inscripcion.abono + abono;
+		Inscripciones.update({_id : inscripcion_id}, {$set : { abono : abonoSumado}});
+		$('#modalAbono').modal('hide');
+		//toastr.success('Guardado correctamente.');
+	}
 }

@@ -411,10 +411,6 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			}
 		}
 
-		
-
-		
-		
 		//Se calcula 
 		this.pagosRealizados=[];
 		for (var i = 0; cobroObligatorio > 0 && i < this.inscripcion.planPagos.fechas.length; i++) {
