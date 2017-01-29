@@ -1684,6 +1684,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
       }
     })
+    .state('root.notas', {
+      url: '/notas',
+      templateUrl: 'client/admin/notas.html',
+      //controller: 'CambiarRangoPlanPagosCtrl as cpp',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "director" || user.roles[0] == "admin"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
     
     ;
 }]);

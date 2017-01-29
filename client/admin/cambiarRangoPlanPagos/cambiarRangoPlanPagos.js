@@ -195,10 +195,10 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		var plan = [];
 		for (var i = 0; i < this.cambioSemanasPlanPagos.totalPagos; i++) {
 			var pago = {
-				semana 			    : mfecha.isoWeek(),
-				fecha 			    : new Date(mfecha.toDate().getTime()),
+				semana 			    		: mfecha.isoWeek(),
+				fecha 			    		: new Date(new Date(mfecha.toDate().getTime()).setHours(23,59,59)),
 				dia                 : mfecha.weekday(),
-				tipoPlan 		    : 'Semanal',
+				tipoPlan 		    		: 'Semanal',
 				numeroPago 	        : i + 1,
 				alumno_id						: this.alumno_id,
 				inscripcion_id			: modeloPago.inscripcion_id,
@@ -224,8 +224,8 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 				estatus             : 0,
 				tiempoPago          : 0,
 				modificada          : true,
-				mes					: mfecha.get('month') + 1,
-				anio				: mfecha.get('year'),
+				mes									: mfecha.get('month') + 1,
+				anio								: mfecha.get('year'),
 				modulo							: "colegiatura"
 			}
 			

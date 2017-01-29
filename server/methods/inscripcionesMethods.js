@@ -277,7 +277,8 @@ Meteor.methods({
 			importeColegiatura : inscripcion.planPagos.colegiatura[tipoPlanPagos].importeRegular,
 			gerente_id 	: vendedor.profile.gerenteVenta_id,
 			estatus			: 1,
-			cuenta_id 	: cuentaInscripcion._id
+			cuenta_id 	: cuentaInscripcion._id,
+			beneficiario : "gerente"
 		});
 		
 		//RETORNAMOS EL ID DEL ALUMNO PARA SU REDIRECCIONAMIENTO A LA VISTA PERFIL
