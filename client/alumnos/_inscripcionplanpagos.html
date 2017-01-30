@@ -31,13 +31,25 @@
 			<div class="row">
 			<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso)" ng-repeat = "cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 				<label class="input">
-					<input class="font-xs" ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy'}}">
+					<input class="font-xs" ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy HH:mm:ss'}}">
 				</label>
 			</section>
 			</div>
 		</fieldset>
 	</div>
 	<fieldset>
+<!--
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="progress progress-sm">
+					<div class="progress-bar bg-color-greenLight" style="width: {{al.cantPagadas}}%"></div>
+					<div class="progress-bar bg-color-yellow" style="width: {{al.cantAtrasadas}}%"></div>
+					<div class="progress-bar bg-color-redLight" style="width: {{al.cantCanceladas}}%"></div>
+					<div class="progress-bar bg-color-blueDark" style="width: {{al.cantCondonadas}}%"></div>
+				</div>
+			</div>
+		</div>
+-->
 		<div class="row">
 			<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 				<label class="input">
@@ -112,3 +124,8 @@
 	</div>
 	
 </form>		
+<div class="row">
+			<div class="col-sm-12">
+				<hr class="simple"/>
+			</div>
+		</div>
