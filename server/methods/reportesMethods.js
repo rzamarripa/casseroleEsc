@@ -311,6 +311,59 @@ Meteor.methods({
 		});
 		
 		return "hecho";
+	},
+	reporteComisiones : function(semana, anio, seccion_id, campus_id){
+		dias = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+	  var comisionesGerente = Comisiones.find({semanaPago : semana, anioPago : anio, seccion_id : seccion_id, beneficiario : "gerente"}).fetch();
+	  var comisionesVendedores = Comisiones.find({semana : semana, anio : anio, seccion_id : seccion_id, beneficiario : "vendedor"}).fetch();
+	  var gerentes_id = _.pluck(comisionesGerente, "vendedor_id");
+	  var arreglo = {};
+	  _.each(comisionesGerente, function(comision){
+		  if(arreglo[comision.gerente_id] == undefined){
+			   arreglo[comision.gerente_id] = {};
+			   arreglo[comision.gerente_id].gerente = Meteor.users.findOne(comision.gerente_id, {fields : {profile : 1}});
+			   arreglo[comision.gerente_id].cantidad = 1;
+			   arreglo[comision.gerente_id].semana = comision.semana;
+			   arreglo[comision.gerente_id].beneficiario = comision.beneficiario;
+			   arreglo[comision.gerente_id].dias = {};
+			   _.each(dias, function(dia){
+				   arreglo[comision.gerente_id].dias[dia] = 0;
+			   })
+			   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] = 1;
+			   
+		  }else{
+			   arreglo[comision.gerente_id].cantidad += 1;
+			   if(arreglo[comision.gerente_id].dias[dias[comision.diaPago]] == undefined){
+				   arreglo[comision.gerente_id].dias = {};
+				   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] = 0;
+			   }else{
+				   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] += 1;
+			   }
+			   
+		  }
+	  });
+	  arreglo = _.toArray(arreglo);
+
+	  var conceptos = ConceptosComision.find({estatus : true, seccion_id : seccion_id}).fetch();
+	  _.each(arreglo, function(vendedor){		  
+			_.each(conceptos, function(concepto){
+				switch(concepto.signo){
+					case "<=" :
+						if(vendedor.cantidad >= concepto.cantInicial && vendedor.cantidad <= concepto.cantFinal){
+							vendedor.importe = vendedor.cantidad * concepto.importe;
+						}
+						break;
+					case ">=" :
+						if(vendedor.cantidad >= concepto.cantInicial && vendedor.cantidad >= concepto.cantFinal){
+							vendedor.importe = vendedor.cantidad * concepto.importe;
+						}
+						break;
+				}
+			});
+	  });	  
+	  
+	  return arreglo;
+	  
 	}
 })
 

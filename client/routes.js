@@ -1701,5 +1701,21 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     
+    .state('root.reporteComisiones', {
+      url: '/reporteComisiones',
+      templateUrl: 'client/reportes/reporteComisiones.html',
+      controller: 'ReporteComisionesCtrl as rc',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "director" || user.roles[0] == "admin"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
     ;
 }]);
