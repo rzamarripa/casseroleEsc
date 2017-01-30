@@ -305,7 +305,8 @@ Meteor.methods({
 		return arreglo;
 	},
 	modificarSemanasPlanPagos : function(alumno_id, planPagos) {
-		PlanPagos.remove({alumno_id : alumno_id, modulo : "colegiatura"});
+		console.log(alumno_id, planPagos);
+		PlanPagos.remove({alumno_id : alumno_id});
 		_.each(planPagos, function(pago){
 			PlanPagos.insert(pago);
 		});

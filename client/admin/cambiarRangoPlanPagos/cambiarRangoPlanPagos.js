@@ -13,6 +13,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 	this.buscar.nombre = "";
 	this.alumno_id = "";
 	this.planPagos = [];
+	window.rc = rc;
 	
   
   this.subscribe('buscarAlumnosAdmin', () => {
@@ -213,6 +214,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 				diasRecargo         : this.cambioSemanasPlanPagos.diasRecargo,
 				diasDescuento       : this.cambioSemanasPlanPagos.diasDescuento,
 				importe             : this.cambioSemanasPlanPagos.importeRegular,		
+				fechaCreacion				: new Date(),
 				faltante						: null,
 				fechaPago           : null,
 				anioPago						: null,
@@ -230,13 +232,13 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 			}
 			
 			if(i == 0){
-				pago.pagada = 1;
+				pago.estatus = 1;
 			}
 			
 			rc.planPagos.push(pago);
 			mfecha = mfecha.day(8);
 		}
-
+		
 		return plan;
 	}
 	
