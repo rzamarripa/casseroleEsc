@@ -353,15 +353,6 @@ Meteor.methods({
 			descripcion : "inscripcion"
 		});
 
-
-
-		
-		
-		
-		
-
-
-
 		//GENERAR PLAN DE PAGOS
 		
 		Meteor.call("generaPlanPagos", inscripcion);
