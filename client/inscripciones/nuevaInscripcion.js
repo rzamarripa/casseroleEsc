@@ -33,6 +33,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
+
+	this.subscribe('conceptosComision',() => {
+		return [{seccion_id : this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):"a"}]
+	});
 	
 	this.subscribe('ciclos',()=>{
 		return [{estatus:true,
@@ -104,6 +108,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		ciclos : () => {
 			return Ciclos.find();
 		},
+		conceptosComision : () => {
+			return ConceptosComision.find();
+		},
 		campus : () => {
 			return Campus.findOne();
 		},
@@ -115,51 +122,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  }
 	});
 
-	this.llenarComision = function(_comision,importe){
-		try{
-			var vendedor = Meteor.users.findOne({_id:this.inscripcion.vendedor_id});
-			this.comisiones.push({
-				fechaPago 	: new Date(),
-				alumno_id 	: this.inscripcion.alumno_id,
-				grupo_id		: this.inscripcion.grupo_id,
-				seccion_id  : Meteor.user().profile.seccion_id,
-				campus_id 	: Meteor.user().profile.campus_id,
-				vendedor_id	: vendedor._id,
-				gerente_id	: vendedor.profile.gerenteVenta_id,
-				estatus			: 1,
-				beneficiario : _comision.beneficiario,
-				importe 		: importe,
-				modulo			: _comision.modulo,
-				comision_id : _comision._id,
-				cuenta_id 	: this.cuentaInscripcion._id,
-				weekday 		: this.diaActual,
-				semanaPago	: this.semanaPago
-			});
-		}
-		catch(e){
-
-		}
-	};
-	/*this.llenarPago=function(concepto,plan,tipoPlan){
-		this.pagosRealizados.push({
-						fechaPago 	: new Date(),
-						alumno_id 	: this.inscripcion.alumno_id,
-						grupo_id	: this.inscripcion.grupo_id,
-						seccion_id  : Meteor.user().profile.seccion_id,
-						campus_id 	: Meteor.user().profile.campus_id,
-						numero 		: plan.no,
-						semana 		: plan.numero,
-						anio 		: plan.anio,
-						estatus 	: 1,
-						concepto 	: concepto.nombre,
-						tipo 		: "Cobro",
-						usuario_id 	: Meteor.userId(),
-						importe 	: concepto.importe,
-						cuenta_id : tipoPlan == 'inscripcion' ? this.cuentaInscripcion._id:this.cuentaActiva._id,
-						weekday : this.diaActual,
-						semanaPago: this.semanaPago
-					});
-	}*/
+	
+	
 	
 	this.planPagosSemana =function () {
 		var fechaInicial = this.inscripcion.planPagos.colegiatura.fechaInicial;
@@ -335,166 +299,29 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}
 		return plan;
 	}
-	/*this.llenarPago=function(concepto,plan,tipoPlan){
-		this.pagosRealizados.push({
-			fechaPago 	: new Date(),
-			alumno_id 	: this.inscripcion.alumno_id,
-			grupo_id	: this.inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
-			numero 		: plan.numeroPago,
-			semana 		: plan.semana,
-			anio 		: plan.anio,
-			estatus 	: 1,
-			concepto 	: concepto.nombre,
-			tipo 		: "Cobro",
-			usuario_id 	: Meteor.userId(),
-			importe 	: concepto.importe,
-			cuenta_id : tipoPlan == 'inscripcion' ? this.cuentaInscripcion._id:this.cuentaActiva._id,
-			weekday : this.diaActual,
-			semanaPago: this.semanaPago
-		});
-	}*/
+	
 	this.calcularInscripcion=function(){
 		//Se suman los conceptos de inscripción
 		var tipo = this.inscripcion.planPagos.colegiatura.tipoColegiatura;
 		var _concepto = this.inscripcion.planPagos.colegiatura[this.inscripcion.planPagos.colegiatura.tipoColegiatura];
 		var cobroObligatorio =  _concepto.importeRegular;
 		var conIns = this.inscripcion.planPagos.inscripcion;
-		this.inscripcion.totalPagar = 0;
+		this.inscripcion.totalPagar =  _concepto.importeRegular;
 		this.comisiones = [];
 		this.inscripcion.pagos={};
 		this.inscripcion.abono=0;
-		console.log()
+
+
 		for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
 			var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
 			if(concepto.estatus){
 				this.inscripcion.totalPagar += concepto.importe;
-				//this.inscripcion[connceptoId]=false;
-				this.inscripcion.pagos[connceptoId]={
-					_id:connceptoId,
-					importeRegular:concepto.importe,
-					importeDescuento:concepto.importe-conIns.importeDescuento,
-					importeRecargo:concepto.importe+conIns.importeRecargo,
-					importe:concepto.importe,
-					estatus:0,
-					nombre:concepto.nombre,
-					pago:0,
-					tiempoPago: 0,
-					fecha: this.inscripcion.fechaInscripcion,
-					fechaRegistro: new Date(),
-					restante:0
-				};
-			}
-			
-		}
-		//Se suman los conceptos de comisión
-		this.comisionObligada = 0;
-		for(var conceptoid in this.inscripcion.planPagos.conceptosComision){
-			var concepto = this.inscripcion.planPagos.conceptosComision[conceptoid];
-			if(concepto.estatus && concepto.prioridad == 'Alta'){
-				//this.inscripcion.totalPagar += concepto.importe;
-				this.comisionObligada += concepto.importe;
-				//Se asigna la comisión al vendedor y gerente de venta
-				this.llenarComision(concepto, concepto.importe);
 			}
 		}
-		var resto = this.inscripcion.importePagado - this.comisionObligada;
-		for(var i = 0; resto > 0, i < this.inscripcion.planPagos.conceptosComision.length; i++){
-			var concepto = this.inscripcion.planPagos.conceptosComision[i];
-			if(concepto.estatus && concepto.prioridad !='Alta'){
-				if(concepto.importe > resto)
-					this.llenarComision(concepto, resto);
-				else
-					this.llenarComision(concepto,concepto.importe);
-				resto -= concepto.importe;
-			}
-		}
-
-		//Se calcula 
-		this.pagosRealizados=[];
-		for (var i = 0; cobroObligatorio > 0 && i < this.inscripcion.planPagos.fechas.length; i++) {
-			var pago = this.inscripcion.planPagos.fechas[i];
-			var concepto = this.inscripcion.planPagos.colegiatura[this.inscripcion.planPagos.colegiatura.tipoColegiatura];
-			this.inscripcion.totalPagar += concepto.importeRegular;
-			//this.inscripcion.totalPaga
-			//Esto está mal porque no debería de afectar la comisión al pago de la primer colegiatura
-			if(concepto.importeRegular <= this.inscripcion.importePagado){
-				pago.estatus = 1;
-				pago.pago = concepto.importeRegular;
-				/*for(var j in concepto.conceptos){
-					this.llenarPago(concepto.conceptos[j], pago, 'colegiatura');
-				}*/
-				cobroObligatorio -=  pago.pago;
-
-			}
-
-
-			else{
-				//pago.estatus = 6;
-				this.inscripcion.abono += cobroObligatorio;
-				//pago.faltante = concepto.importeRegular-cobroObligatorio;
-				//this.llenarPago({nombre:'Abono Colegiatura',importe:cobroObligatorio},pago,'colegiatura');
-				cobroObligatorio = 0;
-			}
-		};
-
-		cobroObligatorio = _concepto.importeRegular
 		
-		if((this.inscripcion.importePagado - cobroObligatorio) >= this.inscripcion.planPagos.inscripcion.importeRegular)
-		{
-			this.inscripcion.planPagos.inscripcion.estatus = 1;
-			//this.inscripcion.estatus=true;
-			this.inscripcion.planPagos.inscripcion.pago = this.inscripcion.planPagos.inscripcion.importeRegular;
-			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaInicial);
-			/*this.llenarPago({nombre : 'inscripcion',importe : this.inscripcion.planPagos.inscripcion.importeRegular},
-				{numeroPago:1,semana : frg.isoWeek(),anio:frg.get("year")},'inscripcion');*/
-
-			for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
-				var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
-				if(concepto.estatus){
-					this.inscripcion[connceptoId]=true;
-					this.inscripcion.pagos[connceptoId].pago=this.inscripcion.pagos[connceptoId].importeRegular;
-					this.inscripcion.pagos[connceptoId].estatus=1;
-					this.inscripcion.pagos[connceptoId].fechaPago = new Date();
-					this.inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
-					this.inscripcion.pagos[connceptoId].anioPago = moment().get('year');
-					this.inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					this.inscripcion.pagos[connceptoId].diaPago = moment().weekday();
-					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
-				}
-			}
-		}else{
-			//this.inscripcion.planPagos.inscripcion.estatus=6;
-			//this.inscripcion.abono+=(this.inscripcion.importePagado-cobroObligatorio);
-			//this.inscripcion.planPagos.inscripcion.faltante=this.inscripcion.planPagos.inscripcion.importeRegular-
-			//												this.inscripcion.planPagos.inscripcion.pago;
-			var frg=moment(this.inscripcion.planPagos.colegiatura.fechaInicial);
-			/*this.llenarPago({nombre:'Abono de inscripcion',importe:this.inscripcion.planPagos.inscripcion.pago},
-				{numeroPago:1,semana:frg.isoWeek(),anio:frg.get("year")},'inscripcion');*/
-			var _acumuladoConcepto=0;
-			for(var connceptoId in this.inscripcion.planPagos.inscripcion.conceptos){
-				var concepto = this.inscripcion.planPagos.inscripcion.conceptos[connceptoId];
-				_acumuladoConcepto+= concepto.importe;
-				if(concepto.estatus && _acumuladoConcepto<= this.inscripcion.importePagado-cobroObligatorio){
-					this.inscripcion[connceptoId]=true;
-					this.inscripcion.pagos[connceptoId].pago=this.inscripcion.pagos[connceptoId].importeRegular;
-					this.inscripcion.pagos[connceptoId].estatus=1;
-					this.inscripcion.pagos[connceptoId].fechaPago = new Date();
-					this.inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
-					this.inscripcion.pagos[connceptoId].anioPago = moment().get('year');
-					this.inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					this.inscripcion.pagos[connceptoId].diaPago = moment().weekday();
-
-					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
-				}
-				else if(concepto.estatus && _acumuladoConcepto > this.inscripcion.importePagado-cobroObligatorio &&
-					_acumuladoConcepto -concepto.importe < this.inscripcion.importePagado-cobroObligatorio) {
-					this.inscripcion.abono+=(this.inscripcion.importePagado-cobroObligatorio)-(_acumuladoConcepto -concepto.importe );
-					
-				} 
-			}
-		}
+		//Calcula comision obligada
+		this.comisionObligada = _concepto.importeRegular;
+		
 	}
 
 	this.hayCupo = function(grupo_id){
