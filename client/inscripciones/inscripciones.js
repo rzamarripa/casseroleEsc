@@ -21,6 +21,7 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 			Inscripciones.update(inscripcion_id, { $set : { estatus : 1 }});
 			Meteor.apply('reactivarPlanPagos', [inscripcion_id], function(error, result){
 			  toastr.success("El alumno ha sido recuperado y su plan de pagos se ha activado, pero no olvide agregarlo a un grupo");
+			  rc.getInscripciones();
 		  });
 		}else{
 			Inscripciones.update(inscripcion_id, { $set : { estatus : 0 }});
@@ -49,8 +50,8 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 				if(result){ 
 					console.log("entré al result ", result);
 					rc.inscripciones = result;
+					$scope.$apply();
 				}
-				$scope.$apply();
 		  });
 		}else{
 			rc.inscripciones = [];

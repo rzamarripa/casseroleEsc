@@ -184,6 +184,21 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
     return moment(date).calendar();
 	}
 	
+	this.tieneFoto = function(sexo, foto){
+	  if(foto === undefined){
+		  if(sexo === "masculino")
+			  return "img/badmenprofile.jpeg";
+			else if(sexo === "femenino"){
+				return "img/badgirlprofile.jpeg";
+			}else{
+				return "img/badprofile.jpeg";
+			}
+			  
+	  }else{
+		  return foto;
+	  }
+  };
+	
 	this.cambiarEstatus = function(aviso_id){
 		var aviso = MensajesVendedores.findOne(aviso_id);
 		if(aviso){
@@ -193,7 +208,6 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 			}else{
 				toastr.info("Mensaje no leído");
 			}
-		}
-		
+		}		
 	}
 };

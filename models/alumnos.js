@@ -4,4 +4,3 @@ Alumnos.allow({
   update: function (userId, doc) { return !Roles.userIsInRole(userId, 'alumno'); },
   remove: function (userId, doc) { return !Roles.userIsInRole(userId, 'alumno'); }
 });
-
