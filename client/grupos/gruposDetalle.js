@@ -34,7 +34,7 @@ angular
 	
 	this.subscribe('buscarNoAlumnos', () => {
     return [{
-	    options : { limit: 1000000 },
+	    options : { limit: 10 },
 	    where : {
 	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'),

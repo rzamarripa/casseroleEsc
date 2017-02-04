@@ -13,10 +13,8 @@ function GruposActivosCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 	this.grupos = {};
 	this.cant = 0;
 	
-	this.subscribe('grupos', () => {		
-		return [{
-			estatus : true
-		}]
+	this.subscribe('grupo', () => {
+		return [{_id : $stateParams.id, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];
 	});
 	
 	this.subscribe('maestros', () => {		
