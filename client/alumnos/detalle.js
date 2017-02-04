@@ -21,8 +21,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanasSeleccionadas = [];
 	this.otroPago = {}; 
 	this.planPagosCollec = [];
+	this.cantPendientes = 0;
+	this.cantCondonadas = 0;
+	this.cantCanceladas = 0;
+	this.cantAtrasadas 	= 0;
+	this.cantPagadas 		= 0;
+	this.cantSeleccionados = 0;
 	window.rc = rc;
-	
+	this.i = 0;
 	this.subscribe("ocupaciones",()=>{
 		return [{_id : this.getReactively("ocupacion_id"), estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
@@ -92,12 +98,25 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		planPagos : () => {
 			var raw = PlanPagos.find().fetch();
 			var planes = [];
-			for(var id in raw){
-				pago = raw[id];
-				if(!planes[pago.inscripcion_id])
-					planes[pago.inscripcion_id]=[];
-				planes[pago.inscripcion_id].push(pago);
+			
+			if(raw != undefined){
+				this.cantPagadas 		= PlanPagos.find({estatus : 1}).count();
+				this.cantPendientes = PlanPagos.find({estatus : 0}).count();
+				this.cantCondonadas = PlanPagos.find({estatus : 3}).count();
+				this.cantAbonados = PlanPagos.find({estatus : 6}).count();
+				this.cantCanceladas = PlanPagos.find({estatus : 2}).count();
+				this.cantAtrasadas 	= PlanPagos.find({$and : [ {estatus : 0}, { $or : [{anio : {$lt : this.anioActual}}, 
+																										 { $and : [{ semana : { $lt : this.semanaPago}}, { anio : this.anioActual}]}]}]}).count();
+				for(var id in raw){
+					pago = raw[id];
+					if(!planes[pago.inscripcion_id])
+						planes[pago.inscripcion_id]=[];
+					planes[pago.inscripcion_id].push(pago);
+				}
+				
+				
 			}
+			
 			
 			return planes;
 		},
@@ -252,7 +271,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diasDiferencia = fechaCobro.diff(fechaActual, "days");
 		//var concepto 			= configuracion.colegiatura[pago.tipoPlan];
 		var importe 			= pago.importeRegular;
-		console.log("pago ", diasDiferencia, fechaActual, fechaCobro);
 		if(diasDiferencia >= pago.diasDescuento){
 			importe -= pago.importeDescuento;
 		}
@@ -320,14 +338,17 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.seleccionarSemana = function(cobro, plan, configuracion){
 		rc.hayParaPagar = true;
 		rc.totalPagar = 0;
+		rc.cantSeleccionados = 0;
 		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
 			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 2){
 				rc.hayParaPagar = false;
+				rc.cantSeleccionados++;
 				if(plan[i].estatus == 6 || plan[i].faltante > 0){
 					rc.totalPagar += plan[i].faltante;
 				}
 				else{
+					
 					rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
 				}
 				rc.semanasSeleccionadas.push(plan[i]);
@@ -362,42 +383,24 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	this.obtenerEstatus = function(cobro){
-		//var i = cobro.numeroPago - 1;
-		//var fechaActual = new Date();
-		//var fechaCobro = new Date(plan[i].fecha);
-		//var diasRecargo = Math.floor((fechaActual - fechaCobro) / (1000 * 60 * 60 * 24));
-		//var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
-		//var concepto = configuracion.colegiatura[plan[i].tipoPlan];
-		
-		
-		/* 
-			estatus 0 => Debe
-			estatus 1 => Pagada
-			estatus 2 => Cancelada
-			estatus 3 => Condonada
-			tiempoPago 1 => Atrasada
-		*/
-		
-		
+
 		if(cobro.estatus == 1){
 			return "bg-color-green txt-color-white";
 		}			
 		if(cobro.estatus == 5 || cobro.tmpestatus==5)
 			return "bg-color-blue txt-color-white";
-		else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual))
-			rc.cantPendientes++;
+		else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual)){
+			
+		}
 		else if(cobro.estatus == 3){
-			rc.cantCondonadas++;
 			return "bg-color-blueDark txt-color-white";	
 		}
 		else if(cobro.estatus == 2){
-			rc.cantCanceladas++;
 			return "bg-color-red txt-color-white";
 		}
 		else if(cobro.estatus == 6)
 			return "bg-color-greenLight txt-color-white";
 		else if(cobro.tiempoPago == 1 || cobro.anio < this.anioActual || (cobro.semana < this.semanaPago && cobro.anio == this.anioActual)){
-			rc.cantAtrasadas++;
 			return "bg-color-orange txt-color-white";
 		}
 		
@@ -1204,5 +1207,16 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		Inscripciones.update({_id : inscripcion_id}, {$set : { abono : abonoSumado}});
 		$('#modalAbono').modal('hide');
 		//toastr.success('Guardado correctamente.');
+	}
+	
+	this.tienePermiso = function(roles){
+		permiso = false;
+		_.each(roles, function(role){
+			if(role == Meteor.user().roles[0]){
+				permiso = true;
+			}
+		});
+		
+		return permiso;
 	}
 }
