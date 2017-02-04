@@ -197,7 +197,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "admin"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -213,7 +213,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista"){
+						if(user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "recepcionista" || user.roles[0] == "admin"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1699,8 +1699,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
          });
        }]
       }
-    })
-    
+    })    
     .state('root.reporteComisiones', {
       url: '/reporteComisiones',
       templateUrl: 'client/reportes/reporteComisiones.html',
@@ -1709,6 +1708,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
         "currentUser": ["$meteor", "toastr", function($meteor, toastr){
           return $meteor.requireValidUser(function(user) {
             if(user.roles[0] == "director" || user.roles[0] == "admin"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
+    .state('root.cambiarSeccion', {
+      url: '/cambiarSeccion',
+      templateUrl: 'client/secciones/cambiarSeccion.html',
+      controller: 'CambiarSeccionCtrl as cs',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin"){
               return true;
             }else{
               return 'UNAUTHORIZED'; 

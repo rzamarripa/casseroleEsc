@@ -1,0 +1,10 @@
+<h2>Seleccione la escuela - <small>a la que se quiere cambiar.</small></h2>
+<div class="row">
+	<div ng-repeat="seccion in cs.secciones" class="col-xs-12 col-sm-6 col-md-6">
+		<div ng-click="cs.seleccionarSeccion(seccion._id)" style="cursor:pointer;" class="panel panel-{{seccion.activo == true ? 'success':'danger'}} pricing-big">
+			<div class="panel-heading">
+			<h1 class="panel-title" style="font-size:50px;">{{seccion.nombreseccion}}</h1>
+			</div>
+		</div>
+	</div>
+</div>

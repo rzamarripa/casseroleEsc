@@ -390,7 +390,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 				})
 				
 				if(ra <= 52 ){
-					asignacion.semanas.push({anio : ultimaSemana.anio, semana : ra});
+					asignacion.semanas.push({anio : rc.grupo.anio, semana : ra});
 				}else{
 					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra) - 52});
 				}
