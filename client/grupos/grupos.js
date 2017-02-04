@@ -2,7 +2,7 @@ angular.module("casserole")
 .controller("GruposCtrl", GruposCtrl);
  function GruposCtrl($scope, $meteor, $reactive , $state, $stateParams, toastr){
  	let rc = $reactive(this).attach($scope);
- 
+
   if ($stateParams.id != undefined) {
   	this.action = false;
   }else{
@@ -14,6 +14,8 @@ angular.module("casserole")
 	this.subCiclos_ids = [];
 	this.periodos_ids = [];
 	this.subCiclos = [];
+	
+
 	
 	this.subscribe('grupo', () => {
 		return [{_id : $stateParams.id, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}];

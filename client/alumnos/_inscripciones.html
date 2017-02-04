@@ -10,8 +10,8 @@
 		        <div>
 		          <div class="widget-body">
 			          <div>
-			            <inscripcionplanpagos></inscripcionplanpagos>
-									<modalabonar></modalabonar>
+			            <inscripcionplanpagos ng-if="al.tienePermiso(['coordinadorFinanciero', 'director', 'recepcionista'])"></inscripcionplanpagos>
+									<modalabonar ng-if="al.tienePermiso(['coordinadorFinanciero', 'director', 'recepcionista'])"></modalabonar>
 									<curricula></curricula>
 			          </div>						
 		          </div>
