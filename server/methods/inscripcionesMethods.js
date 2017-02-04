@@ -152,10 +152,45 @@ Meteor.methods({
 			
 		});
 	},
-	generaComisiones : function (inscripcion){
-		var comisionVendedor = ConceptosComision.find({seccion_id:inscripcion.seccion_id, beneficiario : "vendedor", estatus:true});
-		var comisionGerente = ConceptosComision.find({seccion_id:inscripcion.seccion_id, beneficiario : "gerente", estatus:true});
+	generaComisionesVendedor : function (inscripcion, configInscripcion, pago){
+		//OBTENER LOS OBJETOS CON LOS QUE SE LLENARÁ LA INSCRIPCIÓN
+		var grupo 						= Grupos.findOne(inscripcion.grupo_id);
+		var planEstudio 			= PlanesEstudios.findOne(grupo.planEstudios_id)
+		var campus	 					= Campus.findOne(Meteor.user().profile.campus_id);
+		var cantidadAlumnos 	= Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus._id}).count();
+		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
+		var configColegiatura = inscripcion.planPagos.colegiatura[inscripcion.planPagos.colegiatura.tipoColegiatura];
+		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
 
+		//VARIABLES REUTILIZABLES
+		var diaActual 	= moment(new Date()).weekday();
+		var semanaPago 	= moment(new Date()).isoWeek();
+		var mesPago 		= moment(new Date()).get('month') + 1;
+		var anioPago 		= moment(new Date()).get('year');
+
+		var tipoPlanPagos = inscripcion.planPagos.colegiatura.tipoColegiatura;
+		Comisiones.insert({
+			alumno_id : inscripcion.alumno_id,
+			cantidad 	: 1,
+			inscripcion_id 	: inscripcion._id,
+			importePagado 	: pago,
+			importeComision : pago,
+			grupo_id		: inscripcion.grupo_id,
+			seccion_id  : Meteor.user().profile.seccion_id,
+			campus_id 	: Meteor.user().profile.campus_id,
+			fechaPago 	: new Date(),
+			diaPago     : diaActual,
+			mesPago     : mesPago,
+			semanaPago  : semanaPago,
+			anioPago    : anioPago,
+			vendedor_id : inscripcion.vendedor_id,
+			importeInscripcion : configInscripcion.importe,
+			importeColegiatura : inscripcion.planPagos.colegiatura[tipoPlanPagos].importeRegular,
+			gerente_id 	: vendedor.profile.gerenteVenta_id,
+			estatus			: 1,
+			cuenta_id 	: cuentaInscripcion._id,
+			beneficiario : "vendedor"
+		});
 
 	},
 	inscribirAlumno : function (inscripcion) {
@@ -287,10 +322,13 @@ Meteor.methods({
 		inscripcion.pagos={};
 		remanente = (inscripcion.importePagado - inscripcion.cambio )- configColegiatura.importeRegular;
 		var configInscripcion = undefined;
+		var inscripcionConnceptoId= undefined;
 		inscripcion.planPagos.inscripcion.conceptos = sortObjects(inscripcion.planPagos.inscripcion.conceptos,"orden",false,false);
 		_.each(inscripcion.planPagos.inscripcion.conceptos,function(concepto,connceptoId){
-			if(!configInscripcion)
+			if(!configInscripcion){
 				configInscripcion = concepto;
+				inscripcionConnceptoId = connceptoId;
+			}
 			inscripcion.pagos[connceptoId]={
 				_id:connceptoId,
 				importeRegular:concepto.importe,
@@ -316,7 +354,19 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].tiempoPago = 0;
 			}
 			else if(remanente>0){
-				inscripcion.abono+=remanente;
+				if(connceptoId==inscripcionConnceptoId){
+					inscripcion.pagos[connceptoId].pago=remanente;
+					inscripcion.pagos[connceptoId].faltante=inscripcion.pagos[connceptoId].importeRegular-remanente;
+					inscripcion.pagos[connceptoId].estatus=6;
+					inscripcion.pagos[connceptoId].fechaPago = new Date();
+					inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
+					inscripcion.pagos[connceptoId].anioPago = moment().get('year');
+					inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
+					inscripcion.pagos[connceptoId].diaPago = moment().weekday();
+					inscripcion.pagos[connceptoId].tiempoPago = 0;
+				}
+				else
+					inscripcion.abono+=remanente;
 			}
 			remanente-=concepto.importe;
 		});
