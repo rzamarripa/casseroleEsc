@@ -1,0 +1,99 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.alumnoDetalle({alumno_id : ac.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
+											<i class="fa fa-user"></i> Ir a mi Perfil
+										</a>&nbsp;
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.editarAlumno({alumno_id : ac.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{ac.fechaActual | date:'dd-MM-yyyy'}}</h4>
+									</div>
+									<ol class="carousel-indicators">
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
+										<img style="max-width:200px;" src="{{ac.tieneFoto(ac.alumno.profile.sexo, ac.alumno.profile.fotografia)}}" >
+									</div>
+									<div class="col-sm-6">
+										<h1>{{ac.alumno.profile.nombre}} <span class="semi-bold">{{ac.alumno.profile.apPaterno}} {{ac.alumno.profile.apMaterno}}</span>
+										
+										<small> (Alumno)</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-key fa-lg"></i>&nbsp;&nbsp;
+													<span class="txt-color-darken">
+														<strong>{{ac.alumno.profile.matricula}}</strong>
+													</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{ac.alumno.profile.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope fa-lg"></i>&nbsp;&nbsp;<a href="mailto:{{ac.alumno.profile.correo}}">{{ac.alumno.profile.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{ac.alumno.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<h2> Currícula : <small class="pull-right"><button class="btn btn-danger" ui-sref="root.actualizarCalificaciones({alumno_id : curso.alumno_id})" ng-if="ac.tienePermiso(['coordinadorAcademico'])">Actualizar calificaciones</button></small></h2>
+		<table class="table table-bordered table-responsive">
+			<tr ng-repeat="grado in ac.curricula.grados">
+				<th width="5%"><div class="text-center">{{$index + 1}}</div></th>
+				<td ng-repeat="_materia in grado" 
+						ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : _materia.aprobado != undefined ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
+					<div class="row">
+						<div class="col-sm-8" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
+							<strong>{{_materia.materia.nombreCorto}}</strong>
+							<input type="range" ng-model="_materia.calificacion" min="0" max="10" class="form-control" ng-change="ac.estaAprobado(_materia)"/>
+						</div>
+					</div>
+					<p style="margin-bottom: 0px !important;" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>{{_materia.materia.nombre}}</small></p>	
+					<p style="margin-bottom: 0px !important;" ng-if="_materia.aprobado != undefined" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''"><small>Calif. {{_materia.calificacion}}</small></p>	
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<button type="button" class="btn btn-primary" ng-click="ac.actualizarCalificaciones()">Actualizar</button>
+	</div>
+</div>
