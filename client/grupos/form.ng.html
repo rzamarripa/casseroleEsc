@@ -81,14 +81,14 @@
 					<div class="well">
 						<form name="form2" class="form-horizontal" role="form" novalidate >
 							<div class="row">
-					  		<div class="col-sm-4" valida>
+					  		<div class="col-sm-2" valida>
 									<label >Maestro *</label>
 									<select name="maestro" class="form-control" ng-model="gp.asignacion.maestro_id">
 										<option ng-repeat="maestro in gp.maestros" value="{{maestro._id}}">{{maestro.nombre}} {{maestro.apPaterno}} {{maestro.apMaterno}}</option>
 									</select>
 								</div>
 					    	
-								<div class="col-sm-3" valida>
+								<div class="col-sm-1" valida>
 									<label>Grado*</label>
 									<select name="grados" class="form-control" ng-model="gp.asignacion.grado" ng-change="gp.getMaterias(gp.grupo.planEstudios_id, gp.asignacion.grado)">
 										<option ng-repeat="grado in gp.grados" value="{{grado}}">{{grado}}</option>
@@ -102,9 +102,13 @@
 								</div>
 								<div class="col-sm-3" valida>
 									<label>Materia *</label>
-									<select name="materia" class="form-control" ng-model="gp.asignacion.materia">
+									<select name="materia" class="form-control" ng-model="gp.asignacion.materia" ng-change="gp.getSemanas(gp.asignacion.materia)">
 										<option ng-repeat="materia in gp.materias" value="{{materia}}">{{materia.nombre}}</option>
 									</select>
+								</div>
+								<div class="col-sm-3">
+									<label>Semana *</label>
+									<input class="form-control" ng-model="gp.asignacion.semanas"/>
 								</div>
 								<div class="col-sm-1 text-center">
 									<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
