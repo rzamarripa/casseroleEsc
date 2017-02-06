@@ -8,10 +8,10 @@
 							<div class="col-sm-12">
 								<div id="myCarousel" class="carousel profile-carousel">
 									<div class="air air-bottom-right padding-10">
-										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.agregarInscripcion({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.agregarInscripcion({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
 											<i class="fa fa-cogs"></i> Nueva Inscripción
 										</a>&nbsp;
-										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
 	 										<i class="fa fa-pencil"></i> Modificar
 	 									</a> 
 									</div>

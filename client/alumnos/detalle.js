@@ -21,8 +21,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanasSeleccionadas = [];
 	this.otroPago = {}; 
 	this.planPagosCollec = [];
+	this.cantPendientes = 0;
+	this.cantCondonadas = 0;
+	this.cantCanceladas = 0;
+	this.cantAtrasadas 	= 0;
+	this.cantPagadas 		= 0;
+	this.cantSeleccionados = 0;
 	window.rc = rc;
-	
+	this.i = 0;
 	this.subscribe("ocupaciones",()=>{
 		return [{_id : this.getReactively("ocupacion_id"), estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
@@ -92,12 +98,25 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		planPagos : () => {
 			var raw = PlanPagos.find().fetch();
 			var planes = [];
-			for(var id in raw){
-				pago = raw[id];
-				if(!planes[pago.inscripcion_id])
-					planes[pago.inscripcion_id]=[];
-				planes[pago.inscripcion_id].push(pago);
+			
+			if(raw != undefined){
+				this.cantPagadas 		= PlanPagos.find({estatus : 1}).count();
+				this.cantPendientes = PlanPagos.find({estatus : 0}).count();
+				this.cantCondonadas = PlanPagos.find({estatus : 3}).count();
+				this.cantAbonados = PlanPagos.find({estatus : 6}).count();
+				this.cantCanceladas = PlanPagos.find({estatus : 2}).count();
+				this.cantAtrasadas 	= PlanPagos.find({$and : [ {estatus : 0}, { $or : [{anio : {$lt : this.anioActual}}, 
+																										 { $and : [{ semana : { $lt : this.semanaPago}}, { anio : this.anioActual}]}]}]}).count();
+				for(var id in raw){
+					pago = raw[id];
+					if(!planes[pago.inscripcion_id])
+						planes[pago.inscripcion_id]=[];
+					planes[pago.inscripcion_id].push(pago);
+				}
+				
+				
 			}
+			
 			
 			return planes;
 		},
@@ -252,7 +271,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diasDiferencia = fechaCobro.diff(fechaActual, "days");
 		//var concepto 			= configuracion.colegiatura[pago.tipoPlan];
 		var importe 			= pago.importeRegular;
-		console.log("pago ", diasDiferencia, fechaActual, fechaCobro);
 		if(diasDiferencia >= pago.diasDescuento){
 			importe -= pago.importeDescuento;
 		}
@@ -320,14 +338,17 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.seleccionarSemana = function(cobro, plan, configuracion){
 		rc.hayParaPagar = true;
 		rc.totalPagar = 0;
+		rc.cantSeleccionados = 0;
 		rc.semanasSeleccionadas = [];
 		for (var i = 0; i < cobro.numeroPago; i++) {
 			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 2){
 				rc.hayParaPagar = false;
+				rc.cantSeleccionados++;
 				if(plan[i].estatus == 6 || plan[i].faltante > 0){
 					rc.totalPagar += plan[i].faltante;
 				}
 				else{
+					
 					rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
 				}
 				rc.semanasSeleccionadas.push(plan[i]);
@@ -362,42 +383,24 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	this.obtenerEstatus = function(cobro){
-		//var i = cobro.numeroPago - 1;
-		//var fechaActual = new Date();
-		//var fechaCobro = new Date(plan[i].fecha);
-		//var diasRecargo = Math.floor((fechaActual - fechaCobro) / (1000 * 60 * 60 * 24));
-		//var diasDescuento = Math.floor((fechaCobro - fechaActual) / (1000 * 60 * 60 * 24));
-		//var concepto = configuracion.colegiatura[plan[i].tipoPlan];
-		
-		
-		/* 
-			estatus 0 => Debe
-			estatus 1 => Pagada
-			estatus 2 => Cancelada
-			estatus 3 => Condonada
-			tiempoPago 1 => Atrasada
-		*/
-		
-		
+
 		if(cobro.estatus == 1){
 			return "bg-color-green txt-color-white";
 		}			
 		if(cobro.estatus == 5 || cobro.tmpestatus==5)
 			return "bg-color-blue txt-color-white";
-		else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual))
-			rc.cantPendientes++;
+		else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual)){
+			
+		}
 		else if(cobro.estatus == 3){
-			rc.cantCondonadas++;
 			return "bg-color-blueDark txt-color-white";	
 		}
 		else if(cobro.estatus == 2){
-			rc.cantCanceladas++;
 			return "bg-color-red txt-color-white";
 		}
 		else if(cobro.estatus == 6)
 			return "bg-color-greenLight txt-color-white";
 		else if(cobro.tiempoPago == 1 || cobro.anio < this.anioActual || (cobro.semana < this.semanaPago && cobro.anio == this.anioActual)){
-			rc.cantAtrasadas++;
 			return "bg-color-orange txt-color-white";
 		}
 		
@@ -768,6 +771,48 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 
 	this.pagarConcepto = function( configuracion){
+
+		function sortProperties(obj, sortedBy, isNumericSort, reverse) {
+            sortedBy = sortedBy || 1; // by default first key
+            isNumericSort = isNumericSort || false; // by default text sort
+            reverse = reverse || false; // by default no reverse
+
+            var reversed = (reverse) ? -1 : 1;
+
+            var sortable = [];
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    sortable.push([key, obj[key]]);
+                }
+            }
+            if (isNumericSort)
+                sortable.sort(function (a, b) {
+                    return reversed * (a[1][sortedBy] - b[1][sortedBy]);
+                });
+            else
+                sortable.sort(function (a, b) {
+                    var x = a[1][sortedBy].toLowerCase(),
+                        y = b[1][sortedBy].toLowerCase();
+                    return x < y ? reversed * -1 : x > y ? reversed : 0;
+                });
+            return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+        }
+
+        function sortObjects(objects, sortedBy, isNumericSort, reverse) {
+		    var newObject = {};
+		    sortedBy = sortedBy || 1; // by default first key
+            isNumericSort = isNumericSort || false; // by default text sort
+            reverse = reverse || false; // by default no reverse
+		    var sortedArray = sortProperties(objects, sortedBy, isNumericSort, reverse);
+		    for (var i = 0; i < sortedArray.length; i++) {
+		        var key = sortedArray[i][0];
+		        var value = sortedArray[i][1];
+		        newObject[key] = value;
+		    }
+		    return newObject;
+		}
+		
+
 		if (confirm("Está seguro que desea realizar el cobro por $" + parseFloat(rc.ttotalpagar))) {
 			var semanasCondonadas = [];
 			var diaActual = moment(new Date()).weekday();
@@ -784,6 +829,11 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			if(rc.abono<0)
 				rc.abono=0
 
+			sortObjects(configuracion.planPagos.inscripcion.conceptos,"orden",false,false);
+			//console.log(configuracion.planPagos.inscripcion.conceptos);
+			var ccinscripcion=Object.keys(configuracion.planPagos.inscripcion.conceptos)[0];
+
+			
 			var condonado= Pagos.insert({
 				fechaPago 	: new Date(),
 				alumno_id 	: configuracion.alumno_id,
@@ -803,7 +853,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				inscripcion_id : configuracion._id
 			});
 			
-			_.each(configuracion.pagos, function(pago) {
+			_.each(configuracion.pagos, function(pago,ipago) {
 				if(pago.tmpestatus == 5){
 					if(pago.faltante){
 						pago.pago = pago.importe-pago.pago;
@@ -811,6 +861,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					else{
 						pago.pago = pago.importe;
 						
+					}
+					console.log(ipago,ccinscripcion)
+					if(ipago==ccinscripcion){
+						Meteor.call('generaComisionesVendedor', configuracion, configuracion.planPagos.inscripcion.conceptos[ccinscripcion],pago.pago);
 					}
 					pago.fechaPago = new Date();
 					pago.semanaPago = moment().isoWeek();
@@ -1204,5 +1258,16 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		Inscripciones.update({_id : inscripcion_id}, {$set : { abono : abonoSumado}});
 		$('#modalAbono').modal('hide');
 		//toastr.success('Guardado correctamente.');
+	}
+	
+	this.tienePermiso = function(roles){
+		permiso = false;
+		_.each(roles, function(role){
+			if(role == Meteor.user().roles[0]){
+				permiso = true;
+			}
+		});
+		
+		return permiso;
 	}
 }

@@ -34,22 +34,27 @@
 										<div class="row">
 											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input  type="text" value="Pendientes" disabled="" class="">
+													<input  type="text" value="Pendientes {{p.cantPendientes}}" disabled="" class="">
 												</label>
 											</section>
 											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input  type="text" value="Recargos" disabled="" class="bg-color-orange txt-color-white">
+													<input  type="text" value="Pagados {{p.cantPagadas}}" disabled="" class="bg-color-green txt-color-white">
 												</label>
 											</section>
 											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input  type="text" value="Pagados" disabled="" class="bg-color-green txt-color-white">
+													<input  type="text" value="Condonados {{p.cantCondonadas}}" disabled="" class="bg-color-blueDark txt-color-white">
 												</label>
 											</section>
 											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 												<label class="input">
-													<input  type="text" value="Abonados" disabled="" class="bg-color-greenLight txt-color-white">
+													<input  type="text" value="Recargos {{p.cantAtrasadas}}" disabled="" class="bg-color-orange txt-color-white">
+												</label>
+											</section>
+											<section class="col col-2" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+												<label class="input">
+													<input  type="text" value="Abonados {{p.cantAbonados}}" disabled="" class="bg-color-greenLight txt-color-white">
 												</label>
 											</section>											
 										</div>

@@ -110,6 +110,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.actualizarCalificaciones', {
+      url: '/actualizarCalificaciones/:alumno_id/:inscripcion_id',
+      templateUrl: 'client/alumnos/actualizarCalificaciones.html',      
+      controller: 'ActualizarCalificacionesCtrl as ac',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "coordinadorAcademico"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.deudores', {
       url: '/deudores',
       templateUrl: 'client/planPagos/deudores/deudores.html',      

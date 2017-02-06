@@ -79,7 +79,7 @@
 						</ul>
 					</div>
 					<div class="col-sm-12 col-md-12 col-lg-12 text-center">
-							<a class="btn btn-sm btn-default" ng-click='m.loadMore()'><i class="fa fa-arrow-down text-muted"></i> CARGAR MÁS</a>
+						<a class="btn btn-sm btn-default" ng-click='m.loadMore()'><i class="fa fa-arrow-down text-muted"></i> CARGAR MÁS</a>
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-2 col-lg-4">
@@ -99,11 +99,11 @@
 						<!-- RESULTADOS USUARIOS -->
 						<nav>
 							<ul>
-								<li class="chat-users top-menu-invisible open">
+								<li class="chat-users open">
 									<div class="display-users">											
-									  	<a ng-repeat="alumno in m.alumnos" href="#" style="color : black; cursor: pointer" class="usr" data-chat-id="cha1" data-chat-fname="Sadi" data-chat-lname="Orlaf" data-chat-status="away" data-rel="popover-hover" data-placement="right" data-html="true" data-original-title="" title="" ng-click="m.agregarAmigo(alumno._id)"> 
-										  	<i></i>{{alumno.profile.nombreCompleto}}
-									  	</a>
+								  	<a ng-repeat="alumno in m.alumnos" href="#" style="color : black; cursor: pointer" class="usr" data-chat-id="cha1" data-chat-fname="Sadi" data-chat-lname="Orlaf" data-chat-status="away" data-rel="popover-hover" data-placement="right" data-html="true" data-original-title="" title="" ng-click="m.agregarAmigo(alumno._id)"> 
+									  	<i></i>{{alumno.profile.nombreCompleto}}
+								  	</a>
 									</div>
 								</li>
 							</ul>	
@@ -147,11 +147,7 @@
 					<hr>
 				</div>
 			</div>
-
 		</div>
-
-
 	</div>
-
 </div>
 

@@ -1,6 +1,6 @@
 <div class="row" ng-class="{desactivado: curso.estatus == 0}">
 	<div class="col-sm-12">
-		<h2> Currícula : </h2>
+		<h2> Currícula : <small class="pull-right"><button class="btn btn-danger" ui-sref="root.actualizarCalificaciones({alumno_id : curso.alumno_id, inscripcion_id : curso._id})" ng-if="al.tienePermiso(['coordinadorAcademico'])">Actualizar calificaciones</button></small></h2>
 		<table class="table table-bordered table-responsive">
 			<tr ng-repeat="grado in curso.curricula.grados">
 				<th width="5%"><div class="text-center">{{$index + 1}}</div></th>

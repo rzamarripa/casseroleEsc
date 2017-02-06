@@ -30,8 +30,7 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	    options : { limit: 10 },
 	    where : { 
 				nombreCompleto : this.getReactively('buscar.nombre'), 
-				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
-				campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+				seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 			}
     }];
   });

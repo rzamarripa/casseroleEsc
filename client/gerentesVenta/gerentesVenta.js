@@ -6,6 +6,11 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;
+  this.comision = {};
+  this.gerenteVenta = {};
+  this.gerenteVenta.profile = {};
+  this.gerenteVenta.profile.planComision = [];
+  window.rc = rc;
   
   this.subscribe('gerentesVenta', ()=>{
 		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["gerenteVenta"]}}]
@@ -87,4 +92,38 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 		});
 	};
 	
+	this.cambiarEstatus = function(id)
+	{
+		var gerenteVenta = Meteor.users.findOne({_id:id});
+		if(gerenteVenta.profile.estatus == true)
+			gerenteVenta.profile.estatus = false;
+		else
+			gerenteVenta.profile.estatus = true;		
+		Meteor.call('modificarUsuario', gerenteVenta, 'gerenteVenta');
+	};
+	
+	this.agregarComision = function(comision, form){
+		if(form.$invalid){
+      toastr.error('Error al guardar los datos.');
+      return;
+		}	
+		
+		if(this.gerenteVenta.profile.planComision == undefined)
+			this.gerenteVenta.profile.planComision = [];
+		
+		this.gerenteVenta.profile.planComision.push(angular.copy(comision));
+		this.comision = {};
+	}
+	
+	this.confirmarComision = function(comision){
+		delete comision.editando;
+	}
+	
+	this.editarComision = function(comision){
+		comision.editando = true;
+	}
+	
+	this.quitarComision = function(indice){
+		this.gerenteVenta.profile.planComision.splice(indice, 1);
+	}
 };
