@@ -8,3 +8,4 @@ angular.module('casserole').factory('alumnoService', ['$meteor', function ($mete
     return $meteor.object(Alumnos, id, reactive).subscribe("alumnos");
   }
 }]);
+

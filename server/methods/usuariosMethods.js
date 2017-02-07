@@ -1,5 +1,6 @@
 Meteor.methods({
   createUsuario: function (usuario, rol) {
+  	usuario.contrasena = Math.random().toString(36).substring(2,7);
 	  profile = {
 				email: usuario.correo,
 				nombre: usuario.nombre,
@@ -21,8 +22,23 @@ Meteor.methods({
 		});
 		
 		Roles.addUsersToRoles(usuario_id, rol);
-		
+		Meteor.call('sendEmail',
+			profile.email,
+			'sistema@casserole.edu.mx',
+			'Bienvenido a Casserole',
+			'Usuario: '+ usuario.nombreUsuario + ' contraseña: '+ usuario.contrasena
+		);
+		return usuario_id;
 	},
+	sendEmail: function (to, from, subject, text) {
+    this.unblock();
+    Email.send({
+      to: to,
+      from: from,
+      subject: subject,
+      text: text
+    });
+  },
 	userIsInRole: function(usuario, rol, grupo, vista){
 		if (!Roles.userIsInRole(usuario, rol, grupo)) {
 	    throw new Meteor.Error(403, "Usted no tiene permiso para entrar a " + vista);

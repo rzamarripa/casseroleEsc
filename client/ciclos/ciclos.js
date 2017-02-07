@@ -2,7 +2,7 @@ angular
   .module('casserole')
   .controller('CiclosCtrl', CiclosCtrl);
  
-function CiclosCtrl($scope, $meteor, $reactive, $state, toastr) {
+function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
 	let rc = $reactive(this).attach($scope);
 	this.action = true;
 	this.subscribe('ciclos',()=>{
@@ -37,14 +37,16 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		ciclo.campus_id = Meteor.user().profile.campus_id;
 		ciclo.seccion_id = Meteor.user().profile.seccion_id;
 		ciclo.usuarioInserto = Meteor.userId();
-		Ciclos.insert(ciclo);
-		toastr.success('Guardado correctamente.');
-		ciclo = {};
-		$('.collapse').collapse('hide');
-		this.nuevo = true;
-		$state.go('root.ciclos');
-		form.$setPristine();
-    form.$setUntouched();
+		SaveService.save('ciclos', ciclo, function(err, message){
+			if(err){
+				toastr.error(err);
+				return
+			}
+			ciclo = {};
+			rc.nuevo = true;
+			$('.collapse').collapse('hide');
+			toastr.success(message);
+		});
 	};
 	
 	this.editar = function(id)

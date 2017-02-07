@@ -47,3 +47,5 @@ angularui:ui-calendar
 planettraining:jquery-fullcalendar
 
 shell-server
+email
+mrt:nprogress
