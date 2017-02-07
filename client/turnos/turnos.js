@@ -28,7 +28,8 @@ angular.module("casserole")
 	        return;
 	  }
 		turno.estatus = true;
-		turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
+		var diaFinal = (turno.diaFinal == undefined || turno.diaFinal == "") ? "" : "-" + turno.diaFinal
+		turno.nombre = turno.diaInicial + diaFinal;
 		turno.campus_id = Meteor.user().profile.campus_id;
 		//this.turno.seccion_id = Meteor.user().profile.seccion_id;
 		turno.usuarioInserto = Meteor.userId();
@@ -58,7 +59,9 @@ angular.module("casserole")
     }
 		var idTemp = turno._id;
 		delete turno._id;		
-		turno.nombre = turno.diaInicial + "-" + turno.diaFinal;
+		var diaFinal = (turno.diaFinal == undefined || turno.diaFinal == "") ? "" : "-" + turno.diaFinal
+		turno.nombre = turno.diaInicial + diaFinal;
+		console.log(diaFinal)
 		turno.usuarioActualizo = Meteor.userId(); 
 		Turnos.update({_id:idTemp},{$set:turno});
 		toastr.success('Actualizado correctamente.');
