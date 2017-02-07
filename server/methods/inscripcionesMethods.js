@@ -462,6 +462,23 @@ Meteor.methods({
 		
 		//RETORNAMOS EL ID DEL ALUMNO PARA SU REDIRECCIONAMIENTO A LA VISTA PERFIL
 		return inscripcion.alumno_id;
+	},
+	buscarEnGrupo : function(nombreCompleto, seccion_id){
+		if(nombreCompleto.length > 3){
+			let selector = {
+				"profile.nombreCompleto": { '$regex' : '.*' + nombreCompleto || '' + '.*', '$options' : 'i' },
+				"profile.seccion_id": seccion_id,
+				roles : ["alumno"]
+			}
+			
+			var alumnos 				= Meteor.users.find(selector).fetch();
+			var alumnos_ids = _.pluck(alumnos, "_id");
+			
+			_.each(alumnos, function(alumno){
+				alumno.profile.inscripciones = Inscripciones.find({alumno_id : alumno._id, estatus : 1}).fetch();
+			})
+			return alumnos;
+		} 
 	}
 	
 });

@@ -9,6 +9,7 @@ angular
   this.alumnos_id = [];
   this.alumnosGrupo = [];
   this.asignacion = {};
+  this.inscripcion = {};
   this.buscar = {};
   this.buscar.nombre = "";
   this.alumno_id = "";
@@ -34,6 +35,7 @@ angular
 		}]
 	});
 	
+/*
 	this.subscribe('buscarNoAlumnos', () => {
     return [{
 	    options : { limit: 10 },
@@ -45,6 +47,7 @@ angular
  		  }
     }];
   });
+*/
 
   this.subscribe('grupos', () => {
 	  return [{_id : $stateParams.grupo_id }]
@@ -107,42 +110,44 @@ angular
 		}
 	}
 
-	this.agregarAlumno = function(alumno_id, nombreCompleto){
-		var alumno = Meteor.users.findOne({_id : alumno_id});
+	this.agregarAlumno = function(alumno_id, inscripcion_id, nombreCompleto){
 		var res = confirm("Está seguro de querer agregar al alumno " + nombreCompleto)
 		if(res){
-			rc.alumno_id = alumno_id;
-			rc.alumnos_id.push(this.alumno_id);
 			if(!rc.grupo.alumnos)
 				rc.grupo.alumnos=[];
 			var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
-			var x = alumnos_id.indexOf(rc.alumno_id);
-			console.log(x);
+			var x = alumnos_id.indexOf(alumno_id);
 			if(x==-1){
-					rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : alumno.profile.inscripcion._id})
-					rc.grupo.inscritos++;
-					console.log(rc.grupo);
-					var idTemp = rc.grupo._id;
-					console.log(idTemp);
-					delete rc.grupo._id;
-					console.log(rc.grupo);
-					Grupos.update({_id : idTemp}, {$set : rc.grupo});
-					rc.buscando = false;
-					rc.buscar.nombre = "";
-					console.log("listo");
-					toastr.success("Ha insertado al alumno correctamente");
+				rc.grupo.alumnos.push({alumno_id : alumno_id, inscripcion_id : inscripcion_id})
+				rc.grupo.inscritos++;
+				console.log(rc.grupo);
+				var idTemp = rc.grupo._id;
+				console.log(idTemp);
+				delete rc.grupo._id;
+				console.log(rc.grupo);
+				Grupos.update({_id : idTemp}, {$set : rc.grupo});
+				rc.buscando = false;
+				rc.buscar.nombre = "";
+				console.log("listo");
+				toastr.success("Ha insertado al alumno correctamente");
 			}
 		}
 	}
 	
 	this.buscandoNoAlumno = function(){
 		this.hoy = new Date();
+		
 		if(this.buscar.nombre.length > 0){
 			rc.buscando = true;
 		}else{
 			rc.buscando = false;
 		}
-		
+		Meteor.apply("buscarEnGrupo", [rc.buscar.nombre, Meteor.user().profile.seccion_id], function(error, result){
+			if(result){
+				rc.balumnos = result;
+				console.log(rc.balumnos);
+			}
+		});
 	}
 	
 	this.tieneFoto = function(sexo, foto){
