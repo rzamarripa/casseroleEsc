@@ -36,8 +36,8 @@
 								<td>{{alumno.profile.matricula}}</td>
 								<td>{{alumno.profile.nombreCompleto}}</td>
 								<td>
-									<button type="button" class="btn btn-primary btn-sm" ng-click="gp.agregarAlumno(alumno._id, alumno.profile.nombreCompleto)">
-										<i class="fa fa-plus fa-fw"></i></span>
+									<button type="button" class="btn btn-primary btn-sm" ng-click="gp.agregarAlumno(alumno._id, alumno.profile.nombreCompleto)" ng-repeat="inscripcion in alumno.profile.inscripciones">
+										<i class="fa fa-plus fa-fw"></i> {{inscripcion.fechaInscripcion | date:"d-M-yy"}}
 									</button>
 								</td>
 							</tr>
@@ -45,7 +45,7 @@
 					</table>
 				</div>
 			</div>
-			<span> Última actualización: {{gp.hoy | date:"dd-MM-yyyy HH:mm"}}
+			<span> Última actualización: {{gp.hoy | date:"dd-MM-yyyy HH:mm a"}}
 				<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Cerrar..." class="btn btn-xs btn-default pull-right" ng-click="gp.buscando = false; gp.buscar.nombre = ''">
 					<i class="fa fa-times"></i>
 				</button> 
@@ -76,15 +76,7 @@
 					<td><a href="/alumnos/{{alumno._id}}">{{alumno.profile.nombreCompleto}}</a></td>
 					<td>
 						<div class="text-center">
-					    <div class="btn-group">
-							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    <span class="caret"></span>
-							    <span class="sr-only">Toggle Dropdown</span>
-							  </button>
-							  <ul class="dropdown-menu text-left">
-							    <li><a href="#" ng-click="gp.quitarAlumno(alumno._id)"><i class="fa fa-trash"></i> Eliminar</a></li>
-							  </ul>
-							</div>
+							<a href="#" ng-click="gp.quitarAlumno(alumno._id)"><i class="fa fa-trash"></i> Eliminar</a>
 				    </div>
 					</td>
 				</tr>
