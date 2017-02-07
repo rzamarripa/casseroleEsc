@@ -37,7 +37,8 @@ Meteor.methods({
 			sexo : usuario.sexo,
 			apellidos: usuario.apPaterno + " " + usuario.apMaterno,
 			nombreCompleto : usuario.nombre  + " " + usuario.apPaterno + " " + usuario.apMaterno,
-			fotografia : usuario.fotografia
+			fotografia : usuario.fotografia,
+			estatus : usuario.estatus
 		}
 	  
 	  if(usuario.maestro_id != undefined){

@@ -106,11 +106,12 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	this.cambiarEstatus = function(id)
 	{
 		var maestro = Maestros.findOne({_id:id});
-		if(maestro.estatus == true)
+		if(maestro.estatus == true){
 			maestro.estatus = false;
-		else
+		}else{
 			maestro.estatus = true;
-		
+		}
+		Meteor.call('updateUsuario', maestro, maestro._id, 'maestro');
 		Maestros.update({_id:id}, {$set : {estatus : maestro.estatus}});
 	};
 
