@@ -6,7 +6,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6 col-sm-offset-3 text-center">
+	<div class="col-sm-6 text-center">
 		<form class="form-inline">
 			<div class="form-group">
 				<label for="semanaActual">Semana</label>
@@ -17,6 +17,9 @@
 				<input name="anio" type="number" ng-model="de.anio" class="form-control"/>
 			</div>
 		</form>
+	</div>
+	<div class="col-sm-3">
+		<button class="btn btn-primary" ng-click="de.getPagosPorSemana()"><i class="fa fa-dollar"></i> Buscar</button>
 	</div>
 	<div class="col-sm-3">
 		<button class="btn btn-primary pull-right" ng-click="de.imprimir('pagadores')"><i class="fa fa-print"></i> Imprimir</button>
