@@ -77,9 +77,6 @@ angular
 	  alumnos : () => {
 		  return Meteor.users.find({_id : { $in : this.getCollectionReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.nombreCompleto" : 1}});
 	  },
-	  balumnos : ()=>{
-	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});
-	  },
 	  inscripcion : () => {
 		  return Inscripciones.findOne();
 	  }
@@ -117,6 +114,7 @@ angular
 				rc.grupo.alumnos=[];
 			var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 			var x = alumnos_id.indexOf(alumno_id);
+			console.log(x);
 			if(x==-1){
 				rc.grupo.alumnos.push({alumno_id : alumno_id, inscripcion_id : inscripcion_id})
 				rc.grupo.inscritos++;
@@ -130,6 +128,8 @@ angular
 				rc.buscar.nombre = "";
 				console.log("listo");
 				toastr.success("Ha insertado al alumno correctamente");
+			}else{
+				toastr.error("Este alumno ya se encuentra en el grupo");
 			}
 		}
 	}
