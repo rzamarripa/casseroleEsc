@@ -462,7 +462,6 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	this.getSemanas = function(materia){
 		rc.asignacion.semanas = "";
 		materia = JSON.parse(materia);
-		console.log(materia);
 		rc.asignacion.semanas = materia.semanas;
 	}
 

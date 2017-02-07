@@ -114,6 +114,7 @@ Meteor.methods({
 				  arreglo[pago.alumno_id].pagos.push(pago);
 				  arreglo[pago.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
 				  var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : pago.alumno_id}, { sort : {fechaPago : -1}});
+				  console.log(ultimoPago);
 				  arreglo[pago.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 				  arreglo[pago.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;
 				  arreglo[pago.alumno_id].deuda = pago.importe;

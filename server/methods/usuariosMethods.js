@@ -153,4 +153,8 @@ Meteor.methods({
 			Accounts.setPassword(user._id, usuario.password, {logout: false});		
 		}
 	},
+	usuarioActivo : function (usuario){
+		var usuarioActual = Meteor.users.findOne({username : usuario});
+		return usuarioActual.profile.estatus;
+	}
 });

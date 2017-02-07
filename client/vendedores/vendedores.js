@@ -15,7 +15,7 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	});	
 	
 	this.subscribe('vendedoresGerentes', ()=>{
-		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["vendedor", "gerenteVenta"]}}]
+		return [{"profile.estatus" : true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["vendedor", "gerenteVenta"]}}]
 	});	
  
   this.helpers({
