@@ -19,13 +19,11 @@ function ReporteComisionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.getComisiones = function(semana, anio){
 	  Meteor.apply('reporteComisionesGerentes', [this.semana, this.anio, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
 		  rc.gerentes = result;
-		  console.log(result);
 	    $scope.$apply();
 	  });
 	  
 	  Meteor.apply('reporteComisionesVendedores', [this.semana, this.anio, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
 		  rc.vendedores = result;
-		  console.log(result);
 	    $scope.$apply();
 	  });
   }

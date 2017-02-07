@@ -16,7 +16,6 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 
   this.login = function () {
 	  Meteor.apply('usuarioActivo', [this.credentials.username], function(error, result){
-		  console.log(result);
 		  if(result == true){
 			  $meteor.loginWithPassword(rc.credentials.username, rc.credentials.password).then(
 		      function () {

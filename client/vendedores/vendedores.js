@@ -26,9 +26,9 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 			return Campus.findOne();
 		},
 	  gerentesVenta : () => {
-		  return Meteor.users.find({roles : ["gerenteVenta"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});	  
+		  return Meteor.users.find({roles : ["gerenteVenta"], "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});
 	  }
-  });  
+  });
   
   this.nuevoVendedor = function()
   {

@@ -21,6 +21,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanasSeleccionadas = [];
 	this.otroPago = {}; 
 	this.planPagosCollec = [];
+	this.planPagos = [];
 	this.cantPendientes = 0;
 	this.cantCondonadas = 0;
 	this.cantCanceladas = 0;

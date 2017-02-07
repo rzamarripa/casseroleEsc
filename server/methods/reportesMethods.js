@@ -84,7 +84,7 @@ Meteor.methods({
 	  return otrosPagos;
   },
   deudores: function (seccion_id) {
-		var pagosPendientes = PlanPagos.find({estatus : 0, modulo : "colegiatura", seccion_id : seccion_id, fecha : { $lt : new Date() } }).fetch();
+		var pagosPendientes = PlanPagos.find({estatus : 0, modulo : "colegiatura", seccion_id : seccion_id, fecha : { $lt : new Date() } }, {sort : {fecha : 1}}).fetch();
 	  var arreglo = {};
 	  if(pagosPendientes != undefined){
 		  var totalDeuda = 0.00;
@@ -113,8 +113,7 @@ Meteor.methods({
 				  }
 				  arreglo[pago.alumno_id].pagos.push(pago);
 				  arreglo[pago.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
-				  var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : pago.alumno_id}, { sort : {fechaPago : -1}});
-				  console.log(ultimoPago);
+				  var ultimoPago = PlanPagos.findOne({$or : [{estatus : 1}, {estatus : 3}], alumno_id : pago.alumno_id}, { sort : {fechaPago : -1}});
 				  arreglo[pago.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
 				  arreglo[pago.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;
 				  arreglo[pago.alumno_id].deuda = pago.importe;
@@ -306,7 +305,6 @@ Meteor.methods({
 		return arreglo;
 	},
 	modificarSemanasPlanPagos : function(alumno_id, planPagos) {
-		console.log(alumno_id, planPagos);
 		PlanPagos.remove({alumno_id : alumno_id});
 		_.each(planPagos, function(pago){
 			PlanPagos.insert(pago);
@@ -406,7 +404,6 @@ Meteor.methods({
 		//Aplico las reglas de bonos por cada vendedor
 		var conceptosComision = ConceptosComision.find({seccion_id : seccion_id, estatus : true}).fetch();
 	  _.each(arreglo, function(vendedor){
-		  console.log(vendedor);
 			_.each(conceptosComision, function(concepto){
 				switch(concepto.signo){
 					case "<=" :
