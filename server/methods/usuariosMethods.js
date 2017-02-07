@@ -52,9 +52,7 @@ Meteor.methods({
 		}});
 		Accounts.setPassword(user._id, usuario.contrasena, {logout: false});
 	},
-	createGerenteVenta: function (usuario, rol) {
-	  console.log("Inscribir Alumno");
-	  
+	createGerenteVenta: function (usuario, rol) {	  
 	  usuario.profile.friends = [];
 	  
 		if(usuario.maestro_id != undefined)
@@ -72,7 +70,6 @@ Meteor.methods({
 		
 	},
 	updateGerenteVenta: function (usuario, rol) {		
-		console.log("usuario", usuario)
 		var user = Meteor.users.findOne(usuario._id);
 	  Meteor.users.update({_id: user._id}, {$set:{
 			username: usuario.username,
@@ -83,10 +80,8 @@ Meteor.methods({
 		Accounts.setPassword(user._id, usuario.password, {logout: false});		
 	},
 	updateDirector: function (usuario, rol) {		
-		console.log("usuario", usuario)
 		var usuarioViejo = Meteor.users.findOne({"profile.seccion_id" : usuario.profile.seccion_id});
 		var idTemp = usuarioViejo._id;
-		console.log("usuario viejo", usuarioViejo);
 	  Meteor.users.update({_id: idTemp}, {$set:{
 			username: usuario.username,
 			roles: [rol],
