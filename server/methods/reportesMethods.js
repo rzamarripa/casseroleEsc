@@ -155,9 +155,10 @@ Meteor.methods({
 		_.each(grupos, function(grupo){
 			//Recorrer a los alumnos de cada grupo
 			_.each(grupo.alumnos, function(alumno){
+				console.log(alumno);
 				var inscripcion = Inscripciones.findOne(alumno.inscripcion_id);
 				//Validar que el alumno está activo en su inscripción
-				if(inscripcion.estatus == 1){
+				if(inscripcion != undefined && inscripcion.estatus == 1){
 					//Obtener los pagos atrasados			
 					var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : alumno.alumno_id, modulo : "colegiatura"}, { sort : {fechaPago : -1}});
 					//validar que haya pagado la semana actual

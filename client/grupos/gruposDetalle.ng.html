@@ -17,18 +17,40 @@
 	</div>
 	<div class="col-sm-6">
 		<label for="noAlumnos">Agregar alumnos</label>
-		<select name="noAlumnos" ng-model="gp.alumnose" class="js-example-basic-single"  style='width: 100%; '>
-			<option ng-value="alumno._id" ng-repeat="alumno in gp.balumnos">{{alumno.profile.nombreCompleto}}</option>
-		</select>
-	</div>
-	<div class="col-sm-1">
-		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-		<button type="button" class="btn btn-primary" ng-click="gp.agregarAlumno()" ng-show="gp.confirmar == false;">
-			<i class="fa fa-plus fa-fw"></i> Agregar</span>
-		</button>
-		<button type="button" class="btn btn-primary" ng-click="gp.agregarAlumno()" ng-show="gp.confirmar == true;">
-			<i class="fa fa-check fa-fw"></i> Confirmar</span>
-		</button>
+		<input type="text" ng-model="gp.buscar.nombre" class="form-control" ng-change="gp.buscandoNoAlumno()">
+		<div class="ajax-dropdown" ng-show="gp.buscando" style="display: block; width: 100% !important;">
+			<div class="ajax-notifications custom-scroll">
+				<div class="alert alert-transparent">
+					<table class="table">
+						<thead>
+						<tr>
+							<th>Foto</th>
+							<th>Matrícula</th>
+							<th>Nombre</th>
+							<td>Agregar</td>
+						</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="alumno in gp.balumnos">
+								<td><img src="{{gp.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 70px;border-left: 4px solid #fff;"></td>
+								<td>{{alumno.profile.matricula}}</td>
+								<td>{{alumno.profile.nombreCompleto}}</td>
+								<td>
+									<button type="button" class="btn btn-primary btn-sm" ng-click="gp.agregarAlumno(alumno._id, alumno.profile.nombreCompleto)">
+										<i class="fa fa-plus fa-fw"></i></span>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<span> Última actualización: {{gp.hoy | date:"dd-MM-yyyy HH:mm"}}
+				<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Cerrar..." class="btn btn-xs btn-default pull-right" ng-click="gp.buscando = false; gp.buscar.nombre = ''">
+					<i class="fa fa-times"></i>
+				</button> 
+			</span>
+		</div>
 	</div>
 </div>
 <br/>

@@ -14,6 +14,8 @@ angular
   this.alumno_id = "";
   this.ins = "";
   this.confirmar = false;
+  this.buscando = false;
+  this.hoy = new Date();
   window.rc = rc;
   
   $(document).ready(function(){
@@ -38,7 +40,8 @@ angular
 	    where : {
 	    	_id : { $nin : this.getCollectionReactively('alumnos_id')},
 		    nombreCompleto : this.getReactively('buscar.nombre'),
-				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
+				seccion_id :  Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+				estatus : true
  		  }
     }];
   });
@@ -69,7 +72,7 @@ angular
 		  return asignacionActiva;
 	  },
 	  alumnos : () => {
-		  return Meteor.users.find({_id : { $in : this.getCollectionReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.matricula" : 1}});
+		  return Meteor.users.find({_id : { $in : this.getCollectionReactively("alumnos_id")},roles : ["alumno"]}, { sort : { "profile.nombreCompleto" : 1}});
 	  },
 	  balumnos : ()=>{
 	  	  return Meteor.users.find({_id : { $nin : this.getReactively("alumnos_id")},roles : ["alumno"]});
@@ -104,18 +107,19 @@ angular
 		}
 	}
 
-	this.agregarAlumno = function(){
-		this.confirmar = !this.confirmar;
-		rc.alumno_id = rc.alumnose;
-		rc.alumnos_id.push(this.alumno_id);
-		if(!rc.grupo.alumnos)
-			rc.grupo.alumnos=[];
-		var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
-		var x = alumnos_id.indexOf(rc.alumno_id);
-		if(x==-1){
-			if(this.getReactively("alumnose")){
-				if(this.getReactively("inscripcion")){
-					rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : rc.inscripcion._id})
+	this.agregarAlumno = function(alumno_id, nombreCompleto){
+		var alumno = Meteor.users.findOne({_id : alumno_id});
+		var res = confirm("Está seguro de querer agregar al alumno " + nombreCompleto)
+		if(res){
+			rc.alumno_id = alumno_id;
+			rc.alumnos_id.push(this.alumno_id);
+			if(!rc.grupo.alumnos)
+				rc.grupo.alumnos=[];
+			var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
+			var x = alumnos_id.indexOf(rc.alumno_id);
+			console.log(x);
+			if(x==-1){
+					rc.grupo.alumnos.push({alumno_id : rc.alumno_id, inscripcion_id : alumno.profile.inscripcion._id})
 					rc.grupo.inscritos++;
 					console.log(rc.grupo);
 					var idTemp = rc.grupo._id;
@@ -123,10 +127,22 @@ angular
 					delete rc.grupo._id;
 					console.log(rc.grupo);
 					Grupos.update({_id : idTemp}, {$set : rc.grupo});
+					rc.buscando = false;
+					rc.buscar.nombre = "";
+					console.log("listo");
 					toastr.success("Ha insertado al alumno correctamente");
-				}				
-			}			
+			}
 		}
+	}
+	
+	this.buscandoNoAlumno = function(){
+		this.hoy = new Date();
+		if(this.buscar.nombre.length > 0){
+			rc.buscando = true;
+		}else{
+			rc.buscando = false;
+		}
+		
 	}
 	
 	this.tieneFoto = function(sexo, foto){
