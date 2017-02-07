@@ -36,7 +36,7 @@
 								<td>{{alumno.profile.matricula}}</td>
 								<td>{{alumno.profile.nombreCompleto}}</td>
 								<td>
-									<button type="button" class="btn btn-primary btn-sm" ng-click="gp.agregarAlumno(alumno._id, alumno.profile.nombreCompleto)" ng-repeat="inscripcion in alumno.profile.inscripciones">
+									<button type="button" class="btn btn-primary btn-sm" ng-click="gp.agregarAlumno(alumno._id, inscripcion._id, alumno.profile.nombreCompleto)" ng-repeat="inscripcion in alumno.profile.inscripciones">
 										<i class="fa fa-plus fa-fw"></i> {{inscripcion.fechaInscripcion | date:"d-M-yy"}}
 									</button>
 								</td>

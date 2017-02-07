@@ -424,6 +424,26 @@ Meteor.methods({
 	  
 	  return arreglo;
 	  
+	},
+	getPagosPorSemana : function(semanaPago, anioPago, campus_id){
+		console.log(semanaPago, anioPago, campus_id)
+		var pagos = PlanPagos.find( {campus_id : campus_id, semanaPago : semanaPago, estatus : 1, anioPago : anioPago}, {sort : {fecha : 1}}).fetch();
+		var arreglo = {};
+		_.each(pagos, function(pago){
+			if(undefined == arreglo[pago.alumno_id]){
+				arreglo[pago.alumno_id] = {};
+				arreglo[pago.alumno_id].semanasPagadas = [];
+				arreglo[pago.alumno_id].alumno = Meteor.users.findOne({_id : pago.alumno_id});
+				arreglo[pago.alumno_id].usuario = Meteor.users.findOne({_id : pago.usuarioInserto_id});
+				arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
+				arreglo[pago.alumno_id].tipoPlan = pago.tipoPlan;
+				arreglo[pago.alumno_id].fechaPago = pago.fechaPago;
+			}else{
+				arreglo[pago.alumno_id].semanasPagadas.push(pago.semana);
+			}
+		})
+		
+		return _.toArray(arreglo);
 	}
 })
 
