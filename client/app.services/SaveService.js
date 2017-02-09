@@ -32,11 +32,11 @@ angular.module('casserole').service('SaveService', function ($meteor) {
 		collection = Mongo.Collection.get(collectionName);
 		collection.insert(object, function(err, res){
 			if(!err){
-				if(collection == 'maestro')
-					object.maestro_id = id;
+				if(collectionName === 'maestros')
+					object.maestro_id = res;
 				Meteor.call('createUsuario', object, 'maestro', function(err, res){
 					if(err){
-						collection.remove(id);
+						collection.remove(res);
 						callback(err.reason, 'Error al Guardar');
 					}else{
 						callback(undefined, 'Guardado Correctamente');
