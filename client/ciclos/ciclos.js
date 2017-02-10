@@ -8,7 +8,7 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
 	this.subscribe('ciclos',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
 	});
-  
+
   this.helpers({
 		ciclos : () => {
 		  return Ciclos.find();
