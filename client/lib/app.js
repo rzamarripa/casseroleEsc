@@ -19,3 +19,4 @@ angular.module('casserole',
   ]
 );
 
+NProgress.configure({ easing: 'ease', speed: 600 });
