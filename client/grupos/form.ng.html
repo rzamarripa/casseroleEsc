@@ -52,7 +52,7 @@
 					<div class="col-sm-4" valida>
 						<label >Turno *</label>
 						<select name="turno" class="form-control" placeholder="Seleccione" ng-model="gp.grupo.turno_id" required="">
-							<option ng-repeat="turno in gp.turnos" value="{{turno._id}}">{{turno.nombre}} {{horaInicio}}-{{horaFin}}</option>
+							<option ng-repeat="turno in gp.turnos" value="{{turno._id}}">{{turno.nombre}} {{turno.horaInicio}}-{{turno.horaFin}}</option>
 						</select>
 					</div>
 				</div>

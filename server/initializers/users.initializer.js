@@ -5,6 +5,7 @@ Meteor.startup(function () {
       password: '123qwe',
       profile : {
 	      nombre: 'Súper Administrador',
+	      estatus : true
       }
     });
     

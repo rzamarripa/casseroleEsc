@@ -6,7 +6,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.inscripcion.totalPagar = 0.00;
 	this.comisionObligada =0;
 	this.pagosRealizados = [];
-	this.diaActual = moment(new Date()).weekday();
+	this.diaActual = moment(new Date()).isoWeekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.mesPago = moment(new Date()).get('month') + 1;
 	this.anioPago = moment(new Date()).get('year');
@@ -192,7 +192,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			var pago = {
 				semana 			    : mfecha.isoWeek(),
 				fecha 			    : new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
+				dia                 : mfecha.isoWeekday(),
 				tipoPlan 		    : 'Semanal',
 				numeroPago 	        : i + 1,				
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
@@ -247,7 +247,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			var pago = {
 				semana 			    : mfecha.isoWeek(),
 				fecha 			    : new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
+				dia                 : mfecha.isoWeekday(),
 				tipoPlan 		    : 'Mensual',
 				numeroPago 	        : i + 1,
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
@@ -305,7 +305,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			var pago = {
 				semana 			    		: mfecha.isoWeek(),
 				fecha 			    		: new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
+				dia                 : mfecha.isoWeekday(),
 				tipoPlan 		    		: 'Quincenal',
 				numeroPago 	        : i + 1,
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
@@ -472,7 +472,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 					this.inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 					this.inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 					this.inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					this.inscripcion.pagos[connceptoId].diaPago = moment().weekday();
+					this.inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
 					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}
 			}
@@ -496,7 +496,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 					this.inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 					this.inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 					this.inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					this.inscripcion.pagos[connceptoId].diaPago = moment().weekday();
+					this.inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
 
 					this.inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}

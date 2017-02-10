@@ -10,6 +10,7 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
 	this.totalPagos = 0.00;
 	this.pagos = [];
 	this.pagosPorSemana = [];
+
   
 	this.imprimir = function(elem)
   {
@@ -32,12 +33,18 @@ function PagosSemanaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toas
   }
   
   this.getPagosPorSemana = function(){
+		NProgress.set(0.5);
 	  Meteor.apply("getPagosPorSemana", [this.semanaActual, this.anio, Meteor.user().profile.campus_id], function(error, result){
 		  if(result){
+			  NProgress.set(1);
 			  rc.pagosPorSemana = result;
 			  console.log(result);
+		  }else{
+			  NProgress.set(1);
 		  }
+		  $scope.$apply();
 	  })
+	  
   }
 }
 

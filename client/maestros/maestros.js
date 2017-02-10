@@ -50,16 +50,7 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr,
   {
     this.action = true;
     this.nuevo = !this.nuevo;
-    this.maestro = {
-    	contrasena: '123',
-    	confirmarContrasena: '123',
-    	titulo: 'lic',
-    	nombre: 'Cosme Miguel',
-    	apellidoPaterno: 'López',
-    	apellidoMaterno: 'Camacho',
-    	correo: 'cosme.miguel.24@gmail.com',
-    	sexo:'Masculino'
-    };
+    this.maestro = {};
   };
 
 	this.guardar = function(maestro,form)
@@ -72,9 +63,8 @@ function MaestrosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr,
 		maestro.campus_id = Meteor.user().profile.campus_id;
 		maestro.usuarioInserto = Meteor.userId();
 		maestro.fechaCreacion = new Date();
-		maestro.campus_id = Meteor.user().profile.campus_id;
 		// Service
-		SaveService.saveUser('maestros', maestro, 'maestro', function(err, message){
+		SaveService.saveUser('maestros', angular.copy(maestro), 'maestro', function(err, message){
 			if(err){
 				toastr.error(err);
 				return

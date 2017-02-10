@@ -49,7 +49,8 @@
 					<th width="10%"><div class="text-center">Acción</div></th>
 					<th width="20%"><div class="text-center hidden-xs">No. Factura</div></th>
 					<th width="25%"><div class="text-center">Concepto</div></th>
-					<th width="20%"><div class="text-center">Fecha Límite</div></th>
+					<th width="25%"><div class="text-center">Descripción</div></th>
+					<th width="20%"><div class="text-center">Fecha</div></th>
 					<th width="20%"><div class="text-center hidden-xs">Importe</div></th>
 	      </tr> 
 	    </thead>
@@ -61,7 +62,8 @@
 	        </td>
 	        <td class="hidden-xs text-center">{{gasto.numeroFactura}}</td>
 	        <td>{{gc.getConcepto(gasto.concepto_id)}}</td>
-	        <td class="text-center">{{gasto.fechaLimite | date:"dd/MM/yyyy"}}</td>
+	        <td>{{gasto.descripcion}}</td>
+	        <td class="text-center">{{gasto.fecha | date:"dd/MM/yyyy"}}</td>
 	        <td align="right">{{gasto.importe | currency}}</td>
 	      </tr>
 	    </tbody>

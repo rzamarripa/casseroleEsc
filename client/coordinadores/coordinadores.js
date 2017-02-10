@@ -137,4 +137,14 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 			rc.coordinador.confirmarContrasena = "";
 		}
 	}
+	
+	this.cambiarEstatus = function(id)
+	{
+		var coordinador = Meteor.users.findOne({_id:id});
+		if(coordinador.profile.estatus == true)
+			coordinador.profile.estatus = false;
+		else
+			coordinador.profile.estatus = true;
+		Meteor.call('modificarUsuario', coordinador, coordinador.roles[0]);
+  };
 };

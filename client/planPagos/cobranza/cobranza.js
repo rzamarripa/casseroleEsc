@@ -34,8 +34,10 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	});
 	
 	this.calcularCobros = function(fechaInicial, fechaFinal, usuario_id, form){
+		NProgress.set(0.5);
 		if(form.$invalid){
 			toastr.error('Error al enviar los datos, por favor llene todos los campos.');
+			NProgress.set(1);
 			return;
     }
 		this.totales = 0.00;
@@ -44,6 +46,7 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 			  rc.totales += cobro.importe;
 		  })
 		  rc.otrosCobros = result;
+		  NProgress.set(1);
 	    $scope.$apply();
 	  });
 	}

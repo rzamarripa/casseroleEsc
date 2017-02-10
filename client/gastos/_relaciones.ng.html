@@ -70,9 +70,11 @@
 	      <tr>
 					<th width="5%"><div class="text-center">No.</div></th>
 					<th width="10%"><div class="text-center">Acción</div></th>
-					<th width="35%"><div class="text-center">Fecha Límite</div></th>
-					<th width="25%"><div class="text-center hidden-xs">Registros</div></th>
-					<th width="25%"><div class="text-center">Importe</div></th>
+					<th width="10%"><div class="text-center">Fecha</div></th>
+					<th width="10%"><div class="text-center hidden-xs">Registros</div></th>
+					<th width="20%"><div class="text-center">Concepto</div></th>
+					<th width="25%"><div class="text-center hidden-xs">Descripción</div></th>
+					<th width="20%"><div class="text-center">Importe</div></th>
 	      </tr> 
 	    </thead>
 	    <tbody>
@@ -81,8 +83,10 @@
 	      	<td align="center">
 	          <a ng-click="gc.cambiarEstatus(gasto)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
 	        </td>
-	        <td class="text-center">{{gasto.fechaLimite | date:"dd/MM/yyyy"}}</td>
+	        <td class="text-center">{{gasto.fecha | date:"dd/MM/yyyy"}}</td>
 	        <td class="hidden-xs text-center">{{gasto.registros}}</td>
+	        <td class="hidden-xs text-center">{{gasto.concepto.nombre}}</td>
+	        <td class="hidden-xs text-center">{{gasto.descripcion}}</td>
 	        <td align="right">{{gasto.importe | currency}}</td>
 	      </tr>
 	    </tbody>

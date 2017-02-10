@@ -15,7 +15,7 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 	});	
 	
 	this.subscribe('vendedoresGerentes', ()=>{
-		return [{"profile.estatus" : true, "profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["vendedor", "gerenteVenta"]}}]
+		return [{"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", roles : { $in : ["vendedor", "gerenteVenta"]}}]
 	});	
  
   this.helpers({
@@ -125,5 +125,15 @@ function VendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toast
 			rc.vendedor.confirmarContrasena = "";
 		}
 	}
+	
+	this.cambiarEstatus = function(id)
+	{
+		var vendedor = Meteor.users.findOne({_id:id});
+		if(vendedor.profile.estatus == true)
+			vendedor.profile.estatus = false;
+		else
+			vendedor.profile.estatus = true;
+		Meteor.call('modificarUsuario', vendedor, "vendedor");
+  };
 	
 };

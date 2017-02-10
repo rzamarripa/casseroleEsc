@@ -6,7 +6,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.inscripcion.totalPagar = 0.00;
 	this.comisionObligada =0;
 	this.pagosRealizados = [];
-	this.diaActual = moment(new Date()).weekday();
+	this.diaActual = moment(new Date()).isoWeekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.mesPago = moment(new Date()).get('month') + 1;
 	this.anioPago = moment(new Date()).get('year');
@@ -17,6 +17,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.inscrito = "";
 	this.cantidadAlumnos = 0;
 	this.prospecto = {};
+	this.grupoSeleccionado = {};
 	
 	$(document).ready(function(){
 	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
@@ -65,6 +66,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	
 	this.subscribe('cuentas', ()=>{
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	});
+	
+	this.subscribe('turnos', ()=>{
+		return [{estatus:true, _id : this.getReactively("grupoSeleccionado.turno_id")}]
 	});
 	
 	this.subscribe('campus', ()=>{
@@ -128,9 +133,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.planPagosSemana =function () {
 		var fechaInicial = this.inscripcion.planPagos.colegiatura.fechaInicial;
 		// Si este alumno está entrando con fecha posterior, se tomará como primer semana la actual y de ahí se incrmentará las semanas.
-		console.log("es nueva inscripcion ", this.esNuevaInscripcion);
 		if(rc.esNuevaInscripcion == false){
-			console.log("fue nueva inscripción");
 			var fechaActual = new Date();
 			if(fechaInicial < fechaActual){
 				console.log("es menor", fechaInicial, fechaActual);
@@ -145,10 +148,17 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		
 		var plan = [];
 		for (var i = 0; i < totalPagos; i++) {
+			
+			var anio = mfecha.get('year');
+			if(mfecha.isoWeek() == 52){
+				ultimoPago = _.last(plan);
+				anio = moment(ultimoPago.fecha).get("year");
+			}
+			
 			var pago = {
 				semana 			    : mfecha.isoWeek(),
 				fecha 			    : new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
+				dia                 : mfecha.isoWeekday(),
 				tipoPlan 		    : 'Semanal',
 				numeroPago 	        : i + 1,				
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
@@ -165,7 +175,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				tiempoPago          : 0,
 				modificada          : false,
 				mes					: mfecha.get('month') + 1,
-				anio				: mfecha.get('year')
+				anio				: anio
 			}
 			
 			if(i == 0){
@@ -200,11 +210,19 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		if(Math.abs(dife) > 15)
 			mfecha.add(1,'month');
 		for (var i = 0; i < totalPagos; i++) {
+			//console.log(mfecha.startOf("week").toDate(), mfecha.toDate(), mfecha.isoWeek(), mfecha.get('year'))
+			var anio = mfecha.get('year');
+			if(mfecha.isoWeek() == 52){
+				ultimoPago = _.last(plan);
+				anio = moment(ultimoPago.fecha).get("year");
+			}
+				
+			
 			var pago = {
 				semana 			    : mfecha.isoWeek(),
 				fecha 			    : new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
-				tipoPlan 		    : 'Mensual',
+				dia                 : mfecha.isoWeekday(),
+				tipoPlan 		    		: 'Mensual',
 				numeroPago 	        : i + 1,
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
 				importeDescuento    : this.inscripcion.planPagos.colegiatura.Mensual.importeDescuento,
@@ -220,7 +238,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				tiempoPago          : 0,
 				modificada          : false,
 				mes					: mfecha.get('month') + 1,
-				anio				: mfecha.get('year')
+				anio				: anio
 			}
 			
 			if(i == 0){
@@ -229,6 +247,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			
 			plan.push(pago);
 			mfecha.add(1,'month');
+			
 		}
 		return plan;
 	}
@@ -261,7 +280,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			var pago = {
 				semana 			    		: mfecha.isoWeek(),
 				fecha 			    		: new Date(mfecha.toDate().getTime()),
-				dia                 : mfecha.weekday(),
+				dia                 : mfecha.isoWeekday(),
 				tipoPlan 		    		: 'Quincenal',
 				numeroPago 	        : i + 1,
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Mensual.importeRecargo,
@@ -325,11 +344,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 
 	this.hayCupo = function(grupo_id){
-		var grupo = Grupos.findOne(grupo_id);
-		var planEstudios = PlanesEstudios.findOne(grupo.planEstudios_id);
-
-		this.inscripcion.planPagos = { inscripcion:grupo.inscripcion,colegiatura:grupo.colegiatura };
-		this.inscripcion.planPagos.colegiatura.fechaInicial = grupo.fechaInicio;
+		this.grupoSeleccionado = Grupos.findOne(grupo_id);
+		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
+		this.grupoSeleccionado.turno = Turnos.findOne(this.grupoSeleccionado.turno_id);
+		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion,colegiatura:this.grupoSeleccionado.colegiatura };
+		this.inscripcion.planPagos.colegiatura.fechaInicial = this.grupoSeleccionado.fechaInicio;
 		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos = planEstudios.semanas;
 		var _inscripcion = this.inscripcion.planPagos.inscripcion;
 		_inscripcion.importeRegular =0;
@@ -364,9 +383,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			if(concepto.estatus)
 				mensual.importeRegular += concepto.importe;
 		}
-		this.inscripcion.planPagos.conceptosComision = grupo.conceptosComision;
+		this.inscripcion.planPagos.conceptosComision = this.grupoSeleccionado.conceptosComision;
 		
-		if(grupo.inscritos < grupo.cupo){
+		if(this.grupoSeleccionado.inscritos < this.grupoSeleccionado.cupo){
 			this.cupo = "check";
 		}else{
 			this.cupo = "remove";

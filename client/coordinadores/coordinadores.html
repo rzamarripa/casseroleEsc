@@ -144,7 +144,7 @@
 							  <ul class="dropdown-menu dropdown-menu-right text-left">
 							    <li><a href="#" ng-click="c.editar(coordinador._id)"><i class="fa fa-pencil"></i> Editar</a></li>
 							    <li><a href="#" ng-click="c.cambiarEstatus(coordinador._id)">
-							    				<i class="fa fa-{{coordinador.estatus ? 'trash' : 'check' }}"></i> {{coordinador.estatus ? "Desactivar" : "Activar" }}
+							    				<i class="fa fa-{{coordinador.profile.estatus ? 'trash' : 'check' }}"></i> {{coordinador.profile.estatus ? "Desactivar" : "Activar" }}
 							    		</a>
 							    </li>
 							  </ul>

@@ -45,7 +45,7 @@
 	    </thead>
 	    <tbody>
 	      <tr ng-repeat="(key, dia) in gc.diasActuales track by $index">
-	        <td class="hidden-xs">{{dia}}</td>
+	        <td >{{dia}}</td>
 	        <td align="right" class="hidden-xs">{{gc.importeDiarioPagos(key+1, cuenta._id) | currency}}</td>
 	      </tr>
 	      <tr>
@@ -86,7 +86,7 @@
 	      </tr>
 	      <tr ng-if="cuenta.inscripcion">
 	      	<td>Gastos de R.P y Adtvo.</td>
-	      	<td align="right">{{ gc.gastosRelaciones(cuenta._id) | currency}} + </td>
+	      	<td align="right">{{ gc.gastosRelaciones(cuenta._id) | currency}}</td>
 	      </tr>
 	    	<tr>
 	      	<td><strong>Total:</strong></td>
