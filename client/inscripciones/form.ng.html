@@ -22,7 +22,8 @@
 		<div class="jarviswidget jarviswidget-sortable" id="wid-id-0" role="widget">
 			<header role="heading">
 				<span class="widget-icon"> <i class="fa fa-check"></i> </span>
-				<h2>Proceso de Inscripción </h2>
+				<h2 ng-show="ins.prospectoSeleccionado == undefined">Proceso de Inscripción</h2>
+				<h2 ng-show="ins.prospectoSeleccionado != undefined">Se está inscribiendo a: <strong>{{ins.prospectoSeleccionado.profile.nombreCompleto}}</strong></h2>
 				<div class="widget-toolbar hidden-mobile" role="menu">
 					<span class="onoffswitch-title"><i class="fa fa-info"></i>&nbsp;&nbsp;&nbsp;&nbsp; Carga inicial</span>
 					<span class="onoffswitch">
@@ -423,6 +424,12 @@
 															  	<strong><i class="fa fa-{{ins.cupo}} fa-lg"></i></strong>
 															  </p>
 														  </div>															  
+														</div>
+														<div class="col-sm-4">
+															<label class="text-center">Turno</label>
+														  	<p>
+															  	{{ins.grupoSeleccionado.turno.nombre}} {{ins.grupoSeleccionado.turno.horaInicio}}-{{ins.grupoSeleccionado.turno.horaInicio != undefined ? ins.grupoSeleccionado.turno.horaFin : ""}}
+															  </p>
 														</div>
 											  	</div>
 										  	</div>	

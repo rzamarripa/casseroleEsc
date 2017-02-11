@@ -224,7 +224,7 @@ angular.module("casserole")
 	{
 		var turno = Turnos.findOne(turno_id);
 		if (turno) 
-		return turno.nombre + "("+turno.asistencias+")";
+		return turno.nombre + " " + turno.horaInicio + "-" + turno.horaFin;
 	};	
 	
 	this.getEstatus = function(estatus){

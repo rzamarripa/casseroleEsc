@@ -11,7 +11,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.ttotalpagar =0.00;
 	this.alumno = {};
 	this.fechaActual = new Date();
-	this.diaActual = moment(new Date()).weekday();
+	this.diaActual = moment(new Date()).isoWeekday();
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.anioActual = moment().get("year");
 	this.hayParaPagar = true;
@@ -529,7 +529,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.pagar = function(planPago, configuracion){
 		if (confirm("Está seguro de realizar el cobro por $" + parseFloat(rc.ttotalpagar))) {
 			var semanasPagadas = [];
-			var diaSemana = moment(new Date()).weekday();
+			var diaSemana = moment().isoWeekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
@@ -596,7 +596,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			Inscripciones.update({_id:configuracion._id},{$set:{abono:configuracion.abono}})
 			this.totalPagar = 0.00;
 			this.ttotalpagar = 0.00;
-			
+			this.cantSeleccionados = 0;
 			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
 			var url = $state.href("anon.pagosImprimir",{pago : pago_id,alumno_id:configuracion.alumno_id},{newTab : true});
 			window.open(url,'_blank');
@@ -644,7 +644,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.condonar = function(planPagos, configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
-			var diaSemana = moment(new Date()).weekday();
+			var diaSemana = moment().isoWeekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
@@ -692,7 +692,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.semanaPago = moment().isoWeek();
 					pago.anioPago = moment().get('year');
 					pago.mesPago = moment().get('month')+1;
-					pago.diaPago = moment().weekday();
+					pago.diaPago = moment().isoWeekday();
 					pago.estatus = 3;		
 					pago.importe = 0;
 					pago.pago_id = condonado
@@ -713,7 +713,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.condonarConcepto = function( configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			var semanasCondonadas = [];
-			var diaActual = moment(new Date()).weekday();
+			var diaSemana = moment().isoWeekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
@@ -749,7 +749,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.semanaPago = moment().isoWeek();
 					pago.anioPago = moment().get('year');
 					pago.mesPago = moment().get('month')+1;
-					pago.diaPago = moment().weekday();
+					pago.diaPago = moment().isoWeekday();
 					pago.estatus = 3;		
 					pago.importe = 0;
 					pago.pago_id=condonado
@@ -816,7 +816,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 		if (confirm("Está seguro que desea realizar el cobro por $" + parseFloat(rc.ttotalpagar))) {
 			var semanasCondonadas = [];
-			var diaActual = moment(new Date()).weekday();
+			var diaSemana = moment().isoWeekday();
 			var semanaPago = moment(new Date()).isoWeek();
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
@@ -871,7 +871,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.semanaPago = moment().isoWeek();
 					pago.anioPago = moment().get('year');
 					pago.mesPago = moment().get('month')+1;
-					pago.diaPago = moment().weekday();
+					pago.diaPago = moment().isoWeekday();
 					pago.estatus = 1;		
 					pago.importe = pago.tmpPago;
 					pago.pago_id=condonado
@@ -911,7 +911,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					fechaInscripcion  : inscripcion.fechaInscripcion,
 				   	semana 			    : mfecha.isoWeek(),
 					fecha 			    : new Date(mfecha.toDate().getTime()),
-					dia                 : mfecha.weekday(),
+					dia                 : mfecha.isoWeekday(),
 					tipoPlan 		    : 'Semanal',
 					numeroPago 	        : i + 1,
 				
@@ -969,7 +969,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					fechaInscripcion  : inscripcion.fechaInscripcion,
 				   	semana 			    : mfecha.isoWeek(),
 					fecha 			    : new Date(mfecha.toDate().getTime()),
-					dia                 : mfecha.weekday(),
+					dia                 : mfecha.isoWeekday(),
 					tipoPlan 		    : 'Quincenal',
 					numeroPago 	        : i + 1,
 				
@@ -1026,7 +1026,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					fechaInscripcion  : inscripcion.fechaInscripcion,
 				   	semana 			    : mfecha.isoWeek(),
 					fecha 			    : new Date(mfecha.toDate().getTime()),
-					dia                 : mfecha.weekday(),
+					dia                 : mfecha.isoWeekday(),
 					tipoPlan 		    : 'Mensual',
 					numeroPago 	        : i + 1,
 				
@@ -1193,7 +1193,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 		var semanasPagadas = [];
 		var conceptoActual = ConceptosPago.findOne(pago.concepto_id);
-		diaActual = moment(new Date()).weekday();
+		diaActual = moment(new Date()).isoWeekday();
 		semanaPago = moment(new Date()).isoWeek();
 		anioPago = moment(new Date()).get('year');
 		pago.estatus = 1;
@@ -1240,7 +1240,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.guardarComentario = function(alumno_id){
 		semanaActual = moment(new Date()).isoWeek();
-		diaActual = moment(new Date()).weekday();
+		diaActual = moment(new Date()).isoWeekday();
 		this.comentario.fechaCreacion = new Date();
 		this.comentario.estatus = true;
 		this.comentario.usuarioInserto_id = Meteor.userId();

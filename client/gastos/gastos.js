@@ -10,15 +10,14 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.gasto.fecha = new Date();
   this.semanaActual = moment(new Date()).isoWeek();
   this.anioActual = moment().get("year");
-  this.diaActual = moment(new Date()).weekday();
+  this.diaActual = moment().isoWeekday();
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
   for(i = 0; i < this.diaActual; i++){this.diasActuales.push(dias[i])};
-  
-  
-
+  window.rc = rc;
+ 
   this.subscribe('gastos', () => {
-    return [{estatus: true, semana: this.semanaActual, campus_id: Meteor.user() != undefined ? Meteor.user().profile.campus_id : ''}];
+    return [{estatus: true, semana: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
   });
 
   this.subscribe('conceptosGasto', () => {
@@ -26,7 +25,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   });
 
   this.subscribe('pagos', () => {
-    return [{semanaPago: this.semanaActual, campus_id: Meteor.user() != undefined ? Meteor.user().profile.campus_id : ''}];
+    return [{semanaPago: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
   });
 
   this.subscribe('comisiones', () => {
@@ -43,6 +42,10 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			if(rc.getReactively("tipoGasto") == "Depositos"){
 				_.each(gas, function(g){
 					g.cuenta = Cuentas.findOne(g.cuenta_id);
+				})
+			}else if(rc.getReactively("tipoGasto") == "Relaciones"){
+				_.each(gas, function(g){
+					g.concepto = ConceptosGasto.findOne(g.concepto_id);
 				})
 			}
 			return gas;
@@ -96,7 +99,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 
   this.guardarConcepto = function(concepto, form){
     if(form.$invalid){
-      toastr.error('error.');
+      toastr.error('Por favor llene la información correctamente.');
       return;
     }
     concepto.tipoGasto = this.tipoGasto;

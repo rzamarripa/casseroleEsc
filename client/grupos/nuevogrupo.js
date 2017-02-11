@@ -381,6 +381,7 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		asignacion.estatus = false;
 
 		if(rc.grupo.asignaciones.length == 0){
+			console.log("no tiene asignaciones");
 			var rango = _.range(rc.grupo.semanaInicio, rc.grupo.semanaInicio + parseInt(asignacion.materia.semanas));
 			var cantVacaciones = 0;
 			_.each(rango, function(ra){
@@ -401,13 +402,12 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		}else{
 			var ultimaAsignacion = _.last(rc.grupo.asignaciones);
 			var ultimaSemana = _.last(ultimaAsignacion.semanas);
-			
 			var rango = _.range(ultimaSemana.semana + 1, ultimaSemana.semana + parseInt(asignacion.materia.semanas) + 1);
 			var cantVacaciones = 0;
 			_.each(rango, function(ra){
 				ra += cantVacaciones;
 				_.each(vacaciones, function(vaca){
-					if(ra == vaca.semana && rc.grupo.anio == vaca.anio){
+					if(ra == vaca.semana && ultimaSemana.anio == vaca.anio){
 						cantVacaciones++;
 						ra++;
 					}

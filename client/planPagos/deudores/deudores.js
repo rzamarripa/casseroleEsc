@@ -10,13 +10,17 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.deudores = [];
   this.totales = [];
   
-  
+  NProgress.set(0.5);
 	
   Meteor.apply('deudores', [Meteor.user().profile.seccion_id], function(error, result){
-	  console.log(result);
-	  rc.totales = result[0];
-	  result.splice(0, 1);
-	  rc.deudores = result;
+	  if(result){
+		  console.log(result);
+		  rc.totales = result[0];
+		  result.splice(0, 1);
+		  rc.deudores = result;
+		  NProgress.set(1);
+	  }	  
+
     $scope.$apply();
   });
   

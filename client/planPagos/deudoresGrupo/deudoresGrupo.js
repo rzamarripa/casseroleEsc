@@ -7,9 +7,10 @@ function DeudoresGrupoCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   this.semanaActual = moment().isoWeek();
   this.anioActual = moment().get("year");
   this.deudores = [];
-
+	NProgress.set(0.5);
   Meteor.apply('cobranza', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.deudores = result;
+	  NProgress.set(1);
     $scope.$apply();
   });
   

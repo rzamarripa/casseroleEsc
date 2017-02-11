@@ -1,6 +1,6 @@
 angular.module("casserole")
 .controller("CampusCtrl", CampusCtrl);  
- function CampusCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
+ function CampusCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, SaveService){
  	let rc = $reactive(this).attach($scope);
   this.action = true;
   this.nuevo = true;
@@ -49,13 +49,17 @@ angular.module("casserole")
 			campus.estatus = true;
 			campus.usuarioInserto = Meteor.userId();
 			campus.fechaCreacion = new Date();
-			Campus.insert(this.campus);
-			toastr.success('Guardado correctamente.');
-			this.campus = {}; 
-			$('.collapse').collapse('hide');
-			this.nuevo = true;
-			form.$setPristine();
-			form.$setUntouched();
+			SaveService.save('campus', campus, function(err, message){
+				if(err){
+					toastr.error(err);
+					return
+				}
+				campus = {};
+				rc.nuevo = true;
+				$('.collapse').collapse('hide');
+				toastr.success(message);
+			});
+			
 	};
 	
 	this.editar = function(id)

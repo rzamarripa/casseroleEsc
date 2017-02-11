@@ -56,7 +56,7 @@ Meteor.methods({
 					mesPago			  		: mfecha.get('month') + 1,
 					anioPago		  		: mfecha.get('year'),
 					semanaPago        : mfecha.isoWeek(),
-					diaPago           : mfecha.weekday(),
+					diaPago           : mfecha.isoWeekday(),
 					faltante          : pago.importeRegular-pago.pago,
 					estatus           : 1,
 					tiempoPago        : 0,
@@ -163,7 +163,7 @@ Meteor.methods({
 		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
 
 		//VARIABLES REUTILIZABLES
-		var diaActual 	= moment(new Date()).weekday();
+		var diaActual 	= moment(new Date()).isoWeekday();
 		var semanaPago 	= moment(new Date()).isoWeek();
 		var mesPago 		= moment(new Date()).get('month') + 1;
 		var anioPago 		= moment(new Date()).get('year');
@@ -235,7 +235,7 @@ Meteor.methods({
 		}
 
 		//VARIABLES REUTILIZABLES
-		var diaActual 	= moment(new Date()).weekday();
+		var diaActual 	= moment(new Date()).isoWeekday();
 		var semanaPago 	= moment(new Date()).isoWeek();
 		var mesPago 		= moment(new Date()).get('month') + 1;
 		var anioPago 		= moment(new Date()).get('year');
@@ -350,7 +350,7 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 				inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 				inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-				inscripcion.pagos[connceptoId].diaPago = moment().weekday();
+				inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
 				inscripcion.pagos[connceptoId].tiempoPago = 0;
 			}
 			else if(remanente>0){
@@ -362,7 +362,7 @@ Meteor.methods({
 					inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 					inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 					inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					inscripcion.pagos[connceptoId].diaPago = moment().weekday();
+					inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
 					inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}
 				else

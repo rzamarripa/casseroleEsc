@@ -146,7 +146,7 @@
 							  <ul class="dropdown-menu dropdown-menu-right text-left">
 							    <li><a href="#" ng-click="v.editar(vendedor._id)"><i class="fa fa-pencil"></i> Editar</a></li>
 							    <li><a href="#" ng-click="v.cambiarEstatus(vendedor._id)">
-							    				<i class="fa fa-{{vendedor.estatus ? 'trash' : 'check' }}"></i> {{vendedor.estatus ? "Desactivar" : "Activar" }}
+							    				<i class="fa fa-{{vendedor.profile.estatus ? 'trash' : 'check' }}"></i> {{vendedor.profile.estatus ? "Desactivar" : "Activar" }}
 							    		</a>
 							    </li>
 							  </ul>

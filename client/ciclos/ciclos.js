@@ -37,6 +37,7 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
 		ciclo.campus_id = Meteor.user().profile.campus_id;
 		ciclo.seccion_id = Meteor.user().profile.seccion_id;
 		ciclo.usuarioInserto = Meteor.userId();
+		Ciclos.insert(ciclo)
 		SaveService.save('ciclos', ciclo, function(err, message){
 			if(err){
 				toastr.error(err);
