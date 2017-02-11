@@ -35,7 +35,7 @@
 			<tbody>
 				<tr ng-repeat="gasto in da.gastosCheque">
 					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
+					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
 					<td>{{ gasto.concepto.nombre }}</td>
 					<td ng-class="{'text-right negritas':$last}">{{ gasto.chequeReferenciado }}</td>					
 					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
@@ -60,7 +60,7 @@
 			<tbody>
 				<tr ng-repeat="gasto in da.gastosRelaciones">
 					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
+					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
 					<td>{{ gasto.concepto.nombre }}</td>
 					<td ng-class="{'text-right negritas':$last}">{{ gasto.registros }}</td>
 					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
@@ -109,7 +109,7 @@
 			<tbody>
 				<tr ng-repeat="gasto in da.gastosAdmon">
 					<td>{{$index + 1}}</td>
-					<td>{{ gasto.fechaLimite | date:"dd-MM-yyyy hh:mm:ss" }}</td>
+					<td>{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
 					<td ng-class="{'text-right negritas':$last}">{{ gasto.concepto.nombre }}</td>
 					<td class="text-right" ng-class="{'txt-color-green negritas':$last}">{{ gasto.importe | currency }}</td>
 				</tr>

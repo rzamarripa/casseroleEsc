@@ -168,5 +168,27 @@ Meteor.methods({
 	usuarioActivo : function (usuario){
 		var usuarioActual = Meteor.users.findOne({username : usuario});
 		return usuarioActual.profile.estatus;
+	},
+	buscarAlumnos : function(options){
+		if(options.where.nombreCompleto.length > 0){
+			let selector = {
+		  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
+		  	"profile.campus_id": options.where.campus_id,
+		  	roles : ["alumno"]
+			}
+			
+			var alumnos = Meteor.users.find(selector, options.options).fetch();	
+			_.each(alumnos, function(alumno){
+				alumno.profile.seccion = Secciones.findOne(alumno.profile.seccion_id);
+				alumno.profile.inscripciones = Inscripciones.find({alumno_id : alumno._id}).fetch();
+				alumno.profile.grupos = [];
+				_.each(alumno.profile.inscripciones, function(inscripcion){
+					var grupo = Grupos.findOne(inscripcion.grupo_id);
+					grupo.turno = Turnos.findOne(grupo.turno_id);
+					alumno.profile.grupos.push(grupo)
+				})
+			});
+		}
+		return alumnos;
 	}
 });

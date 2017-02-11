@@ -19,6 +19,8 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.graficaGastos = [];
 	this.categorias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 	
+	window.rc = rc;
+	
   this.subscribe("inscripciones",()=>{
 		return [{estatus : 1, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
 	});
@@ -128,36 +130,34 @@ function DashboardCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  semanalesSemana : () => {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Semanal", semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
-	  quincenalesSemana : () => {
-		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Quincenal", semana : parseInt(this.getReactively("semanaActual"))}).count();
-	  },
 	  mensualesSemana : () => {
 		  return Inscripciones.find({"planPagos.colegiatura.tipoColegiatura" : "Mensual", semana : parseInt(this.getReactively("semanaActual"))}).count();
 	  },
 	  graficaGastos : () => {
-		  var gastos = Gastos.find({ tipoGasto : {$not : "Depositos"}},{ sort : { weekday : 1 }}).fetch();
+		  var gastos = Gastos.find({ tipoGasto : {$not : "Depositos"}},{ sort : { diaSemana : 1 }}).fetch();
 		  var arreglo = {};
 			_.each(gastos, function(gasto){
 				if(arreglo[gasto.tipoGasto] == undefined){
 					arreglo[gasto.tipoGasto] = {};
 					arreglo[gasto.tipoGasto].total = 0.00;
 					arreglo[gasto.tipoGasto].data = {};
-					for(var i = 1; i <= 7; i++){
+					for(var i = 0; i <= 7; i++){
 						arreglo[gasto.tipoGasto].data = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
 					}
 					arreglo[gasto.tipoGasto].name = gasto.tipoGasto;
-					arreglo[gasto.tipoGasto].data[gasto.weekday - 1] = gasto.importe;
+					console.log(gasto.importe);
+					arreglo[gasto.tipoGasto].data[gasto.diaSemana - 1] = gasto.importe;
 					arreglo[gasto.tipoGasto].total = gasto.importe;
 				}else{
-					var total = (arreglo[gasto.tipoGasto].data[gasto.weekday] != undefined) ? arreglo[gasto.tipoGasto].data[gasto.weekday] : 0.00;
+					var total = (arreglo[gasto.tipoGasto].data[gasto.diaSemana - 1] != undefined) ? arreglo[gasto.tipoGasto].data[gasto.diaSemana - 1] : 0.00;
 					total += gasto.importe;
-					arreglo[gasto.tipoGasto].data[gasto.weekday - 1] = total;
+					arreglo[gasto.tipoGasto].data[gasto.diaSemana - 1] = total;
 					arreglo[gasto.tipoGasto].total += total;
 				}
 			});
 			
 			arreglo = _.toArray(arreglo);
-		  
+		  console.log(arreglo);
 		  $('#gastosGrafica').highcharts( {
 			  chart: {
             type: 'line'

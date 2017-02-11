@@ -122,6 +122,8 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 		delete planeacion._id;
 		rc.planeacion = angular.copy(planeacion);
 		rc.planeacion.estatus = 1;
+		rc.nuevo = true;
+		rc.action = true;
 		$('.collapse').collapse('show');
 	}
 	

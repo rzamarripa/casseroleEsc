@@ -164,6 +164,12 @@
 															  </p>
 														  </div>															  
 														</div>
+														<div class="col-sm-4">
+															<label class="text-center">Turno</label>
+														  	<p>
+															  	{{ins.grupoSeleccionado.turno.nombre}} {{ins.grupoSeleccionado.turno.horaInicio}}-{{ins.grupoSeleccionado.turno.horaInicio != undefined ? ins.grupoSeleccionado.turno.horaFin : ""}}
+															  </p>
+														</div>
 											  	</div>
 										  	</div>	
 											</div>
@@ -222,6 +228,7 @@
 																	<p ng-repeat="concepto in ins.inscripcion.planPagos.colegiatura.Semanal.conceptos">{{concepto.importe | currency}} </p>
 																</td>
 															</tr>
+<!--
 															<tr>
 																<td>
 																	<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.planPagos.colegiatura.tipoColegiatura"  value="Quincenal"  ng-change='ins.cambioTipoColegiatura("Quincenal")'>
@@ -232,6 +239,7 @@
 																	<p ng-repeat="concepto in ins.inscripcion.planPagos.colegiatura.Quincenal.conceptos">{{concepto.importe | currency}} </p>
 																</td>
 															</tr>
+-->
 															<tr>
 																<td>
 																	<input type="radio" name="rbColegiatura" ng-model="ins.inscripcion.planPagos.colegiatura.tipoColegiatura"  value="Mensual"  ng-change='ins.cambioTipoColegiatura("Mensual")'>

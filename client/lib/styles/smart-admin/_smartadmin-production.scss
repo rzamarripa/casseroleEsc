@@ -9643,6 +9643,7 @@ td.fc-other-month,
  */
 .table-wrap {
   overflow: auto;
+  overflow-x: scroll;
 }
 .inbox-body {
   position: relative;

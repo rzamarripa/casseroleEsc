@@ -510,11 +510,11 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	}
 
 	this.hayCupo = function(grupo_id){
-		var grupo = Grupos.findOne(grupo_id);
-		var planEstudios = PlanesEstudios.findOne(grupo.planEstudios_id);
-
-		this.inscripcion.planPagos = { inscripcion:grupo.inscripcion,colegiatura:grupo.colegiatura };
-		this.inscripcion.planPagos.colegiatura.fechaInicial = grupo.fechaInicio;
+		this.grupoSeleccionado = Grupos.findOne(grupo_id);
+		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
+		this.grupoSeleccionado.turno = Turnos.findOne(this.grupoSeleccionado.turno_id);
+		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion,colegiatura:this.grupoSeleccionado.colegiatura };
+		this.inscripcion.planPagos.colegiatura.fechaInicial = this.grupoSeleccionado.fechaInicio;
 		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos = planEstudios.semanas;
 		var _inscripcion = this.inscripcion.planPagos.inscripcion;
 		_inscripcion.importeRegular =0;
@@ -549,9 +549,9 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			if(concepto.estatus)
 				mensual.importeRegular += concepto.importe;
 		}
-		this.inscripcion.planPagos.conceptosComision = grupo.conceptosComision;
+		this.inscripcion.planPagos.conceptosComision = this.grupoSeleccionado.conceptosComision;
 		
-		if(grupo.inscritos < grupo.cupo){
+		if(this.grupoSeleccionado.inscritos < this.grupoSeleccionado.cupo){
 			this.cupo = "check";
 		}else{
 			this.cupo = "remove";
@@ -584,8 +584,8 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		var campus = Campus.findOne(Meteor.user().profile.campus_id);
 		
 		inscripcion.planEstudios_id = grupo.planEstudios_id;
-		inscripcion.campus_id = Meteor.user().profile.campus_id;
-		inscripcion.seccion_id = Meteor.user().profile.seccion_id;
+		inscripcion.campus_id = grupo.campus_id;
+		inscripcion.seccion_id = grupo.seccion_id;
 		inscripcion.estatus = 1;
 		inscripcion.semana = moment(new Date()).isoWeek();
 		var planEstudio = PlanesEstudios.findOne(inscripcion.planEstudios_id)
@@ -607,8 +607,8 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			fechaPago 	: new Date(),
 			alumno_id 	: rc.inscripcion.alumno_id,
 			grupo_id		: rc.inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
+			seccion_id  : grupo.seccion_id,
+			campus_id 	: grupo.campus_id,
 			estatus 		: 1,
 			usuarioInserto_id 	: Meteor.userId(),
 			importe 		: rc.inscripcion.importePagado-rc.inscripcion.cambio,
