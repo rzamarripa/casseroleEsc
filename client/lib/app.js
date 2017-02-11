@@ -32,3 +32,4 @@ function onReady() {
 }
 */
 
+NProgress.configure({ easing: 'ease', speed: 600 });

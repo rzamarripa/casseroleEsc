@@ -15,6 +15,12 @@ angular.module("casserole").run(function ($rootScope, $state, toastr) {
         $state.go('internal-client-error');
     }
   });
+  $rootScope.$on('$stateChangeStart', function(next, current) { 
+    NProgress.set(0.2);
+  });
+  $rootScope.$on('$stateChangeSuccess', function(next, current) { 
+    NProgress.set(1.0);
+  });
 });
 
 angular.module('casserole').config(['$injector', function ($injector) {
@@ -24,7 +30,6 @@ angular.module('casserole').config(['$injector', function ($injector) {
 
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/');
-
   /***************************
    * Anonymous Routes
    ***************************/
