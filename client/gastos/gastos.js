@@ -76,7 +76,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
   this.guardar = function(gasto, form){
     if(form.$invalid){
-      toastr.error('error.');
+      toastr.error('Llene toda la información.');
       return;
     }
     gasto.estatus = true;
