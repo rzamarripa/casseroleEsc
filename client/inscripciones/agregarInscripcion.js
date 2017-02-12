@@ -18,6 +18,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.inscrito = "";
 	this.cantidadAlumnos = 0;
 	this.prospecto = {};
+	this.grupoSeleccionado = {};
 	this.alumno_id = $stateParams.alumno_id;
 	this.inscripcion.alumno_id = this.alumno_id;
 	
@@ -64,6 +65,10 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	
 	this.subscribe('cuentas', ()=>{
 		return [{estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	});
+	
+	this.subscribe('turnos', ()=>{
+		return [{estatus:true, _id : this.getReactively("grupoSeleccionado.turno_id")}]
 	});
 	
 	this.subscribe('campus', ()=>{
