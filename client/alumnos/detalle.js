@@ -847,7 +847,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				pago        : this.ppago,
 
 				//cuenta_id   : rc.cuentaInscripcion._id,
-				diaPago     : diaActual,
+				diaPago     : this.diaActual,
 				mesPago     : mesPago,
 				semanaPago  : semanaPago,
 				anioPago    : anioPago,
