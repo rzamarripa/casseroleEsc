@@ -179,6 +179,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.alumnosPorEstatus', {
+      url: '/alumnosPorEstatus',
+      templateUrl: 'client/reportes/alumnosPorEstatus.html',      
+      controller: 'AlumnosPorEstatusCtrl as ape',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',

@@ -217,5 +217,62 @@ Meteor.methods({
 			});
 		}
 		return alumnos;
+	},
+	cambiarEstatusAlumno : function(alumno_id, estatus, classLabel, estatusNombre){
+		
+		var alumno = Meteor.users.findOne({ _id : alumno_id});
+		var diaSemana = moment().isoWeekday();
+		var dia = moment().date();
+		var semana = moment().isoWeek();
+		var mes = moment().month() + 1;
+		var anio = moment().year();
+		
+		BitacoraEstatus.insert({alumno_id : alumno_id, estatusAnterior : parseInt(alumno.profile.estatus), estatusActual : parseInt(estatus), fechaCreacion : new Date(), diaSemana : diaSemana, dia : dia, semana : semana, mes : mes, anio : anio });
+		Meteor.users.update({_id : alumno_id}, {$set : {"profile.semanaEstatus " : moment().isoWeek(), "profile.estatus" : estatus, "profile.estatusObj.classLabel" : classLabel, "profile.estatusObj.nombre" : estatusNombre, "profile.estatusObj.codigo" : estatus}});
+		if(estatus == 1){ //Registrado
+		  return "Registrado";
+	  }else if(estatus == 2){
+		  return "Inicio";
+	  }else if(estatus == 3){
+		  return "Inicio Pospuesto";
+	  }else if(estatus == 4){
+		  return "Fantasma";
+	  }else if(estatus == 5){
+		  return "Activo";
+	  }else if(estatus == 6){
+		  return "Baja";
+	  }else if(estatus == 7){
+		  return "Terminación de Pago";
+	  }else if(estatus == 8){
+		  return "Egresado";
+	  }
+	},
+	getAlumnosPorEstatus : function(fechaInicio, fechaFin, estatus, seccion_id){
+		var estatusNombre = "";
+		if(estatus == 1){ //Registrado
+		  var estatusNombre = "Registrado";
+	  }else if(estatus == 2){
+		  var estatusNombre = "Inicio";
+	  }else if(estatus == 3){
+		  var estatusNombre = "Inicio Pospuesto";
+	  }else if(estatus == 4){
+		  var estatusNombre = "Fantasma";
+	  }else if(estatus == 5){
+		  var estatusNombre = "Activo";
+	  }else if(estatus == 6){
+		  var estatusNombre = "Baja";
+	  }else if(estatus == 7){
+		  var estatusNombre = "Terminación de Pago";
+	  }else if(estatus == 8){
+		  var estatusNombre = "Egresado";
+	  }
+		var bitacoras = BitacoraEstatus.find({fechaCreacion : { $gte : fechaInicio, $lt : fechaFin}, estatusActual : parseInt(estatus), seccion_id : seccion_id}).fetch();
+		if(bitacoras.length > 0){
+			_.each(bitacoras, function(bitacora){
+				bitacora.alumno = Meteor.users.findOne({_id : bitacora.alumno_id}, { fields : {"profile.nombreCompleto" : 1, "profile.matricula" : 1, "profile.estatus" : 1, "profile.estatusObj" : 1}});
+				bitacora.estatusNombre = estatusNombre;
+			})
+		}		
+		return bitacoras;
 	}
 });

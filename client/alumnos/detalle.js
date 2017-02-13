@@ -1311,4 +1311,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		  return "Egresado"
 	  }
   }
+  
+  this.cambiarEstatus = function(estatus, classLabel){
+	  Meteor.apply("cambiarEstatusAlumno", [rc.alumno._id, estatus, this.obtenerColorEstatus(estatus), this.obtenerNombreEstatus(estatus)], function(error, result){
+		  if(result){
+			  toastr.success("El alumno se ha cambiado al estatus " + result);
+		  }else{
+			  toastr.error("No se pudo cambiar el estatus");
+		  }
+	  })
+  }
 }
