@@ -15,6 +15,8 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.validaUsuario = false;
   this.validaContrasena = false;
   this.alumnos = [];
+  
+  window.rc = rc;
 	
 /*
 	this.subscribe('buscarAlumnos', () => {
@@ -102,9 +104,9 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
 				return "img/badprofile.jpeg";
 			}
@@ -125,13 +127,14 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 					} 		   
 		    }], function(error, result){
 			  if(result){
-				  console.log(result);
 				  rc.alumnos = result;
 				  NProgress.set(1);
 			  }
 		
 		    $scope.$apply();
 		  });
+	  }else{
+		  rc.alumnos = [];
 	  }
   }
   

@@ -1147,7 +1147,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('root.asistenciaGrupo', {
-      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:id',
+      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:fechaAsistencia',
       templateUrl: 'client/maestro/asistencias/asistencias.ng.html',
       controller: 'MaestroAsistenciasCtrl as masas',
       resolve: {
@@ -1744,7 +1744,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
         "currentUser": ["$meteor", "toastr", function($meteor, toastr){
           return $meteor.requireValidUser(function(user) {
-            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin"){
+            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin" || user.roles[0] == "maestro"){
               return true;
             }else{
               return 'UNAUTHORIZED'; 

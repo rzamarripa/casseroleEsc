@@ -39,11 +39,10 @@
 		      <tr>
 		        <th class="col-sm-1">Matrícula</th>
 		        <th class="col-sm-2">Nombre</th>
-		        <th class="text-center" ng-repeat="asistencia in mast.asistencias">
-			        <a ng-if="currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.asistenciaGrupo({
-				        		grupo_id : asistencia.grupo_id, materia_id : asistencia.materia_id, maestro_id : asistencia.maestro_id, id : asistencia._id
-					        })" class="text-center" style="font-size: 10px;">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</a>
-					    <span ng-if="currentUser.roles[0] == 'maestro'">{{asistencia.fechaAsistencia | date:"dd-MM-yyyy"}}</span>
+		        <th class="text-center" ng-repeat="fechas in mast.diasUnicos">
+			        <a ng-if="currentUser.roles[0] == 'coordinadorAcademico' || currentUser.roles[0] == 'director'" ui-sref="root.asistenciaGrupo({
+				        		grupo_id : mast.grupo._id, materia_id : mast.asignacion.materia_id, maestro_id : mast.asignacion.maestro_id, fechaAsistencia : fechas.fecha})" class="text-center" style="font-size: 10px;">{{fechas.fecha | date:"dd-MM-yyyy"}}</a>
+					    <span ng-if="currentUser.roles[0] == 'maestro'">{{fechas.fecha | date:"dd-MM-yyyy"}}</span>
 			      </th>
 		      </tr>
 		    </thead>

@@ -1,9 +1,11 @@
 <div class="row">
 	<div class="col-sm-4">
-		<a class="btn btn-primary" ui-sref="root.verAsistencias({grupo_id : masas.grupo._id, materia_id : masas.materia._id, maestro_id : masas.grupo.maestro_id})">
+<!--
+		<button class="btn btn-primary" ui-sref="root.verAsistencias({grupo_id : masas.grupo._id, materia_id : masas.materia._id, maestro_id : masas.maestro._id})">
 		  Ver Asistencias
-		</a>
-		<a class="btn btn-primary" ui-sref="root.gruposMaestro">
+		</button>
+-->
+		<a class="btn btn-primary" ui-sref="root.gruposMaestro" ng-if="currentUser.roles[0] == 'maestro'">
 		  Mis Grupos
 		</a>
 	</div>
@@ -45,7 +47,7 @@
 				<span class="pull-right" style="margin-right: 30px;"><i class="fa fa-calendar"></i> {{masas.hoy | date:'dd-MM-yyyy HH:mm'}}</span>
 			</h5>
 			<ul id="sortable1" class="todo ui-sortable">
-				<li style="cursor: pointer;" ng-repeat="alumno in masas.listaAsistencia.alumnos" ng-click="masas.tomarAsistencia(alumno.estatus, $index)" ng-class="alumno.estatus == true ? '' : 'danger !important'">
+				<li style="cursor: pointer;" ng-repeat="alumno in masas.listaAsistencia" ng-click="masas.tomarAsistencia(alumno.estatus, $index)" ng-class="alumno.estatus == true ? '' : 'danger !important'">
 					<span ng-class="masas.getColorFondo(alumno.estatus)" style="width: 0px; padding: 5px;"> 
 						
 					</span>
