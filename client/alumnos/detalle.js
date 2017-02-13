@@ -1271,4 +1271,44 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		
 		return permiso;
 	}
+	
+	this.obtenerColorEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "bg-color-blue txt-white";
+	  }else if(estatus == 2){
+		  return "bg-color-purple txt-white"
+	  }else if(estatus == 3){
+		  return "bg-color-yellow txt-white"
+	  }else if(estatus == 4){
+		  return "bg-color-blueLight txt-white"
+	  }else if(estatus == 5){
+		  return "bg-color-greenLight txt-white"
+	  }else if(estatus == 6){
+		  return "bg-color-red txt-white"
+	  }else if(estatus == 7){
+		  return "bg-color-blueDark txt-white"
+	  }else if(estatus == 8){
+		  return "label-primary txt-white"
+	  }
+  }
+  
+  this.obtenerNombreEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "Registrado";
+	  }else if(estatus == 2){
+		  return "Inicio"
+	  }else if(estatus == 3){
+		  return "Pospuesto"
+	  }else if(estatus == 4){
+		  return "Fantasma"
+	  }else if(estatus == 5){
+		  return "Activo"
+	  }else if(estatus == 6){
+		  return "Baja"
+	  }else if(estatus == 7){
+		  return "Term.Pago"
+	  }else if(estatus == 8){
+		  return "Egresado"
+	  }
+  }
 }

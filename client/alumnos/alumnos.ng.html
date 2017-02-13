@@ -21,7 +21,7 @@
 </div>
 <br/>
 <div class="row">
-	<div class="col-lg-3" ng-repeat="alumno in al.alumnos" style="margin-bottom: 10px;">
+	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 tarjetas-alumnos" ng-repeat="alumno in al.alumnos" style="margin-bottom: 10px; padding-left: 5px; padding-right: 10px;">
       <div class="contact-box center-version">
 	      <div class="ribbon-wrapper-alumno">
 		      <div class="ribbon-alumno {{al.obtenerColorEstatus(alumno.profile.estatus)}}">{{al.obtenerNombreEstatus(alumno.profile.estatus)}}</div>

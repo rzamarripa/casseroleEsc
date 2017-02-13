@@ -173,6 +173,8 @@ h1, h2, h3, h4, h5, h6 {
     color: inherit;
 }
 
+/* Cinta de estatus de los alumnos */
+
 .wrapper {
   margin: 50px auto;
   width: 280px;
@@ -192,7 +194,16 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   position: absolute;
   top: -3px;
-  right: 13px;
+  right: 7px;
+}
+
+.ribbon-wrapper-alumno-profile {
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -28px;
+  right: 7px;
 }
 
 .ribbon-alumno{
@@ -225,7 +236,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .ribbon-alumno:before, .ribbon-alumno:after {
   content: "";
-  border-top:   3px solid #6e8900;
+  border-top:   3px solid #898989;
   border-left:  3px solid transparent;
   border-right: 3px solid transparent;
   position:absolute;

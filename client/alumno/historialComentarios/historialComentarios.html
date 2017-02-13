@@ -28,7 +28,10 @@
 							<div class="col-sm-12">
 								<div class="row">
 									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
-										<img style="max-width:200px;" src="{{hc.tieneFoto(hc.alumno.profile.sexo, hc.alumno.profile.fotografia)}}" >
+								    <img style="max-width:200px;" src="{{hc.tieneFoto(hc.alumno.profile.sexo, hc.alumno.profile.fotografia)}}" >
+								    <div class="ribbon-wrapper-alumno-profile" style="z-index: 10">
+								      <div class="ribbon-alumno {{hc.obtenerColorEstatus(hc.alumno.profile.estatus)}}">{{hc.obtenerNombreEstatus(hc.alumno.profile.estatus)}}</div>
+								    </div>
 									</div>
 									<div class="col-sm-6">
 										<h1>{{hc.alumno.profile.nombre}} <span class="semi-bold">{{hc.alumno.profile.apPaterno}} {{hc.alumno.profile.apMaterno}}</span>
