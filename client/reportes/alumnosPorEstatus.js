@@ -20,4 +20,63 @@ function AlumnosPorEstatusCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    $scope.$apply();
 	  });
   }
+  
+  this.getCantAlumnos = function(semana, anio){
+	  Meteor.apply('getCantAlumnosPorEstatus', [new Date(this.fechaInicio.setHours(0,0,0,0)), new Date(this.fechaFin.setHours(23,59,59,0)), this.estatus, Meteor.user().profile.seccion_id], function(error, result){
+		  console.log("cant. ", result);
+		  
+
+		  $('#cantAlumnos').highcharts( {
+			  chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Relación de Gastos de la Semana ' + rc.getReactively("semanaActual"),
+            x: -20 //center
+        },
+        subtitle: {
+            text: (rc.campus != undefined) ? rc.campus.nombre : '',
+            x: -20
+        },
+        xAxis: {
+            categories: result[0],
+            plotBands: [{ // visualize the weekend
+                from: 4.5,
+                to: 6.5,
+                color: 'rgba(68, 170, 213, .2)'
+            }]
+        },
+        yAxis: {
+            title: {
+                text: 'Gasto en $'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' Pesos'
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: result[1]
+	    });
+
+	    $scope.$apply();
+	  });
+  }
 };

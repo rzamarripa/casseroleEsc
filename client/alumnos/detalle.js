@@ -1313,7 +1313,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
   }
   
   this.cambiarEstatus = function(estatus, classLabel){
-	  Meteor.apply("cambiarEstatusAlumno", [rc.alumno._id, estatus, this.obtenerColorEstatus(estatus), this.obtenerNombreEstatus(estatus)], function(error, result){
+	  Meteor.apply("cambiarEstatusAlumno", [rc.alumno._id, estatus, this.obtenerColorEstatus(estatus), this.obtenerNombreEstatus(estatus), Meteor.user().profile.seccion_id], function(error, result){
 		  if(result){
 			  toastr.success("El alumno se ha cambiado al estatus " + result);
 		  }else{
