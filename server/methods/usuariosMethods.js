@@ -273,6 +273,7 @@ Meteor.methods({
 					cantBitacoras[bitacora.estatusActual] = {};
 					cantBitacoras[bitacora.estatusActual].name = obtenerEstatusNombre(bitacora.estatusActual);
 					cantBitacoras[bitacora.estatusActual].data = elementos.slice();
+					cantBitacoras[bitacora.estatusActual].color = obtenerColorEstatus(bitacora.estatusActual);
 					cantBitacoras[bitacora.estatusActual].data[bitacora.semana - semanas[0]] = 1;
 					console.log(bitacora.estatusActual, bitacora.semana, cantBitacoras[bitacora.estatusActual], semanas[0]);
 				}else{
@@ -310,4 +311,24 @@ function obtenerEstatusNombre(estatus){
   }
   
   return estatusNombre;
+}
+
+function obtenerColorEstatus(estatus){
+	if(estatus == 1){
+	  return "#57889c";
+  }else if(estatus == 2){
+	  return "#6e587a";
+  }else if(estatus == 3){
+	  return "#b09b5b";
+  }else if(estatus == 4){
+	  return "#92a2a8";
+  }else if(estatus == 5){
+	  return "#71843f";
+  }else if(estatus == 6){
+	  return "#a90329";
+  }else if(estatus == 7){
+	  return "#4c4f53";
+  }else if(estatus == 8){
+	  return "blue";
+  }
 }

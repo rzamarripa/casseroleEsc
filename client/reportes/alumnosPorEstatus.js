@@ -31,7 +31,7 @@ function AlumnosPorEstatusCtrl($scope, $meteor, $reactive, $state, toastr) {
             type: 'line'
         },
         title: {
-            text: 'Relación de Gastos de la Semana ' + rc.getReactively("semanaActual"),
+            text: 'Alumnos por estatus por semana ',
             x: -20 //center
         },
         subtitle: {
@@ -48,7 +48,7 @@ function AlumnosPorEstatusCtrl($scope, $meteor, $reactive, $state, toastr) {
         },
         yAxis: {
             title: {
-                text: 'Gasto en $'
+                text: 'Cantidad de Alumnos'
             },
             plotLines: [{
                 value: 0,
@@ -57,7 +57,7 @@ function AlumnosPorEstatusCtrl($scope, $meteor, $reactive, $state, toastr) {
             }]
         },
         tooltip: {
-            valueSuffix: ' Pesos'
+            valueSuffix: ' Alumnos'
         },
         legend: {
             layout: 'horizontal',
