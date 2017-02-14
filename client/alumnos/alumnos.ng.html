@@ -38,9 +38,10 @@
               <abbr title="Teléfono">T:</abbr> {{alumno.profile.tel1}}
           </address>
         </a>
-        <a ui-sref="root.grupoDetalle({grupo_id : grupo._id})" ng-repeat="grupo in alumno.profile.grupos" style="text-decoration: none;">
-	        {{grupo.nombre}} - {{grupo.turno.nombre}}
-        </a>
+        <button ui-sref="root.grupoDetalle({grupo_id : grupo._id})" ng-repeat="grupo in alumno.profile.grupos" class="btn btn-block {{grupo.classButton}}" style="text-decoration: none;" >
+	        <span class="pull-left"><i class="fa fa-group"></i> {{grupo.nombre}} - {{grupo.turno.nombre}}</span>
+	        <label class="badge {{grupo.classButton}} pull-right"> <i class="fa fa-check"></i> {{grupo.inasistenciasSemana}}/{{grupo.turno.inasistencias}}</label>
+        </button>
 <!--
           <div class="contact-box-footer">
               <div class="m-t-xs btn-group">

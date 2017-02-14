@@ -117,7 +117,7 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
   };
   
   this.buscarAlumnos = function(){
-	  if(this.buscar.nombre.length > 3 ){
+	  if(this.buscar.nombre.length > 0 ){
 		  Meteor.apply('buscarAlumnos', [{
 			    options : { limit: 51 },
 			    where : { 

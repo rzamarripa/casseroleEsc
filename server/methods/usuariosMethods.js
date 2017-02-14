@@ -171,6 +171,8 @@ Meteor.methods({
 	},
 	buscarAlumnos : function(options){
 		if(options.where.nombreCompleto.length > 0){
+			var semanaActual = moment().isoWeek();
+			
 			let selector = {
 		  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
 		  	"profile.campus_id": options.where.campus_id,
@@ -185,8 +187,33 @@ Meteor.methods({
 				_.each(alumno.profile.inscripciones, function(inscripcion){
 					var grupo = Grupos.findOne(inscripcion.grupo_id);
 					grupo.turno = Turnos.findOne(grupo.turno_id);
-					alumno.profile.grupos.push(grupo)
-				})
+					alumno.profile.grupos.push(grupo);
+				});
+				
+				_.each(alumno.profile.grupos, function(grupo){
+					grupo.inasistenciasSemana = Asistencias.find({alumno_id : alumno._id, grupo_id : grupo._id, estatus : 0}).count();
+					if(grupo.inasistenciasSemana >= grupo.turno.inasistencias){
+						grupo.classButton = "btn-danger";
+					}else{						
+						if(alumno.profile.estatus == 1){ //Registrado
+						  grupo.classButton = "bg-color-blue txt-white";
+					  }else if(alumno.profile.estatus == 2){
+						  grupo.classButton = "bg-color-purple txt-white"
+					  }else if(alumno.profile.estatus == 3){
+						  grupo.classButton = "bg-color-yellow txt-white"
+					  }else if(alumno.profile.estatus == 4){
+						  grupo.classButton = "bg-color-blueLight txt-white"
+					  }else if(alumno.profile.estatus == 5){
+						  grupo.classButton = "bg-color-greenLight txt-white"
+					  }else if(alumno.profile.estatus == 6){
+						  grupo.classButton = "bg-color-red txt-white"
+					  }else if(alumno.profile.estatus == 7){
+						  grupo.classButton = "bg-color-blueDark txt-white"
+					  }else if(alumno.profile.estatus == 8){
+						  grupo.classButton = "label-primary txt-white"
+					  }
+					}
+				});
 			});
 		}
 		return alumnos;
