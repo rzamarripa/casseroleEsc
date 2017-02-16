@@ -2,148 +2,20 @@
 	<div class="col-sm-12">
 		<div class="well well-sm">
 			<div class="row">
-				<div class=" col-sm-4 col-md-2 col-lg-2" style="text-align: center;">
-					<img src="{{m.tieneFoto(currentUser.profile.fotografia, currentUser.profile.sexo)}}" alt="tú" style="max-width: 150px;">
-					<div class="padding-10">
-						<h4 class="font-md"><strong>{{currentUser.profile.friends.length}}</strong>
-						<br>
-						<small>Amigos</small></h4>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-8 col-lg-6">						
-					<form method="post" class="well padding-bottom-10" onsubmit="return false;">
-						<textarea rows="2" class="form-control" placeholder="Qué estás pensando?" ng-model="m.post.mensaje"></textarea>
-						<div class="margin-top-10" style="padding-bottom: 30px;">
-							<button type="submit" class="btn btn-sm btn-primary pull-right" ng-click="m.comentar(m.post)">
-								<i class="fa fa-send"></i> Enviar
-							</button>								
-						</div>
-					</form>
-
-					<div class="timeline-seperator text-center" ng-repeat-start="post in m.posts"> <span>{{post.createdAt | date : "dd-MM-yyyy HH:mm:ss"}}</span>
-						<div class="btn-group pull-right">
-							<a href="javascript:void(0);" data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle"><span class="caret single"></span></a>
-							<ul class="dropdown-menu text-left">									
-								<li ng-if="currentUser._id == post.user_id">
-									<a href="javascript:void(0);">Editar</a>
-								</li>
-								<li ng-if="currentUser._id == post.user_id">
-									<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
-								</li>
-							</ul>
-						</div> 
-					</div>
-					<div class="chat-body no-padding profile-message" ng-repeat-end>
-						<ul>
-							<li class="message">
-								<img src="{{m.tieneFoto(post.photo, post.gender)}}" width="50" class="online" alt="sunny">
-								<span class="message-text" style="width: 85%;"> 
-									<a href="#" class="username" >{{post.name}} 
-										<small class="text-muted pull-right"> {{m.duracion(post.createdAt)}} </small>
-									</a> 
-									{{post.message}}
-								</span>
-								<ul class="list-inline font-xs" ng-if="currentUser._id == post.user_id">
-									<li>
-										<a href="javascript:void(0);" class="text-primary">Editar</a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
-									</li>
-								</ul>
-							</li>
-							<li class="message message-reply" ng-repeat="reply in post.replies">
-								<img src="{{m.tieneFoto(reply.photo, reply.gender)}}" class="away" alt="sunny">
-								<span class="message-text" style="width: 85%"> 
-									<a href="javascript:void(0);" class="username">
-										{{reply.name}}
-										<small class="text-muted pull-right ultra-light"> 
-											{{m.duracion(reply.createdAt)}} 
-										</small>
-									</a> 
-									{{reply.comment}} 
-								</span>
-							</li>	
-							<li>
-								<form style="width: 75%" ng-submit="m.reply(m.reply[$index].message, post._id, $index)">
-									<div class="input-group wall-comment-reply" style="width: 100%">										
-										<input id="btn-input" type="text" class="form-control input-xs" placeholder="Escribe tu comentario aquí..." ng-model="m.reply[$index].message">
-										<span class="input-group-btn">
-											<button class="btn btn-primary btn-xs" style="height: 24px;" type="button" ng-click="m.reply(m.reply[$index].message, post._id, $index)">
-												<i class="fa fa-{{m.reply[$index].message.length <= 0 || m.reply[$index].message == undefined ? 'comment-o' : 'commenting-o'}}"></i>
-											</button> 
-										</span>										
-									</div>
-								</form>
-							</li>
-						</ul>
-					</div>
+				<div ng-include=" 'client/alumno/muro/perfil/_perfil.html' "></div>
+				<div class="col-sm-12 col-md-8 col-lg-6">
+					<div ng-include=" 'client/alumno/muro/buscarAmigos/_buscarAmigos.html' "></div>	
+					<div ng-include=" 'client/alumno/muro/postForm/_postForm.html' "></div>	
+					<div ng-include=" 'client/alumno/muro/posts/_posts.html' "></div>	
+					
 					<div class="col-sm-12 col-md-12 col-lg-12 text-center">
 						<a class="btn btn-sm btn-default" ng-click='m.loadMore()'><i class="fa fa-arrow-down text-muted"></i> CARGAR MÁS</a>
 					</div>
 				</div>
-				<div class="col-sm-12 col-md-2 col-lg-4">
-					<!-- BUSCAR USUARIOS -->
-					<div class="well padding-10" style="text-align: left;">
-						<h5 class="margin-top-0">
-							<i class="fa fa-search"></i> Buscar Amigos...
-						</h5>
-						<div class="input-group">
-							<input type="text" class="form-control" ng-model="m.buscar.nombre">
-							<span class="input-group-btn">
-								<button class="btn btn-default" type="button" style="height: 34px;">
-									<i class="fa fa-search"></i>
-								</button>
-							</span>
-						</div>
-						<!-- RESULTADOS USUARIOS -->
-						<nav>
-							<ul>
-								<li class="chat-users open">
-									<div class="display-users">											
-								  	<a ng-repeat="alumno in m.alumnos" href="#" style="color : black; cursor: pointer" class="usr" data-chat-id="cha1" data-chat-fname="Sadi" data-chat-lname="Orlaf" data-chat-status="away" data-rel="popover-hover" data-placement="right" data-html="true" data-original-title="" title="" ng-click="m.agregarAmigo(alumno._id)"> 
-									  	<i></i>{{alumno.profile.nombreCompleto}}
-								  	</a>
-									</div>
-								</li>
-							</ul>	
-						</nav>
-					</div>
+				<div class="col-sm-12 col-md-2 col-lg-4 hidden-xs">
+					<div ng-include=" 'client/alumno/muro/amigos/_amigos.html' "></div>	
 					<hr>
-					<!-- INICIO AMIGOS -->
-					<div class="well padding-10">
-						<h5 class="margin-top-0"><i class="fa fa-group"></i> Amigos</h5>
-						<ul class="list-inline friends-list">
-							<li ng-repeat="amigo in m.amigos">
-								<img src="{{m.tieneFoto(amigo.profile.fotografia, amigo.profile.sexo)}}" alt="{{currentUser.profile.nombreCompleto}}">
-							</li>
-							<li ng-show="currentUser.profile.friends.length > 10">
-								<a href="javascript:void(0);">{{m.masAmigos(currentUser.profile.friends.length)}} más</a>
-							</li>
-						</ul>
-					</div>
-					<hr>
-					
-					<!-- INICIO DE EVENTOS -->
-					<div class="well padding-10">
-						<h5 class="margin-top-0"><i class="fa fa-calendar"></i> Eventos</h5>
-						<table class="table table-hover">								
-							<tr ng-repeat="evento in m.eventos" class="{{evento.className}}">
-								<td>
-									<p style="margin-bottom: 3px;">
-										<i class="fa fa-dot-circle-o"></i><strong> {{evento.title}}</strong>
-										<small class="pull-right">
-											<span class="label label-default">{{m.duracion(evento.start)}}</span>
-										</small>
-									</p>
-									<hr style="margin: 3px;">
-									<small><cite title="{{m.duracion(evento.start)}}">{{evento.description}}</cite></small><br/>
-									<small>Inicio&nbsp;: {{evento.start | date:"dd-MM-yyyy"}}</small><br/>
-									<small>Fin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{evento.end | date:"dd-MM-yyyy"}}</small>
-								</td>
-							</tr>
-						</table>
-					</div>
+					<div ng-include=" 'client/alumno/muro/eventos/_eventos.html' "></div>					
 					<hr>
 				</div>
 			</div>

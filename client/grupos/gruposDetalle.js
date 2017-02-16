@@ -145,7 +145,6 @@ angular
 		Meteor.apply("buscarEnGrupo", [rc.buscar.nombre, Meteor.user().profile.seccion_id], function(error, result){
 			if(result){
 				rc.balumnos = result;
-				console.log(rc.balumnos);
 			}
 		});
 	}
