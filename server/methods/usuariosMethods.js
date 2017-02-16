@@ -167,7 +167,14 @@ Meteor.methods({
 	},
 	usuarioActivo : function (usuario){
 		var usuarioActual = Meteor.users.findOne({username : usuario});
-		return usuarioActual.profile.estatus;
+		console.log(usuarioActual);
+		
+		if(usuarioActual.roles == ["alumno"] && usuarioActual.profile.estatus != 5){
+			return true;
+		}else{
+			return usuarioActual.profile.estatus;
+		}
+		
 	},
 	buscarAlumnos : function(options){
 		if(options.where.nombreCompleto.length > 0){
@@ -287,6 +294,61 @@ Meteor.methods({
 		
 		return [semanas, cantBitacoras, bitacoras];
 
+	},
+	buscarEnGrupo : function(nombreCompleto, seccion_id){
+		if(nombreCompleto.length > 3){
+			let selector = {
+				"profile.nombreCompleto": { '$regex' : '.*' + nombreCompleto || '' + '.*', '$options' : 'i' },
+				"profile.seccion_id": seccion_id,
+				roles : ["alumno"]
+			}
+			
+			var alumnos 				= Meteor.users.find(selector).fetch();
+			var alumnos_ids = _.pluck(alumnos, "_id");
+			
+			_.each(alumnos, function(alumno){
+				alumno.profile.inscripciones = Inscripciones.find({alumno_id : alumno._id, estatus : 1}).fetch();
+			})
+			return alumnos;
+		} 
+	},
+	buscarEnMuro : function(nombreCompleto, seccion_id){
+		if(nombreCompleto.length > 3){
+			let selector = {
+				"profile.nombreCompleto": { '$regex' : '.*' + nombreCompleto || '' + '.*', '$options' : 'i' },
+				//"profile.seccion_id": seccion_id,
+				roles : ["alumno"]
+			}
+			
+			var alumnos 				= Meteor.users.find(selector).fetch();
+			_.each(alumnos, function(alumno){
+
+				alumno.profile.seccion = Secciones.findOne({_id : alumno.profile.seccion_id});
+				if(alumno.profile.solicitudesRecibidas.length > 0){
+					_.each(alumno.profile.solicitudesRecibidas, function(solicitud){
+						/*
+							estatus = 0 Solicitado
+							estatus = 1 Aceptado
+							
+							tipoRelacion = 0 Solicitad
+							tipoRelacion = 1 Amigo
+						*/
+						console.log(solicitud);
+						if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 0){
+							alumno.profile.tipoRelacion = 1;
+						}else if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 1){
+							alumno.profile.tipoRelacion = 2;
+						}else{
+							alumno.profile.tipoRelacion = 0;
+						}
+					})
+				}else{
+					alumno.profile.tipoRelacion = 0;
+				}
+				
+			})
+			return alumnos;
+		}
 	}
 });
 

@@ -132,11 +132,11 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	this.tieneFoto = function(foto, sexo){
 	  if(foto === undefined || foto === null){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 	  }else{
 		  return foto;

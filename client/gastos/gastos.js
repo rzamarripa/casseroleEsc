@@ -11,6 +11,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.semanaActual = moment(new Date()).isoWeek();
   this.anioActual = moment().get("year");
   this.diaActual = moment().isoWeekday();
+  this.campoSubconceptos = false;
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
   for(i = 0; i < this.diaActual; i++){this.diasActuales.push(dias[i])};
@@ -121,10 +122,12 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     if(concepto != undefined)
       return concepto.codigo + " | " + concepto.nombre;
   }
+  
   this.sum = function(){
     var sum = _.reduce(this.gastos, function(memo, gasto){ return memo + gasto.importe; },0);
     return sum
   }
+  
   this.descripcion = function(concepto_id){
     if(concepto_id != undefined){
       concepto = ConceptosGasto.findOne(concepto_id);
@@ -190,4 +193,17 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     return totalComisiones
   }
 ////////////////////////
+
+	this.tieneSubconceptos = function(concepto_id){
+		var concepto = ConceptosGasto.findOne(concepto_id);
+		console.log(concepto);
+		if(concepto.campoSubconceptos == true){
+			rc.campoSubconceptos = true;
+			rc.subconceptos = concepto.subconceptos;
+		}else{
+			rc.campoSubconceptos = false;
+			rc.subconceptos = [];
+		}
+		
+	}
 };

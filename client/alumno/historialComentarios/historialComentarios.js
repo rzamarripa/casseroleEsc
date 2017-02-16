@@ -52,7 +52,7 @@ function HistorialComentariosCtrl($scope, $meteor, $reactive, $state, toastr, $s
 			else if(sexo === "femenino"){
 				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 		}else{
 			return foto;

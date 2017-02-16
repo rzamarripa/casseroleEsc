@@ -174,7 +174,7 @@ function HistorialOtrosPagosCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			else if(sexo === "femenino"){
 				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 		}else{
 			return foto;

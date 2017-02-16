@@ -18,11 +18,21 @@
 						<label for="fecha">Fecha</label>
 						<input name="fecha" format="dd-MM-yyyy" date-time class="form-control" view="date" max-view="year" min-view="date" ng-model="gc.gasto.fecha" required/>
 					</div>
+				</div>
+				<div class="row">
 					<div class="form-group col-sm-4" valida>
 						<label for="concepto">Concepto</label>
-						<select name="concepto_id" class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" required>
+						<select name="concepto_id" class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" ng-change="gc.tieneSubconceptos(gc.gasto.concepto_id)" required>
 						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
 						  	{{concepto.codigo}} | {{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div class="form-group col-sm-4" valida ng-show="gc.campoSubconceptos">
+						<label for="concepto">Sub Concepto</label>
+						<select name="subconcepto_id" class="form-control" placeholder="Seleccione" ng-model="gc.gasto.subconcepto" required>
+						  <option ng-repeat="subconcepto in gc.subconceptos" value="{{subconcepto.nombre}}">
+						  	{{subconcepto.nombre}}
 						  </option>
 						</select>
 					</div>
@@ -34,6 +44,7 @@
 					  <label>Cheque referenciado</label>
 				  	<input type="text" class="form-control"  ng-model="gc.gasto.chequeReferenciado" >
 					</div>
+					
 				</div>
 				<input value="Guardar" type="submit" class="btn btn-primary pull-right" ng-click="gc.guardar(gc.gasto, form)" valida-form formulario="form">
 			</div>

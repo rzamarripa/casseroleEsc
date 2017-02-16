@@ -161,6 +161,54 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 				
 			}
 		})
+	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "alumno"){ 
+		this.solicitudes_ids = [];
+		
+		this.subscribe("alumnos",()=>{
+			return [{
+				_id : { $in : this.getCollectionReactively("solicitudes_ids")}
+			}];
+		});
+	
+		this.helpers({
+	    alumnos : () => {
+		    rc.solicitudes_ids = _.pluck(Meteor.user().profile.solicitudesRecibidas, "alumno_id");
+		    return Meteor.users.find({ _id : {"$in" : rc.solicitudes_ids}}, {limit : 10}).fetch();
+	    },
+	    solicitudes : () => {
+		    var solicitudes = Meteor.user().profile.solicitudesRecibidas;
+		    if(this.getReactively("alumnos")){
+			    _.each(solicitudes, function(solicitud){
+				    solicitud.alumno = Meteor.users.findOne(solicitud.alumno_id);
+			    })
+		    }
+		    console.log(solicitudes);
+		    return solicitudes;
+	    }
+		});
+		
+		this.aceptarSolicitud = function(solicitud){
+			Meteor.apply("aceptarSolicitud", [solicitud, Meteor.userId()], function(error, result){
+				if(result == 1){
+					toastr.success("Ya tiene un nuevo amigo.");
+					console.log(result);
+					$scope.$apply();
+				}else{
+					toastr.danger("No se pudo completar la amistad, inténtelo más tarde");
+				}
+			});
+		}
+		
+		this.rechazarSolicitud = function(solicitud){
+			Meteor.apply("rechazarSolicitud", [solicitud, Meteor.userId()], function(error, result){
+				if(result == 1){
+					toastr.danger("Se ha declinado la invitación.")
+					console.log(result);
+					$scope.$apply();
+				}
+			});
+		}
+		
 	}
 	
 	this.autorun(function() {
@@ -187,11 +235,11 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 	this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 			  
 	  }else{

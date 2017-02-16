@@ -8,8 +8,15 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	this.calendario.eventos = [];
 	this.amigos_ids = [];
 	moment.locale("es");
+	
+	//Buscar amigos
 	this.buscar = {};
 	this.buscar.nombre = "";
+	this.hoy = new Date();
+	this.buscando = false;
+	this.balumnos = [];
+	
+	window.rc = rc;
 
 	this.perPage = 10;
   this.page = 1;
@@ -74,10 +81,6 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
     usuarioActual : () => {
 	    return Meteor.user();
     },
-    amigos : () => {
-	    rc.amigos_ids = Meteor.user().profile.friends;
-	    return Meteor.users.find({ _id : {"$in" : Meteor.user().profile.friends}}, {limit : 10}).fetch();
-    },
     calendario : () => {
 	    if(this.getReactively("calendarios")){
 		    return Calendarios.findOne();
@@ -141,20 +144,31 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 		
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 	  }else{
 		  return foto;
 	  }
   } 
   
-  this.agregarAmigo = function(alumno_id){
-	  Meteor.users.update(Meteor.userId(), { $push : { "profile.friends" : alumno_id }});
-	  toastr.info("Ahora tienes un nuevo amigo");
+  this.solicitarAmistad = function(alumno_id, $index){
+		var alumno = this.balumnos[$index];
+
+	  Meteor.apply("solicitarAmistad", [Meteor.userId(), alumno_id], function(error, result){
+		  console.log(result)
+			if(parseInt(result) == 0){
+				alumno.profile.tipoRelacion = 1;
+				toastr.info("Tu solicitud se ha enviado.");
+			}else{
+				toastr.warning("Ya se había mandado una solicitud")
+			}
+			$scope.$apply();
+		});
+	  
   }
   
   this.masAmigos = function(cantidad){
@@ -170,14 +184,34 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
   	var diferencia = ahora-fecha;
   	if(diferencia < minuto)
   		return "Hace menos de un minuto"
-  	else if(diferencia<hora)
+  	else if(diferencia < hora)
   		return "Hace "+Math.round(diferencia/minuto)+" minutos"
-  	else if(diferencia<dia)
+  	else if(diferencia < dia)
   		return "Hace "+Math.round(diferencia/hora)+" horas"
-  	else if(diferencia<anio)
-  		return "Hace "+Math.round(diferencia/dia)+" dias"
+  	else if(diferencia < anio)
+  		return "Hace "+Math.round(diferencia/dia)+" días"
   	else
   		return "Hace mucho tiempo"
   }
+  
+  this.buscandoNoAlumno = function(){
+		this.hoy = new Date();
+		
+		if(this.buscar.nombre.length > 3){
+			
+			rc.buscando = true;
+		}else{
+			rc.buscando = false;
+		}
+
+		Meteor.apply("buscarEnMuro", [rc.buscar.nombre, Meteor.user().profile.seccion_id], function(error, result){
+			rc.balumnos = [];
+			if(result){
+				rc.balumnos = result;
+				console.log(rc.balumnos);
+				$scope.$apply();
+			}
+		});
+	}
   
 };
