@@ -119,11 +119,11 @@ angular
 								asistencia.profile = al.profile;
 								if(al.profile.fotografia === undefined){
 								  if(al.profile.sexo === "masculino")
-									  al.profile.fotografia = "img/badmenprofile.jpeg";
+									  al.profile.fotografia = "img/badmenprofile.png";
 									else if(al.profile.sexo === "femenino"){
-										al.profile.fotografia = "img/badgirlprofile.jpeg";
+										al.profile.fotografia = "img/badgirlprofile.png";
 									}else{
-										al.profile.fotografia = "img/badprofile.jpeg";
+										al.profile.fotografia = "img/badprofile.png";
 									}
 							  }else{
 								  alumno.profile.fotografia = al.profile.fotografia;
@@ -250,11 +250,11 @@ angular
   this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}			  
 	  }else{
 		  return foto;

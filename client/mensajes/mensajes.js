@@ -100,11 +100,11 @@ function MensajesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var sexo = usuario.profile.sexo;
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 	  }else{
 		  return foto;

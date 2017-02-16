@@ -108,7 +108,7 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			else if(sexo === "femenino"){
 				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 			  
 	  }else{
