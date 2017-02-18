@@ -176,7 +176,7 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 		    return Meteor.users.find({ _id : {"$in" : rc.solicitudes_ids}}, {limit : 10}).fetch();
 	    },
 	    solicitudes : () => {
-		    var solicitudes = Meteor.user().profile.solicitudesRecibidas;
+		    var solicitudes = _.where(Meteor.user().profile.solicitudesRecibidas, {estatus : 0});
 		    if(this.getReactively("alumnos")){
 			    _.each(solicitudes, function(solicitud){
 				    solicitud.alumno = Meteor.users.findOne(solicitud.alumno_id);
@@ -188,6 +188,7 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 		});
 		
 		this.aceptarSolicitud = function(solicitud){
+			rc.avisosVentana = "none";
 			Meteor.apply("aceptarSolicitud", [solicitud, Meteor.userId()], function(error, result){
 				if(result == 1){
 					toastr.success("Ya tiene un nuevo amigo.");
@@ -200,6 +201,7 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
 		}
 		
 		this.rechazarSolicitud = function(solicitud){
+			rc.avisosVentana = "none";
 			Meteor.apply("rechazarSolicitud", [solicitud, Meteor.userId()], function(error, result){
 				if(result == 1){
 					toastr.danger("Se ha declinado la invitación.")

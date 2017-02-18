@@ -1600,7 +1600,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     	}
     })    
     .state('root.alumnoMuro', {
-      url: '/muro',
+      url: '/muro/:alumno_id',
       templateUrl: 'client/alumno/muro/muro.html',
       controller: 'AlumnoMuroCtrl as m',
       resolve: {

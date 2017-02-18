@@ -5,9 +5,11 @@ angular
 function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
 	
+/*
 	this.subscribe("usuarios",()=>{
 		return [{ "profile.estatus":true }];
 	});
+*/
 	
   this.credentials = {
     username: '',
@@ -26,10 +28,10 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      }  
 		  }else{
 			  Meteor.apply('usuarioActivo', [rc.credentials.username], function(error, result){
-				  if(result == true){
+				  if(result != 6){
 					  toastr.success("Bienvenido al Sistema");
 			      if(Meteor.user().roles[0] == "alumno"){
-				      $state.go('root.alumnoMuro',{campus_id : Meteor.user().profile.campus_id});
+				      $state.go('root.alumnoMuro',{alumno_id : Meteor.userId()});
 			      }else{
 				      $state.go('root.home');
 			      }

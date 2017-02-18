@@ -168,7 +168,7 @@ Meteor.methods({
 	usuarioActivo : function (usuario){
 		var usuarioActual = Meteor.users.findOne({username : usuario});
 		
-		if(usuarioActual.roles == ["alumno"] && usuarioActual.profile.estatus != 5){
+		if(usuarioActual.roles == ["alumno"] && usuarioActual.profile.estatus != 6){
 			return true;
 		}else{
 			return usuarioActual.profile.estatus;
@@ -305,43 +305,6 @@ Meteor.methods({
 			})
 			return alumnos;
 		} 
-	},
-	buscarEnMuro : function(nombreCompleto, seccion_id){
-		if(nombreCompleto.length > 3){
-			let selector = {
-				"profile.nombreCompleto": { '$regex' : '.*' + nombreCompleto || '' + '.*', '$options' : 'i' },
-				//"profile.seccion_id": seccion_id,
-				roles : ["alumno"]
-			}
-			
-			var alumnos 				= Meteor.users.find(selector).fetch();
-			_.each(alumnos, function(alumno){
-
-				alumno.profile.seccion = Secciones.findOne({_id : alumno.profile.seccion_id});
-				if(alumno.profile.solicitudesRecibidas.length > 0){
-					_.each(alumno.profile.solicitudesRecibidas, function(solicitud){
-						/*
-							estatus = 0 Solicitado
-							estatus = 1 Aceptado
-							
-							tipoRelacion = 0 Solicitad
-							tipoRelacion = 1 Amigo
-						*/
-						if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 0){
-							alumno.profile.tipoRelacion = 1;
-						}else if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 1){
-							alumno.profile.tipoRelacion = 2;
-						}else{
-							alumno.profile.tipoRelacion = 0;
-						}
-					})
-				}else{
-					alumno.profile.tipoRelacion = 0;
-				}
-				
-			})
-			return alumnos;
-		}
 	}
 });
 
