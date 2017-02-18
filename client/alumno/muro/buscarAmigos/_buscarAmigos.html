@@ -1,6 +1,6 @@
 <!-- 	BUSCAR AMIGOS -->
 <div class="input-group">
-	<input type="text" class="form-control" ng-model="m.buscar.nombre" ng-change="m.buscandoNoAlumno()">
+	<input type="text" class="form-control" ng-model="m.buscar.nombre" ng-change="m.buscandoNoAlumno()" placeholder="Buscar amigos...">
 	<span class="input-group-btn">
 		<button class="btn btn-default" type="button" style="height: 34px;">
 			<i class="fa fa-search"></i>
@@ -27,7 +27,7 @@
 							<img class="online" src="{{m.tieneFoto(alumno.profile.fotografia, alumno.profile.sexo)}}">
 						</div>
 						<div class="col-sm-8">
-							<a href="javascript:void(0);"> {{alumno.profile.nombreCompleto}}</a>
+							<a href="javascript:void(0);" ui-sref="root.alumnoMuro({alumno_id : alumno._id})"> {{alumno.profile.nombreCompleto}}</a>
 							<div class="email">
 								{{alumno.profile.seccion.nombreseccion}}
 							</div>

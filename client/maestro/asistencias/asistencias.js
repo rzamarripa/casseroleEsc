@@ -16,16 +16,16 @@ angular
 	this.fechaFin = new Date();
 	this.fechaFin.setHours(23,59,59,0);
 	this.alumnos_id = [];
-	console.log($stateParams)
+	//console.log($stateParams)
 	window.rc = rc;
 	if($stateParams.fechaAsistencia){
-		console.log("fechaAsistencia", new Date($stateParams.fechaAsistencia));
+		//console.log("fechaAsistencia", new Date($stateParams.fechaAsistencia));
 		this.fechaInicio = new Date($stateParams.fechaAsistencia);
 		this.fechaInicio.setHours(0,0,0,0);
 		this.fechaFin = new Date($stateParams.fechaAsistencia);
 		this.fechaFin.setHours(23,59,59,0);
 		this.hoy = new Date($stateParams.fechaAsistencia);
-		console.log(rc.fechaInicio, rc.fechaFin)
+		//console.log(rc.fechaInicio, rc.fechaFin)
 		this.subscribe('asistencias', ()  => {
 			return [{ fechaAsistencia : { $gte : rc.fechaInicio, $lt : rc.fechaFin }, grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id }];
 		});
@@ -79,9 +79,8 @@ angular
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
 				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
-				var grupo = Grupos.findOne({},{ fields : { alumnos : 1 }});
-				var alumnosIds = _.pluck(grupo.alumnos, "alumno_id");
-				return alumnosIds;
+
+				return rc.alumnos_id;
 			}
 		},
 		turno : () => {
@@ -106,6 +105,29 @@ angular
 					rc.sePuede = true;
 					rc.existe = true;
 					if(rc.existeAsistencia.length > 0){
+						if(rc.existeAsistencia.length < rc.grupo.alumnos.length){
+							//console.log("nuevos alumnos");
+							var alumnosAsistidos = _.pluck(rc.existeAsistencia, "alumno_id");
+							//console.log("asistidos", alumnosAsistidos);
+							var alumnosGrupo = _.pluck(rc.grupo.alumnos, "alumno_id");
+							//console.log("alumnos ex", alumnosGrupo);
+							var alumnosNuevos = _.difference(alumnosGrupo, alumnosAsistidos);
+							//console.log("alumnos Nuevos", alumnosNuevos);
+							if(alumnosNuevos.length > 0){
+								_.each(alumnosNuevos, function(alumno_id){
+									rc.existeAsistencia.push({
+										estatus : 1,
+										fechaCreacion : new Date(),
+										fechaAsistencia : new Date(),
+										materia_id : $stateParams.materia_id,
+										maestro_id : $stateParams.maestro_id,
+										grupo_id : $stateParams.grupo_id,
+										semana : moment().isoWeek(),
+										alumno_id : alumno_id
+									})
+								})
+							}
+						}
 						_.each(rc.existeAsistencia, function(asistencia){						
 							var al = Meteor.users.findOne(asistencia.alumno_id,{ fields : { 
 																																						"profile.nombreCompleto" : 1,
@@ -135,7 +157,7 @@ angular
 					return rc.existeAsistencia;				
 				}else{
 					rc.existe = false;
-					console.log("entré aquí");
+					//console.log("entré aquí");
 					//if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
 					alumnos = [];
 					resultado.fechaCreacion = new Date();
@@ -186,7 +208,7 @@ angular
 		  alumno.alumno_id = alumno._id;
 	  });
 	  
-	  console.log(asistencias);
+	  //console.log(asistencias);
 
 	  Meteor.apply("tomarAsistencia", [asistencias], function(error, result){
 		  if(result == "listo"){
@@ -204,7 +226,7 @@ angular
 		  delete alumno.profile.fotografia;
 		  alumno.fechaActualizacionAsistencia = new Date();
 	  });
-	  console.log(asistencias);
+	  //console.log(asistencias);
 
 	  Meteor.apply("actualizarAsistencia", [asistencias], function(error, result){
 		  if(result == "listo"){

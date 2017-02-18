@@ -155,7 +155,6 @@ Meteor.methods({
 		_.each(grupos, function(grupo){
 			//Recorrer a los alumnos de cada grupo
 			_.each(grupo.alumnos, function(alumno){
-				console.log(alumno);
 				var inscripcion = Inscripciones.findOne(alumno.inscripcion_id);
 				//Validar que el alumno está activo en su inscripción
 				if(inscripcion != undefined && inscripcion.estatus == 1){
@@ -426,7 +425,6 @@ Meteor.methods({
 	  
 	},
 	getPagosPorSemana : function(semanaPago, anioPago, campus_id){
-		console.log(semanaPago, anioPago, campus_id)
 		var pagos = PlanPagos.find( {campus_id : campus_id, semanaPago : semanaPago, estatus : 1, anioPago : anioPago}, {sort : {fecha : 1}}).fetch();
 		var arreglo = {};
 		_.each(pagos, function(pago){

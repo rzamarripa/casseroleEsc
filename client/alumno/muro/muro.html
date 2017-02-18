@@ -1,22 +1,17 @@
-<div class="row">
+<div class="row" style="font-size: 8pt !important;">
 	<div class="col-sm-12">
 		<div class="well well-sm">
 			<div class="row">
 				<div ng-include=" 'client/alumno/muro/perfil/_perfil.html' "></div>
 				<div class="col-sm-12 col-md-8 col-lg-6">
 					<div ng-include=" 'client/alumno/muro/buscarAmigos/_buscarAmigos.html' "></div>	
+					<br/>
 					<div ng-include=" 'client/alumno/muro/postForm/_postForm.html' "></div>	
 					<div ng-include=" 'client/alumno/muro/posts/_posts.html' "></div>	
 					
 					<div class="col-sm-12 col-md-12 col-lg-12 text-center">
 						<a class="btn btn-sm btn-default" ng-click='m.loadMore()'><i class="fa fa-arrow-down text-muted"></i> CARGAR MÁS</a>
 					</div>
-				</div>
-				<div class="col-sm-12 col-md-2 col-lg-4 hidden-xs">
-					<div ng-include=" 'client/alumno/muro/amigos/_amigos.html' "></div>	
-					<hr>
-					<div ng-include=" 'client/alumno/muro/eventos/_eventos.html' "></div>					
-					<hr>
 				</div>
 			</div>
 		</div>

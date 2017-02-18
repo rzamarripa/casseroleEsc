@@ -46,7 +46,7 @@ Meteor.methods({
   actualizarAsistencia : function(asistencia){
 	  
 	  _.each(asistencia, function(alumnoActual){
-		  //console.log("analizando el update", alumnoActual.alumno_id, alumnoActual.profile.estatus, alumnoActual.estatus)
+		  ////console.log("analizando el update", alumnoActual.alumno_id, alumnoActual.profile.estatus, alumnoActual.estatus)
 
 		  delete alumnoActual.$$hashKey;
 		  var cantAsistencias = Asistencias.find({alumno_id : alumnoActual.alumno_id, grupo_id : alumnoActual.grupo_id}).count();
@@ -59,10 +59,16 @@ Meteor.methods({
 				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : 2}});
 			  }
 		  }
-			  
-		  
+			
 		  delete alumnoActual.profile;
-		  Asistencias.update({_id : alumnoActual._id}, { $set : { estatus : alumnoActual.estatus, fechaActualizacionAsistencia : alumnoActual.fechaActualizacionAsistencia}});
+		  if(alumnoActual._id != undefined){
+			  //console.log("act", alumnoActual.alumno_id)
+			  Asistencias.update({_id : alumnoActual._id}, { $set : { estatus : alumnoActual.estatus, fechaActualizacionAsistencia : alumnoActual.fechaActualizacionAsistencia}});
+		  }else{
+			  //console.log("nu", alumnoActual.alumno_id);
+			  Asistencias.insert(alumnoActual);
+		  }
+		  
 
 	  });
 	  return "listo";
