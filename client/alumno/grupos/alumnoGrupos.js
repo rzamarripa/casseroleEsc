@@ -6,7 +6,7 @@ angular
 
  	this.hoy = new Date();
 	this.grupos = [];
-	this.hoy = new Date();
+	window.rc = rc;
 	
 	this.subscribe('inscripciones', () => {		
 		return [{

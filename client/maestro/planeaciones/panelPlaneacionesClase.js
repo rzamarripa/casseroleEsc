@@ -51,7 +51,7 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 			return asignaciones;
 		},
 		planeaciones : () => {
-			return Planeaciones.find();
+			return Planeaciones.find().fetch();
 		},
 		maestros : () => {
 			rc.maestrosReactivos = _.pluck(Maestros.find().fetch(), "_id");
@@ -73,7 +73,7 @@ function PanelPlaneacionesClaseCtrl($scope, $reactive, $meteor, $state, $statePa
 		  return Planeaciones.find({estatus : 3});
 	  },
 	  planeacionesPublicadas : () => {
-		  return Planeaciones.find({estatus : 4});
+		  return Planeaciones.find({$or : [{estatus : 4, estatus : 7}]});
 	  },
 	  planeacionesPapelera : () => {
 		  return Planeaciones.find({estatus : 5});

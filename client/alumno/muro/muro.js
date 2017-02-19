@@ -81,7 +81,6 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 				user_id : $stateParams.alumno_id
 			}]
 		}
-		
 	});
 	
 	this.helpers({

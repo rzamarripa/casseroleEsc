@@ -15,10 +15,10 @@
 				</thead>
 				<tbody>
 					<!-- Post -->
-					<tr ng-repeat-start="comentario in df.foro.comentarios">
-						<td colspan="2" ><strong>{{comentario.usuario.profile.nombreCompleto}}</strong><span class="pull-right text-right"><strong>Creado</strong> <em>{{comentario.fecha | date : "dd-MM-yyyy HH:mm:ss"}}</em></span></td>
+					<tr ng-repeat-start="comentario in df.foro.comentarios" ng-if="comentario.estatus">
+						<td colspan="2" ><strong>{{comentario.usuario.profile.nombreCompleto}}</strong><span class="pull-right text-right"><strong>Creado</strong> <em>{{comentario.fecha | date : "dd-MM-yyyy HH:mm:ss"}}</em><button ng-show="currentUser.roles[0] != 'alumno' && comentario.usuario_id != currentUser._id" class="btn btn-default btn-xs" ng-click="df.reportar(comentario, $index)">Reportar</button></span></td>
 					</tr>
-					<tr ng-repeat-end>
+					<tr ng-repeat-end ng-if="comentario.estatus">
 						<td class="text-center" style="width: 15%;">
 							<div class="push-bit">
 								<img src="{{df.tieneFoto(comentario.usuario.profile.fotografia, comentario.usuario.profile.sexo)}}" 

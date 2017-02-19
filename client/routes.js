@@ -1420,7 +1420,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.planeacionClase', {
       url: '/planeacionClase/:grupo_id/:materia_id/:maestro_id',
-      templateUrl: 'client/planeaciones/planeacionClase.html',
+      templateUrl: 'client/maestro/planeaciones/planeacionClase.html',
       controller: 'PlaneacionClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -1434,9 +1434,25 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.planeacionesGrupo', {
+      url: '/planeacionesGrupo/:grupo_id/:materia_id/:maestro_id',
+      templateUrl: 'client/alumno/grupos/planeaciones/planeacionesGrupo.html',
+      controller: 'PlaneacionesGrupoCtrl as pg',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.revisarPlaneaciones', {
       url: '/revisarPlaneaciones/:materia_id/:maestro_id/:grupo_id',
-      templateUrl: 'client/planeaciones/revisarPlaneacionClase.html',
+      templateUrl: 'client/maestro/planeaciones/revisarPlaneacionClase.html',
       controller: 'RevisarPlaneacionClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -1452,7 +1468,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.panelPlaneaciones', {
       url: '/panelPlaneaciones',
-      templateUrl: 'client/planeaciones/panelPlaneacionesClase.html',
+      templateUrl: 'client/maestro/planeaciones/panelPlaneacionesClase.html',
       controller: 'PanelPlaneacionesClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){

@@ -70,6 +70,10 @@ function PlaneacionClaseCtrl($scope, $reactive, $meteor, $state, $stateParams, t
 	  planeacion.materia_id = $stateParams.materia_id;
 	  planeacion.campus_id = Meteor.user().profile.campus_id;
 		planeacion.seccion_id = Meteor.user().profile.seccion_id;
+		planeacion.meGusta = 0;
+    planeacion.quienMeGusta = [];
+    planeacion.noMeGusta = 0;
+    planeacion.quienNoMeGusta = [];
 	  Planeaciones.insert(planeacion);
 	  planeacion = {};
 	  toastr.success('Guardado correctamente como borrador.');
