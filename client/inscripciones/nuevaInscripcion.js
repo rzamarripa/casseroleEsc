@@ -150,9 +150,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		for (var i = 0; i < totalPagos; i++) {
 			
 			var anio = mfecha.get('year');
+			var ultimoPago = _.last(plan);
 			if(mfecha.isoWeek() == 52){
-				ultimoPago = _.last(plan);
+				//ultimoPago = _.last(plan);
 				anio = moment(ultimoPago.fecha).get("year");
+			}
+			
+			if(mfecha.isoWeek() < ultimoPago.semana){
+				anio = moment(ultimoPago.fecha).get("year") + 1;
 			}
 			
 			var pago = {

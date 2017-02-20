@@ -65,6 +65,23 @@ Meteor.methods({
 							alumno.profile.tipoRelacion = 0;
 						}
 					})
+					
+					_.each(alumno.profile.solicitudesHechas, function(solicitud){
+						/*
+							estatus = 0 Solicitado
+							estatus = 1 Aceptado
+							
+							tipoRelacion = 0 Solicitad
+							tipoRelacion = 1 Amigo
+						*/
+						if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 0){
+							alumno.profile.tipoRelacion = 1;
+						}else if(solicitud.alumno_id == Meteor.userId() && solicitud.estatus == 1){
+							alumno.profile.tipoRelacion = 2;
+						}else{
+							alumno.profile.tipoRelacion = 0;
+						}
+					})
 				}else{
 					alumno.profile.tipoRelacion = 0;
 				}

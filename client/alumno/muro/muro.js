@@ -8,6 +8,7 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	this.calendario.eventos = [];
 	this.amigos_ids = [];
 	this.amigosPosts = [];
+	this.amigos = [];
 	this.post = {};
 	
 	//Buscar amigos
@@ -95,13 +96,15 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 			}else{
 				var alumno = Meteor.users.findOne({_id : $stateParams.alumno_id});
 				if(alumno){
+					rc.amigos_ids = [];
+					rc.amigosPosts = [];
 					rc.amigos_ids = _.pluck(alumno.profile.friends, "alumno_id");
 					rc.amigosPosts = _.pluck(alumno.profile.friends, "alumno_id");
 					rc.amigosPosts.push(alumno._id);
 				}				
 			}
 			
-			return Meteor.users.find({_id : { $not : Meteor.userId()}}).fetch();
+			return Meteor.users.find({_id : { $in : rc.amigos_ids}}).fetch();
 		},
 		alumno : () => {
 			return Meteor.users.findOne({_id : $stateParams.alumno_id});
