@@ -27,7 +27,7 @@ angular
 	});
 	
 	this.subscribe('planeaciones', () => {		
-		return [{ $or : [{estatus : 4, estatus : 7}],
+		return [{ $or : [{estatus : 4}, {estatus : 7}],
 			grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id
 		}]
 	});
@@ -94,21 +94,15 @@ angular
   }
   
   this.meGusto = function(planeacion){
+	  var res = false;
 	  _.each(planeacion.quienMeGusta, function(quien){
 		  if(quien == Meteor.userId()){
-			  return true;
+			  console.log("entré aquí");
+			  res = true;
 		  }
 	  });
-	  return false;
-  }
-  
-  this.noMeGusto = function(planeacion){
-	  _.each(planeacion.quienNoMeGusta, function(quien){
-		  if(quien == Meteor.userId()){
-			  return true;
-		  }
-	  });
-	  return false;
+	  
+	  return res;
   }
   
   this.noMeGusta = function(planeacion){
@@ -121,4 +115,17 @@ angular
 		  $scope.$apply();
 	  })
   }
+  
+  this.noMeGusto = function(planeacion){
+	  var res = false;
+	  _.each(planeacion.quienNoMeGusta, function(quien){
+		  if(quien == Meteor.userId()){
+			  res = true;
+		  }
+	  });
+	  
+	  return res;
+  }
+  
+  
 };
