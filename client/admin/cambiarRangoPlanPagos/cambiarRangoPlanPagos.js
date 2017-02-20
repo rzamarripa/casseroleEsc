@@ -195,6 +195,21 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		
 		var plan = [];
 		for (var i = 0; i < this.cambioSemanasPlanPagos.totalPagos; i++) {
+			
+			var anio = mfecha.get('year');
+			
+			if(mfecha.isoWeek() == 52){
+				ultimoPago = _.last(plan);
+				anio = moment(ultimoPago.fecha).get("year");
+			}
+			
+			if(plan.length > 0){
+				var ultimoPago = _.last(plan);
+				if(mfecha.isoWeek() < ultimoPago.semana){					
+					anio = moment(ultimoPago.fecha).get("year") + 1;
+				}
+			}
+			
 			var pago = {
 				semana 			    		: mfecha.isoWeek(),
 				fecha 			    		: new Date(new Date(mfecha.toDate().getTime()).setHours(23,59,59)),
