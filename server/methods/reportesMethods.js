@@ -442,6 +442,35 @@ Meteor.methods({
 		})
 		
 		return _.toArray(arreglo);
+	},
+	getAlumnosReprobados : function(campus_id){
+		var reprobados = Reprobados.find({campus_id : campus_id, estatus : true}).fetch();
+		console.log(reprobados);
+		var alumnosReprobados = {};
+		_.each(reprobados, function(alumno){
+			if(alumnosReprobados[alumno.materia_id] == undefined){
+				alumnosReprobados[alumno.materia_id] = {};
+				alumnosReprobados[alumno.materia_id].materia = Materias.findOne({_id : alumno.materia_id}, { fields : { nombre : 1 }});
+				alumnosReprobados[alumno.materia_id].alumnos = [];
+				var obj = {};
+				obj.alumno = Meteor.users.findOne({_id : alumno.alumno_id}, { fields : {"profile.nombreCompleto" : 1}});
+				obj.maestro = Maestros.findOne({_id : alumno.maestro_id}, { fields : {nombre: 1 }});
+				obj.grupo = Grupos.findOne({_id : alumno.grupo_id}, { fields : { nombre : 1 }});
+				obj.fechaCreacion = alumno.fechaCreacion;
+				obj.calificacion = alumno.calificacion;
+				alumnosReprobados[alumno.materia_id].alumnos.push(obj);
+			}else{
+				var obj = {};
+				obj.alumno = Meteor.users.findOne({_id : alumno.alumno_id}, { fields : {"profile.nombreCompleto" : 1}});
+				obj.maestro = Maestros.findOne({_id : alumno.maestro_id}, { fields : {nombre: 1 }});
+				obj.grupo = Grupos.findOne({_id : alumno.grupo_id}, { fields : { nombre : 1 }});
+				obj.fechaCreacion = alumno.fechaCreacion;
+				obj.calificacion = alumno.calificacion;
+				alumnosReprobados[alumno.materia_id].alumnos.push(obj);
+			}
+		})
+		
+		return _.toArray(alumnosReprobados);
 	}
 })
 

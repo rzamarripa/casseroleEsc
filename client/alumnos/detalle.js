@@ -28,6 +28,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.cantAtrasadas 	= 0;
 	this.cantPagadas 		= 0;
 	this.cantSeleccionados = 0;
+	this.mostrarOcultarSep = false;
 	window.rc = rc;
 	this.i = 0;
 	this.subscribe("ocupaciones",()=>{
@@ -1320,5 +1321,21 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			  toastr.error("No se pudo cambiar el estatus");
 		  }
 	  })
+  }
+  
+  this.guardarSep = function(inscripcion){
+	  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep, fechaSep : inscripcion.fechaSep }});
+	  rc.mostrarOcultarSep = false;
+	  toastr.success("Se actualizó correctamente");
+  }
+  
+  this.cambiarSep = function(inscripcion){
+	  if(inscripcion.sep == false){
+		  rc.mostrarOcultarSep = false;
+		  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep}, $unset : { fechaSep : ""}});
+	  }else{
+		  rc.mostrarOcultarSep = true;
+	  }
+	  
   }
 }

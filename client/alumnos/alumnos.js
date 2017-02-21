@@ -181,4 +181,19 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		  return "Egresado"
 	  }
   }
+  
+  this.getAlumnosReprobados = function(){
+	  Meteor.apply("getAlumnosReprobados", [], function(error,result){
+		  if(result){
+			  console.log(result);
+			  rc.alumnosReprobados = result;
+		  }else{
+			  toastr.error("No se encontraron alumnos reprobados");
+		  }
+		  
+		  $scope.$apply();
+	  })
+	  
+	  
+  }
 }
