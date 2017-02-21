@@ -68,7 +68,7 @@ function AgregarInscripcionCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	});
 	
 	this.subscribe('turnos', ()=>{
-		return [{estatus:true, _id : this.getReactively("grupoSeleccionado.turno_id")}]
+		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
 	
 	this.subscribe('campus', ()=>{
