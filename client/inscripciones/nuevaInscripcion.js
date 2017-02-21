@@ -18,6 +18,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.cantidadAlumnos = 0;
 	this.prospecto = {};
 	this.grupoSeleccionado = {};
+	this.turnoSeleccionado = "";
 	
 	$(document).ready(function(){
 	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
@@ -69,7 +70,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	
 	this.subscribe('turnos', ()=>{
-		return [{estatus:true, _id : this.getReactively("grupoSeleccionado.turno_id")}]
+		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
 	
 	this.subscribe('campus', ()=>{
@@ -353,9 +354,12 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 
 	this.hayCupo = function(grupo_id){
+		console.log(grupo_id);
 		this.grupoSeleccionado = Grupos.findOne(grupo_id);
+		console.log(this.grupoSeleccionado);
+		this.turnoSeleccionado = this.grupoSeleccionado.turno_id;
 		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
-		this.grupoSeleccionado.turno = Turnos.findOne(this.grupoSeleccionado.turno_id);
+		this.grupoSeleccionado.turno = Turnos.findOne(this.turnoSeleccionado);
 		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion,colegiatura:this.grupoSeleccionado.colegiatura };
 		this.inscripcion.planPagos.colegiatura.fechaInicial = this.grupoSeleccionado.fechaInicio;
 		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos = planEstudios.semanas;
