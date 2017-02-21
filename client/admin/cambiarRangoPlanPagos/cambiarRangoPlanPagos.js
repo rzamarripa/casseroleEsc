@@ -192,7 +192,6 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		mfecha = mfecha.day(dia);
 		var inicio = mfecha.toDate();
 		
-		var plan = [];
 		for (var i = 0; i < this.cambioSemanasPlanPagos.totalPagos; i++) {
 			
 			var anio = mfecha.get('year');
