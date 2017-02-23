@@ -1,5 +1,5 @@
 angular.module("casserole").controller("RootCtrl", RootCtrl);  
-function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
+function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr,$mdToast){
 	let rc = $reactive(this).attach($scope); 
 	this.usuarioActual = {};
 	this.avisosVentana = "none";
@@ -167,10 +167,12 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr){
  	
     if(Meteor.user() && Meteor.user()._id){
       rc.usuarioActual=Meteor.user();
+    }else{
+    	$state.go('anon.login');
     }
     
   });
-  
+
 	this.muestraAvisos = function(){
 	  if(rc.avisosVentana == "none"){
 		  rc.avisosVentana = "block";

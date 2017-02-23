@@ -32,13 +32,11 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
       toastr.error('Error al guardar los datos.');
       return;
     }
-		
 		ciclo.estatus = true;
 		ciclo.campus_id = Meteor.user().profile.campus_id;
 		ciclo.seccion_id = Meteor.user().profile.seccion_id;
 		ciclo.usuarioInserto = Meteor.userId();
-		Ciclos.insert(ciclo)
-		SaveService.save('ciclos', ciclo, function(err, message){
+		SaveService.save('Ciclos', ciclo, function(err, res){
 			if(err){
 				toastr.error(err);
 				return
@@ -46,7 +44,7 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
 			ciclo = {};
 			rc.nuevo = true;
 			$('.collapse').collapse('hide');
-			toastr.success(message);
+			toastr.success(res.message);
 		});
 	};
 	
@@ -63,16 +61,18 @@ function CiclosCtrl($scope, $meteor, $reactive, $state, toastr, SaveService) {
     if(form.$invalid){
         toastr.error('Error al actualizar los datos.');
         return;
-    }
-		var idTemp = ciclo._id;
-		delete ciclo._id;		
+    }	
 		ciclo.usuarioActualizo = Meteor.userId(); 
-		Ciclos.update({_id:idTemp},{$set:ciclo});
-		toastr.success('Actualizado correctamente.');
-		$('.collapse').collapse('hide');
-		this.nuevo = true;
-		form.$setPristine();
-    form.$setUntouched();
+		SaveService.save('Ciclos', ciclo, function(err, res){
+			if(err){
+				toastr.error(err);
+				return
+			}
+			ciclo = {};
+			rc.nuevo = true;
+			$('.collapse').collapse('hide');
+			toastr.success(res.message);
+		});
 	};
 		
 	this.cambiarEstatus = function(id)

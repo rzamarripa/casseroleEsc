@@ -1,6 +1,8 @@
+
 angular.module('casserole',
   [
-    'angular-meteor',    
+    'angular-meteor',
+    'ngMaterial',    
     'ngAnimate',
     'ngCookies',
     'ngSanitize',    
@@ -19,4 +21,8 @@ angular.module('casserole',
   ]
 );
 
-NProgress.configure({ easing: 'ease', speed: 600 });
+$( "html" ).attr({
+    lang: "es"
+});
+
+NProgress.configure({ easing: 'ease', speed: 500 });
