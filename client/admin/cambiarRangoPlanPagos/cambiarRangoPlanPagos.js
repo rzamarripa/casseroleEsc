@@ -142,11 +142,11 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 	this.tieneFoto = function(sexo, foto){
 		if(foto === undefined){
 			if(sexo === "masculino")
-				return "img/badmenprofile.jpeg";
+				return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 		}else{
 			return foto;
@@ -185,7 +185,6 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 	  }
 	  
 	  var modeloPago = PlanPagos.findOne({alumno_id : this.alumno_id});
-	  console.log(modeloPago);
 	  
 	  rc.planPagos = [];
 		var dia = 1;
@@ -193,8 +192,22 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 		mfecha = mfecha.day(dia);
 		var inicio = mfecha.toDate();
 		
-		var plan = [];
 		for (var i = 0; i < this.cambioSemanasPlanPagos.totalPagos; i++) {
+			
+			var anio = mfecha.get('year');
+			
+			if(mfecha.isoWeek() == 52){
+				var ultimoPago = _.last(rc.planPagos);
+				anio = moment(new Date(ultimoPago.fecha)).year();
+			}
+			
+			if(rc.planPagos.length > 0){
+				var ultimoPago = _.last(rc.planPagos);
+				if(mfecha.isoWeek() < ultimoPago.semana){					
+					anio = moment(ultimoPago.fecha).get("year") + 1;
+				}
+			}
+
 			var pago = {
 				semana 			    		: mfecha.isoWeek(),
 				fecha 			    		: new Date(new Date(mfecha.toDate().getTime()).setHours(23,59,59)),
@@ -227,7 +240,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 				tiempoPago          : 0,
 				modificada          : true,
 				mes									: mfecha.get('month') + 1,
-				anio								: mfecha.get('year'),
+				anio								: anio,
 				modulo							: "colegiatura"
 			}
 			
@@ -239,7 +252,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
 			mfecha = mfecha.day(8);
 		}
 		
-		return plan;
+		return rc.planPagos;
 	}
 	
 	this.confirmarCambio = function(){

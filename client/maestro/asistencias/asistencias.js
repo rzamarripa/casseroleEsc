@@ -14,12 +14,20 @@ angular
 	this.fechaInicio = new Date();
 	this.fechaInicio.setHours(0,0,0,0);
 	this.fechaFin = new Date();
-	this.fechaFin.setHours(24,0,0,0);
+	this.fechaFin.setHours(23,59,59,0);
 	this.alumnos_id = [];
-	console.log($stateParams)
-	if($stateParams.id){
+	//console.log($stateParams)
+	window.rc = rc;
+	if($stateParams.fechaAsistencia){
+		//console.log("fechaAsistencia", new Date($stateParams.fechaAsistencia));
+		this.fechaInicio = new Date($stateParams.fechaAsistencia);
+		this.fechaInicio.setHours(0,0,0,0);
+		this.fechaFin = new Date($stateParams.fechaAsistencia);
+		this.fechaFin.setHours(23,59,59,0);
+		this.hoy = new Date($stateParams.fechaAsistencia);
+		//console.log(rc.fechaInicio, rc.fechaFin)
 		this.subscribe('asistencias', ()  => {
-			return [{ _id : $stateParams.id }];
+			return [{ fechaAsistencia : { $gte : rc.fechaInicio, $lt : rc.fechaFin }, grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id }];
 		});
 	}else{
 		this.subscribe('asistencias', ()  => {
@@ -71,20 +79,15 @@ angular
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
 				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
-				var grupo = Grupos.findOne({},{ fields : { alumnos : 1 }});
-				var alumnosIds = _.pluck(grupo.alumnos, "alumno_id");
-				return alumnosIds;
+
+				return rc.alumnos_id;
 			}
 		},
 		turno : () => {
 			return Turnos.findOne();
 		},
 		existeAsistencia : () => {
-			if($stateParams.id != ""){
-				return Asistencias.findOne();
-			}else{
-				return Asistencias.findOne({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}});
-			}			
+			return Asistencias.find({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}}).fetch();		
 		},
 		cantidadAsistenciasRealizadas : () => {
 			return Asistencias.find().count();
@@ -97,84 +100,152 @@ angular
 		},
 		listaAsistencia : () => {
 			var resultado = {};
-			
-			if(this.getReactively("existeAsistencia") != undefined && this.getReactively("alumnos")){
-				rc.sePuede = true;
-				rc.existe = true;
-				if(rc.existeAsistencia.alumnos.length > 0){
-					_.each(rc.existeAsistencia.alumnos, function(alumno){						
-						var al = Meteor.users.findOne(alumno._id);
-						if(al){
-							if(al.profile.fotografia === undefined){
-							  if(al.profile.sexo === "masculino")
-								  al.profile.fotografia = "img/badmenprofile.jpeg";
-								else if(al.profile.sexo === "femenino"){
-									al.profile.fotografia = "img/badgirlprofile.jpeg";
-								}else{
-									al.profile.fotografia = "img/badprofile.jpeg";
-								}			  
-						  }else{
-							  alumno.profile.fotografia = al.profile.fotografia;
-							}					}
-							//alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
-					});
-				}
-				return rc.existeAsistencia;				
-			}else{
-				rc.existe = false;
-				if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
-					resultado.alumnos = [];
+			if(rc.existeAsistencia){
+				if(this.getReactively("existeAsistencia").length > 0 && this.getReactively("alumnos")){
+					rc.sePuede = true;
+					rc.existe = true;
+					if(rc.existeAsistencia.length > 0){
+						if(rc.existeAsistencia.length < rc.grupo.alumnos.length){
+							//console.log("nuevos alumnos");
+							var alumnosAsistidos = _.pluck(rc.existeAsistencia, "alumno_id");
+							//console.log("asistidos", alumnosAsistidos);
+							var alumnosGrupo = _.pluck(rc.grupo.alumnos, "alumno_id");
+							//console.log("alumnos ex", alumnosGrupo);
+							var alumnosNuevos = _.difference(alumnosGrupo, alumnosAsistidos);
+							//console.log("alumnos Nuevos", alumnosNuevos);
+							if(alumnosNuevos.length > 0){
+								_.each(alumnosNuevos, function(alumno_id){
+									rc.existeAsistencia.push({
+										estatus : 1,
+										fechaCreacion : new Date(),
+										fechaAsistencia : new Date(),
+										materia_id : $stateParams.materia_id,
+										maestro_id : $stateParams.maestro_id,
+										grupo_id : $stateParams.grupo_id,
+										semana : moment().isoWeek(),
+										alumno_id : alumno_id
+									})
+								})
+							}
+						}
+						_.each(rc.existeAsistencia, function(asistencia){						
+							var al = Meteor.users.findOne(asistencia.alumno_id,{ fields : { 
+																																						"profile.nombreCompleto" : 1,
+																																						"profile.matricula" : 1,
+																																						"profile.fotografia" : 1,
+																																						"profile.sexo" : 1,
+																																						"profile.estatus" : 1,
+																																						_id : 1
+																																				}},{ sort : { "profile.nombreCompleto" : 1}});
+							if(al){
+								asistencia.profile = al.profile;
+								if(al.profile.fotografia === undefined){
+								  if(al.profile.sexo === "masculino")
+									  al.profile.fotografia = "img/badmenprofile.png";
+									else if(al.profile.sexo === "femenino"){
+										al.profile.fotografia = "img/badgirlprofile.png";
+									}else{
+										al.profile.fotografia = "img/badprofile.png";
+									}
+							  }else{
+								  alumno.profile.fotografia = al.profile.fotografia;
+								}					
+							}
+								//alumno.profile.fotografia = rc.tieneFoto(al.profile.sexo, al.profile.fotografia);
+						});
+					}
+					return rc.existeAsistencia;				
+				}else{
+					rc.existe = false;
+					//console.log("entré aquí");
+					//if(this.getReactively("cantidadAsistenciasRealizadas") < this.getReactively("asistenciasPermitidas")){
+					alumnos = [];
 					resultado.fechaCreacion = new Date();
-					resultado.alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
+					alumnos = Meteor.users.find({roles : ["alumno"]},{ fields : { 
 																																					"profile.nombreCompleto" : 1,
 																																					"profile.matricula" : 1,
 																																					"profile.fotografia" : 1,
 																																					"profile.sexo" : 1,
+																																					"profile.estatus" : 1,
 																																					_id : 1
-																																			}}).fetch();
-					_.each(resultado.alumnos, function(alumno){
+																																			}},{ sort : { "profile.nombreCompleto" : 1}}).fetch();
+					_.each(alumnos, function(alumno){
 						alumno.estatus = 1;
+						alumno.fechaCreacion = new Date();
 					})
 					rc.sePuede = true;
-				}else{
-					rc.sePuede = false;
+	/*
+					}else{
+						rc.sePuede = false;
+					}
+	*/
 				}
 			}
-			return resultado;
+			
+			//alumnos = _.toArray(alumnos);
+			return alumnos;
 		}
   });
   
-  this.guardar = function(asistencia){
-	  _.each(asistencia.alumnos, function(alumno){
-		  delete alumno.profile.fotografia;
+  this.compare = function(a,b) {
+	  if (a.profile.nombreCompleto < b.profile.nombreCompleto)
+	    return -1;
+	  if (a.profile.nombreCompleto > b.profile.nombreCompleto)
+	    return 1;
+	  return 0;
+	}
+  
+  this.guardar = function(asistencias){
+	  NProgress.set(0.5);
+	  
+	  _.each(asistencias, function(alumno){
+		  alumno.fechaAsistencia = new Date();
+		  alumno.fechaCreacion = new Date();
+		  alumno.materia_id = rc.materia._id;
+		  alumno.maestro_id = rc.maestro._id;
+		  alumno.grupo_id = rc.grupo._id;
+		  alumno.semana = rc.semana;
+		  alumno.alumno_id = alumno._id;
 	  });
-	  asistencia.fechaAsistencia = new Date();
-	  asistencia.materia_id = rc.materia._id;
-	  asistencia.maestro_id = rc.maestro._id;
-	  asistencia.grupo_id = rc.grupo._id;
-	  asistencia.semana = rc.semana;
-	  Asistencias.insert(asistencia);
-	  toastr.success('Ha tomado asistencia correctamente.');
+	  
+	  //console.log(asistencias);
+
+	  Meteor.apply("tomarAsistencia", [asistencias], function(error, result){
+		  if(result == "listo"){
+			  toastr.success('Ha tomado asistencia correctamente.');
+			  NProgress.set(1);
+			}else{
+				toastr.error("No se pudo tomar la asistencia, intente más tarde.")
+			}
+			$scope.$apply();
+	  });	  
   }
   
-  this.actualizar = function(asistencia){
-	  var tempId = asistencia._id;
-	  delete asistencia._id;
-	  _.each(asistencia.alumnos, function(alumno){
+  this.actualizar = function(asistencias){
+	  _.each(asistencias, function(alumno){
 		  delete alumno.profile.fotografia;
+		  alumno.fechaActualizacionAsistencia = new Date();
 	  });
-	  asistencia.fechaActualizacionAsistencia = new Date();
-	  Asistencias.update({_id : tempId}, { $set : asistencia });
-	  toastr.success('Ha actualizado la asistencia correctamente.');
+	  //console.log(asistencias);
+
+	  Meteor.apply("actualizarAsistencia", [asistencias], function(error, result){
+		  if(result == "listo"){
+			  toastr.success('Ha actualizado la asistencia correctamente.');
+			  NProgress.set(1);
+			}else{
+				toastr.error("No se pudo actualizar la asistencia, intente más tarde.")
+			}
+			$scope.$apply();
+	  });
   }
   
   this.tomarAsistencia = function(estatus, $index){
 	  if(estatus == undefined || estatus == 0){
-		  rc.listaAsistencia.alumnos[$index].estatus = 1;
+		  rc.listaAsistencia[$index].estatus = 1;
 	  }else if(estatus == 1){
-		  rc.listaAsistencia.alumnos[$index].estatus = 2;
+		  rc.listaAsistencia[$index].estatus = 2;
 	  }else if(estatus == 2){
-		  rc.listaAsistencia.alumnos[$index].estatus = 0;
+		  rc.listaAsistencia[$index].estatus = 0;
 	  }
   }
   
@@ -201,11 +272,11 @@ angular
   this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}			  
 	  }else{
 		  return foto;

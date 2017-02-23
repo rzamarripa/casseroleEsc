@@ -25,7 +25,7 @@
 			    	<div class="col-sm-5" valida>
 							<label>Departamento Académico *</label>
 							<select name="deptoAcademico" class="form-control" placeholder="Seleccione" ng-model="mat.materia.deptoAcademico_id" required="">
-								<option ng-repeat="depto in mat.deptosAcademicos" value="{{depto._id}}" ng-selected="$index == 0">{{depto.descripcionCorta}}</option>
+								<option ng-repeat="depto in mat.deptosAcademicos" value="{{depto._id}}" >{{depto.descripcionCorta}}</option>
 							</select>
 						</div>
 			    </div>

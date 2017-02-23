@@ -14,19 +14,24 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.validation = false;
 	this.validaUsuario = false;
   this.validaContrasena = false;
+  this.alumnos = [];
+  
+  window.rc = rc;
 	
+/*
 	this.subscribe('buscarAlumnos', () => {
 		if(this.getReactively("buscar.nombre").length > 3){
 			return [{
 		    options : { limit: 51 },
 		    where : { 
 					nombreCompleto : this.getReactively('buscar.nombre'), 
-					seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+					//seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
 					campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
 				} 		   
 	    }];
 		}
   });
+*/
   
   this.subscribe('ocupaciones',()=>{
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
@@ -37,13 +42,6 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
   
 	this.helpers({
-		alumnos : () => {
-			return Meteor.users.find({
-		  	"profile.nombreCompleto": { '$regex' : '.*' + this.getReactively('buscar.nombre') || '' + '.*', '$options' : 'i' },
-		  	"profile.seccion_id": Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
-		  	roles : ["alumno"]
-			}, { sort : {"profile.nombreCompleto" : 1 }});
-		},
 	  ocupaciones : () => {
 		  return Ocupaciones.find({estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""});
 	  },
@@ -106,11 +104,11 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 			  
 	  }else{
@@ -118,7 +116,84 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  }
   };
   
+  this.buscarAlumnos = function(){
+	  if(this.buscar.nombre.length > 0 ){
+		  Meteor.apply('buscarAlumnos', [{
+			    options : { limit: 51 },
+			    where : { 
+						nombreCompleto : this.getReactively('buscar.nombre'), 
+						//seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "",
+						campus_id :  Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
+					} 		   
+		    }], function(error, result){
+			  if(result){
+				  rc.alumnos = result;
+				  NProgress.set(1);
+			  }
+		
+		    $scope.$apply();
+		  });
+	  }else{
+		  rc.alumnos = [];
+	  }
+  }
+  
   this.getFocus = function(){
 	  document.getElementById('buscar').focus();
   };  
+  
+  this.obtenerColorEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "bg-color-blue txt-white";
+	  }else if(estatus == 2){
+		  return "bg-color-purple txt-white"
+	  }else if(estatus == 3){
+		  return "bg-color-yellow txt-white"
+	  }else if(estatus == 4){
+		  return "bg-color-blueLight txt-white"
+	  }else if(estatus == 5){
+		  return "bg-color-greenLight txt-white"
+	  }else if(estatus == 6){
+		  return "bg-color-red txt-white"
+	  }else if(estatus == 7){
+		  return "bg-color-blueDark txt-white"
+	  }else if(estatus == 8){
+		  return "label-primary txt-white"
+	  }
+  }
+  
+  this.obtenerNombreEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "Registrado";
+	  }else if(estatus == 2){
+		  return "Inicio"
+	  }else if(estatus == 3){
+		  return "Pospuesto"
+	  }else if(estatus == 4){
+		  return "Fantasma"
+	  }else if(estatus == 5){
+		  return "Activo"
+	  }else if(estatus == 6){
+		  return "Baja"
+	  }else if(estatus == 7){
+		  return "Term.Pago"
+	  }else if(estatus == 8){
+		  return "Egresado"
+	  }
+  }
+  
+  this.getAlumnosReprobados = function(){
+	  Meteor.apply("getAlumnosReprobados", [], function(error,result){
+		  if(result){
+			  console.log(result);
+			  rc.alumnosReprobados = result;
+		  }else{
+			  toastr.error("No se encontraron alumnos reprobados");
+		  }
+		  
+		  $scope.$apply();
+	  })
+	  
+	  
+  }
 }

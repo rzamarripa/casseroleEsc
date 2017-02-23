@@ -1,0 +1,53 @@
+<!-- 	BUSCAR AMIGOS -->
+<div class="input-group">
+	<input type="text" class="form-control" ng-model="m.buscar.nombre" ng-change="m.buscandoNoAlumno()" placeholder="Buscar amigos...">
+	<span class="input-group-btn">
+		<button class="btn btn-default" type="button" style="height: 34px;">
+			<i class="fa fa-search"></i>
+		</button>
+	</span>
+</div>
+<div class="ajax-dropdown" ng-show="m.buscando" style="display: block; width: 100% !important;">
+	<div class="ajax-notifications custom-scroll">
+		
+		<div class="alert alert-transparent">
+			<div class="tab-pane fade active in" id="a2">
+
+				<div class="alert alert-info fade in">
+					<button class="close" data-dismiss="alert">
+						×
+					</button>
+					<i class="fa-fw fa fa-info"></i>
+					<strong>{{m.balumnos.length}} encontrados </strong>en tu búsqueda!
+				</div>
+
+				<div class="user" title="Solicitar Amistad" ng-repeat="alumno in m.balumnos" style="width: 100%">
+					<div class="row">
+						<div class="col-sm-1">
+							<img class="online" src="{{m.tieneFoto(alumno.profile.fotografia, alumno.profile.sexo)}}">
+						</div>
+						<div class="col-sm-8">
+							<a href="javascript:void(0);" ui-sref="root.alumnoMuro({alumno_id : alumno._id})"> {{alumno.profile.nombreCompleto}}</a>
+							<div class="email">
+								{{alumno.profile.seccion.nombreseccion}}
+							</div>
+						</div>
+						<div class="col-sm-3" >
+							<button ng-if="alumno.profile.tipoRelacion == 0" ng-click="m.solicitarAmistad(alumno._id, $index)" class="btn btn-primary btn-sm"><i class="fa fa-hand-peace-o"></i></button>
+							<span title="Ya se solicitó amistad" class="label label-warning" ng-if="alumno.profile.tipoRelacion == 1">Solicitado</span>
+							<span title="Ya son amigos" class="label label-success" ng-if="alumno.profile.tipoRelacion == 2">Amig{{alumno.profile.sexo == "masculino" ? 'o' : 'a'}}</span>
+						</div>
+					</div>
+					
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<span> Última actualización: {{m.hoy | date:"dd-MM-yyyy HH:mm a"}}
+		<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Cerrar..." class="btn btn-xs btn-default pull-right" ng-click="m.buscando = false; m.buscar.nombre = ''">
+			<i class="fa fa-times"></i>
+		</button> 
+	</span>
+</div>

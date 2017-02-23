@@ -1,0 +1,35 @@
+<form class="form-inline">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group" valida>
+				<label for="fechaInicio">Fecha Inicial *</label>
+				<input name="fechaInicio" format="dd-MM-yyyy" date-time view="date" max-view="year" min-view="date" ng-model="ape.fechaInicio" class="form-control" required=""/>
+			</div>
+			<div class="form-group" valida>
+				<label for="fechaFin">Fecha Final *</label>
+				<input name="fechaFin" format="dd-MM-yyyy" date-time view="date" max-view="year" min-view="date" ng-model="ape.fechaFin" class="form-control" required=""/>
+			</div>
+			<div class="form-group" valida>
+				<label for="estatus">Estatus *</label>
+				<select name="estatus" class="form-control" ng-model="ape.estatus" required="">
+					<option value="1">Registrado</option>
+					<option value="2">Inicio</option>
+					<option value="3">Inicio Pospuesto</option>
+					<option value="4">Fantasma</option>
+					<option value="5">Activo</option>
+					<option value="6">Baja</option>
+					<option value="7">Terminación de Pago</option>
+					<option value="8">Egresado</option>
+				</select>
+			</div>
+			<button class="btn btn-primary" ng-click="ape.getCantAlumnos()">Buscar Alumnos</button>
+		</div>
+	</div>
+</form>
+<div class="row">
+	<div class="col-sm-12">
+		<div id="cantAlumnos">
+			
+		</div>
+	</div>
+</div>

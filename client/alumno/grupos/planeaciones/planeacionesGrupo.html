@@ -1,0 +1,92 @@
+<section id="widget-grid" class="">
+	<div class="row">
+		<div class="col-sm-6 col-lg-6" ng-repeat="planeacion in pg.planeaciones">
+			<div class="panel panel-default">
+				<div class="panel-body status">
+					<div class="who clearfix">
+						<img src="{{pg.tieneFoto(pg.maestro.profile.sexo, pg.maestro.profile.fotografia)}}" alt="img" class="online">
+						<span class="name"><b>{{pg.maestro.nombre}} {{pg.maestro.apPaterno}}</b> planeó la clase</span>
+						<span class="from"><b>{{pg.hora(planeacion.fechaCreacion)}}</b> {{pg.materia.nombre}}</span>
+					</div>
+					<div class="text">
+						<div class="row">
+							<div class="col-xs-2">
+								<ul class="vertical-bars">
+									<li>
+										<div class="progress vertical bottom" style="height: 493px;">
+											<div class="progress-bar bg-color-teal" aria-valuetransitiongoal="{{(planeacion.meGusta / pg.grupo.alumnos.length)*100 | number:0}}" style="height: {{(planeacion.meGusta / pg.grupo.alumnos.length)*100 | number:0}}%;" aria-valuenow="{{(planeacion.meGusta / pg.grupo.alumnos.length)*100 | number:0}}">{{(planeacion.meGusta / pg.grupo.alumnos.length)*100 | number:0}}%</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="col-xs-10">
+								<dl class="dl-horizontal">
+								  <dt>Actividades de apertura</dt>
+								  <dd>{{planeacion.actividadesApertura}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Actividades de desarrollo</dt>
+								  <dd>{{planeacion.actividadesCierre}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Actividades de cierre</dt>
+								  <dd>{{planeacion.actividadesDesarrollo}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Competencias disciplinares</dt>
+								  <dd>{{planeacion.competenciasDisciplinares}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Competencias genéricas</dt>
+								  <dd>{{planeacion.competenciasGenericas}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Criterios de evaluación</dt>
+								  <dd>{{planeacion.competenciasGenericas}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Desempeño del estudiante</dt>
+								  <dd>{{planeacion.desempeniosEstudiante}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Evidencias de aprendizaje</dt>
+								  <dd>{{planeacion.evidenciasAprendizaje}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Fuentes de información</dt>
+								  <dd>{{planeacion.fuentesInformacion}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Grupos atendidos</dt>
+								  <dd>{{planeacion.gruposAtendidos}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Instrumentos de evaluación</dt>
+								  <dd>{{planeacion.instrumentosEvaluacion}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Nombre del bloque</dt>
+								  <dd>{{planeacion.nombreBloque}}</dd>
+								</dl>
+								<dl class="dl-horizontal">
+								  <dt>Recursos didáctivos</dt>
+								  <dd>{{planeacion.recursosDidacticos}}</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<ul class="links">
+						<li>
+							<a href="#" ng-click="pg.meGusta(planeacion)" ng-show="!pg.meGusto(planeacion)">{{planeacion.meGusta != 0 ? planeacion.meGusta : ''}} <i class="fa fa-thumbs-o-up" ></i> Me gusta {{pg.planeacion.meGusta}}</a>
+							<span ng-show="pg.meGusto(planeacion)"><i class="fa fa-thumbs-o-up" ></i> Me gustó {{pg.planeacion.meGusta}}</span>
+						</li>
+						<li class="pull-right">
+							<a href="#" ng-show="!pg.noMeGusto(planeacion)" ng-click="pg.noMeGusta(planeacion)">{{planeacion.noMeGusta != 0 ? planeacion.noMeGusta : ''}} <i class="fa fa-thumbs-o-down" ></i> No me gusta</a>
+							<span ng-show="pg.noMeGusto(planeacion)"><i class="fa fa-thumbs-o-down" ></i> No me gustó {{pg.planeacion.meGusta}}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

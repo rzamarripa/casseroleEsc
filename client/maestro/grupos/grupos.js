@@ -6,13 +6,14 @@ angular
  	let rc = $reactive(this).attach($scope);
 	this.grupos = [];
 	this.alumnos_id = [];
+	window.rc = rc;
 	moment.locale("es");
 	this.hoy = moment().format("dddd, D MMMM YYYY, h:mm:ss a");
 	this.fechaHoy = moment().format("dd - MM - yyyy");
 
-	this.subscribe('grupos', () => {		
+	this.subscribe('grupos', () => {
 		return [{
-			estatus : true
+			estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
 		}]
 	});
 	
@@ -39,6 +40,7 @@ angular
 						rc.alumnos_id = rc.alumnos_id.concat(grupo.alumnos ? _.pluck(grupo.alumnos, "alumno_id") : []);
 						misAsignaciones.push({"grupo" : grupo,
 																	"asignacion" : asignacion,
+																	"turno" : Turnos.findOne({_id : grupo.turno_id}),
 																	"alumnos" : Meteor.users.find({ _id : { $in : grupo.alumnos ? _.pluck(grupo.alumnos, "alumno_id") : [] }, 
 																		roles : ["alumno"]},{ fields : { 
 																				"profile.nombreCompleto" : 1,
@@ -61,11 +63,11 @@ angular
 	this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}			  
 	  }else{
 		  return foto;

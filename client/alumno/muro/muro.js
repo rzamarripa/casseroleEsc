@@ -7,9 +7,18 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	this.calendario = {};
 	this.calendario.eventos = [];
 	this.amigos_ids = [];
-	moment.locale("es");
+	this.amigosPosts = [];
+	this.amigos = [];
+	this.post = {};
+	
+	//Buscar amigos
 	this.buscar = {};
 	this.buscar.nombre = "";
+	this.hoy = new Date();
+	this.buscando = false;
+	this.balumnos = [];
+	
+	window.rc = rc;
 
 	this.perPage = 10;
   this.page = 1;
@@ -37,8 +46,13 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
   
   this.subscribe("alumnos",()=>{
 		return [{
-			"profile.estatus" : true, 
 			_id : { $in : this.getCollectionReactively("amigos_ids")}
+		}];
+	});
+	
+	this.subscribe("alumnos",()=>{
+		return [{
+			_id : $stateParams.alumno_id
 		}];
 	});
 	
@@ -47,24 +61,54 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 	});
 	
 	this.subscribe('posts',()=>{
-		return [
-		{
-      limit: parseInt(this.getReactively('perPage')),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      //sort: this.getReactively('sort')
-    },
-		{
-			campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
-		}]
+		if($stateParams.alumno_id == Meteor.userId()){
+			return [
+			{
+	      limit: parseInt(this.getReactively('perPage')),
+	      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
+	      sort: this.getReactively('sort')
+	    },
+			{
+				user_id : { $in : this.getCollectionReactively("amigosPosts")}
+			}]
+		}else{
+			return [
+			{
+	      limit: parseInt(this.getReactively('perPage')),
+	      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
+	      sort: this.getReactively('sort')
+	    },
+			{
+				user_id : $stateParams.alumno_id
+			}]
+		}
 	});
 	
 	this.helpers({
 		calendarios : () => {
 			return Calendarios.find();
 		},
-		alumnos : () => {
-			return Meteor.users.find({roles : ["alumno"]}, { sort : {"profile.nombreCompleto" : 1 }});
-		},		
+		amigos : () => {
+			if($stateParams.alumno_id == Meteor.userId()){
+				this.amigos_ids = _.pluck(Meteor.user().profile.friends, "alumno_id");
+				this.amigosPosts = _.pluck(Meteor.user().profile.friends, "alumno_id");
+				this.amigosPosts.push(Meteor.userId());
+			}else{
+				var alumno = Meteor.users.findOne({_id : $stateParams.alumno_id});
+				if(alumno){
+					rc.amigos_ids = [];
+					rc.amigosPosts = [];
+					rc.amigos_ids = _.pluck(alumno.profile.friends, "alumno_id");
+					rc.amigosPosts = _.pluck(alumno.profile.friends, "alumno_id");
+					rc.amigosPosts.push(alumno._id);
+				}				
+			}
+			
+			return Meteor.users.find({_id : { $in : rc.amigos_ids}}).fetch();
+		},
+		alumno : () => {
+			return Meteor.users.findOne({_id : $stateParams.alumno_id});
+		},
 		posts : () => {
 	  	return Posts.find({},{sort: this.getReactively("sort")});
   	},
@@ -73,10 +117,6 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
     },
     usuarioActual : () => {
 	    return Meteor.user();
-    },
-    amigos : () => {
-	    rc.amigos_ids = Meteor.user().profile.friends;
-	    return Meteor.users.find({ _id : {"$in" : Meteor.user().profile.friends}}, {limit : 10}).fetch();
     },
     calendario : () => {
 	    if(this.getReactively("calendarios")){
@@ -104,9 +144,11 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 			replies : [],
 			createdAt : new Date(),
 			campus_id : Meteor.user().profile.campus_id,
+			geolocalizacion : mensaje.geolocalizacion
 		}
+		console.log("actual", mensajeActual);
 		Posts.insert(mensajeActual);
-		mensaje = {};
+		this.post = {};
 		toastr.success("Has hecho un comentario");
 	}
 	
@@ -141,20 +183,31 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
 		
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 	  }else{
 		  return foto;
 	  }
   } 
   
-  this.agregarAmigo = function(alumno_id){
-	  Meteor.users.update(Meteor.userId(), { $push : { "profile.friends" : alumno_id }});
-	  toastr.info("Ahora tienes un nuevo amigo");
+  this.solicitarAmistad = function(alumno_id, $index){
+		var alumno = this.balumnos[$index];
+
+	  Meteor.apply("solicitarAmistad", [Meteor.userId(), alumno_id], function(error, result){
+		  console.log(result)
+			if(parseInt(result) == 0){
+				alumno.profile.tipoRelacion = 1;
+				toastr.info("Tu solicitud se ha enviado.");
+			}else{
+				toastr.warning("Ya se había mandado una solicitud")
+			}
+			$scope.$apply();
+		});
+	  
   }
   
   this.masAmigos = function(cantidad){
@@ -170,14 +223,52 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
   	var diferencia = ahora-fecha;
   	if(diferencia < minuto)
   		return "Hace menos de un minuto"
-  	else if(diferencia<hora)
+  	else if(diferencia < hora)
   		return "Hace "+Math.round(diferencia/minuto)+" minutos"
-  	else if(diferencia<dia)
+  	else if(diferencia < dia)
   		return "Hace "+Math.round(diferencia/hora)+" horas"
-  	else if(diferencia<anio)
-  		return "Hace "+Math.round(diferencia/dia)+" dias"
+  	else if(diferencia < anio)
+  		return "Hace "+Math.round(diferencia/dia)+" días"
   	else
   		return "Hace mucho tiempo"
   }
+  
+  this.buscandoNoAlumno = function(){	
+		if(this.buscar.nombre.length > 3){
+			rc.buscando = true;
+		}else{
+			rc.buscando = false;
+		}
+
+		Meteor.apply("buscarEnMuro", [rc.buscar.nombre], function(error, result){
+			rc.balumnos = [];
+			if(result){
+				rc.balumnos = result;
+				console.log(rc.balumnos);
+				$scope.$apply();
+			}
+		});
+	}
+	
+	this.reportarPost = function(post_id){
+		Meteor.apply("reportarPost", [post_id, Meteor.userId()], function(error, result){
+			if(result){
+				toastr.success("Se ha reportado el post, gracias por contribuir.")
+			}
+		});
+	}
+	
+	this.mostrarGeolocalizacion = function() {
+    if (navigator.geolocation) {
+        var geo = navigator.geolocation.getCurrentPosition(rc.showPosition);
+        console.log(geo);
+    } else {
+        toastr.error("Geolocalización no es soportada por tu navegador.");
+    }
+	}
+	
+	this.showPosition = function(position) {
+	  rc.post.geolocalizacion = position.coords;
+	}
   
 };

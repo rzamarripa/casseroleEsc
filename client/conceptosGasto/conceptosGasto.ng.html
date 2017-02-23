@@ -18,10 +18,45 @@
 					  <label>Nombre</label>
 				  	<input type="text" class="form-control"  ng-model="cgc.conceptoGasto.nombre" name="nombre" required>
 					</div>
-					<div class="checkbox">
-					  <label class="checkbox-inline">
-				  		<input type="checkbox" ng-model="cgc.conceptoGasto.campoDeDescripcion">
-				  	Agregar campo de descripción</label>
+					<div class="form-group col-sm-3">
+						<div class="checkbox">
+						  <label class="checkbox-inline">
+					  		<input type="checkbox" ng-model="cgc.conceptoGasto.campoDeDescripcion">
+								Agregar campo de descripción
+					  	</label>
+						</div>
+						<div class="checkbox">
+						  <label class="checkbox-inline">
+					  		<input type="checkbox" ng-model="cgc.conceptoGasto.campoSubconceptos" ng-change="cgc.mostrarSubconceptos(cgc.conceptoGasto.campoSubconceptos)">
+					  	Subconceptos</label>
+						</div>
+					</div>					
+				</div>
+				<div class="row" ng-if="cgc.conceptoGasto.campoSubconceptos">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label>Sub concepto de gasto</label>
+							<input id="subconceptoGasto" type="text" class="form-control" ng-model="cgc.subconceptoGasto.nombre">
+							<a ng-click="cgc.agregarSubconcepto(cgc.subconceptoGasto)" ng-disabled="cgc.subconceptoGasto.length <= 0" class="btn btn-primary"><em class="fa fa-plus"></em></a>
+						</div>
+						<table class="table table-striped table-bordered table-list">
+					    <thead>
+					      <tr>
+					        <th colspan="3">Sub-conceptos</th>
+					      </tr> 
+					    </thead>
+					    <tbody>
+					      <tr ng-repeat="subconcepto in cgc.conceptoGasto.subconceptos  track by $index" ng-show="cgc.conceptoGasto.subconceptos.length > 0">
+					        <td class="hidden-xs text-center" width="10%">{{$index + 1}}</td>
+					        <td width="70%">
+						        <input type="text" class="form-control" ng-model="subconcepto.nombre">
+						      </td>
+					        <td align="center" width="20%">
+					          <a ng-click="cgc.eliminarSubconcepto(subconcepto, $index)" class="btn btn-danger"><em class="fa fa-trash"></em></a>
+					        </td>
+					      </tr>
+					    </tbody>
+					  </table>
 					</div>
 				</div>
 				<input type="button" ng-if="!cgc.nuevo" value="Cancelar" class="btn btn-danger" ng-click="cgc.cancelar()">

@@ -1,0 +1,20 @@
+<!-- INICIO DE EVENTOS -->
+<div class="well padding-10">
+	<h5 class="margin-top-0"><i class="fa fa-calendar"></i> Eventos</h5>
+	<table class="table table-hover">								
+		<tr ng-repeat="evento in m.eventos" class="{{evento.className}}">
+			<td>
+				<p style="margin-bottom: 3px;">
+					<i class="fa fa-dot-circle-o"></i><strong> {{evento.title}}</strong>
+					<small class="pull-right">
+						<span class="label label-default">{{m.duracion(evento.start)}}</span>
+					</small>
+				</p>
+				<hr style="margin: 3px;">
+				<small><cite title="{{m.duracion(evento.start)}}">{{evento.description}}</cite></small><br/>
+				<small>Inicio&nbsp;: {{evento.start | date:"dd-MM-yyyy"}}</small><br/>
+				<small>Fin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{evento.end | date:"dd-MM-yyyy"}}</small>
+			</td>
+		</tr>
+	</table>
+</div>

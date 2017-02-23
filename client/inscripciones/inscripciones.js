@@ -39,7 +39,6 @@ function InscripcionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 		    options : { limit: 20 },
 		    where : { 
 					nombreCompleto : rc.getReactively('buscar.nombre'), 
-					seccion_id : rc.seccion._id,
 					campus_id : Meteor.user().profile.campus_id
 				}
 	    }

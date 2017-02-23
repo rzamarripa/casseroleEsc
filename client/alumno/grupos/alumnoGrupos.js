@@ -6,7 +6,7 @@ angular
 
  	this.hoy = new Date();
 	this.grupos = [];
-	this.hoy = new Date();
+	window.rc = rc;
 	
 	this.subscribe('inscripciones', () => {		
 		return [{
@@ -67,11 +67,11 @@ angular
   this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 			  
 	  }else{

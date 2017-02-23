@@ -42,6 +42,7 @@ function ForosCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		foro.seccion_id = Meteor.user().profile.seccion_id;
 		foro.grupo_id = $stateParams.grupo_id;
 		foro.usuarioInserto = Meteor.userId();
+		foro.reportes = 0;
 		Foros.insert(this.foro);
 		toastr.success('Guardado correctamente.');
 		this.foro = {};

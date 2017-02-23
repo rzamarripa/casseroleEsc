@@ -54,7 +54,7 @@ function DetalleGastosCtrl($scope, $meteor, $reactive, $state, toastr, $statePar
 				});
 
 		  }
-
+			
 		  return arreglo;
 	  },
 

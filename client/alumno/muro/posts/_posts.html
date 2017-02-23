@@ -1,0 +1,65 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+	<div class="timeline-seperator text-center" ng-repeat-start="post in m.posts"> <span>{{m.hora(post.createdAt)}}</span>
+		<div class="btn-group pull-right" >
+			<a href="javascript:void(0);" data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle"><span class="caret single"></span></a>
+			<ul class="dropdown-menu text-left" ng-show="post.user_id == currentUser._id">									
+				<li ng-if="currentUser._id == post.user_id">
+					<a href="javascript:void(0);">Editar</a>
+				</li>
+				<li ng-if="currentUser._id == post.user_id">
+					<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
+				</li>
+			</ul>
+			<ul class="dropdown-menu text-left" ng-show="post.user_id != currentUser._id">
+				<li>
+					<a href="javascript:void(0);" class="text-danger" ng-click="m.reportarPost(post._id)">Reportar Post</a>
+				</li>
+			</ul>
+		</div> 
+	</div>
+	<div class="chat-body no-padding profile-message" ng-repeat-end>
+		<ul>
+			<li class="message">
+				<img src="{{m.tieneFoto(post.photo, post.gender)}}" width="50" class="online" alt="sunny">
+				<span class="message-text" style="width: 85%;"> 
+					<a ui-sref="root.alumnoMuro({alumno_id : post.user_id})" class="username" >{{post.name}} 
+						<small class="text-muted pull-right"> {{m.hora(post.createdAt)}} </small>
+					</a> 
+					{{post.message}}
+				</span>
+				<ul class="list-inline font-xs" ng-if="currentUser._id == post.user_id">
+					<li>
+						<a href="javascript:void(0);" class="text-primary">Editar</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="text-danger" ng-click="m.deletePost(post._id)">Eliminar</a>
+					</li>
+				</ul>
+			</li>
+			<li class="message message-reply" ng-repeat="reply in post.replies">
+				<img src="{{m.tieneFoto(reply.photo, reply.gender)}}" class="away" alt="sunny">
+				<span class="message-text" style="width: 85%"> 
+					<a href="javascript:void(0);" ui-sref="root.alumnoMuro({alumno_id : post.user_id})" class="username">
+						{{reply.name}}
+						<small class="text-muted pull-right ultra-light"> 
+							{{m.hora(reply.createdAt)}} 
+						</small>
+					</a> 
+					{{reply.comment}} 
+				</span>
+			</li>	
+			<li>
+				<form style="width: 75%" ng-submit="m.reply(m.reply[$index].message, post._id, $index)">
+					<div class="input-group wall-comment-reply" style="width: 100%">										
+						<input id="btn-input" type="text" class="form-control input-xs" placeholder="Escribe tu comentario aquí..." ng-model="m.reply[$index].message">
+						<span class="input-group-btn">
+							<button class="btn btn-primary btn-xs" style="height: 24px;" type="button" ng-click="m.reply(m.reply[$index].message, post._id, $index)">
+								<i class="fa fa-{{m.reply[$index].message.length <= 0 || m.reply[$index].message == undefined ? 'comment-o' : 'commenting-o'}}"></i>
+							</button> 
+						</span>										
+					</div>
+				</form>
+			</li>
+		</ul>
+	</div>
+</div>

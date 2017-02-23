@@ -28,6 +28,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.cantAtrasadas 	= 0;
 	this.cantPagadas 		= 0;
 	this.cantSeleccionados = 0;
+	this.mostrarOcultarSep = false;
 	window.rc = rc;
 	this.i = 0;
 	this.subscribe("ocupaciones",()=>{
@@ -288,11 +289,11 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.tieneFoto = function(sexo, foto){
 		if(foto === undefined){
 			if(sexo === "masculino")
-				return "img/badmenprofile.jpeg";
+				return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 		}else{
 			return foto;
@@ -847,7 +848,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				pago        : this.ppago,
 
 				//cuenta_id   : rc.cuentaInscripcion._id,
-				diaPago     : diaActual,
+				diaPago     : this.diaActual,
 				mesPago     : mesPago,
 				semanaPago  : semanaPago,
 				anioPago    : anioPago,
@@ -1271,4 +1272,70 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		
 		return permiso;
 	}
+	
+	this.obtenerColorEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "bg-color-blue txt-white";
+	  }else if(estatus == 2){
+		  return "bg-color-purple txt-white"
+	  }else if(estatus == 3){
+		  return "bg-color-yellow txt-white"
+	  }else if(estatus == 4){
+		  return "bg-color-blueLight txt-white"
+	  }else if(estatus == 5){
+		  return "bg-color-greenLight txt-white"
+	  }else if(estatus == 6){
+		  return "bg-color-red txt-white"
+	  }else if(estatus == 7){
+		  return "bg-color-blueDark txt-white"
+	  }else if(estatus == 8){
+		  return "label-primary txt-white"
+	  }
+  }
+  
+  this.obtenerNombreEstatus = function(estatus){
+	  if(estatus == 1){ //Registrado
+		  return "Registrado";
+	  }else if(estatus == 2){
+		  return "Inicio"
+	  }else if(estatus == 3){
+		  return "Pospuesto"
+	  }else if(estatus == 4){
+		  return "Fantasma"
+	  }else if(estatus == 5){
+		  return "Activo"
+	  }else if(estatus == 6){
+		  return "Baja"
+	  }else if(estatus == 7){
+		  return "Term.Pago"
+	  }else if(estatus == 8){
+		  return "Egresado"
+	  }
+  }
+  
+  this.cambiarEstatus = function(estatus, classLabel){
+	  Meteor.apply("cambiarEstatusAlumno", [rc.alumno._id, estatus, this.obtenerColorEstatus(estatus), this.obtenerNombreEstatus(estatus), Meteor.user().profile.seccion_id], function(error, result){
+		  if(result){
+			  toastr.success("El alumno se ha cambiado al estatus " + result);
+		  }else{
+			  toastr.error("No se pudo cambiar el estatus");
+		  }
+	  })
+  }
+  
+  this.guardarSep = function(inscripcion){
+	  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep, fechaSep : inscripcion.fechaSep }});
+	  rc.mostrarOcultarSep = false;
+	  toastr.success("Se actualizó correctamente");
+  }
+  
+  this.cambiarSep = function(inscripcion){
+	  if(inscripcion.sep == false){
+		  rc.mostrarOcultarSep = false;
+		  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep}, $unset : { fechaSep : ""}});
+	  }else{
+		  rc.mostrarOcultarSep = true;
+	  }
+	  
+  }
 }

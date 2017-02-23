@@ -1,0 +1,12 @@
+<!-- AMIGOS -->
+<div class="well padding-10">
+	<h5 class="margin-top-0"><i class="fa fa-group"></i> Amigos</h5>
+	<ul class="list-inline friends-list">
+		<li ng-repeat="amigo in m.amigos" title="{{amigo.profile.nombreCompleto}}">
+			<img src="{{m.tieneFoto(amigo.profile.fotografia, amigo.profile.sexo)}}" alt="{{currentUser.profile.nombreCompleto}}">
+		</li>
+		<li ng-show="currentUser.profile.friends.length > 10">
+			<a href="javascript:void(0);">{{m.masAmigos(currentUser.profile.friends.length)}} más</a>
+		</li>
+	</ul>
+</div>

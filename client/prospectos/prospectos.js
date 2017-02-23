@@ -76,7 +76,7 @@ angular.module("casserole")
 		//Validación
 		if(form.$invalid){
 			this.validation = true;
-      toastr.error('Error al guardar los datos.');
+      toastr.error('Por favor llene toda la información requerida.');
       return;
     }
     

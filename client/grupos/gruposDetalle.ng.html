@@ -54,6 +54,15 @@
 	</div>
 </div>
 <br/>
+<div class="row pull-right">
+	<div class="col-sm-12" ng-if="gp.grupo.seccion_id == currentUser.profile.seccion_id">
+		<a class="btn btn-primary" ui-sref="root.verCalificaciones({grupo_id : gp.grupo._id, materia_id : gp.asignacion.materia_id, maestro_id : gp.asignacion.maestro_id})"> <span><i class="fa fa-check"></i> Calificaciones</span> </a>
+		<a class="btn btn-primary" ui-sref="root.verAsistencias({grupo_id : gp.grupo._id, materia_id : gp.asignacion.materia_id, maestro_id : gp.asignacion.maestro_id})" > <span><i class="fa fa-lg fa-list"></i> Asistencias</span> </a>
+		<a class="btn btn-primary" ui-sref="root.revisarPlaneaciones({grupo_id : gp.grupo._id, materia_id : gp.asignacion.materia_id, maestro_id : gp.asignacion.maestro_id})"> <span><i class="fa fa-lg fa-bookmark"></i> Planeaciones</span> </a>
+		<a class="btn btn-primary" ui-sref="root.alumnoForos({grupo_id : gp.grupo._id})" href="/alumnoForos/2ZJ3GN5LWxqPmqJik"> <span><i class="fa fa-lg fa-comments-o"></i> Foros</span> </a>
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-sm-12">
 		<table class="table table-bordered">

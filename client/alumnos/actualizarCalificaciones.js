@@ -50,22 +50,16 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 		var curriculaNueva = angular.copy(rc.curricula);
 		var idTemp = curriculaNueva._id;
 		delete curriculaNueva._id;
-		
-		_.each(curriculaNueva.grados, function(grado){
-			_.each(grado, function(materia){
-				if(materia.calificacion != undefined && materia.calificacion >= 0 && materia.calificacion <= 10){
-					materia.estatus = 1;
-					materia.fechaCreacion = new Date();
-					if(materia.calificacion >= 7){
-						materia.aprobado = true;
-					}else{
-						materia.aprobado = false;
-					}
-				}				
-			})
-		})
 		console.log(curriculaNueva);
-		Curriculas.update({_id : idTemp}, { $set : curriculaNueva});
+		Meteor.apply("calificarCoordinacion",[curriculaNueva], function(error, result){
+			if(result){
+				toastr.success("Ha calificado correctamente.")
+			}else{
+				toastr.error("No se pudo calificar.")
+			}
+		})
+		
+		
 	}
 	
 	this.estaAprobado = function(materia){
@@ -79,11 +73,11 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 	this.tieneFoto = function(sexo, foto){
 		if(foto === undefined){
 			if(sexo === "masculino")
-				return "img/badmenprofile.jpeg";
+				return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 		}else{
 			return foto;

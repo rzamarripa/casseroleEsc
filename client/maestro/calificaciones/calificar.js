@@ -69,7 +69,6 @@ angular
 
 	this.helpers({		
 		grupo : () => {
-			
 			return Grupos.findOne($stateParams.grupo_id);
 		},
 		maestro : () => {
@@ -134,72 +133,37 @@ angular
 	  calificacion.materia_id = rc.materia._id;
 	  calificacion.maestro_id = rc.maestro._id;
 	  calificacion.grupo_id = rc.grupo._id;
-	  //aquí hay que pasear los alumnos para ambiar las curriculas
+	  calificacion.campus_id = rc.grupo.campus_id;
+	  calificacion.seccion_id = rc.grupo.seccion_id;
+	  //aquí hay que pasear los alumnos para cambiar las curriculas
 		calificacion.estatus = 1;
-	  Calificaciones.insert(calificacion);
-	  _.each(calificacion.alumnos, function(alumno){
-		  var curricula = Curriculas.findOne({alumno_id : alumno._id});		  
-		  _.each(curricula.grados, function(grado){
-			  _.each(grado, function(materia){
-				  if(materia.materia._id == calificacion.materia_id){
-					  materia.calificacion = parseInt(alumno.calificacion);
-					  materia.estatus = 1;
-					  materia.fechaCreacion = new Date();
-					  materia.maestro_id = rc.maestro._id;
-					  materia.grupo_id = rc.grupo._id;
-					  if(materia.calificacion >= 6){
-						  materia.aprobado = true;
-					  }else{
-						  materia.aprobado = false;
-					  }
-				  }
-			  })
-		  })
-		  var idTemp = curricula._id;
-		  delete curricula._id;
-		  Curriculas.update({_id : idTemp}, { $set : curricula})
-	  })
-	  toastr.success('Ha calificado correctamente.');
+		Meteor.apply("calificar",[calificacion], function(error, result){
+			if(result){
+				toastr.success("Ha calificado correctamente.")
+			}else{
+				toastr.error("No se pudo calificar.")
+			}
+		})
   }
   
   this.actualizar = function(calificacion){
-	  var tempId = calificacion._id;
-	  delete calificacion._id;
-	  calificacion.fechaActualizacionAsistencia = new Date();
-	  Calificaciones.update({_id : tempId}, { $set : calificacion });
-	  _.each(calificacion.alumnos, function(alumno){
-		  var curricula = Curriculas.findOne({alumno_id : alumno._id});		  
-		  _.each(curricula.grados, function(grado){
-			  _.each(grado, function(materia){
-				  if(materia.materia._id == calificacion.materia_id){
-					  materia.calificacion = parseInt(alumno.calificacion);
-					  materia.estatus = 1;
-					  materia.fechaCreacion = new Date();
-					  materia.maestro_id = rc.maestro._id;
-					  materia.grupo_id = rc.grupo._id;
-					  if(materia.calificacion >= 6){
-						  materia.aprobado = true;
-					  }else{
-						  materia.aprobado = false;
-					  }
-				  }
-			  })
-		  })
-		  var idTemp = curricula._id;
-		  delete curricula._id;
-		  Curriculas.update({_id : idTemp}, { $set : curricula})
-	  })
-	  toastr.success('Ha actualizado la calificación correctamente.');
+	  Meteor.apply("actualizarCalificacion",[calificacion], function(error, result){
+			if(result){
+				toastr.success("Ha calificado correctamente.")
+			}else{
+				toastr.error("No se pudo calificar.")
+			}
+		})
   }
   
   this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 			  
 	  }else{

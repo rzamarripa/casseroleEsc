@@ -11,61 +11,45 @@
 	<div class="col-sm-12">
 		<div class="input-group">
 			<div class="input-group-btn">
-				<a href="#" ng-click="al.getFocus()" class="btn btn-default btn-primary">
+				<a href="#" ng-click="al.buscarAlumnos()" class="btn btn-default btn-primary">
 					<i class="fa fa-search"></i>
 				</a>
-<!--
-				<a href="./nuevoAlumno" class="btn btn-default btn-primary">
-					<i class="fa fa-plus"></i> Nuevo
-				</a>
--->
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="al.buscar.nombre">
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="al.buscar.nombre" ng-change="al.buscarAlumnos()">
 		</div>
 	</div>
 </div>
-<!--
+<br/>
 <div class="row">
-	<div class="superbox col-sm-12">
-		<div class="superbox-list" ng-repeat="alumno in al.alumnos">
-			<div class="img-box" style="margin:20px;">
-				<img ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" data-img="img/superbox/superbox-full-1.jpg" alt="{{alumno.profile.nombreCompleto}}" title="{{alumno.profile.nombreCompleto" class="superbox-img">
-				<ul class="text-center" style="margin-left: -26px;">
-	        <a href="/alumnos/{{alumno._id}}"><li><i class="fa fa-eye"></i></li></a>
-	        <a href="/editarAlumno/{{alumno._id}}"><li><i class="fa fa-pencil"></i></li></a>
-	      </ul>
-			</div>
-			<p class="lead font-xs text-center">{{alumno.profile.nombre}} <br/> {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}</p>
-		</div>
-	</div>
-</div>
--->
-<div class="row">
-	<div class="col-lg-3" ng-repeat="alumno in al.alumnos">
+	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 tarjetas-alumnos" ng-repeat="alumno in al.alumnos" style="margin-bottom: 10px; padding-left: 5px; padding-right: 10px;">
       <div class="contact-box center-version">
+	      <div class="ribbon-wrapper-alumno">
+		      <div class="ribbon-alumno {{al.obtenerColorEstatus(alumno.profile.estatus)}}">{{al.obtenerNombreEstatus(alumno.profile.estatus)}}</div>
+		    </div>
 
-          <a href="/alumnos/{{alumno._id}}" style="text-decoration: none;">
-
-              <img alt="image" class="img-circle" ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}">
-
-
-              <p class="lead font-xs text-center"><strong>{{alumno.profile.nombre}} <br/> {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}</strong></p>
-
-              <div class="font-bold">{{alumno.username}}</div>
-              <address class="font-xs">
-                  <strong>Alumno</strong><br>
-                  {{alumno.profile.calleNum}}<br>
-                  {{alumno.profile.colonia}}<br>
-                  <abbr title="Teléfono">T:</abbr> {{alumno.profile.tel1}}
-              </address>
-
-          </a>
+        <a href="/alumnos/{{alumno._id}}" style="text-decoration: none;">
+          <img alt="image" class="img-circle" ng-src="{{al.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}">
+          <p class="lead font-xs text-center"><strong>{{alumno.profile.nombre}} <br/> {{alumno.profile.apPaterno}} {{alumno.profile.apMaterno}}</strong></p>
+          <div class="font-bold">{{alumno.username}}</div>
+          <address class="font-xs">
+              <strong>Alumno</strong><br>
+              {{alumno.profile.calleNum}}<br>
+              {{alumno.profile.colonia}}<br>
+              <abbr title="Teléfono">T:</abbr> {{alumno.profile.tel1}}
+          </address>
+        </a>
+        <button ui-sref="root.grupoDetalle({grupo_id : grupo._id})" ng-repeat="grupo in alumno.profile.grupos" class="btn btn-block {{grupo.classButton}}" style="text-decoration: none;" >
+	        <span class="pull-left"><i class="fa fa-group"></i> {{grupo.nombre}} - {{grupo.turno.nombre}}</span>
+	        <label class="badge {{grupo.classButton}} pull-right"> <i class="fa fa-check"></i> {{grupo.inasistenciasSemana}}/{{grupo.turno.inasistencias}}</label>
+        </button>
+<!--
           <div class="contact-box-footer">
               <div class="m-t-xs btn-group">
                   <a href="/alumnos/{{alumno._id}}" class="btn btn-xs btn-white"><i class="fa fa-eye"></i> Ver </a>
                   <a href="/editarAlumno/{{alumno._id}}" class="btn btn-xs btn-white"><i class="fa fa-pencil"></i> Editar</a>
               </div>
           </div>
+-->
 
       </div>
   </div>

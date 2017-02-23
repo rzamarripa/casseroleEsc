@@ -1,0 +1,41 @@
+<span ng-if="ro.usuarioActual.roles[0] == 'alumno'" id="activity" class="activity-dropdown" ng-class="ro.avisosVentana == 'block' ? 'active' : ''" ng-click="ro.muestraAvisos()"> 
+	<i class="fa fa-envelope"></i> <b class="badge  bounceIn animated">{{ro.solicitudes.length}}</b> 
+</span>
+<div class="ajax-dropdown ajax-dropdown" style="display: {{ro.avisosVentana}} ">
+
+<!-- notification content -->
+<div class="ajax-notifications custom-scroll">
+
+	<div class="alert alert-transparent">
+		<!--<h4>Aquí poner los avisos</h4>
+		Inventa una vista bonita, no pongas una tabla horrible
+		-->
+			<div ng-if="currentUser.roles[0] == 'alumno'" class="row">
+				<div class="col-sm-11">
+				  <div class="class=ajax-notifications custom-scroll" style="opacity: 1;">
+				   <ul class="notification-body">
+			   		 <li ng-repeat="solicitud in ro.solicitudes">
+			   		 		<span ng-class="solicitud.estatus ? 'read' : 'unread'">
+										<span class="subject">Nueva Solicitud</span><br/>
+										<span class="font-xs" style="color:#A0A0A0">{{solicitud.alumno.profile.nombreCompleto}}</span>
+										<button class="btn btn-xs btn-success pull-right" style="margin-right: 10px;"><i class="fa fa-thumbs-o-up" ng-click="ro.aceptarSolicitud(solicitud)"></i></button>
+										<button class="btn btn-xs btn-danger pull-right" style="margin-right: 10px;"><i class="fa fa-thumbs-o-down" ng-click="ro.rechazarSolicitud(solicitud)"></i></button>
+										<br/><br/>
+										<span class="date pull-right font-xs">{{solicitud.fechaSolicitud  | date:'dd-MM-yyyy hh:mm'}}</span>
+			   		 		</span>
+			   		 </li>
+				   </ul>
+				  </div>
+				</div>
+			</div>
+	</div>
+
+	<i class="fa fa-lock fa-4x fa-border"></i>
+
+</div>
+<!-- end notification content -->
+
+<!-- footer: refresh area -->
+<span> Fecha: {{ro.hoy | date:'dd-MM-yyyy hh:mm'}}</span>
+<!-- end footer -->
+</div>

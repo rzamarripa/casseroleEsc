@@ -179,6 +179,38 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.alumnosPorEstatus', {
+      url: '/alumnosPorEstatus',
+      templateUrl: 'client/reportes/alumnosPorEstatus.html',      
+      controller: 'AlumnosPorEstatusCtrl as ape',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
+    .state('root.cantAlumnosPorEstatus', {
+      url: '/cantAlumnosPorEstatus',
+      templateUrl: 'client/reportes/cantAlumnosPorEstatus.html',      
+      controller: 'AlumnosPorEstatusCtrl as ape',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "director" || user.roles[0] == "recepcionista"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.alumnos', {
       url: '/alumnos',
       templateUrl: 'client/alumnos/alumnos.ng.html',
@@ -1147,7 +1179,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('root.asistenciaGrupo', {
-      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:id',
+      url: '/asistenciaGrupo/:grupo_id/:materia_id/:maestro_id/:fechaAsistencia',
       templateUrl: 'client/maestro/asistencias/asistencias.ng.html',
       controller: 'MaestroAsistenciasCtrl as masas',
       resolve: {
@@ -1249,7 +1281,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico"){
+						if(user.roles[0] == "alumno" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "director"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1388,7 +1420,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.planeacionClase', {
       url: '/planeacionClase/:grupo_id/:materia_id/:maestro_id',
-      templateUrl: 'client/planeaciones/planeacionClase.html',
+      templateUrl: 'client/maestro/planeaciones/planeacionClase.html',
       controller: 'PlaneacionClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -1402,9 +1434,25 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     })
+    .state('root.planeacionesGrupo', {
+      url: '/planeacionesGrupo/:grupo_id/:materia_id/:maestro_id',
+      templateUrl: 'client/alumno/grupos/planeaciones/planeacionesGrupo.html',
+      controller: 'PlaneacionesGrupoCtrl as pg',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "alumno"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
     .state('root.revisarPlaneaciones', {
       url: '/revisarPlaneaciones/:materia_id/:maestro_id/:grupo_id',
-      templateUrl: 'client/planeaciones/revisarPlaneacionClase.html',
+      templateUrl: 'client/maestro/planeaciones/revisarPlaneacionClase.html',
       controller: 'RevisarPlaneacionClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -1420,7 +1468,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
     })
     .state('root.panelPlaneaciones', {
       url: '/panelPlaneaciones',
-      templateUrl: 'client/planeaciones/panelPlaneacionesClase.html',
+      templateUrl: 'client/maestro/planeaciones/panelPlaneacionesClase.html',
       controller: 'PanelPlaneacionesClaseCtrl as pc',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
@@ -1568,13 +1616,13 @@ angular.module('casserole').config(['$injector', function ($injector) {
     	}
     })    
     .state('root.alumnoMuro', {
-      url: '/muro',
+      url: '/muro/:alumno_id',
       templateUrl: 'client/alumno/muro/muro.html',
       controller: 'AlumnoMuroCtrl as m',
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "alumno"){
+						if(true){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 
@@ -1744,7 +1792,23 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
         "currentUser": ["$meteor", "toastr", function($meteor, toastr){
           return $meteor.requireValidUser(function(user) {
-            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin"){
+            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin" || user.roles[0] == "maestro"){
+              return true;
+            }else{
+              return 'UNAUTHORIZED'; 
+            }           
+         });
+       }]
+      }
+    })
+    .state('root.alumnosReprobados', {
+      url: '/alumnosReprobados',
+      templateUrl: 'client/alumnos/reprobados/reprobados.html',
+      controller: 'AlumnosReprobadosCtrl as a',
+      resolve: {
+        "currentUser": ["$meteor", "toastr", function($meteor, toastr){
+          return $meteor.requireValidUser(function(user) {
+            if(user.roles[0] == "director" || user.roles[0] == "recepcionista" || user.roles[0] == "coordinadorAcademico" || user.roles[0] == "coordinadorFinanciero" || user.roles[0] == "admin" || user.roles[0] == "maestro"){
               return true;
             }else{
               return 'UNAUTHORIZED'; 

@@ -18,6 +18,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.cantidadAlumnos = 0;
 	this.prospecto = {};
 	this.grupoSeleccionado = {};
+	this.turnoSeleccionado = "";
+	
+	this.planPagos = [];
 	
 	$(document).ready(function(){
 	  $("select").select2({dropdownAutoWidth: 'true', width : "100%"});
@@ -69,7 +72,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	});
 	
 	this.subscribe('turnos', ()=>{
-		return [{estatus:true, _id : this.getReactively("grupoSeleccionado.turno_id")}]
+		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
 	
 	this.subscribe('campus', ()=>{
@@ -146,14 +149,23 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		mfecha = mfecha.day(dia);
 		var inicio = mfecha.toDate();
 		
-		var plan = [];
+		rc.planPagos = [];
 		for (var i = 0; i < totalPagos; i++) {
 			
 			var anio = mfecha.get('year');
+			
 			if(mfecha.isoWeek() == 52){
-				ultimoPago = _.last(plan);
+				ultimoPago = _.last(rc.planPagos);
 				anio = moment(ultimoPago.fecha).get("year");
 			}
+			
+			if(rc.planPagos.length > 0){
+				var ultimoPago = _.last(rc.planPagos);
+				if(mfecha.isoWeek() < ultimoPago.semana){					
+					anio = moment(ultimoPago.fecha).get("year") + 1;
+				}
+			}
+			
 			
 			var pago = {
 				semana 			    : mfecha.isoWeek(),
@@ -182,13 +194,14 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				pago.pagada = 1;
 			}
 			
-			plan.push(pago);
+			rc.planPagos.push(pago);
 			mfecha = mfecha.day(8);
 		}
-		return plan;
+		return rc.planPagos;
 	}
 	
 	this.planPagosMensual=function() {
+		mfecha = "";
 		var fechaInicial = this.inscripcion.planPagos.colegiatura.fechaInicial;
 		// Si este alumno está entrando con fecha posterior, se tomará como primer semana la actual y de ahí se incrmentará las semanas.
 		if(this.esNuevaInscripcion == false){
@@ -198,23 +211,32 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				if(fechaInicial < fechaActual){
 					var fechaInicial = fechaActual;
 				}
-			}		
+			}
 		}
 		var dia = this.inscripcion.planPagos.colegiatura.Mensual.diaColegiatura;
 		var totalPagos = this.inscripcion.planPagos.colegiatura.Mensual.totalPagos;
 		var mfecha = moment(fechaInicial);
 		mfecha = mfecha.date(dia);
 		var inicio = mfecha.toDate();
-		var plan = [];
+		rc.planPagos = [];
 		var dife = mfecha.diff(fechaInicial,'days');
-		if(Math.abs(dife) > 15)
+
+		if(Math.abs(dife) >= 15)
 			mfecha.add(1,'month');
 		for (var i = 0; i < totalPagos; i++) {
 			//console.log(mfecha.startOf("week").toDate(), mfecha.toDate(), mfecha.isoWeek(), mfecha.get('year'))
 			var anio = mfecha.get('year');
-			if(mfecha.isoWeek() == 52){
-				ultimoPago = _.last(plan);
+			if(moment(mfecha).isoWeek() == 52){
+				var ultimoPago = _.last(rc.planPagos);
 				anio = moment(ultimoPago.fecha).get("year");
+			}
+			
+			if(rc.planPagos.length > 0){
+				var ultimoPago = _.last(rc.planPagos);
+				
+				if(mfecha.isoWeek() < ultimoPago.semana){
+					anio = moment(ultimoPago.fecha).get("year") + 1;
+				}
 			}
 				
 			
@@ -245,11 +267,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				pago.pagada = 1;
 			}
 			
-			plan.push(pago);
+			rc.planPagos.push(pago);
 			mfecha.add(1,'month');
 			
 		}
-		return plan;
+		return rc.planPagos;
 	}
 	this.planPagosQuincenal = function() {
 		var fechaInicial = this.inscripcion.planPagos.colegiatura.fechaInicial;
@@ -344,9 +366,12 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 
 	this.hayCupo = function(grupo_id){
+		console.log(grupo_id);
 		this.grupoSeleccionado = Grupos.findOne(grupo_id);
+		console.log(this.grupoSeleccionado);
+		this.turnoSeleccionado = this.grupoSeleccionado.turno_id;
 		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
-		this.grupoSeleccionado.turno = Turnos.findOne(this.grupoSeleccionado.turno_id);
+		this.grupoSeleccionado.turno = Turnos.findOne(this.turnoSeleccionado);
 		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion,colegiatura:this.grupoSeleccionado.colegiatura };
 		this.inscripcion.planPagos.colegiatura.fechaInicial = this.grupoSeleccionado.fechaInicio;
 		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos = planEstudios.semanas;

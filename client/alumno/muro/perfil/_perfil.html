@@ -1,0 +1,151 @@
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	<div class="well well-light well-sm no-margin no-padding">
+
+		<div class="row">
+
+			<div class="col-sm-12">
+				<div id="myCarousel" class="carousel profile-carousel">
+					<div class="air air-bottom-right padding-10">
+						<a href="javascript:void(0);" class="btn txt-color-white bg-color-teal btn-sm" ng-show="currentUser._id != m.alumno._id">
+							<i class="fa fa-check"></i> Seguir
+						</a>&nbsp; 
+						<a href="javascript:void(0);" ng-click="m.solicitarAmistad(m.alumno._id, $index)" class="btn txt-color-white bg-color-pinkDark btn-sm" ng-show="currentUser._id != m.alumno._id">
+							<i class="fa fa-link"></i> Enviar Solicitud
+						</a>
+					</div>
+					<div class="air air-top-left padding-10">
+						<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{m.hoy | date:'dd-MM-yyyy'}}</h4>
+					</div>
+					<ol class="carousel-indicators">
+					</ol>
+					<div class="carousel-inner">
+						<div class="item active">
+							<img src="img/demo/s1.jpg" alt="" style="width:100%">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-12">
+
+				<div class="row">
+
+					<div class="col-sm-3 profile-pic">
+						<img src="{{m.tieneFoto(m.alumno.profile.fotografia, m.alumno.profile.sexo)}}">
+						<div class="padding-10">
+							<h4 class="font-md"><strong>{{m.alumno.profile.friends.length}}</strong>
+							<br>
+							<small>Amigos</small></h4>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<h1>{{m.alumno.profile.nombre}} <span class="semi-bold">{{m.alumno.profile.apPaterno}} {{m.alumno.profile.apMaterno}}</span>
+						<br>
+						<small> Estudiante</small></h1>
+						<br>
+						<p class="font-md">
+							<i>Un poco sobre mi...</i>
+						</p>
+						<p>
+
+							{{m.alumno.profile.acercaDeMi}}
+
+						</p>
+						<br>
+						<a href="javascript:void(0);" class="btn btn-default btn-xs"><i class="fa fa-envelope-o"></i> Enviar Mensaje</a>
+						<br>
+						<br>
+
+					</div>
+					<div class="col-sm-3">
+						<h1><small>Amigos</small></h1>
+						<ul class="list-inline friends-list">
+							<li ng-repeat="amigo in m.amigos" title="{{amigo.profile.nombreCompleto}}"><img src="{{m.tieneFoto(amigo.profile.fotografia, amigo.profile.sexo)}}" alt="{{currentUser.profile.nombreCompleto}}">
+							</li>
+						</ul>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="row">
+
+			<div class="col-sm-12">
+
+				<hr>
+
+				<div class="padding-10">
+
+					<ul class="nav nav-tabs tabs-pull-right">
+						<li class="active">
+							<a href="#a1" data-toggle="tab">Actividades Recientes</a>
+						</li>
+						<li class="pull-left">
+							<span class="margin-top-10 display-inline"><i class="fa fa-rss text-success"></i> Actividad</span>
+						</li>
+					</ul>
+
+					<div class="tab-content padding-top-10">
+						<div class="tab-pane fade in active" id="a1">
+
+							<div class="row">
+
+								<div class="col-xs-2 col-sm-1">
+									<time datetime="2014-09-20" class="icon">
+										<strong>Feb</strong>
+										<span>10</span>
+									</time>
+								</div>
+
+								<div class="col-xs-10 col-sm-11">
+									<h6 class="no-margin"><a href="javascript:void(0);">Solicitud de Amistad</a></h6>
+									<p>
+										Aquí pondremos las actividades que vayas generando
+									</p>
+								</div>
+
+								<div class="col-sm-12">
+
+									<hr>
+
+								</div>
+
+								<div class="col-xs-2 col-sm-1">
+									<time datetime="2014-09-20" class="icon">
+										<strong>Feb</strong>
+										<span>20</span>
+									</time>
+								</div>
+
+								<div class="col-xs-10 col-sm-11">
+									<h6 class="no-margin"><a href="javascript:void(0);">Confirmación de Amistad</a></h6>
+									<p>
+										En la red
+									</p>
+								</div>
+
+								<div class="col-sm-12">
+
+									<br>
+
+								</div>
+
+							</div>
+
+						</div>
+						
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+		<!-- end row -->
+
+	</div>
+
+</div>

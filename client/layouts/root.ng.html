@@ -10,7 +10,13 @@
 		<div ng-if="ro.usuarioActual.roles[0] == 'vendedor'">
 			<div ng-include="'client/layouts/avisosVendedor.html'"></div>
 		</div>
+		
+		<div ng-if="currentUser.roles[0] == 'alumno'">
+			<div ng-include="'client/layouts/avisosAlumnos.html'"></div>
+		</div>
 	</div>
+	
+  <div class="pull-right">
 	  <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
 			<li class="">
 				<a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown" aria-expanded="false"> 
@@ -44,7 +50,9 @@
       </span>
     </div>
     
-    <div class="btn-header pull-right" ng-if="currentUser.roles != ['alumno'] || currentUser.roles != ['maestro']">
+    
+    
+    <div class="btn-header transparent pull-right" ng-show="currentUser.roles[0] != 'alumno'">
       <span>
         <a ui-sref="root.cambiarSeccion" title="Cambiar Sección">
           <i class="fa fa-building"></i>
@@ -52,7 +60,7 @@
       </span>
     </div>
     
-    <div class="btn-header pull-right">
+    <div class="btn-header transparent pull-right">
       <span>
         <a ui-sref="anon.logout" title="Cerrar Sesión">
           <i class="fa fa-sign-{{ro.isLoggedIn() ? 'out' : 'in'}}"></i>
@@ -62,7 +70,7 @@
 
     <div id="fullscreen" class="btn-header transparent pull-right">
       <span>
-        <a full-screen title="Full Screen">
+        <a full-screen title="Pantalla Completa">
           <i class="fa fa-arrows-alt"></i>
         </a>
       </span>
@@ -88,11 +96,14 @@
 <div id="main" role="main">
   <div id="ribbon">
 	  <span class="ribbon-button-alignment"> 
-			<span id="backbutton" back-button class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title=""><i class="fa fa-arrow-left"></i> Regresar</span> 
+			<span id="backbutton" back-button class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="">
+				<i class="fa fa-arrow-left"></i> <span class="hidden-xs">Regresar
+			</span>
+		</span> 
 		</span>
-	  <ol class="breadcrumb pull-right">
-			<li>{{ro.campus.clave}} - {{ro.campus.descripcion}}</li>
-			<li>{{ro.seccion.descripcion}}</li>
+	  <ol class="breadcrumb pull-right" ng-show="currentUser.roles[0] != 'alumno'">
+		  <li>{{ro.seccion.descripcion}}</li>
+			<li class="hidden-xs">{{ro.campus.clave}} - {{ro.campus.descripcion}}</li>
 		</ol>
   </div>
   <div id="content" ui-view></div>

@@ -8,12 +8,27 @@
 							<div class="col-sm-12">
 								<div id="myCarousel" class="carousel profile-carousel">
 									<div class="air air-bottom-right padding-10">
-										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.agregarInscripcion({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
-											<i class="fa fa-cogs"></i> Nueva Inscripción
-										</a>&nbsp;
-										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
-	 										<i class="fa fa-pencil"></i> Modificar
-	 									</a> 
+										<form class="form-inline">
+											<div class="form-group">
+												<label for="estatus" class="txt-white"><strong>Estatus</strong></label>
+												<select class="form-control" ng-model="al.alumno.profile.estatus" ng-change="al.cambiarEstatus(al.alumno.profile.estatus)">
+													<option value="1">Registrado</option>
+													<option value="2">Inicio</option>
+													<option value="3">Inicio Pospuesto</option>
+													<option value="4">Fantasma</option>
+													<option value="5">Activo</option>
+													<option value="6">Baja</option>
+													<option value="7">Terminación de Pago</option>
+													<option value="8">Egresado</option>
+												</select>
+											</div>
+											<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.agregarInscripcion({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm">
+												<i class="fa fa-cogs"></i> Nueva Inscripción
+											</a>&nbsp;
+											<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'coordinadorAcademico'" ui-sref="root.editarAlumno({alumno_id : al.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm">
+		 										<i class="fa fa-pencil"></i> Modificar
+		 									</a> 
+										</form>
 									</div>
 									<div class="air air-top-left padding-10">
 										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{al.fechaActual | date:'dd-MM-yyyy'}}</h4>
@@ -30,13 +45,12 @@
 							<div class="col-sm-12">
 								<div class="row">
 									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
-										<img style="max-width:200px;" src="{{al.tieneFoto(al.alumno.profile.sexo, al.alumno.profile.fotografia)}}" >
+								    <img style="max-width:200px;" src="{{al.tieneFoto(al.alumno.profile.sexo, al.alumno.profile.fotografia)}}" >
+								    <div class="ribbon-wrapper-alumno-profile" style="z-index: 10">
+								      <div class="ribbon-alumno {{al.obtenerColorEstatus(al.alumno.profile.estatus)}}">{{al.obtenerNombreEstatus(al.alumno.profile.estatus)}}</div>
+								    </div>
 										<div class="padding-10">
-											<h4 class="font-md"><strong>0</strong>
-											<br>
-											<small>Seguidores</small></h4>
-											<br>
-											<h4 class="font-md"><strong>0</strong>
+											<h4 class="font-md"><strong>{{al.alumno.profile.friends.length}}</strong>
 											<br>
 											<small>Amigos</small></h4>
 										</div>

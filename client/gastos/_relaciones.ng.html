@@ -16,13 +16,21 @@
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="fecha">Fecha</label>
-						<input date-time class="form-control" format="dd-MM-yyyy" view="year" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
+						<input date-time class="form-control" format="dd-MM-yyyy" view="date" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="concepto">Concepto</label>
-						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" required>
+						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" ng-change="gc.tieneSubconceptos(gc.gasto.concepto_id)" required>
 						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
 						  	{{concepto.nombre}}
+						  </option>
+						</select>
+					</div>
+					<div class="form-group col-sm-4" ng-show="gc.campoSubconceptos">
+						<label for="concepto">Sub Concepto</label>
+						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.subconcepto">
+						  <option ng-repeat="subconcepto in gc.subconceptos" value="{{subconcepto.nombre}}">
+						  	{{subconcepto.nombre}}
 						  </option>
 						</select>
 					</div>

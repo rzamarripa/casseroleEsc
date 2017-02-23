@@ -1,0 +1,40 @@
+<form class="form-inline">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group" valida>
+				<label for="fechaInicio">Fecha Inicial *</label>
+				<input name="fechaInicio" format="dd-MM-yyyy" date-time view="date" max-view="year" min-view="date" ng-model="ape.fechaInicio" class="form-control" required=""/>
+			</div>
+			<div class="form-group" valida>
+				<label for="fechaFin">Fecha Final *</label>
+				<input name="fechaFin" format="dd-MM-yyyy" date-time view="date" max-view="year" min-view="date" ng-model="ape.fechaFin" class="form-control" required=""/>
+			</div>
+			<button class="btn btn-primary" ng-click="ape.getAlumnos()">Buscar Alumnos</button>
+		</div>
+	</div>
+</form>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped table-bordered">
+			<caption><h4>Listado de Alumnos</h4></caption>
+			<thead class="thead">
+				<tr>
+					<th class="text-center">No.</th>
+					<th class="text-center">Fecha Cambio</th>
+					<th class="text-center">Matrícula</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center">Estatus Actual</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="alumno in ape.alumnos">
+					<td class="text-center">{{$index + 1}}</td>	
+					<td class="text-center">{{alumno.fechaCreacion | date:"dd-MM-yyyy"}}</td>
+					<td class="text-center">{{alumno.alumno.profile.matricula}}</td>			
+					<td>{{alumno.alumno.profile.nombreCompleto}}</td>
+					<td class="text-center"><span class="label {{alumno.alumno.profile.estatusObj.classLabel}}">{{alumno.alumno.profile.estatusObj.nombre}}</label></td>					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

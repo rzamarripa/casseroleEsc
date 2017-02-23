@@ -45,7 +45,7 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 			var usuarios = Meteor.users.find().fetch()
 			if(this.getReactively("foro")){
 				_.each(rc.foro.comentarios, function(comentario){					
-					comentario.usuario = Meteor.users.findOne(comentario.usuario_id);
+					comentario.usuario = Meteor.users.findOne(comentario.usuario_id, { "profile.nombreCompleto" : 1});
 				})
 			}
 			return Meteor.users.find();
@@ -81,8 +81,6 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
 		$("#summernote").summernote("reset");
-		form.$setPristine();
-    form.$setUntouched();
 	};
 	
 	this.editar = function(id)
@@ -106,8 +104,6 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
-		form.$setPristine();
-    form.$setUntouched();	
 	};
 		
 	this.cambiarEstatus = function(id)
@@ -132,14 +128,26 @@ function DetalleForoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	this.tieneFoto = function(foto, sexo){
 	  if(foto === undefined || foto === null){
 		  if(sexo === "masculino")
-			  return "img/badmenprofile.jpeg";
+			  return "img/badmenprofile.png";
 			else if(sexo === "femenino"){
-				return "img/badgirlprofile.jpeg";
+				return "img/badgirlprofile.png";
 			}else{
-				return "img/badprofile.jpeg";
+				return "img/badprofile.png";
 			}
 	  }else{
 		  return foto;
 	  }
   } 
+  
+  this.reportar = function(comentario, index){
+	  comentario.estatus = false;
+	  _.each(rc.foro.comentarios, function(comentarioActual){
+		  delete comentarioActual.usuario;
+	  })
+	  var comentarios = rc.foro.comentarios;
+	  rc.foro.reportes++;
+		console.log(rc.foro);
+	  Foros.update({_id : rc.foro._id}, { $set : {reportes : rc.foro.reportes, comentarios : comentarios}});
+	  toastr.warning("Se ha reportado el comentario");
+  }
 };
