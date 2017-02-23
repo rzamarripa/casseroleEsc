@@ -76,6 +76,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     this.nuevo = !this.nuevo;
   }
   this.guardar = function(gasto, form){
+	  console.log(form);	  
     if(form.$invalid){
       toastr.error('Llene toda la información.');
       return;
@@ -203,6 +204,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		}else{
 			rc.campoSubconceptos = false;
 			rc.subconceptos = [];
+			rc.gasto.subConcepto = "NA";
 		}
 		
 	}

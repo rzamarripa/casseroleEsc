@@ -28,10 +28,10 @@
 						  </option>
 						</select>
 					</div>
-					<div class="form-group col-sm-4" valida ng-show="gc.campoSubconceptos">
+					<div class="form-group col-sm-4" ng-show="gc.campoSubconceptos">
 						<label for="concepto">Sub Concepto</label>
-						<select name="subconcepto_id" class="form-control" placeholder="Seleccione" ng-model="gc.gasto.subconcepto" required>
-						  <option ng-repeat="subconcepto in gc.subconceptos" value="{{subconcepto.nombre}}">
+						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.subconcepto">
+						  <option ng-repeat="subconcepto in gc.subconceptos" value="{{subconcepto}}">
 						  	{{subconcepto.nombre}}
 						  </option>
 						</select>

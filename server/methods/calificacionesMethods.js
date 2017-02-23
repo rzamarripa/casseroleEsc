@@ -109,5 +109,59 @@ Meteor.methods({
 	  })
 	  
 	  return true;
+	},
+	calificarCoordinacion : function(curricula){
+		console.log(curricula);
+		_.each(curricula.grados, function(grado){
+			_.each(grado, function(materia){
+				if(materia.calificacion != undefined && materia.calificacion >= 0 && materia.calificacion <= 10){
+					materia.estatus = 1;
+					materia.fechaCreacion = new Date();
+					if(materia.calificacion >= 7){
+						materia.aprobado = true;
+						var estaReprobado = Reprobados.findOne({alumno_id : curricula.alumno_id, materia_id : calificacion.materia_id});
+						if(estaReprobado){
+						  Reprobados.update({alumno_id : curricula.alumno_id, materia_id : materia.materia._id}, {$set : {estatus : false}})
+					  }
+					}else{
+						materia.aprobado = false;
+						
+						var estaReprobado = Reprobados.findOne({alumno_id : curricula.alumno_id, materia_id : materia.materia._id});
+						
+						//Insertar o modificar
+					  if(estaReprobado != undefined){
+						  Reprobados.update({
+							  alumno_id : curricula.alumno_id,
+							  materia_id : materia.materia._id								  
+						  }, {$set : {
+							  maestro_id : calificacion.maestro_id,
+							  grupo_id : calificacion.grupo_id,
+							  calificacion : materia.calificacion,
+							  estatus : true
+							}});
+					  }else{
+						  Reprobados.insert({
+							  alumno_id : curricula.alumno_id,
+							  materia_id : calificacion.materia_id,
+							  maestro_id : calificacion.maestro_id,
+							  grupo_id : calificacion.grupo_id,
+							  calificacion : materia.calificacion,
+							  fechaCreacion : new Date(),
+							  seccion_id : calificacion.seccion_id,
+							  cmapus_id : calificacion.campus_id,
+							  estatus : true
+						  })
+					  }
+					}
+				}				
+			})
+		})
+		console.log(curricula);
+		Curriculas.update({_id : idTemp}, { $set : curricula});
+		
+		return true;
 	}
 })
+
+
+
