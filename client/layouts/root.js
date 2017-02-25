@@ -25,6 +25,10 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 				_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
 			}]
 		});
+		
+		this.subscribe('mensajes',()=>{
+			return [{para_id : Meteor.user() != undefined ? Meteor.userId() : "", estatus : 1 }]
+		});
 				
 		this.helpers({
 			campus : () => {
@@ -35,6 +39,9 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 			},
 			avisos : () => {
 			  return Avisos.find();
+			},
+			cantMensajes : () => {
+				return Mensajes.find({estatus : 1}).count();
 			}
 		});
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "coordinadorFinanciero"){
@@ -82,6 +89,10 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 			}]
 		});
 		
+		this.subscribe('mensajes',()=>{
+			return [{para_id : Meteor.user() != undefined ? Meteor.userId() : "", estatus : 1 }]
+		});
+		
 		this.subscribe('secciones', function(){
 			return [{
 				_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""
@@ -97,6 +108,9 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 			},
 			avisos : () => {
 			  return Avisos.find();
+			},
+			cantMensajes : () => {
+				return Mensajes.find({estatus : 1}).count();
 			}
 		});
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "vendedor"){ 
@@ -132,6 +146,10 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 			}]
 		});
 		
+		this.subscribe('mensajes',()=>{
+			return [{para_id : Meteor.user() != undefined ? Meteor.userId() : "", estatus : 1 }]
+		});
+		
 		this.subscribe("turnos", function(){
 			return [{
 				estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""
@@ -159,6 +177,9 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 					return gruposMaestros;
 				}
 				
+			},
+			cantMensajes : () => {
+				return Mensajes.find({estatus : 1}).count();
 			}
 		})
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "alumno"){ 

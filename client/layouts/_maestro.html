@@ -6,7 +6,14 @@
         <span class="menu-item-parent">Panel de Control</span>
       </a>
     </li>
-	</ul>
+    <li data-ui-sref-active="active">
+	    <a ui-sref="root.mensajes">
+	      <i class="fa fa-lg fa-fw fa-commenting-o"></i>
+	      <span class="menu-item-parent">Mensajes </span>
+	      <span class="badge pull-right inbox-badge margin-right-13">{{ro.cantMensajes}}</span>
+	    </a>
+	  </li>
+	</ul>	
 	<ul data-smart-menu ng-repeat="grupo in ro.gruposMaestro">
     <li data-menu-collapse data-ui-sref-active="active">
 	    <a href="#">
