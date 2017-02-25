@@ -3,17 +3,16 @@ angular.module('casserole').service('SaveService', function ($meteor) {
 		if(!collectionName || !object || !callback){
 			throw new Error('Dice el cosme que no estás mandando todos los parametros');
 		}
-		if(!Mongo.Collection.get(collectionName)){
+		if(!eval(collectionName)){
 			throw new Error('Dice el cosme que la colleccion "'+collectionName+'" no existe');
 		}
-		NProgress.set(0.5);
-		$("body").css("cursor", "wait");
-		collection = Mongo.Collection.get(collectionName);
-		collection.insert(object, function(err, res){
-			if(!err){
-				callback(undefined, 'Guardado Correctamente');
+		NProgress.set(0.3);
+		$("body").css("cursor", "progress");
+		Meteor.call('save', collectionName, object, function(err, res){
+			if(!res.error){
+				callback(undefined, res.result);
 			}else{
-				callback(err.reason, 'Error al Guardar');
+				callback(err, 'Error al Guardar');
 			}
 			$("body").css("cursor", "default");
 			NProgress.set(1.0);
@@ -27,8 +26,8 @@ angular.module('casserole').service('SaveService', function ($meteor) {
 		if(!Mongo.Collection.get(collectionName)){
 			throw new Error('Dice el cosme que la colleccion "'+collectionName+'" no existe');
 		}
-		NProgress.set(0.5);
-		$("body").css("cursor", "wait");
+		NProgress.set(0.3);
+		$("body").css("cursor", "progress");
 		collection = Mongo.Collection.get(collectionName);
 		collection.insert(object, function(err, res){
 			if(!err){

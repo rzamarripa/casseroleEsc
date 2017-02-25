@@ -49,4 +49,6 @@ planettraining:jquery-fullcalendar
 shell-server
 email
 mrt:nprogress
+smowden:offline-js
+meteorhacks:async
 mobile-status-bar
