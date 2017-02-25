@@ -66,9 +66,11 @@ angular
 		},
 		alumnosGrupo : () => {
 			var grupo = Grupos.findOne($stateParams.grupo_id);
-			rc.alumnos_id = grupo.alumnos;
-			rc.seccion_id = this.getReactively("grupo.seccion_id");
-			return Meteor.users.find({roles : ["alumno"]}).fetch();
+			if(grupo){
+				rc.alumnos_id = grupo.alumnos;
+				rc.seccion_id = this.getReactively("grupo.seccion_id");
+				return Meteor.users.find({roles : ["alumno"]}).fetch();
+			}
 		},
 		alumnos : () => {
 			if(this.alumnosGrupo){

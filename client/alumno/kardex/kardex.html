@@ -13,7 +13,7 @@
 									<tr ng-repeat="(key, value) in planEstudio.grados" >
 										<th width="5%"><div class="text-center">{{key + 1}}</div></th>
 										<td ng-repeat="_materia in planEstudio.grados[key]" 
-												ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : _materia.aprobado != undefined ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
+												ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : (_materia.aprobado != undefined || _materia.aprobado == false) ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
 											<div class="row">
 												<div class="col-sm-8" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
 													<strong>{{_materia.materia.nombreCorto}}</strong>

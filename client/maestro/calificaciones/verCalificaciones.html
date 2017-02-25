@@ -24,7 +24,7 @@
 						{{alumno.tipo}}
 					</label> 
 					<p>
-						<img src="{{vercal.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion > 6 ? 'online' : 'busy'">
+						<img src="{{vercal.tieneFoto(alumno.profile.sexo, alumno.profile.fotografia)}}" style="width: 50px;border-left: 4px solid #fff;" ng-class="alumno.calificacion >= 6 ? 'online' : 'busy'">
 						<strong>{{alumno.profile.matricula}}</strong> - {{alumno.profile.nombreCompleto}}
 					</p>
 				</li>
