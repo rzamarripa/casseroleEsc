@@ -10,6 +10,7 @@ angular.module("casserole").run(function ($rootScope, $state, toastr) {
       case "UNAUTHORIZED":
       	toastr.error("Acceso Denegado");
 				toastr.error("No tiene permiso para ver esta opción");
+				NProgress.set(1.0);
         break;
       default:
         $state.go('internal-client-error');

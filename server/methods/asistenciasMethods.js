@@ -33,7 +33,7 @@ Meteor.methods({
 		  if(alumnoActual.profile.estatus == 1 && alumnoActual.estatus != 0){
 			  var cantAsistencias = Asistencias.find({alumno_id : alumnoActual.alumno_id, grupo_id : alumnoActual.grupo_id, estatus : {$gte : 1}}).count();
 			  if(cantAsistencias == 0){
-				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : 2}});
+				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : "2"}});
 			  }
 		  }
 		  
@@ -52,11 +52,11 @@ Meteor.methods({
 		  var cantAsistencias = Asistencias.find({alumno_id : alumnoActual.alumno_id, grupo_id : alumnoActual.grupo_id}).count();
 		  if(cantAsistencias <= 1){
 			  if(cantAsistencias == 0  && alumnoActual.estatus > 0){
-				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : 2}});
+				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : "2"}});
 			  }else if(cantAsistencias == 1 && alumnoActual.estatus == 0){
-				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : 1}});
+				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : "1"}});
 			  }else if(cantAsistencias == 1 && alumnoActual.estatus > 0){
-				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : 2}});
+				  Meteor.users.update({_id : alumnoActual.alumno_id}, {$set : {"profile.estatus" : "2"}});
 			  }
 		  }
 			

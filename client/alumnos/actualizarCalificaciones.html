@@ -80,7 +80,7 @@
 				<td ng-repeat="_materia in grado" 
 						ng-class="_materia.aprobado == true ? 'bg-color-green txt-white' : _materia.aprobado != undefined ? 'bg-color-red text-white' : ''" style="padding-bottom: 3px !important;">
 					<div class="row">
-						<div class="col-sm-8" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
+						<div class="col-sm-12" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
 							<strong>{{_materia.materia.nombreCorto}}</strong>
 							<input type="range" ng-model="_materia.calificacion" min="0" max="10" class="form-control" ng-change="ac.estaAprobado(_materia)"/>
 						</div>

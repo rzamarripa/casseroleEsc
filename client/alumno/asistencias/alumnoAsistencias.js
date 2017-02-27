@@ -2,10 +2,11 @@ angular.module("casserole")
 .controller("AlumnoAsistenciasCtrl",AlumnoAsistenciasCtrl);  
 function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $compile) {
 	
-	let rc=$reactive(this).attach($scope);
+	let rc = $reactive(this).attach($scope);
 	var alumnos_id = [];
 	this.materia_id = "";
 	this.grupo_id = "";
+	window.rc = rc;
  
 	this.subscribe('grupos',()=>{
 		return [{_id : $stateParams.grupo_id, estatus:true}]
@@ -16,11 +17,11 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	});
 	
 	this.subscribe('alumnos', () => {		
-		return [{_id : { $in : this.getCollectionReactively('alumnos_id')}}]
+		return [{_id : Meteor.userId() }]
 	});
 	
 	this.subscribe('asistencias', ()  => {
-		return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id }]
+		return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, alumno_id : Meteor.userId() }]
 	});
 
 	this.helpers({
@@ -43,8 +44,8 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	  materia : () => {
 		  return Materias.findOne();
 	  },
-	  alumnos : () => {
-		  return Meteor.users.find({roles : ["alumno"]});
+	  alumno : () => {
+		  return Meteor.users.findOne({roles : ["alumno"]});
 	  },
 	  asistencias : () => {
 	  	return Asistencias.find({},{ sort : {fechaAsistencia : 1}});
@@ -55,24 +56,32 @@ function AlumnoAsistenciasCtrl($scope, $meteor, $reactive, $state, $stateParams,
 	  alumnosAsistidos : () => {
 		  var transmutar = {};
 		  var arregloCoincidencias = [];
-		  if(this.getReactively("existenAsistencias")>0){
-			  _.each(this.getReactively("asistencias"), function(asistencia){
-				  _.each(asistencia.alumnos, function(alumno){											  
-					  if(alumno._id == Meteor.userId()){
-							if("undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
-								transmutar[alumno.profile.nombreCompleto]={};
-								transmutar[alumno.profile.nombreCompleto].nombre = alumno.profile.nombreCompleto; 
-								transmutar[alumno.profile.nombreCompleto].matricula = alumno.profile.matricula; 
-								transmutar[alumno.profile.nombreCompleto].fotografia = alumno.profile.fotografia; 
-								transmutar[alumno.profile.nombreCompleto].dias = [];
-							}
-							transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
-						}
-					})
-			  })
-		  }		  
-			return _.toArray(transmutar);
-
+		  var alumno = Meteor.users.findOne({roles : ["alumno"]});
+		  _.each(this.getReactively("asistencias"), function(asistencia){
+				if(alumno.profile != undefined && "undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
+					transmutar[alumno.profile.nombreCompleto]={};
+					transmutar[alumno.profile.nombreCompleto]._id = alumno._id;
+					transmutar[alumno.profile.nombreCompleto].nombre = alumno.profile.nombreCompleto; 
+					transmutar[alumno.profile.nombreCompleto].matricula = alumno.profile.matricula; 
+					transmutar[alumno.profile.nombreCompleto].fotografia = alumno.profile.fotografia; 
+					transmutar[alumno.profile.nombreCompleto].dias = [];
+					transmutar[alumno.profile.nombreCompleto].dias.push(asistencia.estatus);
+				}else if(alumno.profile != undefined){
+					transmutar[alumno.profile.nombreCompleto].dias.push(asistencia.estatus);
+				}
+		  })
+			transmutar = _.toArray(transmutar);
+			return transmutar;
+	  },
+	  diasUnicos : () => {
+		  var arreglo = {};
+		  _.each(this.getReactively("asistencias"), function(asistencia){
+			  if(arreglo[asistencia.fechaAsistencia] == undefined){
+				  arreglo[asistencia.fechaAsistencia] = {};
+				  arreglo[asistencia.fechaAsistencia].fecha = asistencia.fechaAsistencia;
+			  }
+		  });
+		  return _.toArray(arreglo);
 	  }
   });
   

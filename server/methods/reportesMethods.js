@@ -47,13 +47,14 @@ Meteor.methods({
 	    if(arreglo[etapaVenta.nombre] == undefined){
 				arreglo[etapaVenta.nombre] = {};
 				arreglo[etapaVenta.nombre].etapaVenta = etapaVenta.nombre;
-				arreglo[etapaVenta.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial.setHours(24)), $lte: new Date(fechaFinal)}, "profile.etapaVenta_id" : etapaVenta._id}).count();
+				arreglo[etapaVenta.nombre].cantidad = Prospectos.find({"profile.fecha" : {$gte : new Date(fechaInicial), $lte: new Date(fechaFinal)}, "profile.etapaVenta_id" : etapaVenta._id}).count();
 			}
     });
     
     var arregloFinal = {};
     arregloFinal.etapasVenta = [];
-		arregl = _.toArray(arreglo);
+		arreglo = _.toArray(arreglo);
+		console.log(arreglo);
     return _.toArray(arreglo);
   },
   historialCobranza : function (fechaInicial, fechaFinal, seccion_id, usuario_id, modulo) {

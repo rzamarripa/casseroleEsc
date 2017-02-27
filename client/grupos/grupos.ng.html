@@ -11,9 +11,14 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<a class="btn btn-primary" href="./grupo" ng-click="gp.nuevoGrupo()">
-		  Nuevo
-		</a>
+		<div class="input-group">
+			<div class="input-group-btn">
+				<a href="./grupo" ng-click="gp.nuevoGrupo()" class="btn btn-default btn-primary">
+					<i class="fa fa-plus"></i> Nuevo
+				</a>
+			</div>
+			<input class="form-control" type="text" placeholder="Buscar..." id="buscar" ng-model="gp.buscarGrupo">
+		</div>
 	</div>
 </div>
 <br>
@@ -22,7 +27,7 @@
 		<table class="table table-bordered table-responsive" style="table-layout:fixed;">
 			<thead>
 				<tr>
-					<th width="2%"><div class="text-center">No.</div></th>
+					<th width="5%"><div class="text-center">No.</div></th>
 					<th width="10%" class="hidden-xs visible-lg"><div class="text-center">Ciclo</div></th>
 					<th width="10%"><div class="text-center">Grupo</div></th>
 					<th width="5%"><div class="text-center">Alums.</div></th>
@@ -42,8 +47,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="grupo in gp.grupos">
-					<td>{{$index + 1}}</td>
+				<tr ng-repeat="grupo in gp.grupos | filter:gp.buscarGrupo">
+					<td class="text-center">{{$index + 1}}</td>
 			    <td class="text-center hidden-xs visible-lg">{{gp.getCiclo(grupo.ciclo_id)}}</td>
 			    <td class="text-center"><a ui-sref="root.grupoDetalle({grupo_id : grupo._id})">{{grupo.nombre}}</a></td>
 			    <td class="text-center"><strong>{{grupo.alumnos.length}}/{{grupo.cupo}}</strong></td>

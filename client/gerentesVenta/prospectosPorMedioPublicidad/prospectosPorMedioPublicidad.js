@@ -10,7 +10,10 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
   this.fechaFinal = new Date();
 
   this.getProspectos = function(fechaInicial, fechaFinal){
+    fechaInicial = new Date(fechaInicial.setHours(0,0,0));
+    fechaFinal = new Date(fechaFinal.setHours(23,59,59))
     
+    console.log(fechaInicial, fechaFinal);
     Meteor.apply('prospectosPorEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
       
       var nombres = _.pluck(result, "medio");
@@ -55,64 +58,17 @@ function ProspectosPorMedioPublicidadCtrl($scope, $meteor, $reactive,  $state, $
     });
   }
 
-
-   this.getEtapas11= function(fechaInicial, fechaFinal){
-
-
+  this.getEtapas= function(fechaInicial, fechaFinal){
+	 	fechaInicial = new Date(fechaInicial.setHours(0,0,0));
+    fechaFinal = new Date(fechaFinal.setHours(23,59,59))
+    
+    console.log(fechaInicial, fechaFinal);
      Meteor.apply('prospectosSoloEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
-      
-      // var nombres = _.pluck(result, "medio");
+		 	console.log(result);
+      var nombreEtapas = _.pluck(result, "etapaVenta");
       var valores = _.pluck(result, "cantidad");
-$('#prospectosSoloEtapaVenta').highcharts( {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Pagos por semana ' + rc.semanaActual
-        },
-        xAxis: {
-            categories: nombreGrupos
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Total'
-            }
-        },
-        tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
-            shared: true
-        },
-        plotOptions: {
-            column: {
-                stacking: ''
-            }
-        },
-        series: [{
-            name: 'Pagos',
-            data: valores
-        }]
-        });
-        $scope.$apply();
-    });
-
-  }
-
-
-
-   this.getEtapas= function(fechaInicial, fechaFinal){
-
-     Meteor.apply('prospectosSoloEtapaVenta', [fechaInicial, fechaFinal], function(error, result){
-              
-              // arreglo = _.toArray(arreglo);
-              // var valores = _.pluck(arreglo, "data");
-
-
-
-              var nombreEtapas = _.pluck(result, "etapaVenta");
-               var valores = _.pluck(result, "cantidad");
           
-           $('#prospectosSoloEtapaVenta').highcharts( {
+      $('#prospectosSoloEtapaVenta').highcharts( {
         chart: {
             type: 'column'
         },
@@ -138,11 +94,11 @@ $('#prospectosSoloEtapaVenta').highcharts( {
             }
         },
         series: [{
-            etapaVenta: 'Prospectos',
+            name: 'Prospectos',
             data: valores
         }]
-        });
-       })
+      });
+     })
 
     }
 

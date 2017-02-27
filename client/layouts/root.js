@@ -1,5 +1,5 @@
 angular.module("casserole").controller("RootCtrl", RootCtrl);  
-function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr,$mdToast){
+function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdToast){
 	let rc = $reactive(this).attach($scope); 
 	this.usuarioActual = {};
 	this.avisosVentana = "none";

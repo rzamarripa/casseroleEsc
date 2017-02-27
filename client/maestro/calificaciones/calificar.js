@@ -21,7 +21,7 @@ angular
 	
 	this.subscribe('curriculas', () => {		
 		return [{
-			planEstudios_id : this.getReactively("grupo.planEstudios_id")
+			alumno_id : { $in : this.getCollectionReactively('alumnos_id')}
 		}]
 	});
 	

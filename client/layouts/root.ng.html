@@ -27,7 +27,7 @@
 						<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-user"></i> {{currentUser.profile.nombreCompleto}}</a>
 					</li>
 					<li class="divider"></li>
-					<li>
+					<li ng-show="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorAcademico' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'recepcionista'" >
 						<a href="javascript:void(0);" ui-sref="root.cambiarSeccion" class="padding-10 padding-top-0 padding-bottom-0" ><i class="fa fa-building"></i> Cambiar <u>E</u>scuela</a>
 					</li>
 					<li class="divider"></li>
@@ -36,7 +36,7 @@
 					</li>
 					<li class="divider"></li>
 					<li>
-						<a ui-sref="anon.logout" href="#" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-{{ro.isLoggedIn() ? 'out' : 'in'}}"></i> <strong><u>C</u>errar Sesión</strong></a>
+						<a ui-sref="anon.logout" href="#" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out"></i> <strong><u>C</u>errar Sesión</strong></a>
 					</li>
 				</ul>
 			</li>
@@ -52,7 +52,7 @@
     
     
     
-    <div class="btn-header transparent pull-right" ng-show="currentUser.roles[0] != 'alumno'">
+    <div class="btn-header transparent pull-right" ng-hide="currentUser.roles[0] == 'alumno' || currentUser.roles[0] == 'maestro' || currentUser.roles[0] == 'vendedor'">
       <span>
         <a ui-sref="root.cambiarSeccion" title="Cambiar Sección">
           <i class="fa fa-building"></i>
@@ -63,7 +63,7 @@
     <div class="btn-header transparent pull-right">
       <span>
         <a ui-sref="anon.logout" title="Cerrar Sesión">
-          <i class="fa fa-sign-{{ro.isLoggedIn() ? 'out' : 'in'}}"></i>
+          <i class="fa fa-sign-out"></i>
         </a>
       </span>
     </div>

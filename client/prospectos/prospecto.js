@@ -65,7 +65,7 @@ angular.module("casserole")
 		  return Tareas.find();
 	  },
 	  etapasVenta : () => {
-		  return EtapasVenta.find();
+		  return EtapasVenta.find({},{sort : {orden : 1}});
 	  },
 	  secciones : () => {
 		  return Secciones.find();

@@ -270,7 +270,7 @@ Meteor.methods({
 		alumno.profile.campus_id 			= Meteor.user().profile.campus_id;
 		alumno.profile.seccion_id 		= Meteor.user().profile.seccion_id;
 		alumno.profile.usuarioInserto = Meteor.userId();
-		alumno.profile.estatus 				= true;
+		alumno.profile.estatus 				= "1";
 		
 		//PREPARAR LA INSCRIPCIÓN
 		inscripcion.planEstudios_id = grupo.planEstudios_id;		
@@ -282,7 +282,7 @@ Meteor.methods({
 		
 		var matriculaAnterior = 0;
 		var anio = '' + new Date().getFullYear();
-		anio = anio.substring(2,4);
+		anio = anio.substring( 2, 4);
 		
 		//Si existen Alumnos generamos la matrícula siguiente
 		if(cantidadAlumnos > 0){
