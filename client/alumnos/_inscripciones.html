@@ -5,7 +5,7 @@
 		    <div class="col-sm-12">
 		      <div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget" data-widget-collapsed="{{curso.estatus == 1}}" ng-repeat = "curso in al.inscripciones">
 		        <header>
-		          <h2>Inscripción {{ $index + 1 }} - {{curso.grupo.nombre}} - {{curso.grupo.turno.nombre}}</h2>
+		          <h2>Inscripción {{ $index + 1 }} | {{curso.grupo.nombre}} - {{curso.grupo.turno.nombre}} | &nbsp; <span class="pull-right"> {{curso.seccion.nombreseccion}}</span></h2>
 		        </header>
 		        <div>
 		          <div class="widget-body">

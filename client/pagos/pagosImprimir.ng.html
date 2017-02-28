@@ -16,6 +16,8 @@
 							{{pi.seccion.ciudad}}, {{pi.seccion.estado}}
 							<br>
 							<abbr title="Phone">TEL:</abbr> {{pi.seccion.telefono1}}
+							<br/><br/>
+							<strong>ATENDIÓ: </strong>{{currentUser.profile.nombreCompleto}}
 						</address>
 						<div>
 							<div>
@@ -41,8 +43,8 @@
 											<th>Importe</th>
 										</tr>
 										<tr ng-repeat="semana in value">
-											<td class="text-right">{{semana.semana}} / {{semana.anio}}</td>
-											<td>{{semana.importe | currency}}</td>
+											<td class="text-left">{{semana.semana}} / {{semana.anio}}</td>
+											<td class="text-right">{{semana.importe | currency}}</td>
 										</tr>
 									</table>
 								</td>

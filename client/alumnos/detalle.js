@@ -134,6 +134,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				_.each(inscripciones, function(inscripcion){
 					inscripcion.grupo = Grupos.findOne(inscripcion.grupo_id);
 					inscripcion.curricula = Curriculas.findOne({planEstudios_id : inscripcion.planEstudios_id});
+					inscripcion.seccion = Secciones.findOne({_id : inscripcion.seccion_id});
 					if(inscripcion.grupo)
 						inscripcion.grupo.turno = Turnos.findOne(inscripcion.grupo.turno_id);
 				})
