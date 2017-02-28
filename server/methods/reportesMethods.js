@@ -472,6 +472,16 @@ Meteor.methods({
 		})
 		
 		return _.toArray(alumnosReprobados);
+	},
+	getAlumnosSep : function(campus_id){
+		var inscripciones = Inscripciones.find({campus_id : campus_id, estatus : 1, sep : true}).fetch();
+		_.each(inscripciones, function(inscripcion){
+			inscripcion.alumno = Meteor.users.findOne({_id : inscripcion.alumno_id}, { fields : { "profile.nombreCompleto" : 1 }});
+			inscripcion.grupo = Grupos.findOne({_id : inscripcion.grupo_id});
+			inscripcion.planEstudio = PlanesEstudios.findOne({_id : inscripcion.planEstudios_id});
+		})
+		
+		return inscripciones;
 	}
 })
 

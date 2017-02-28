@@ -48,7 +48,6 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 
 	this.actualizarCalificaciones = function(){
 		var curriculaNueva = angular.copy(rc.curricula);
-		console.log(curriculaNueva);
 		Meteor.apply("calificarCoordinacion",[curriculaNueva], function(error, result){
 			if(result){
 				toastr.success("Ha calificado correctamente.")
@@ -56,8 +55,6 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 				toastr.error("No se pudo calificar.")
 			}
 		})
-		
-		
 	}
 	
 	this.estaAprobado = function(materia){

@@ -10,26 +10,25 @@
 <button type="button" class="btn btn-primary" ng-click="a.getAlumnosReprobados()">Alumnos en SEP</button>
 <div class="row">
 	<div class="col-sm-12">
-		<table class="table table-striped" ng-repeat="materia in a.alumnosSep">
+		<table class="table table-striped">
 			<caption>{{materia.materia.nombre}}</caption>
 			<thead class="thead">
 				<tr>
 					<th class="text-center">No.</th>
 					<th class="text-center">Nombre</th>
+					<th class="text-center">Fecha Sep</th>
 					<th class="text-center">Grupo</th>
-					<th class="text-center">Maestro</th>
-					<th class="text-center">Calificación</th>
-					<th class="text-center">Fecha</th>
+					<th class="text-center">Plan de Estudios</th>
+
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="alumno in materia.alumnos">
-					<td class="text-center">{{ $index + 1 }}</td>	
-					<td>{{alumno.alumno.profile.nombreCompleto}}</td>			
-					<td class="text-center">{{alumno.grupo.nombre}}</td>			
-					<td class="text-center">{{alumno.maestro.nombre}}</td>			
-					<td class="text-center">{{alumno.calificacion}}</td>			
-					<td class="text-center">{{alumno.fechaCreacion | date:"dd-MM-yyyy"}}</td>			
+				<tr ng-repeat="inscripcion in a.alumnosSep">
+					<td class="text-center">{{ $index + 1 }}</td>
+					<td>{{inscripcion.alumno.profile.nombreCompleto}}</td>
+					<td class="text-center">{{inscripcion.fechaSep | date : "dd-MM-yyyy"}}</td>
+					<td class="text-center">{{inscripcion.grupo.nombre}}</td>
+					<td class="text-center">{{inscripcion.planEstudio.descripcion}}</td>
 				</tr>
 			</tbody>
 		</table>
