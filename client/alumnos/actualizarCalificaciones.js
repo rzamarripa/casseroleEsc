@@ -48,8 +48,6 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 
 	this.actualizarCalificaciones = function(){
 		var curriculaNueva = angular.copy(rc.curricula);
-		var idTemp = curriculaNueva._id;
-		delete curriculaNueva._id;
 		console.log(curriculaNueva);
 		Meteor.apply("calificarCoordinacion",[curriculaNueva], function(error, result){
 			if(result){
@@ -63,7 +61,7 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 	}
 	
 	this.estaAprobado = function(materia){
-		if(materia.calificacion >= 7){
+		if(materia.calificacion >= 6){
 			materia.aprobado = true;
 		}else{
 			materia.aprobado = false;

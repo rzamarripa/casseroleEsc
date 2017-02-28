@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+				Alumnos &gt; en SEP
+		</h1>
+	</div>
+</div>
+<br>
+<button type="button" class="btn btn-primary" ng-click="a.getAlumnosReprobados()">Alumnos en SEP</button>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-striped" ng-repeat="materia in a.alumnosSep">
+			<caption>{{materia.materia.nombre}}</caption>
+			<thead class="thead">
+				<tr>
+					<th class="text-center">No.</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center">Grupo</th>
+					<th class="text-center">Maestro</th>
+					<th class="text-center">Calificación</th>
+					<th class="text-center">Fecha</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="alumno in materia.alumnos">
+					<td class="text-center">{{ $index + 1 }}</td>	
+					<td>{{alumno.alumno.profile.nombreCompleto}}</td>			
+					<td class="text-center">{{alumno.grupo.nombre}}</td>			
+					<td class="text-center">{{alumno.maestro.nombre}}</td>			
+					<td class="text-center">{{alumno.calificacion}}</td>			
+					<td class="text-center">{{alumno.fechaCreacion | date:"dd-MM-yyyy"}}</td>			
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

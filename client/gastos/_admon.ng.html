@@ -10,7 +10,7 @@
 						<label for="concepto">Concepto</label>
 						<select class="form-control" placeholder="Seleccione" ng-model="gc.gasto.concepto_id" name="concepto_id" ng-change="gc.tieneSubconceptos(gc.gasto.concepto_id)" required>
 						  <option ng-repeat="concepto in gc.conceptos" value="{{concepto._id}}">
-						  	{{concepto.nombre}}
+						  	{{concepto.codigo}} | {{concepto.nombre}}
 						  </option>
 						</select>
 					</div>

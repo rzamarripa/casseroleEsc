@@ -119,7 +119,7 @@ Meteor.methods({
 					materia.fechaCreacion = new Date();
 					if(materia.calificacion >= 7){
 						materia.aprobado = true;
-						var estaReprobado = Reprobados.findOne({alumno_id : curricula.alumno_id, materia_id : calificacion.materia_id});
+						var estaReprobado = Reprobados.findOne({alumno_id : curricula.alumno_id, materia_id : materia.materia._id});
 						if(estaReprobado){
 						  Reprobados.update({alumno_id : curricula.alumno_id, materia_id : materia.materia._id}, {$set : {estatus : false}})
 					  }
@@ -134,21 +134,17 @@ Meteor.methods({
 							  alumno_id : curricula.alumno_id,
 							  materia_id : materia.materia._id								  
 						  }, {$set : {
-							  maestro_id : calificacion.maestro_id,
-							  grupo_id : calificacion.grupo_id,
 							  calificacion : materia.calificacion,
 							  estatus : true
 							}});
 					  }else{
 						  Reprobados.insert({
 							  alumno_id : curricula.alumno_id,
-							  materia_id : calificacion.materia_id,
-							  maestro_id : calificacion.maestro_id,
-							  grupo_id : calificacion.grupo_id,
+							  materia_id : materia.materia._id,
 							  calificacion : materia.calificacion,
 							  fechaCreacion : new Date(),
-							  seccion_id : calificacion.seccion_id,
-							  cmapus_id : calificacion.campus_id,
+							  seccion_id : materia.materia.seccion_id,
+							  cmapus_id : materia.materia.campus_id,
 							  estatus : true
 						  })
 					  }
@@ -157,6 +153,8 @@ Meteor.methods({
 			})
 		})
 		console.log(curricula);
+		var idTemp = curricula._id;
+		delete curricula._id;
 		Curriculas.update({_id : idTemp}, { $set : curricula});
 		
 		return true;
