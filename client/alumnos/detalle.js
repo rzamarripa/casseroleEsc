@@ -707,8 +707,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				}
 			});
 			
-			
-			$state.go("anon.pagosImprimir",{pago : condonado,alumno_id 	: configuracion.alumno_id}); 
+			// c = condonar
+			$state.go("anon.pagosImprimir",{pago : condonado, alumno_id 	: configuracion.alumno_id, tipo : "c"}); 
 		}
 	}
 

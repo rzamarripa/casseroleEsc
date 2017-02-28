@@ -64,7 +64,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('anon.pagosImprimir', {
-      url: '/pagosImprimir/:pago/:alumno_id',
+      url: '/pagosImprimir/:pago/:alumno_id/:tipo',
       templateUrl: 'client/pagos/pagosImprimir.ng.html',
       controller: 'PagosImprimirCtrl as pi',
      // params: { 'semanas': ':semanas' , 'id' : ':id'},

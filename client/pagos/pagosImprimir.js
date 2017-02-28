@@ -54,9 +54,16 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 	
 					if(!ret["Colegiatura"] )ret["Colegiatura"]=[];
 					
-					ret["Colegiatura"].push({semana : pago.semana, anio : pago.anio, importe : pago.importeRegular});
+					if($stateParams.tipo == "c"){
+						console.log("condonacion");
+						ret["Colegiatura"].push({semana : pago.semana, anio : pago.anio, importe : pago.importe});
+						rc.total += pago.importe;
+					}else{
+						console.log("pago regular");
+						ret["Colegiatura"].push({semana : pago.semana, anio : pago.anio, importe : pago.importeRegular});
+						rc.total += pago.importeRegular;
+					}
 					
-					rc.total += pago.importeRegular;
 					
 					if(pago.tiempoPago == 1 && pago.importe > 0){
 						if(!ret["Recargo"])ret["Recargo"]=[];
@@ -64,7 +71,7 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 						rc.total += pago.importeRecargo;
 					}
 					
-					if(diasDescuento >= pago.diasDescuento && pago.importe>0){
+					if(diasDescuento >= pago.diasDescuento && pago.importe > 0){
 						if(!ret["Descuento"])ret["Descuento"]=[];
 						ret["Descuento"].push({semana:pago.semana,anio:pago.anio,importe:pago.importeDescuento})
 						rc.total -= pago.importeDescuento;
