@@ -1041,7 +1041,23 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "vendedor"){
+						if(user.roles[0] == "vendedor" || user.roles[0] == "gerenteVenta"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
+    })
+    .state('root.prospectosGerente', {
+      url: '/prospectosGerente',
+      templateUrl: 'client/prospectos/prospectosGerente.html',
+      controller: 'ProspectosGerenteCtrl as fa',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "gerenteVenta"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

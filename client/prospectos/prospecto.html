@@ -212,9 +212,10 @@
 														<div class="col-sm-3">
 															<label for="escuela">Interés</label>
 															<select class="form-control" ng-model="fa.prospecto.profile.interes">
-																<option value="Casserole">Casserole</option>
-																<option value="Prepa Icep">Prepa ICEP</option>
-																<option value="Universidad Icep">Universidad ICEP</option>
+																<option value="Diplomado">Diplomado</option>
+																<option value="Carrera">Carrera Técnica</option>
+																<option value="Preparatoria">Preparatoria</option>
+																<option value="Universidad">Universidad</option>
 															</select>
 														</div>					
 														<div class="col-sm-3">
@@ -494,7 +495,7 @@
 																</td>
 																<td class="text-center">																	
 																	<button class="btn btn-warning" ng-click="fa.editarLlamada(llamada)"><i class="fa fa-pencil white"></i></button>
-																	<button class="btn btn-danger" ng-click="fa.eliminarLlamada($index, llamada)"><i class="fa fa-trash white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarLlamada(llamada)"><i class="fa fa-trash white"></i></button>
 																</td>
 															</tr>
 														</table>
@@ -539,7 +540,7 @@
 																</td>
 																<td class="text-center">
 																	<button class="btn btn-warning" ng-click="fa.editarReunion(reunion)"><i class="fa fa-pencil white"></i></button>
-																	<button class="btn btn-danger" ng-click="fa.eliminarReunion($index, reunion)"><i class="fa fa-trash white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarReunion(reunion)"><i class="fa fa-trash white"></i></button>
 																</td>
 															</tr>
 														</table>
@@ -582,7 +583,7 @@
 																</td>
 																<td class="text-center">
 																	<button class="btn btn-warning" ng-click="fa.editarTarea(tarea)"><i class="fa fa-pencil white"></i></button>
-																	<button class="btn btn-danger" ng-click="fa.eliminarTarea($index, tarea)"><i class="fa fa-trash white"></i></button>
+																	<button class="btn btn-danger" ng-click="fa.eliminarTarea(tarea)"><i class="fa fa-trash white"></i></button>
 																</td>
 															</tr>
 														</table>

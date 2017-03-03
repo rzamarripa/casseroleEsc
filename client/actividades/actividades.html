@@ -40,8 +40,8 @@
 								<span class="text-muted">{{llamada.resultado}} </span>
 								<span class="date">{{llamada.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
 								<span ng-if="llamada.estatus == true" >
-									<label class="date pull-right"><strong>Escriba el resultado de la llamada</strong></label>
-									<input class="form-control" placeholder="Resultado" ng-model="llamada.resultado"/>
+									<label class="date pull-right"><strong>Escriba el comentario de la llamada</strong></label>
+									<input class="form-control" placeholder="Comentario" ng-model="llamada.resultado"/>
 									<button class="btn btn-primary" ng-click="ac.cambiarEstatus('llamada', llamada)"><i class="fa fa-check fa-lg"></i> Guardar</button>
 								</span>
 							</p>
@@ -58,8 +58,8 @@
 								<span class="text-muted">{{reunion.resultado}} </span>
 								<span class="date ">{{reunion.fecha | date : 'dd-MM-yyyy HH:mm'}}</span>
 								<span ng-if="reunion.estatus == true" >
-									<label class="date pull-right"><strong>Escriba el resultado de la reunión</strong></label>
-									<input class="form-control" placeholder="Resultado" ng-model="reunion.resultado"/>
+									<label class="date pull-right"><strong>Escriba el comentario de la reunión</strong></label>
+									<input class="form-control" placeholder="Comentario" ng-model="reunion.resultado"/>
 									<button class="btn btn-primary" ng-click="ac.cambiarEstatus('reunion', reunion)"><i class="fa fa-check fa-lg"></i> Guardar</button>
 								</span>
 							</p>

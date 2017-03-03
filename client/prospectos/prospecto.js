@@ -245,4 +245,27 @@ angular.module("casserole")
 	  this.prospecto.seccion_id = seccion._id
   };
 		
+	this.eliminarLlamada = function(llamada){
+		var res = confirm("Está seguro que quiere eliminar la llamada, no se podrá recuperar");
+		if(res){
+			Llamadas.remove({_id : llamada._id});
+			toastr.success("Se eliminó correctamente");
+		}			
+	}
+	
+	this.eliminarReunion = function(reunion){
+		var res = confirm("Está seguro que quiere eliminar la reunión, no se podrá recuperar");
+		if(res){
+			Reuniones.remove({_id : reunion._id});
+			toastr.success("Se eliminó correctamente");
+		}			
+	}
+	
+	this.eliminarTarea = function(tarea){
+		var res = confirm("Está seguro que quiere eliminar la tarea, no se podrá recuperar");
+		if(res){
+			Tareas.remove({_id : tarea._id});
+			toastr.success("Se eliminó correctamente");
+		}			
+	}
 };

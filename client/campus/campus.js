@@ -57,7 +57,7 @@ angular.module("casserole")
 				campus = {};
 				rc.nuevo = true;
 				$('.collapse').collapse('hide');
-				toastr.success(message);
+				toastr.success("Guardado correctamente");
 			});
 			
 	};
