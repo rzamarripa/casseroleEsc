@@ -74,7 +74,7 @@
 											    		<label class="toggle">
 																<input type="checkbox" name="checkbox-toggle" ng-model="fa.llamada.estatus">
 																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
-																Estatus
+																Hecho
 															</label>
 											    	</div>
 											    </div> 
@@ -120,7 +120,7 @@
 											    		<label class="toggle">
 																<input type="checkbox" name="checkbox-toggle" ng-model="fa.reunion.estatus">
 																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
-																Estatus
+																Hecho
 															</label>
 											    	</div>
 											    </div> 
@@ -162,7 +162,7 @@
 											    		<label class="toggle">
 																<input type="checkbox" name="checkbox-toggle" ng-model="fa.tarea.estatus">
 																<i data-swchon-text="ON" data-swchoff-text="OFF"></i>
-																Estatus
+																Hecho
 															</label>
 											    	</div>
 											    </div> 
@@ -473,7 +473,7 @@
 																<th class="text-center" width="5%">No.</th>
 																<th width="20%">Asunto</th>
 																<th width="15%">Fecha</th>
-																<th>Resultado</th>
+																<th>Comentarios</th>
 																<th class="text-center" width="10%">Estatus</th>
 																<th class="text-center" width="15%">Acciones</th>
 															</tr>
@@ -517,7 +517,7 @@
 																<th width="20%">Asunto</th>
 																<th width="15%">Fecha</th>
 																<th>Lugar</th>
-																<th>Resultado</th>
+																<th>Comentarios</th>
 																<th width="10%">Estatus</th>
 																<th class="text-center" width="15%">Acciones</th>
 															</tr>
@@ -561,11 +561,11 @@
 																<th width="5%">No.</th>
 																<th width="20%">Asunto</th>
 																<th width="15%">Fecha</th>
-																<th>Resultado</th>
+																<th>Comentarios</th>
 																<th width="10%">Estatus</th>
 																<th class="text-center" width="15%">Acciones</th>
 															</tr>
-															<tr ng-repeat="tarea in fa.tareas">
+															<tr ng-repeat="tarea in fa.tareas"> 
 																<td>{{$index+1}}</td>
 																<td>{{tarea.asunto}}</td>
 																<td>{{tarea.fecha | date: "dd-MM-yyyy"}}</td> 
