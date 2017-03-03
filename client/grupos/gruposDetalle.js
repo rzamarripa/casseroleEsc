@@ -29,7 +29,6 @@ angular
 	});
 	
 	this.subscribe('inscripciones', () => {		
-		console.log(rc.getReactively("alumno_id"));
 		return [{
 			alumno_id : this.getReactively('alumno_id')
 		}]
@@ -114,19 +113,14 @@ angular
 				rc.grupo.alumnos=[];
 			var alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 			var x = alumnos_id.indexOf(alumno_id);
-			console.log(x);
 			if(x==-1){
 				rc.grupo.alumnos.push({alumno_id : alumno_id, inscripcion_id : inscripcion_id})
 				rc.grupo.inscritos++;
-				console.log(rc.grupo);
 				var idTemp = rc.grupo._id;
-				console.log(idTemp);
 				delete rc.grupo._id;
-				console.log(rc.grupo);
 				Grupos.update({_id : idTemp}, {$set : rc.grupo});
 				rc.buscando = false;
 				rc.buscar.nombre = "";
-				console.log("listo");
 				toastr.success("Ha insertado al alumno correctamente");
 			}else{
 				toastr.error("Este alumno ya se encuentra en el grupo");

@@ -16,7 +16,6 @@ angular
 		if(result){
 			if(result.materia_id != undefined)
 				rc.existe = true;
-			console.log(result);
 			rc.capturaCalificaciones = result;
 		}
 	})
