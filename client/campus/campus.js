@@ -49,7 +49,7 @@ angular.module("casserole")
 			campus.estatus = true;
 			campus.usuarioInserto = Meteor.userId();
 			campus.fechaCreacion = new Date();
-			SaveService.save('campus', campus, function(err, message){
+			SaveService.save('Campus', campus, function(err, message){
 				if(err){
 					toastr.error(err);
 					return
