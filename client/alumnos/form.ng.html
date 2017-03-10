@@ -26,22 +26,32 @@
 			<h4>Datos de Usuario</h4>
 			<div class="well">
 				<div class="row">
-					<div class="col-sm-3">
+					<div class="col-sm-2">
 						<label>Fotografía</label>
 						<button class="btn btn-primary" ng-click="al.tomarFoto()"><i class="fa fa-camera"></i></button>
 						<img width="100px" ng-src="{{al.alumno.profile.fotografia}}" ng-class="{'img-thumbnail': !!al.alumno.profile.fotografia}" />
 					</div>
-				  <div class="col-sm-3" valida>
+				  <div class="col-sm-2" valida>
 				    <label for="username">Usuario *</label>
 				    <input name="username" type="text" class="form-control"  placeholder="Usuario" ng-model="al.alumno.username" required="" readonly="">
 					</div>
-					<div class="col-sm-3" valida>
-				    <label for="password">Contraseña *</label>
-				    <input name="password" type="password" class="form-control " placeholder="Contraseña" ng-model="al.alumno.password" required="" id="contra">						
+					<div class="col-sm-3" ng-class="!al.validaContrasena == true ? 'has-error' : 'has-success'">
+			    	<label>Contraseña *</label>
+			    	<input type="password" class="form-control" placeholder="Contraseña"
+			    	ng-model="al.alumno.password"
+			    	ng-disabled="al.cambiarPassword"
+			    	ng-change="al.validarContrasena(al.alumno.password, al.alumno.confirmarContrasena)">
+		    	</div>
+		    	<div class="col-sm-3" ng-class="!al.validaContrasena == true ? 'has-error' : 'has-success'">					    
+			    	<label>Confirmar Contraseña *</label>
+			    	<input type="password" class="form-control" placeholder="Confirmar Contraseña" 
+			    	ng-model="al.alumno.confirmarContrasena" 
+			    	ng-disabled="al.cambiarPassword"
+			    	ng-change="al.validarContrasena(al.alumno.password, al.alumno.confirmarContrasena)">
+			    	<div class="note note-success" ng-if="!al.validaContrasena == true && al.alumno.confirmarContrasena.length > 0">Las contraseñas no coinciden.</div>
 					</div>
-					<div class="col-sm-3" valida>
-				    <label for="repeatPassword">Repetir Contraseña *</label>
-				    <input name="repeatPassword" type="password" class="form-control" placeholder="Repetir Contraseña" ng-model="al.alumno.profile.repeatPassword" required="">
+					<div class="col-sm-2"> 
+						<button class="btn btn-primary btn-sm" ng-click="al.cambiarContrasena()">{{(al.cambiarPassword == true) ? 'Cambiar Contraseña' : 'No cambiar'}}</button>
 					</div>
 				</div>
 			</div>			

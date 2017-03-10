@@ -54,8 +54,6 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 				rc.nuevo = true;
 				rc.recepcionista = {};
 				$('.collapse').collapse('hide');
-				form.$setPristine();
-				form.$setUntouched();	
 			}
 		});
 	};
@@ -81,8 +79,6 @@ function RecepcionistasCtrl($scope, $meteor, $reactive,  $state, $stateParams, t
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
-		form.$setPristine();
-		form.$setUntouched();
 		this.validaUsuario = false;
 		this.validaContrasena = false;
 	};

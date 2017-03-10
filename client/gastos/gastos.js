@@ -29,7 +29,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   });
 
   this.subscribe('pagos', () => {
-    return [{semanaPago: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
+    return [{semanaPago: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : '', estatus : 1}];
   });
 
   this.subscribe('comisiones', () => {
@@ -147,8 +147,10 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	////////Depositos////////
 	
   this.importeDiarioPagos = function(dia, cuenta_id){
+	  console.log(dia, cuenta_id);
     pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
+    console.log(importe);
     return importe;
   }
 

@@ -29,6 +29,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.cantPagadas 		= 0;
 	this.cantSeleccionados = 0;
 	this.mostrarOcultarSep = false;
+	this.seccion_id = "";
+	this.cambiarPassword = true;
 	window.rc = rc;
 	this.i = 0;
 	this.subscribe("ocupaciones",()=>{
@@ -62,7 +64,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 
 	this.subscribe("cuentas",()=>{
-		return [{activo:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+		return [{activo:true, seccion_id : this.getReactively("seccion_id")}]
 	});
 
 	this.subscribe("grupos",() => {
@@ -157,40 +159,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	  },
 		mediosPublicidad : () => {
 			return MediosPublicidad.find();
-		}/*
-,
-		cantidades : () => {
-				this.cantPendientes = 0;		
-				this.cantPagadas = 0;
-				this.cantCanceladas = 0;
-				this.cantAtrasadas = 0;
-				this.cantCondonadas = 0;
-				_.each(rc.planPagosCollec, function(pago){
-					
-					if(pago.estatus == 1)
-						rc.cantPagadas += 1;
-					else if(pago.estatus == 0 && (pago.semana >= rc.semanaPago && pago.anio >= rc.anioActual))
-						rc.cantPendientes++;
-					else if(pago.estatus == 3){
-						rc.cantCondonadas++;
-					}
-					else if(pago.estatus == 2){
-						rc.cantCanceladas++;
-					}
-					else if(pago.tiempoPago == 1 || pago.anio < rc.anioActual || (pago.semana < rc.semanaPago && pago.anio == rc.anioActual)){
-						rc.cantAtrasadas++;
-					}
-					
-				});
-				console.log("checando", rc.cantPendientes, rc.cantPagadas, rc.planPagosCollec.length);
-				rc.cantPendientes = (rc.cantPendientes / rc.planPagosCollec.length ) * 100;
-				rc.cantPagadas 		= (rc.cantPagadas 	 / rc.planPagosCollec.length ) * 100;
-				rc.cantCondonadas = (rc.cantCondonadas / rc.planPagosCollec.length ) * 100;
-				rc.cantCanceladas = (rc.cantCanceladas / rc.planPagosCollec.length ) * 100;
-				
-				console.log("checando f", rc.cantPendientes, rc.cantPagadas, rc.planPagosCollec.length);
 		}
-*/
 	});
 
 	this.grupo = function (grupoId){
@@ -200,8 +169,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.actualizar = function(alumno,form){
 		var alumnoTemp = Meteor.users.findOne({_id : alumno._id});
+		
+/*
+		if()
 		this.alumno.password = alumnoTemp.password;
 		this.alumno.repeatPassword = alumnoTemp.password;
+*/
 		//document.getElementById("contra").value = this.alumno.password;
 
 		if(form.$invalid){
@@ -212,13 +185,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var apPaterno = alumno.profile.apPaterno != undefined ? alumno.profile.apPaterno + " " : "";
 		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
 		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
-		delete alumno.profile.repeatPassword;
-		Meteor.call('updateGerenteVenta', rc.alumno, "alumno");
+		//delete alumno.profile.repeatPassword;
+		console.log("rc.alumno", rc.alumno);
+		Meteor.call('modificarUsuario', rc.alumno, "alumno");
 		toastr.success('Actualizado correctamente.');
 		$('.collapse').collapse('hide');
 		this.nuevo = true;
-		form.$setPristine();
-		form.$setUntouched();
 		$state.go('root.alumnos');
 	};
 	
@@ -367,6 +339,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		}	
 		rc.pagaCon =rc.totalPagar-configuracion.abono;
+		this.seccion_id = configuracion.seccion_id;
 		if(rc.pagaCon < 0)
 			rc.pagaCon = 0;
 		rc.ttotalpagar = rc.pagaCon
@@ -856,12 +829,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			var condonado= Pagos.insert({
 				fechaPago 	: new Date(),
 				alumno_id 	: configuracion.alumno_id,
-				grupo_id	: configuracion.grupo_id,
+				grupo_id		: configuracion.grupo_id,
 				seccion_id  : configuracion.seccion_id,
 				campus_id 	: configuracion.campus_id,
-				estatus 	: 1,
+				estatus 		: 1,
 				usuario_id 	: Meteor.userId(),
-				importe 	: this.ppago,
+				importe 		: this.ppago,
 				pago        : this.ppago,
 
 				//cuenta_id   : rc.cuentaInscripcion._id,
@@ -1293,8 +1266,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 		var abonado = Pagos.insert({
 			fechaPago 	: new Date(),
-			alumno_id 	: configuracion.alumno_id,
-			grupo_id		: configuracion.grupo_id,
+			alumno_id 	: inscripcion.alumno_id,
+			grupo_id		: inscripcion.grupo_id,
 			seccion_id  : inscripcion.seccion_id,
 			campus_id 	: inscripcion.campus_id,
 			estatus 		: 1,
@@ -1307,13 +1280,13 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			modulo 			: "abono",
 			descripcion : "Abono",
 			anioPago    : anioPago,
-			inscripcion_id : configuracion._id,
+			inscripcion_id : inscripcion_id,
 			diaSemana		: diaSemana,
 			cuenta_id		: rc.cuenta._id
 		});
 		
 		// a = abonar
-		var url = $state.href("anon.pagosImprimir",{pago : abonado, alumno_id 	: configuracion.alumno_id, tipo : "a"},{newTab : true}); 
+		var url = $state.href("anon.pagosImprimir",{pago : abonado, alumno_id 	: inscripcion.alumno_id, tipo : "a"},{newTab : true}); 
 		
 		window.open(url,'_blank');
 		//toastr.success('Guardado correctamente.');
@@ -1395,4 +1368,26 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	  }
 	  
   }
+  
+  this.validarContrasena = function(contrasena, confirmarContrasena){
+		if(contrasena && confirmarContrasena){
+			if(contrasena === confirmarContrasena && contrasena.length > 0 && confirmarContrasena.length > 0){
+				rc.validaContrasena = true;
+			}else{
+				rc.validaContrasena = false;
+			}
+		}
+	}
+	
+	this.cambiarContrasena = function(){
+		this.cambiarPassword = !this.cambiarPassword;
+		if(this.alumno.cambiarContrasena == false){
+			rc.alumno.password = undefined;
+			rc.alumno.confirmarContrasena = undefined;
+		}else{
+			rc.alumno.password = "";
+			rc.alumno.confirmarContrasena = "";
+		}
+	}
+
 }

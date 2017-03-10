@@ -93,7 +93,7 @@ Meteor.methods({
 			roles: [rol],
 			profile: usuario.profile
 		}});
-		
+		console.log(user._id, usuario.password);
 		Accounts.setPassword(user._id, usuario.password, {logout: false});		
 	},
 	updateDirector: function (usuario, rol) {		
@@ -154,6 +154,7 @@ Meteor.methods({
 	  
   },
   modificarUsuario: function (usuario, rol) {		
+	  console.log("usuario enviado", usuario);
 		var user = Meteor.users.findOne(usuario._id);
 	  Meteor.users.update({_id: user._id}, {$set:{
 			username: usuario.username,
@@ -161,6 +162,7 @@ Meteor.methods({
 			profile: usuario.profile
 		}});
 		
+		console.log("user", user);
 		if(usuario.password != undefined){
 			Accounts.setPassword(user._id, usuario.password, {logout: false});		
 		}
