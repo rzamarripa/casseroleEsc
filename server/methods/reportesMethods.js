@@ -58,23 +58,25 @@ Meteor.methods({
     return _.toArray(arreglo);
   },
   historialCobranza : function (fechaInicial, fechaFinal, seccion_id, usuario_id, modulo) {
-	  fechaInicial = moment(fechaInicial).add(-1, "days");
+	  console.log(seccion_id, usuario_id, modulo);
+	  fechaInicial = fechaInicial.setHours(0,0);
 	  var query = {};
 	  if(usuario_id == "todos" || usuario_id == undefined){
-		  if(modulo == "todos"){
-			  query = {seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  
+		  if(modulo == "todos" || modulo == undefined){
+			  query = {seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24,0))}}
 		  }else{
-			  query = {modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+			  query = {modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24,0))}}
 		  }
 	  }else{
-		  if(modulo == "todos"){
-			  query = {usuarioInserto_id : usuario_id, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+		  if(modulo == "todos" || modulo == undefined){
+			  query = {usuarioInserto_id : usuario_id, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24,0))}}
 		  }else{
-			  query = {usuarioInserto_id : usuario_id, modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24))}}
+			  query = {usuarioInserto_id : usuario_id, modulo : modulo, seccion_id : seccion_id, fechaPago : {$gte : new Date(fechaInicial), $lt: new Date(fechaFinal.setHours(24,0))}}
 		  }
 	  }	  
-	  
-		 var otrosPagos = PlanPagos.find(query).fetch(); 
+	  console.log(query);
+		 var otrosPagos = PlanPagos.find(query).fetch();
 	  
 	  _.each(otrosPagos, function(pago){
 		  pago.concepto = ConceptosPago.findOne({_id : pago.concepto_id});

@@ -45,6 +45,7 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		  _.each(result, function(cobro){
 			  rc.totales += cobro.importe;
 		  })
+		  console.log(result);
 		  rc.otrosCobros = result;
 		  NProgress.set(1);
 	    $scope.$apply();
@@ -55,5 +56,16 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
     var simple = new Date(y, 0, 1 + (w - 1) * 7);
     rc.fechaInicial = new Date(simple);
     rc.fechaFinal = new Date(moment(simple).add(7,"days"));
+	}
+	
+	this.cancelarPago = function(planPago){
+		Meteor.apply('cancelarPago', [planPago], function(error, result){
+		  if(result){
+			  toastr.success("Se canceló correctamente");
+		  }
+		  NProgress.set(1);
+	    $scope.$apply();
+	  });
+		
 	}
 };

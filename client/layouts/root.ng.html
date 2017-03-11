@@ -11,37 +11,14 @@
 			<div ng-include="'client/layouts/avisosVendedor.html'"></div>
 		</div>
 		
+		<!-- Pánel de mensajes para alumnos -->
 		<div ng-if="currentUser.roles[0] == 'alumno'">
 			<div ng-include="'client/layouts/avisosAlumnos.html'"></div>
 		</div>
 	</div>
 	
   <div class="pull-right">
-	  <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
-			<li class="">
-				<a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown" aria-expanded="false"> 
-					<img src="{{ro.tieneFoto(currentUser.profile.sexo, currentUser.profile.foto)}}" alt="{{currentUser.profile.nombreCompleto}}" class="online">  
-				</a>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-user"></i> {{currentUser.profile.nombreCompleto}}</a>
-					</li>
-					<li class="divider"></li>
-					<li ng-show="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorAcademico' || currentUser.roles[0] == 'coordinadorFinanciero' || currentUser.roles[0] == 'recepcionista'" >
-						<a href="javascript:void(0);" ui-sref="root.cambiarSeccion" class="padding-10 padding-top-0 padding-bottom-0" ><i class="fa fa-building"></i> Cambiar <u>E</u>scuela</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a full-screen href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Pantalla <u>C</u>ompleta</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a ui-sref="anon.logout" href="#" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out"></i> <strong><u>C</u>errar Sesión</strong></a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-		
+	  		
     <div id="hide-menu" class="btn-header pull-right">
       <span>
         <a toggle-menu title="Collapse Menu">
@@ -49,8 +26,6 @@
         </a>
       </span>
     </div>
-    
-    
     
     <div class="btn-header transparent pull-right" ng-hide="currentUser.roles[0] == 'alumno' || currentUser.roles[0] == 'maestro' || currentUser.roles[0] == 'vendedor'">
       <span>
@@ -85,9 +60,9 @@
 				<img ng-if="ro.usuarioActual.profile.fotografia" ng-src="{{ro.usuarioActual.profile.fotografia}}" alt="yo" class="online"> 
 				<img ng-if="!ro.usuarioActual.profile.fotografia" src="/img/avatars/male.png" alt="yo" class="online"> 
 				<span>
-					{{ro.usuarioActual.profile.nombre}} {{ro.usuarioActual.profile.apPaterno}} {{ro.usuarioActual.profile.apMaterno}}
+					{{ro.usuarioActual.profile.nombre}} {{ro.usuarioActual.profile.apPaterno}}
 				</span>
-			</a>			
+			</a>
 		</span>
 	</div>
   <div ng-include=" 'client/layouts/left-nav.ng.html' "></div>
@@ -107,4 +82,26 @@
 		</ol>
   </div>
   <div id="content" ui-view></div>
+</div>
+<div id="shortcut">
+	<ul>
+		<li>
+			<a href="#ajax/inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
+		</li>
+		<li>
+			<a href="#ajax/calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
+		</li>
+		<li>
+			<a href="#ajax/gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
+		</li>
+		<li>
+			<a href="#ajax/invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
+		</li>
+		<li>
+			<a href="#ajax/gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
+		</li>
+		<li>
+			<a href="#ajax/profile.html" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+		</li>
+	</ul>
 </div>

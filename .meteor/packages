@@ -44,7 +44,6 @@ peerlibrary:fs
 modules@0.7.7
 meteorhacks:aggregate
 angularui:ui-calendar
-planettraining:jquery-fullcalendar
 
 shell-server
 email
@@ -53,3 +52,4 @@ smowden:offline-js
 meteorhacks:async
 mobile-status-bar
 angular:angular-material
+fastclick

@@ -183,6 +183,8 @@ function RootCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr, $mdT
 			}
 		})
 	}else if(Meteor.user() && Meteor.user().roles && Meteor.user().roles[0] == "alumno"){ 
+		//Alumno
+		
 		this.solicitudes_ids = [];
 		
 		this.subscribe("alumnos",()=>{

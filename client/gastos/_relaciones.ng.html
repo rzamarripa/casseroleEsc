@@ -66,6 +66,10 @@
 	        <td class="text-center">{{gc.registrosComision}}</td>
 	        <td class="text-right">{{gc.comisiones(gc.cuentaActiva._id) | currency}}</td>
 	      </tr>
+	      <tr>
+		      <td colspan="2" class="text-right"><strong>Total</strong></td>
+		      <td class="text-right"><span class="pull-right"><strong>{{gc.restosInscripcion(gc.cuentaActiva._id) + gc.comisiones(gc.cuentaActiva._id) | currency}}</strong></span></td>
+	      </tr>
 	    </tbody>
 	  </table>
 	</div>
@@ -99,6 +103,5 @@
 	      </tr>
 	    </tbody>
 	  </table>
-	  <span class="pull-right">Total: {{gc.restosInscripcion(gc.cuentaActiva._id) + gc.comisiones(gc.cuentaActiva._id) | currency}}</span>
 	</div>
 </div>
