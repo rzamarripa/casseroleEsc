@@ -108,28 +108,6 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 			  })
 		  }
 			transmutar = _.toArray(transmutar);
-			
-			
-			if(this.getReactively("existenAsistencias")>0){
-				var arreglo = {};
-				_.each(rc.getReactively("diasUnicos"), function(diaUnico){
-					_.each(rc.getReactively("asistencias"), function(asistencia){
-						if(arreglo[diaUnico + asistencia.alumno_id] != undefined){
-							arreglo[diaUnico + asistencia.alumno_id] = {};
-							arreglo[diaUnico + asistencia.alumno_id].nombre = asistencia.profile.nombreCompleto;
-							arreglo[diaUnico + asistencia.alumno_id].dias = [];
-							arreglo[diaUnico + asistencia.alumno_id].dias.push(asistencia.estatus);
-						}else{
-							arreglo[diaUnico + asistencia.alumno_id].dias.push(asistencia.estatus);
-						}
-					})
-				})
-					
-			}
-			
-			console.log(arreglo);
-			
-			
 			return transmutar;
 	  }
   });
