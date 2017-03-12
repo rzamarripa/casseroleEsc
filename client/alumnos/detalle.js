@@ -38,7 +38,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 	
 	this.subscribe("planPagos",()=>{
-		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", modulo : "colegiatura" }]
+		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
 	this.subscribe("turnos",()=>{
@@ -100,7 +100,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return Pagos.find();
 		},
 		planPagos : () => {
-			var raw = PlanPagos.find().fetch();
+			var raw = PlanPagos.find({modulo : "colegiatura"}).fetch();
 			var planes = [];
 			
 			if(raw != undefined){
@@ -829,7 +829,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				var conceptoPago = ConceptosPago.findOne(pago.concepto_id);
 				if(pago.tmpestatus == 5){
 					if(pago.faltante){
-						pago.pago = pago.importe-pago.pago;
+						pago.pago = pago.importe-pago.pago;;
 					}
 					else{
 						pago.pago = pago.importe;
@@ -866,21 +866,23 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						diaPago 		: moment().date(),
 						diaSemana 	: moment().isoWeekday(),
 						tiempoPago 	: 0,
-						alumno_id 	: pago.alumno_id,
-						inscripcion_id : pago.inscripcion_id,
-						seccion_id 	: pago.seccion_id,
-						campus_id 	: pago.campus_id,
+						alumno_id 	: configuracion.alumno_id,
+						inscripcion_id : configuracion._id,
+						seccion_id 	: configuracion.seccion_id,
+						campus_id 	: configuracion.campus_id,
 						cuenta_id 	: conceptoPago.cuenta_id,
 						usuarioInserto_id : Meteor.userId(),
 						modulo : "inscripcion",
-						descripcion : "Inscripción",
-						nombre : "Inscripción"
+						descripcion : pago.descripcion,
+						nombre : pago.nombre
 					});
-					//TODO ME QUEDE HACIENDO LOS PAGOS PARCIALES
+					
+/*
 					pago.pago = pago.tmpPago + pago.pago;
 					pago.pago_id = nuevoPago;
-					var planPago = PlanPagos.findOne({pago_id : pago.pago_id});
-					PlanPagos.update({_id : planPago._id}, {$set : pago});
+*/
+					console.log("primer concepto", pago);
+					PlanPagos.update({_id : pago.planPago_id}, {$set : pago});
 					
 					pagosInsertados.push(nuevoPago);
 					delete pago.tmpestatus;

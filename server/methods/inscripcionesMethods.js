@@ -382,11 +382,9 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
 				//Se inserta el pago completo
 				var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
-				console.log("pago id", pago_id);
-				//Se asigna el id del pago al pago de la inscripcion
-				inscripcion.pagos[connceptoId].pago_id = pago_id;
+				
 				//Se insertan los pagos generados en Plan Pagos
-				PlanPagos.insert({
+				var planPago_id = PlanPagos.insert({
 					pago_id : pago_id,
 					orden : concepto.orden,
 	        nombre : concepto.nombre,
@@ -416,6 +414,11 @@ Meteor.methods({
 	        inscripcion_id 		: inscripcion._id,
 	        alumno_id 	: usuario_id
 				})
+				
+				console.log("pago id", pago_id);
+				//Se asigna el id del pago al pago de la inscripcion
+				inscripcion.pagos[connceptoId].pago_id = pago_id;
+				inscripcion.pagos[connceptoId].planPago_id = planPago_id;
 			}
 			else if(remanente>0){
 				//Si quedó dinero entonces se hace un abono al concepto pago
@@ -440,12 +443,9 @@ Meteor.methods({
 					inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
 					//Se inserta el pago completo
 					var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
-					console.log("pago id-", pago_id);
-					//Se asigna el id del pago al pago de la inscripcion
-					inscripcion.pagos[connceptoId].pago_id = pago_id;
-					console.log(inscripcion.pagos[connceptoId])
+					
 					//Se insertan los pagos generados en Plan Pagos
-					PlanPagos.insert({
+					var planPago_id = PlanPagos.insert({
 						pago_id : pago_id,
 						pago : remanente,
 						faltante : inscripcion.pagos[connceptoId].faltante=inscripcion.pagos[connceptoId].importeRegular-remanente,
@@ -476,15 +476,21 @@ Meteor.methods({
 		        inscripcion_id : inscripcion._id,
 		        alumno_id : usuario_id
 					})
+					
+					console.log("pago id-", pago_id);
+					//Se asigna el id del pago al pago de la inscripcion
+					inscripcion.pagos[connceptoId].pago_id = pago_id;
+					inscripcion.pagos[connceptoId].planPago_id = planPago_id;
+					console.log(inscripcion.pagos[connceptoId])
+					
 				}
 				else{
 					inscripcion.abono+=remanente;
-					
-					
-				}	
+				}
 			}else{
+				
 				//Se insertan los pagos generados en Plan Pagos
-				PlanPagos.insert({
+				var planPago_id = PlanPagos.insert({
 					orden : concepto.orden,
 	        nombre : concepto.nombre,
 	        descripcion : concepto.nombre,
@@ -503,7 +509,9 @@ Meteor.methods({
 	        diasDescuento : inscripcion.planPagos.inscripcion.diasDescuento,
 	        inscripcion_id : inscripcion._id,
 	        alumno_id : usuario_id
-				})
+				});
+				
+				inscripcion.pagos[connceptoId].planPago_id = planPago_id;
 			}
 			
 			
