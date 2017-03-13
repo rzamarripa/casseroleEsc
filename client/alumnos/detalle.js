@@ -38,7 +38,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	});
 	
 	this.subscribe("planPagos",()=>{
-		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "", modulo : "colegiatura" }]
+		return [{alumno_id : $stateParams.alumno_id, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
 	
 	this.subscribe("turnos",()=>{
@@ -100,7 +100,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			return Pagos.find();
 		},
 		planPagos : () => {
-			var raw = PlanPagos.find().fetch();
+			var raw = PlanPagos.find({modulo : "colegiatura"}).fetch();
 			var planes = [];
 			
 			if(raw != undefined){
@@ -824,35 +824,15 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			sortObjects(configuracion.planPagos.inscripcion.conceptos,"orden",false,false);
 			//console.log(configuracion.planPagos.inscripcion.conceptos);
 			var ccinscripcion=Object.keys(configuracion.planPagos.inscripcion.conceptos)[0];
-
-			
-			var condonado= Pagos.insert({
-				fechaPago 	: new Date(),
-				alumno_id 	: configuracion.alumno_id,
-				grupo_id		: configuracion.grupo_id,
-				seccion_id  : configuracion.seccion_id,
-				campus_id 	: configuracion.campus_id,
-				estatus 		: 1,
-				usuario_id 	: Meteor.userId(),
-				importe 		: this.ppago,
-				pago        : this.ppago,
-
-				//cuenta_id   : rc.cuentaInscripcion._id,
-				diaPago     : this.diaActual,
-				mesPago     : mesPago,
-				semanaPago  : semanaPago,
-				anioPago    : anioPago,
-				inscripcion_id : configuracion._id
-			});
-			
+			var pagosInsertados = [];
 			_.each(configuracion.pagos, function(pago,ipago) {
+				var conceptoPago = ConceptosPago.findOne(pago.concepto_id);
 				if(pago.tmpestatus == 5){
 					if(pago.faltante){
-						pago.pago = pago.importe-pago.pago;
+						pago.pago = pago.importe-pago.pago;;
 					}
 					else{
 						pago.pago = pago.importe;
-						
 					}
 					console.log(ipago,ccinscripcion)
 					if(ipago==ccinscripcion){
@@ -865,22 +845,56 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					pago.diaPago = moment().isoWeekday();
 					pago.estatus = 1;		
 					pago.importe = pago.tmpPago;
-					pago.pago_id=condonado
+					
 
 					pago.faltante = 0;
 					//rc.condonarPago(pago,semanasCondonadas);
 					
 					
 					//delete pago._id;
+					
+					
+					var nuevoPago = Pagos.insert({
+						importeRegular : pago.tmpPago,
+						pago : pago.pago,
+						estatus 		: 1,
+						fechaPago 	: new Date(),
+						concepto_id : pago.concepto_id,
+						semanaPago 	: moment().isoWeek(),
+						anioPago 		: moment().get('year'),
+						mesPago 		: moment().get('month')+1,
+						diaPago 		: moment().date(),
+						diaSemana 	: moment().isoWeekday(),
+						tiempoPago 	: 0,
+						alumno_id 	: configuracion.alumno_id,
+						inscripcion_id : configuracion._id,
+						seccion_id 	: configuracion.seccion_id,
+						campus_id 	: configuracion.campus_id,
+						cuenta_id 	: conceptoPago.cuenta_id,
+						usuarioInserto_id : Meteor.userId(),
+						modulo : "inscripcion",
+						descripcion : pago.descripcion,
+						nombre : pago.nombre
+					});
+					
+/*
+					pago.pago = pago.tmpPago + pago.pago;
+					pago.pago_id = nuevoPago;
+*/
+					console.log("primer concepto", pago);
+					PlanPagos.update({_id : pago.planPago_id}, {$set : pago});
+					
+					pagosInsertados.push(nuevoPago);
 					delete pago.tmpestatus;
-					delete pago.tmpPago
-					PlanPagos.update(idTemp, {$set : pago});
+					delete pago.tmpPago;
+					
+					
 				}
 			});
 			var idTemp = configuracion._id;
 			Inscripciones.update({_id:configuracion._id},{$set:{pagos:configuracion.pagos,abono:configuracion.abono}});
 			
-			$state.go("anon.pagosImprimir",{pago : condonado,alumno_id 	: configuracion.alumno_id}); 
+			$state.go("anon.pagosImprimir",{pago : pagosInsertados, alumno_id 	: configuracion.alumno_id}); 
 		}
 	}
 	this.planPagosSemana =function (inscripcion) {

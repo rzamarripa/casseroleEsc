@@ -439,23 +439,24 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var res = confirm("Revise que la Carga Inicial esté activada en caso de inscribir alumnos ya existentes, o desactivada para inscribir un alumno a un grupo nuevo.?");
 		if(res == true){
 			console.log(inscripcion);
-/*
+
 			Meteor.call('inscribirAlumno', inscripcion, function(error, result){
 				if(error){
 					console.log(error);
 				}else{
 					if(result){
 						toastr.success('Alumno Inscrito');
-						//$state.go("root.alumnoDetalle",{alumno_id : result});
+						$state.go("root.alumnoDetalle",{alumno_id : result});
 					}
 				}
 			});
-*/
-			
+/*
+			console.log(this.pagosRealizados);
 			for (var i = 0; i < this.pagosRealizados.length; i++) {
 				console.log(this.pagosRealizados[i]);
-				//Pagos.insert(this.pagosRealizados[i]);
+				Pagos.insert(this.pagosRealizados[i]);
 			}
+*/
 		}
 	}
 	

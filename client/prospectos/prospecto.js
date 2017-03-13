@@ -73,6 +73,9 @@ angular.module("casserole")
 	  mediosPublicidad : () => {
 		  return MediosPublicidad.find();
 	  },
+	  ocupaciones : () => {
+		  return Ocupaciones.find();
+	  }
 	});
   
   this.nuevaLlamada = true;

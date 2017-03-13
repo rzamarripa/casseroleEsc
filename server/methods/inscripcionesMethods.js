@@ -65,15 +65,16 @@ Meteor.methods({
 					modificada        : false,
 					mes               : pago.mes,
 					anio              : pago.anio,
-					pago_id           : inscripcion.pago_id,
 					modulo						: "colegiatura",
 					cuenta_id					: cuentaActiva._id,
 					descripcion				: "Colegiatura",
 					usuarioInserto_id : Meteor.userId()
 				}
 				
-		  	}else{
-		  		var fechaActual = moment();
+				var pago_id = Pagos.insert(nuevoPago);
+				nuevoPago.pago_id = pago_id;				
+	  	}else{
+	  		var fechaActual = moment();
 				var fechaCobro = moment(pago.fecha);
 				var diasRecargo = fechaActual.diff(fechaCobro, 'days')
 				var diasDescuento = fechaCobro.diff(fechaActual, 'days')
@@ -84,63 +85,68 @@ Meteor.methods({
 					pesos = pago.importeRegular+pago.importeRecargo;
 					tiempoPago =1;
 				}
-				
+			
 
-		    	nuevoPago = {
-		  			alumno_id         : inscripcion.alumno_id,
-						inscripcion_id    : inscripcion._id,
-						vendedor_id       : inscripcion.vendedor_id,
-						seccion_id        : inscripcion.seccion_id,
-						campus_id         : inscripcion.campus_id,
-						fechaInscripcion  : inscripcion.fechaInscripcion,
-						semana            : pago.semana,
-						fecha             : pago.fecha,
-						fechaCreacion			: new Date(),
-						dia               : pago.dia,
-						tipoPlan          : pago.tipoPlan,
-						numeroPago        : pago.numeroPago,
-						importeRecargo    : pago.importeRecargo,
-						importeDescuento  : pago.importeDescuento,
-						importeRegular    : pago.importeRegular,
-						diasRecargo       : pago.diasRecargo,
-						diasDescuento     : pago.diasDescuento,
-						importe           : pesos,
-						faltante          : pago.faltante,
-						pago              : 0,
-						mesPago					  : undefined,
-					  anioPago				  : undefined,
-						fechaPago         : undefined,
-						semanaPago        : undefined,
-						diaPago           : undefined,
-						diaSemana					: diaSemana,
-						estatus           : pago.estatus,
-						tiempoPago        : tiempoPago,
-						modificada        : false,
-						mes               : pago.mes,
-						anio              : pago.anio,
-						pago_id           : undefined,
-						modulo						: "colegiatura",
-						cuenta_id					: cuentaActiva._id,
-						descripcion				: "Colegiatura"			
-					}
-	  		}
+	    	nuevoPago = {
+	  			alumno_id         : inscripcion.alumno_id,
+					inscripcion_id    : inscripcion._id,
+					vendedor_id       : inscripcion.vendedor_id,
+					seccion_id        : inscripcion.seccion_id,
+					campus_id         : inscripcion.campus_id,
+					fechaInscripcion  : inscripcion.fechaInscripcion,
+					semana            : pago.semana,
+					fecha             : pago.fecha,
+					fechaCreacion			: new Date(),
+					dia               : pago.dia,
+					tipoPlan          : pago.tipoPlan,
+					numeroPago        : pago.numeroPago,
+					importeRecargo    : pago.importeRecargo,
+					importeDescuento  : pago.importeDescuento,
+					importeRegular    : pago.importeRegular,
+					diasRecargo       : pago.diasRecargo,
+					diasDescuento     : pago.diasDescuento,
+					importe           : pesos,
+					faltante          : pago.faltante,
+					pago              : 0,
+					mesPago					  : undefined,
+				  anioPago				  : undefined,
+					fechaPago         : undefined,
+					semanaPago        : undefined,
+					diaPago           : undefined,
+					diaSemana					: diaSemana,
+					estatus           : pago.estatus,
+					tiempoPago        : tiempoPago,
+					modificada        : false,
+					mes               : pago.mes,
+					anio              : pago.anio,
+					pago_id           : undefined,
+					modulo						: "colegiatura",
+					cuenta_id					: cuentaActiva._id,
+					descripcion				: "Colegiatura"			
+				}
+  		}
 		  
 			PlanPagos.insert(nuevoPago);
 		})
+		
+		
+		
 		inscripcion.planPagos.fechas = undefined;
 
+/*
 		for(var idd in inscripcion.pagos){
 	  		if(inscripcion.pagos[idd].estatus != 0)
-				inscripcion.pagos[idd].pago_id = inscripcion.pago_id;
+				//inscripcion.pagos[idd].pago_id = inscripcion.pago_id;
 		}
+*/
 		Inscripciones.update({_id:inscripcion._id},{$set:{pagos:inscripcion.pagos,planPagos:inscripcion.planPagos}});
 	},
 	reactivarPlanPagos : function(inscripcion) {
-		//PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
+		PlanPagos.update({inscripcion_id : inscripcion, estatus : 2}, {$set : { estatus : 0}}, {multi : true});
 	},
 	cancelarPlanPagos : function(inscripcion) {
 		var inscripcion = Inscripciones.findOne(inscripcion);
-		//PlanPagos.update({inscripcion_id : inscripcion, estatus : 0}, {$set : { estatus : 2}}, {multi : true});
+		PlanPagos.update({inscripcion_id : inscripcion, estatus : 0}, {$set : { estatus : 2}}, {multi : true});
 		var grupos = Grupos.find(
 			{ "alumnos.alumno_id": inscripcion.alumno_id }
 		).fetch();
@@ -255,6 +261,7 @@ Meteor.methods({
 		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
 		var configColegiatura = inscripcion.planPagos.colegiatura[inscripcion.planPagos.colegiatura.tipoColegiatura];
 		var cuentaInscripcion = Cuentas.findOne({seccion_id : grupo.seccion_id, inscripcion : true});
+		var cuentaActiva = Cuentas.findOne({estatus:true, seccion_id : grupo.seccion_id});
 		
 		//PREPARAR PLAN DE PAGOS
 		var remanente =  configColegiatura.importeRegular;
@@ -328,57 +335,198 @@ Meteor.methods({
 		var configInscripcion = undefined;
 		var inscripcionConnceptoId= undefined;
 		inscripcion.planPagos.inscripcion.conceptos = sortObjects(inscripcion.planPagos.inscripcion.conceptos,"orden",false,false);
+		//SE INSERTA LA INSCRIPCIÓN UNA VEZ QUE SABEMOS EL ID DEL ALUMNO
+		inscripcion._id = Inscripciones.insert(inscripcion);
+		
 		_.each(inscripcion.planPagos.inscripcion.conceptos,function(concepto,connceptoId){
 			if(!configInscripcion){
 				configInscripcion = concepto;
 				inscripcionConnceptoId = connceptoId;
 			}
+			var conceptoActual = ConceptosPago.findOne(connceptoId);
+			//Se genera el pago del concepto
 			inscripcion.pagos[connceptoId]={
-				_id:connceptoId,
+				concepto_id:connceptoId,
 				importeRegular:concepto.importe,
 				importeDescuento:concepto.importe-conIns.importeDescuento,
 				importeRecargo:concepto.importe+conIns.importeRecargo,
 				importe:concepto.importe,
 				estatus:0,
 				nombre:concepto.nombre,
+				descripcion : concepto.nombre,
+				modulo : "inscripcion",
 				pago:0,
 				tiempoPago: 0,
 				fecha: inscripcion.fechaInscripcion,
 				fechaRegistro: new Date(),
 				restante:0
 			};
+			
 			if(remanente>=concepto.importe){
-				inscripcion.pagos[connceptoId].pago=inscripcion.pagos[connceptoId].importeRegular;
+				//Si pagó completo el concepto pago
+				inscripcion.pagos[connceptoId].pago = inscripcion.pagos[connceptoId].importeRegular;
 				inscripcion.pagos[connceptoId].estatus=1;
 				inscripcion.pagos[connceptoId].fechaPago = new Date();
+				inscripcion.pagos[connceptoId].concepto_id = connceptoId;
 				inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 				inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 				inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
 				inscripcion.pagos[connceptoId].diaPago = moment().date();
 				inscripcion.pagos[connceptoId].diaSemana = moment().isoWeekday();
 				inscripcion.pagos[connceptoId].tiempoPago = 0;
+				inscripcion.pagos[connceptoId].alumno_id = usuario_id;
+				inscripcion.pagos[connceptoId].inscripcion_id = inscripcion._id;
+				inscripcion.pagos[connceptoId].seccion_id = grupo.seccion_id;
+				inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
+				inscripcion.pagos[connceptoId].cuenta_id = cuentaActiva._id;
+				inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
+				//Se inserta el pago completo
+				var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
+				
+				//Se insertan los pagos generados en Plan Pagos
+				var planPago_id = PlanPagos.insert({
+					pago_id : pago_id,
+					orden : concepto.orden,
+	        nombre : concepto.nombre,
+	        descripcion : concepto.nombre,
+	        pago : inscripcion.pagos[connceptoId].importeRegular,
+	        importe : concepto.importe,
+	        modificada : false,
+	        modulo : concepto.modulo,
+	        fechaPago 	: new Date(),
+					semanaPago 	: moment().isoWeek(),
+					anioPago 		: moment().get('year'),
+					mesPago 		: moment().get('month')+1,
+					diaPago 		: moment().date(),
+					diaSemana 	: moment().isoWeekday(),
+	        estatus 		: inscripcion.pagos[connceptoId].estatus,
+					cuenta_id 	: conceptoActual.cuenta_id,
+					concepto_id : conceptoActual._id,
+	        campus_id 	: concepto.campus_id,
+	        seccion_id 	: concepto.seccion_id,
+	        usuarioInserto_id : concepto.usuarioInserto,
+	        recargo 		: inscripcion.planPagos.inscripcion.recargo,
+	        importeRecargo 		: inscripcion.planPagos.inscripcion.importeRecargo,
+	        diasRecargo : inscripcion.planPagos.inscripcion.diasRecargo,
+	        descuento 	: inscripcion.planPagos.inscripcion.descuento,
+	        importeDescuento 	: inscripcion.planPagos.inscripcion.importeDescuento,
+	        diasDescuento 		: inscripcion.planPagos.inscripcion.diasDescuento,
+	        inscripcion_id 		: inscripcion._id,
+	        alumno_id 	: usuario_id
+				})
+				
+				console.log("pago id", pago_id);
+				//Se asigna el id del pago al pago de la inscripcion
+				inscripcion.pagos[connceptoId].pago_id = pago_id;
+				inscripcion.pagos[connceptoId].planPago_id = planPago_id;
 			}
 			else if(remanente>0){
+				//Si quedó dinero entonces se hace un abono al concepto pago
 				if(connceptoId==inscripcionConnceptoId){
 					inscripcion.pagos[connceptoId].pago=remanente;
 					inscripcion.pagos[connceptoId].faltante=inscripcion.pagos[connceptoId].importeRegular-remanente;
 					inscripcion.pagos[connceptoId].estatus=6;
 					inscripcion.pagos[connceptoId].fechaPago = new Date();
+					inscripcion.pagos[connceptoId].concepto_id = connceptoId;
+					inscripcion.pagos[connceptoId].cuenta_id = conceptoActual.cuenta_id;
 					inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 					inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 					inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
 					inscripcion.pagos[connceptoId].diaPago = moment().date();
 					inscripcion.pagos[connceptoId].diaSemana = moment().isoWeekday();
 					inscripcion.pagos[connceptoId].tiempoPago = 0;
+					inscripcion.pagos[connceptoId].alumno_id = usuario_id;
+					inscripcion.pagos[connceptoId].inscripcion_id = inscripcion._id;
+					inscripcion.pagos[connceptoId].seccion_id = grupo.seccion_id;
+					inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
+					inscripcion.pagos[connceptoId].cuenta_id = cuentaActiva._id;
+					inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
+					//Se inserta el pago completo
+					var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
+					
+					//Se insertan los pagos generados en Plan Pagos
+					var planPago_id = PlanPagos.insert({
+						pago_id : pago_id,
+						pago : remanente,
+						faltante : inscripcion.pagos[connceptoId].faltante=inscripcion.pagos[connceptoId].importeRegular-remanente,
+						orden : concepto.orden,
+		        nombre : concepto.nombre,
+		        descripcion : concepto.nombre,
+		        modificada : false,
+		        importe : concepto.importe,
+		        modulo : concepto.modulo,
+		        fechaPago 	: new Date(),
+						semanaPago 	: moment().isoWeek(),
+						anioPago 		: moment().get('year'),
+						mesPago 		: moment().get('month')+1,
+						diaPago 		: moment().date(),
+						diaSemana 	: moment().isoWeekday(),
+		        estatus : inscripcion.pagos[connceptoId].estatus,
+						cuenta_id : conceptoActual.cuenta_id,
+						concepto_id : conceptoActual._id,
+		        campus_id : concepto.campus_id,
+		        seccion_id : concepto.seccion_id,
+		        usuarioInserto_id : concepto.usuarioInserto,
+		        recargo : inscripcion.planPagos.inscripcion.recargo,
+		        importeRecargo : inscripcion.planPagos.inscripcion.importeRecargo,
+		        diasRecargo : inscripcion.planPagos.inscripcion.diasRecargo,
+		        descuento : inscripcion.planPagos.inscripcion.descuento,
+		        importeDescuento : inscripcion.planPagos.inscripcion.importeDescuento,
+		        diasDescuento : inscripcion.planPagos.inscripcion.diasDescuento,
+		        inscripcion_id : inscripcion._id,
+		        alumno_id : usuario_id
+					})
+					
+					console.log("pago id-", pago_id);
+					//Se asigna el id del pago al pago de la inscripcion
+					inscripcion.pagos[connceptoId].pago_id = pago_id;
+					inscripcion.pagos[connceptoId].planPago_id = planPago_id;
+					console.log(inscripcion.pagos[connceptoId])
+					
 				}
-				else
+				else{
 					inscripcion.abono+=remanente;
+				}
+			}else{
+				
+				//Se insertan los pagos generados en Plan Pagos
+				var planPago_id = PlanPagos.insert({
+					orden : concepto.orden,
+	        nombre : concepto.nombre,
+	        descripcion : concepto.nombre,
+	        modificada : false,
+	        importe : concepto.importe,
+	        modulo : concepto.modulo,
+	        estatus : 0,
+	        campus_id : concepto.campus_id,
+	        seccion_id : concepto.seccion_id,
+	        usuarioInserto_id : concepto.usuarioInserto,
+	        recargo : inscripcion.planPagos.inscripcion.recargo,
+	        importeRecargo : inscripcion.planPagos.inscripcion.importeRecargo,
+	        diasRecargo : inscripcion.planPagos.inscripcion.diasRecargo,
+	        descuento : inscripcion.planPagos.inscripcion.descuento,
+	        importeDescuento : inscripcion.planPagos.inscripcion.importeDescuento,
+	        diasDescuento : inscripcion.planPagos.inscripcion.diasDescuento,
+	        inscripcion_id : inscripcion._id,
+	        alumno_id : usuario_id
+				});
+				
+				inscripcion.pagos[connceptoId].planPago_id = planPago_id;
 			}
+			
+			
+			
 			remanente-=concepto.importe;
 		});
-
-		//SE INSERTA LA INSCRIPCIÓN UNA VEZ QUE SABEMOS EL ID DEL ALUMNO
-		inscripcion._id = Inscripciones.insert(inscripcion);
+		
+		
+		
+		//Se inserta el pago completo
+		var inscripcionIdTemp = inscripcion._id;
+		delete inscripcion._id;
+		Inscripciones.update({_id : inscripcionIdTemp}, { $set : inscripcion});
+		inscripcion._id = inscripcionIdTemp;
+		
 		if(!grupo.alumnos)
 			grupo.alumnos=[];
 			
@@ -388,27 +536,7 @@ Meteor.methods({
 		delete grupo._id;
 		Grupos.update({_id: inscripcion.grupo_id},{$set:grupo});
 		
-		//REGISTRAR EL PAGO REALIZADO
-
-		inscripcion.pago_id = Pagos.insert({
-			fechaPago 	: new Date(),
-			alumno_id 	: inscripcion.alumno_id,
-			grupo_id		: inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
-			estatus 		: 1,
-			usuarioInserto_id 	: Meteor.userId(),
-			importe 		: inscripcion.importePagado - inscripcion.cambio,
-			cuenta_id   : cuentaInscripcion._id,
-			diaPago     : moment().date(),
-			diaSemana		: diaSemana,
-			mesPago     : mesPago,
-			semanaPago  : semanaPago,
-			anioPago    : anioPago,
-			inscripcion_id : inscripcion._id,
-			modulo 			: "inscripcion",
-			descripcion : "inscripcion"
-		});
+		
 
 		//GENERAR PLAN DE PAGOS
 		
@@ -425,8 +553,8 @@ Meteor.methods({
 			importePagado 	: inscripcion.importePagado,
 			importeComision : remanente,
 			grupo_id		: inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
+			seccion_id  : grupo.seccion_id,
+			campus_id 	: grupo.campus_id,
 			fechaPago 	: new Date(),
 			diaPago     : moment().date(),
 			diaSemana		: diaSemana,
@@ -450,8 +578,8 @@ Meteor.methods({
 			importePagado 	: inscripcion.importePagado,
 			importeComision : remanente,
 			grupo_id		: inscripcion.grupo_id,
-			seccion_id  : Meteor.user().profile.seccion_id,
-			campus_id 	: Meteor.user().profile.campus_id,
+			seccion_id  : grupo.seccion_id,
+			campus_id 	: grupo.campus_id,
 			fechaPago 	: new Date(),
 			diaPago     : moment().date(),
 			diaSemana		: diaSemana,
@@ -471,6 +599,13 @@ Meteor.methods({
 		
 		//RETORNAMOS EL ID DEL ALUMNO PARA SU REDIRECCIONAMIENTO A LA VISTA PERFIL
 		return inscripcion.alumno_id;
+	},
+	cancelarPago : function(planPago){
+		PlanPago.update({_id : planPago._id}, {$set : {estatus : 0, modificada : true, pago : 0, fechaPago : undefined, fecha : undefined, diaPago : undefined, mesPago : undefined, anioPago : undefined, semanaPago : undefined, diaSemana : undefined, cuenta_id : undefined}});
+		
+		Pagos.update({_id : planPago._id}, { $set : {estatus : 0, modificada : true, pago : 0, fechaPago : undefined, fecha : undefined, diaPago : undefined, mesPago : undefined, anioPago : undefined, semanaPago : undefined, diaSemana : undefined, cuenta_id : undefined}});
+		
+		return true;
 	}
 	
 });

@@ -16,6 +16,7 @@ angular
 	this.fechaFin = new Date();
 	this.fechaFin.setHours(23,59,59,0);
 	this.alumnos_id = [];
+	this.unClick = false;
 	//console.log($stateParams)
 	window.rc = rc;
 	if($stateParams.fechaAsistencia){
@@ -197,7 +198,7 @@ angular
   
   this.guardar = function(asistencias){
 	  NProgress.set(0.5);
-	  
+	  this.unClick = true;
 	  _.each(asistencias, function(alumno){
 		  alumno.fechaAsistencia = new Date();
 		  alumno.fechaCreacion = new Date();

@@ -37,6 +37,7 @@
 			<table class="table table-bordered">
 		    <thead>
 		      <tr>
+			      <th width="15px;">No.</th>
 		        <th class="col-sm-1">Matrícula</th>
 		        <th class="col-sm-2">Nombre</th>
 		        <th class="text-center" ng-repeat="fechas in mast.diasUnicos">
@@ -48,6 +49,7 @@
 		    </thead>
 		    <tbody>
 		      <tr ng-repeat="alumno in mast.alumnosAsistidos" style="font-size: 10px;">
+			      <td>{{$index + 1}}</td>
 						<td class="cell"><a href="/alumnos/{{alumno._id}}">{{alumno.matricula}}</a></td>
 						<td class="cell"><a href="/alumnos/{{alumno._id}}">{{alumno.nombre}}</a></td>
 <!--

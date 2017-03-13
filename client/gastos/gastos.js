@@ -149,14 +149,15 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.importeDiarioPagos = function(dia, cuenta_id){
 	  console.log(dia, cuenta_id);
     pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
-    importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
+    console.log(pagos);
+    importe = _.reduce(pagos, function(memo, pago){return memo + pago.pago}, 0);
     console.log(importe);
     return importe;
   }
 
   this.importeSemanalPagos = function(cuenta_id){
     pagos = Pagos.find({cuenta_id:cuenta_id}).fetch();
-    importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
+    importe = _.reduce(pagos, function(memo, pago){return memo + pago.pago},0);
     return importe;
   }
 

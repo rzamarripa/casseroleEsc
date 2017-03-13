@@ -29,7 +29,7 @@
 		<h2> Colegiatura : </h2>	
 		<fieldset>
 			<div class="row">
-			<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso)" ng-repeat = "cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
+			<section class="col col-1" ng-click="al.seleccionarSemana(cobro, al.planPagos[curso._id], curso)" ng-repeat="cobro in al.planPagos[curso._id]" style="padding-left: 2px; padding-right: 2px; margin-bottom: 5px;">
 				<label class="input">
 					<input class="font-xs" ng-class="al.obtenerEstatus(cobro)" type="text" value="{{cobro.semana}} / {{cobro.anio}}" disabled="" title="Cobro {{cobro.tipoPlan}}&#10;Fecha de corte:{{cobro.fecha|date:'dd/MM/yyyy HH:mm:ss'}}">
 				</label>
