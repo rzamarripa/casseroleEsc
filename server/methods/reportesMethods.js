@@ -76,7 +76,7 @@ Meteor.methods({
 		  }
 	  }	  
 	  console.log(query);
-		 var otrosPagos = PlanPagos.find(query).fetch();
+		 var otrosPagos = Pagos.find(query).fetch();
 	  
 	  _.each(otrosPagos, function(pago){
 		  pago.concepto = ConceptosPago.findOne({_id : pago.concepto_id});
@@ -316,7 +316,7 @@ Meteor.methods({
 		return "hecho";
 	},
 	reporteComisionesGerentes : function(semana, anio, seccion_id, campus_id){
-		dias = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+		dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 		//Busco las comisiones de los gerentes
 	  var comisionesGerente = Comisiones.find({semanaPago : semana, anioPago : anio, seccion_id : seccion_id, beneficiario : "gerente"}).fetch();
 	  var arreglo = {};
@@ -333,15 +333,15 @@ Meteor.methods({
 			   _.each(dias, function(dia){
 				   arreglo[comision.gerente_id].dias[dia] = 0;
 			   })
-			   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] = 1;
+			   arreglo[comision.gerente_id].dias[dias[comision.diaSemana -1]] = 1;
 			   
 		  }else{
 			   arreglo[comision.gerente_id].cantidad += 1;
-			   if(arreglo[comision.gerente_id].dias[dias[comision.diaPago]] == undefined){
+			   if(arreglo[comision.gerente_id].dias[dias[comision.diaSemana -1]] == undefined){
 				   arreglo[comision.gerente_id].dias = {};
-				   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] = 0;
+				   arreglo[comision.gerente_id].dias[dias[comision.diaSemana -1]] = 0;
 			   }else{
-				   arreglo[comision.gerente_id].dias[dias[comision.diaPago]] += 1;
+				   arreglo[comision.gerente_id].dias[dias[comision.diaSemana -1]] += 1;
 			   }
 			   
 		  }
@@ -371,7 +371,7 @@ Meteor.methods({
 	  
 	},
 	reporteComisionesVendedores : function(semana, anio, seccion_id, campus_id){
-		dias = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+		dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 	  var arreglo = {};
 	  //Busco las comisiones de los vendedores
 	  var comisionesVendedores = Comisiones.find({semanaPago : semana, anioPago : anio, seccion_id : seccion_id, beneficiario : "vendedor"}).fetch();
@@ -389,17 +389,17 @@ Meteor.methods({
 			   _.each(dias, function(dia){
 				   arreglo[comision.vendedor_id].dias[dia] = 0;
 			   })
-			   arreglo[comision.vendedor_id].dias[dias[comision.diaPago]] = 1;
+			   arreglo[comision.vendedor_id].dias[dias[comision.diaSemana -1]] = 1;
 		  }else{
 			   arreglo[comision.vendedor_id].cantidad += 1;
 			   arreglo[comision.vendedor_id].comision += comision.importeComision;
-			   if(arreglo[comision.vendedor_id].dias[dias[comision.diaPago]] == undefined){
+			   if(arreglo[comision.vendedor_id].dias[dias[comision.diaSemana -1]] == undefined){
 				   arreglo[comision.vendedor_id].dias = {};
-				   arreglo[comision.vendedor_id].dias[dias[comision.diaPago]] = 0;
+				   arreglo[comision.vendedor_id].dias[dias[comision.diaSemana -1]] = 0;
 			   }else{
-				   arreglo[comision.vendedor_id].dias[dias[comision.diaPago]] += 1;
+				   arreglo[comision.vendedor_id].dias[dias[comision.diaSemana -1]] += 1;
 			   }
-			   
+			   //TODO me falta corregir el total de inscritos cuando el alumno sea diferente
 		  }
 	  });
 	  arreglo = _.toArray(arreglo);

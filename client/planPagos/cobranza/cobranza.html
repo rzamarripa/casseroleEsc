@@ -20,6 +20,7 @@
 			<select name="usuarios" class="form-control" ng-model="oc.modulo">
 				<option value="todos" selected="selected">Todos</option>
 				<option value="colegiatura">Colegiatura</option>
+				<option value="inscripcion">Inscripción</option>
 				<option value="Otro">Otros</option>
 			</select>
 		</div>
@@ -57,7 +58,7 @@
 					<td class="text-right">{{cobro.cuenta.nombre}}</td>
 					<td >{{cobro.usuarioInserto.profile.nombreCompleto}}</td>
 					<td class="text-right">{{cobro.pago | currency}}</td>
-					<td><button class="btn btn-danger" ng-click="oc.cancelarPago(cobro)" ng-if="cobro.descripcion == 'Colegiatura'"><i class="fa fa-trash"></i></button></td>
+					<td><button class="btn btn-danger btn-xs" ng-click="oc.cancelarPago(cobro)" ng-if="cobro.descripcion == 'Colegiatura'"><i class="fa fa-trash"></i></button></td>
 				</tr>
 				<tr>
 					<td colspan="8" class="text-right text-success negritas">Total</td>

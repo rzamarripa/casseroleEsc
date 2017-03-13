@@ -31,6 +31,7 @@ function ConceptosComisionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			toastr.error('Error al guardar los datos.');
 			return;
 		}
+		conceptoComision.beneficiario = "vendedor";
 		conceptoComision.nombre = conceptoComision.cantInicial + conceptoComision.signo + conceptoComision.cantFinal;
 		conceptoComision.estatus = true;
 		conceptoComision.campus_id = Meteor.user().profile.campus_id;

@@ -169,7 +169,7 @@ Meteor.methods({
 		var cantidadAlumnos 	= Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus._id}).count();
 		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
 		var configColegiatura = inscripcion.planPagos.colegiatura[inscripcion.planPagos.colegiatura.tipoColegiatura];
-		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
+		var cuentaInscripcion = Cuentas.findOne({inscripcion: true, seccion_id : grupo.seccion_id});
 
 		//VARIABLES REUTILIZABLES
 		var diaSemana 	= moment(new Date()).isoWeekday();
@@ -378,7 +378,7 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].inscripcion_id = inscripcion._id;
 				inscripcion.pagos[connceptoId].seccion_id = grupo.seccion_id;
 				inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
-				inscripcion.pagos[connceptoId].cuenta_id = cuentaActiva._id;
+				inscripcion.pagos[connceptoId].cuenta_id = conceptoActual.cuenta_id;
 				inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
 				//Se inserta el pago completo
 				var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
