@@ -1,4 +1,4 @@
-<h2>Conceptos de Comisión</h2>
+<h2>Conceptos de Comisión a Asesores</h2>
 <div class="row">
 	<div class="col-sm-12">
 		<a class="btn btn-{{ccm.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
@@ -7,51 +7,6 @@
 		</a>
 		
 		<div class="collapse" id="collapseExample">
-<!--
-			<form name="form" class="form-horizontal" role="form" novalidate>
-		  	<div class="well">	    
-			    <div class="row">
-				    <div class="col-sm-4">
-				    	<label>Prioridad *</label>
-					    <select name="prioridad" class="form-control" ng-model="ccm.conceptoComision.prioridad" required>
-				    		<option value="Baja">Baja</option>
-				    		<option value="Media">Media</option>
-				    		<option value="Alta">Alta</option>
-			    		</select>
-			    	</div>
-			    	<div class="col-sm-4" valida>
-				    	<label>Nombre *</label>
-					    <input name="nombre" type="text" class="form-control" ng-model="ccm.conceptoComision.nombre" required=""/>
-			    	</div>
-			    	<div class="col-sm-4" valida>
-				    	<label>Importe *</label>
-					    <input name="importe" type="number" class="form-control" ng-model="ccm.conceptoComision.importe" required=""/>
-			    	</div>
-			    	<div class="col-sm-4">
-			    		<label>Módulo *</label>
-			    		<select name="modulo" class="form-control" ng-model="ccm.conceptoComision.modulo" required>
-				    		<option value="inscripcion">Inscripción</option>
-				    		<option value="colegiatura">Colegiatura</option>
-				    		<option value="otros">Otros</option>
-			    		</select>
-			    	</div>
-			    	<div class="col-sm-4">
-			    		<label>Beneficiario</label>
-			    		<select class="form-control" ng-model="ccm.conceptoComision.beneficiario">
-				    		<option value="vendedor">Vendedor</option>
-				    		<option value="gerente">Gerente de Ventas</option>
-			    		</select>
-			    	</div>
-			    </div>				  
-				</div>
-				<div class="row">
-					<div class="col-sm-12">
-						<input type="submit" value="Guardar" ng-click="ccm.guardar(ccm.conceptoComision,form)" class="btn btn-primary" ng-show="ccm.action" valida-form formulario="form"/>
-						<input type="submit" ng-click="ccm.actualizar(ccm.conceptoComision,form)" value="Actualizar" class="btn btn-primary" ng-show="!ccm.action" valida-form formulario="form" />				
-					</div>
-				</div>	  
-		  </form>
--->
 			<form name="form" class="form-horizontal" role="form" novalidate>
 		  	<div class="well">	    
 			    <div class="row">
@@ -75,13 +30,6 @@
 			    	<div class="col-sm-2" valida>
 				    	<label>Importe *</label>
 					    <input name="importe" type="number" class="form-control" ng-model="ccm.conceptoComision.importe" required=""/>
-			    	</div>
-			    	<div class="col-sm-4">
-			    		<label>Beneficiario</label>
-			    		<select class="form-control" ng-model="ccm.conceptoComision.beneficiario">
-				    		<option value="vendedor">Vendedor</option>
-				    		<option value="gerente">Gerente de Ventas</option>
-			    		</select>
 			    	</div>
 			    </div>				  
 				</div>

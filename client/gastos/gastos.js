@@ -14,9 +14,12 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.campoSubconceptos = false;
   this.registrosComision = 0;
   this.registrosInscripcion = 0;
+  this.totalBonoGerente = 0;
+  this.totalBonoVendedor = 0;
   this.detallePagos = [];
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
+  
   for(i = 0; i < this.diaActual; i++){this.diasActuales.push(dias[i])};
   window.rc = rc;
  
@@ -29,7 +32,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   });
 
   this.subscribe('pagos', () => {
-    return [{semanaPago: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : '', estatus : 1}];
+    return [{semanaPago: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
   });
 
   this.subscribe('comisiones', () => {
@@ -147,11 +150,8 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	////////Depositos////////
 	
   this.importeDiarioPagos = function(dia, cuenta_id){
-	  console.log(dia, cuenta_id);
     pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
-    console.log(pagos);
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.pago}, 0);
-    console.log(importe);
     return importe;
   }
 
@@ -199,8 +199,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.restosInscripcion = function(cuenta_id){
 	  comisionesVendedor = Comisiones.find({beneficiario:"vendedor", cuenta_id:cuenta_id}).fetch();
-	  //console.log(comisionesVendedor.length);
-	  rc.registrosInscripcion = comisionesVendedor.length;
+	  rc.registrosInscripcion = _.uniq(_.pluck(comisionesVendedor, "alumno_id")).length;
     totalComisiones = _.reduce(comisionesVendedor, function(memo, comision){return memo + comision.importeComision},0);
     return totalComisiones;
   }
@@ -211,6 +210,8 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  comisionesGerente = Comisiones.find({beneficiario:"gerente", cuenta_id:cuenta_id}).fetch();
 	  rc.registrosComision = comisionesGerente.length;
     totalComisiones = _.reduce(comisionesGerente, function(memo, comision){return memo + comision.importeComision},0);
+    this.getBonosGerentes();
+  this.getBonosVendedores();
     return totalComisiones;
   }
 	////////////////////////
@@ -230,10 +231,39 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 	
 	this.desgloseImporteDiarioPagos = function(dia, cuenta_id){
-		//console.log(dia);
 		var id = "#myModal" + dia + cuenta_id;
 		$(id).modal('show');
 		rc.diaSeleccionado = dias[dia];
 		rc.detallePagos = Pagos.find({diaSemana:dia+1, cuenta_id:cuenta_id}).fetch();
 	}
+	
+	this.getBonosGerentes = function(){
+	  Meteor.apply('reporteComisionesGerentes', [this.semanaActual, this.anioActual, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
+		  if(result){
+			  rc.totalBonoGerente = 0;
+			  console.log(result);
+			  _.each(result, function(gerente){
+				  if(gerente.importe)
+					  rc.totalBonoGerente += gerente.importe;
+			  })
+			  console.log("comision g", rc.totalBonoGerente);
+		  }
+		  return rc.totalBonoGerente;
+	  }); 
+  }
+  
+  this.getBonosVendedores = function(){
+	  Meteor.apply('reporteComisionesVendedores', [this.semanaActual, this.anioActual, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
+		  if(result){
+			  rc.totalBonoVendedor = 0;
+			  _.each(result, function(vendedor){
+				  if(vendedor.bono)
+					  rc.totalBonoVendedor += vendedor.bono;
+			  })
+			  console.log("comision v", rc.totalBonoVendedor);
+		  }
+	  });
+	  
+	  
+  }
 };

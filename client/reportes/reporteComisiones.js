@@ -4,7 +4,7 @@ angular
  
 function ReporteComisionesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	let rc = $reactive(this).attach($scope);
-	this.dias = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+	this.dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 	this.semana = moment(new Date()).isoWeek();
 	this.anio = moment().get("year");
 	this.semanaActual = moment(new Date()).isoWeek();
@@ -18,13 +18,17 @@ function ReporteComisionesCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.getComisiones = function(semana, anio){
 	  Meteor.apply('reporteComisionesGerentes', [this.semana, this.anio, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
+		  console.log("gerente ", result);
 		  rc.gerentes = result;
 	    $scope.$apply();
 	  });
 	  
 	  Meteor.apply('reporteComisionesVendedores', [this.semana, this.anio, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
+		  console.log("vendedor ", result);
 		  rc.vendedores = result;
 	    $scope.$apply();
 	  });
+	  
+	  
   }
 };

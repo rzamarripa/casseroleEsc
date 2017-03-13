@@ -116,12 +116,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					if(!planes[pago.inscripcion_id])
 						planes[pago.inscripcion_id]=[];
 					planes[pago.inscripcion_id].push(pago);
-				}
-				
-				
+				}				
 			}
-			
-			
 			return planes;
 		},
 		planPagosCollec : () => {
@@ -169,13 +165,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.actualizar = function(alumno,form){
 		var alumnoTemp = Meteor.users.findOne({_id : alumno._id});
-		
-/*
-		if()
-		this.alumno.password = alumnoTemp.password;
-		this.alumno.repeatPassword = alumnoTemp.password;
-*/
-		//document.getElementById("contra").value = this.alumno.password;
 
 		if(form.$invalid){
 			toastr.error('Error al actualizar los datos.');
@@ -528,11 +517,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 							campus_id 	: configuracion.campus_id,
 							estatus 		: 1,
 							usuarioInserto_id 	: Meteor.userId(),
-							importe 		: this.ppago,
+							pago 		: this.ppago,
 							cuenta_id   : rc.cuenta._id,
 							diaPago     : diaActual,
 							mesPago     : mesPago,
 							semanaPago  : semanaPago,
+							descripcion : "Colegiatura",
+							nombre			: "Colegiatura",
+							modulo			: "colegiatura",
 							anioPago    : anioPago,
 							inscripcion_id : configuracion._id,
 							diaSemana		: diaSemana,

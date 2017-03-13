@@ -94,24 +94,32 @@
 	      	<td align="right">{{ gc.comisiones(gc.cuentaActiva._id) | currency}}</td>
 	      </tr>
 	      <tr ng-if="cuenta.inscripcion">
+	      	<td>Bonos a Gerentes</td>
+	      	<td align="right">{{ gc.totalBonoGerente | currency}}</td>
+	      </tr>
+	      <tr ng-if="cuenta.inscripcion">
+	      	<td>Bonos a Asesores</td>
+	      	<td align="right">{{ gc.totalBonoVendedor | currency}}</td>
+	      </tr>
+	      <tr ng-if="cuenta.inscripcion">
 	      	<td>Gastos de R.P y Adtvo.</td>
 	      	<td align="right">{{ gc.gastosRelaciones(cuenta._id) | currency}}</td>
 	      </tr>
 	    	<tr ng-if="cuenta.inscripcion">
 	      	<td><strong>Gastos Totales:</strong></td>
-	      	<td align="right">{{cuenta.totalDepositos + gc.restosInscripcion(cuenta._id) +  gc.gastosRelaciones(cuenta._id) + gc.comisiones(cuenta._id) | currency}}</td>
+	      	<td align="right">{{cuenta.totalDepositos + gc.totalBonoGerente + gc.totalBonoVendedor + gc.restosInscripcion(cuenta._id) +  gc.gastosRelaciones(cuenta._id) + gc.comisiones(cuenta._id) | currency}}</td>
 	      </tr>
 	      <tr ng-if="cuenta.inscripcion">
 	      	<td><strong>Resta por depositar</strong></td>
-	      	<td align="right">{{gc.importeSemanalPagos(cuenta._id) - (cuenta.totalDepositos + gc.restosInscripcion(cuenta._id) + gc.comisiones(cuenta._id) +  gc.gastosRelaciones(cuenta._id)) | currency}}</td>
+	      	<td align="right">{{gc.importeSemanalPagos(cuenta._id) - (cuenta.totalDepositos + gc.restosInscripcion(cuenta._id) + gc.comisiones(cuenta._id) +  gc.gastosRelaciones(cuenta._id) + gc.totalBonoGerente + gc.totalBonoVendedor)  | currency}}</td>
 	      </tr>
 	      <tr ng-if="!cuenta.inscripcion">
 	      	<td><strong>Gastos Totales:</strong></td>
-	      	<td align="right">{{cuenta.totalDepositos + gc.gastosCheques(cuenta._id) | currency}}</td>
+	      	<td align="right">{{gc.gastosCheques(cuenta._id) | currency}}</td>
 	      </tr>
 	      <tr ng-if="!cuenta.inscripcion">
 	      	<td><strong>Resta por depositar</strong></td>
-	      	<td align="right">{{gc.importeSemanalPagos(cuenta._id) | currency}}</td>
+	      	<td align="right">{{gc.importeSemanalPagos(cuenta._id) - cuenta.totalDepositos | currency}}</td>
 	      </tr>
 	  	</tbody>
 	  </table>
