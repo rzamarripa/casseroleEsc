@@ -16,7 +16,7 @@
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="fecha">Fecha</label>
-						<input date-time class="form-control" format="dd-MM-yyyy" view="date" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
+						<input date-time class="form-control" readonly="" style="background-color: white" format="dd-MM-yyyy" view="date" max-view="year" min-view="date" ng-model="gc.gasto.fecha" name="fecha" required/>
 					</div>
 					<div class="form-group col-sm-4" valida>
 						<label for="concepto">Concepto</label>
@@ -58,13 +58,13 @@
 	    <tbody>
 	    	<tr>
 	    		<td>Restos de inscripción</td>
-	    		<td></td>
-	    		<td align="right">{{gc.restosInscripcion(gc.cuentaInscripcion._id) | currency}}</td>
+	    		<td>{{gc.registrosInscripcion}}</td>
+	    		<td align="right">{{gc.restosInscripcion(gc.cuentaActiva._id) | currency}}</td>
 	    	</tr>
 	      <tr>
 	        <td>Comisiones</td>
-	        <td></td>
-	        <td align="right">{{gc.comisiones(gc.cuentaInscripcion._id) | currency}}</td>
+	        <td>{{gc.registrosComision}}</td>
+	        <td align="right">{{gc.comisiones(gc.cuentaActiva._id) | currency}}</td>
 	      </tr>
 	    </tbody>
 	  </table>
@@ -99,6 +99,6 @@
 	      </tr>
 	    </tbody>
 	  </table>
-	  <span class="pull-right">Total: {{gc.sum() + gc.comisiones(gc.cuentaInscripcion._id) | currency}}</span>
+	  <span class="pull-right">Total: {{gc.restosInscripcion(gc.cuentaActiva._id) + gc.comisiones(gc.cuentaActiva._id) | currency}}</span>
 	</div>
 </div>

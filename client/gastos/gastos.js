@@ -12,13 +12,16 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.anioActual = moment().get("year");
   this.diaActual = moment().isoWeekday();
   this.campoSubconceptos = false;
+  this.registrosComision = 0;
+  this.registrosInscripcion = 0;
+  this.detallePagos = [];
   dias = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
   this.diasActuales = [];
   for(i = 0; i < this.diaActual; i++){this.diasActuales.push(dias[i])};
   window.rc = rc;
  
   this.subscribe('gastos', () => {
-    return [{estatus: true, semana: this.semanaActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
+    return [{estatus: true, semana: this.semanaActual, anio: this.anioActual, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
   });
 
   this.subscribe('conceptosGasto', () => {
@@ -142,19 +145,19 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
 ////////Depositos
   this.importeDiarioPagos = function(dia, cuenta_id){
-    pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
-    importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
+    pagos = Pagos.find({diaPago:dia, cuenta_id:cuenta_id}).fetch();
+    importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
     return importe;
   }
 
   this.importeSemanalPagos = function(cuenta_id){
-    pagos = Pagos.find({cuenta_id:cuenta_id}).fetch();
+    pagos = Pagos.find({cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
     return importe;
   }
 
   this.importeDiarioGastos = function(dia, cuenta_id){
-    gastos = Gastos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();  
+    gastos = Gastos.find({diaSemana:dia, cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();  
     importe = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
     return importe;
   }
@@ -173,25 +176,29 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     return totalPagos - totalGastos;
   }
   this.gastosRelaciones = function(cuenta_id){
-    //comisiones = Comisiones.find({modulo:"colegiatura", cuenta_id:cuenta_id}).fetch();
-    gastos = Gastos.find({tipoGasto:"Relaciones", cuenta_id : cuenta_id}).fetch();
-    admon = Gastos.find({tipoGasto:"Admon", cuenta_id : cuenta_id}).fetch();
-    //totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
+    //comisiones = Comisiones.find({beneficiario:"gerente", cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();
+    gastos = Gastos.find({tipoGasto:"Relaciones", cuenta_id : cuenta_id }).fetch();
+    admon = Gastos.find({tipoGasto:"Admon", cuenta_id : cuenta_id }).fetch();
+    //totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importeComision},0);
     totalGastos = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
     totalGastos += _.reduce(admon, function(memo, gasto){return memo + gasto.importe},0);
-    return totalGastos;
+    //console.log(totalGastos + totalComisiones)
+    return totalGastos;// + totalComisiones;
   }
   this.restosInscripcion = function(cuenta_id){
-    comisiones = Comisiones.find({modulo:"inscripcion", cuenta_id:cuenta_id}).fetch();
-    totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
+	  comisionesVendedor = Comisiones.find({beneficiario:"vendedor", cuenta_id:cuenta_id}).fetch();
+	  console.log(comisionesVendedor.length);
+	  rc.registrosInscripcion = comisionesVendedor.length;
+    totalComisiones = _.reduce(comisionesVendedor, function(memo, comision){return memo + comision.importeComision},0);
     return totalComisiones;
   }
 ////////////////////////
 ///////////relaciones
   this.comisiones = function(cuenta_id){
-    comisiones = Comisiones.find({modulo:"colegiatura", cuenta_id:cuenta_id}).fetch();
-    totalComisiones = _.reduce(comisiones, function(memo, comision){return memo + comision.importe},0);
-    return totalComisiones
+	  comisionesGerente = Comisiones.find({beneficiario:"gerente", cuenta_id:cuenta_id}).fetch();
+	  rc.registrosComision = comisionesGerente.length;
+    totalComisiones = _.reduce(comisionesGerente, function(memo, comision){return memo + comision.importeComision},0);
+    return totalComisiones;
   }
 ////////////////////////
 
@@ -207,5 +214,13 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 			rc.gasto.subConcepto = "NA";
 		}
 		
+	}
+	
+	this.desgloseImporteDiarioPagos = function(dia, cuenta_id){
+		console.log(dia);
+		var id = "#myModal" + dia + cuenta_id;
+		$(id).modal('show');
+		rc.diaSeleccionado = dias[dia];
+		rc.detallePagos = Pagos.find({diaPago:dia+1, cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();
 	}
 };

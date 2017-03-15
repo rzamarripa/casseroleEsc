@@ -195,43 +195,43 @@ Meteor.methods({
 	},
 	inscribirAlumno : function (inscripcion) {
 		function sortProperties(obj, sortedBy, isNumericSort, reverse) {
-            sortedBy = sortedBy || 1; // by default first key
-            isNumericSort = isNumericSort || false; // by default text sort
-            reverse = reverse || false; // by default no reverse
+      sortedBy = sortedBy || 1; // by default first key
+      isNumericSort = isNumericSort || false; // by default text sort
+      reverse = reverse || false; // by default no reverse
 
-            var reversed = (reverse) ? -1 : 1;
+      var reversed = (reverse) ? -1 : 1;
 
-            var sortable = [];
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    sortable.push([key, obj[key]]);
-                }
-            }
-            if (isNumericSort)
-                sortable.sort(function (a, b) {
-                    return reversed * (a[1][sortedBy] - b[1][sortedBy]);
-                });
-            else
-                sortable.sort(function (a, b) {
-                    var x = a[1][sortedBy].toLowerCase(),
-                        y = b[1][sortedBy].toLowerCase();
-                    return x < y ? reversed * -1 : x > y ? reversed : 0;
-                });
-            return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+      var sortable = [];
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            sortable.push([key, obj[key]]);
         }
+      }
+      if (isNumericSort)
+        sortable.sort(function (a, b) {
+            return reversed * (a[1][sortedBy] - b[1][sortedBy]);
+        });
+      else
+        sortable.sort(function (a, b) {
+            var x = a[1][sortedBy].toLowerCase(),
+                y = b[1][sortedBy].toLowerCase();
+            return x < y ? reversed * -1 : x > y ? reversed : 0;
+        });
+      return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+    }
 
-        function sortObjects(objects, sortedBy, isNumericSort, reverse) {
-		    var newObject = {};
-		    sortedBy = sortedBy || 1; // by default first key
-            isNumericSort = isNumericSort || false; // by default text sort
-            reverse = reverse || false; // by default no reverse
-		    var sortedArray = sortProperties(objects, sortedBy, isNumericSort, reverse);
-		    for (var i = 0; i < sortedArray.length; i++) {
-		        var key = sortedArray[i][0];
-		        var value = sortedArray[i][1];
-		        newObject[key] = value;
-		    }
-		    return newObject;
+    function sortObjects(objects, sortedBy, isNumericSort, reverse) {
+	    var newObject = {};
+	    sortedBy = sortedBy || 1; // by default first key
+          isNumericSort = isNumericSort || false; // by default text sort
+          reverse = reverse || false; // by default no reverse
+	    var sortedArray = sortProperties(objects, sortedBy, isNumericSort, reverse);
+	    for (var i = 0; i < sortedArray.length; i++) {
+	        var key = sortedArray[i][0];
+	        var value = sortedArray[i][1];
+	        newObject[key] = value;
+	    }
+	    return newObject;
 		}
 
 		//VARIABLES REUTILIZABLES
@@ -250,7 +250,7 @@ Meteor.methods({
 		var cantidadAlumnos 	= Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus._id}).count();
 		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
 		var configColegiatura = inscripcion.planPagos.colegiatura[inscripcion.planPagos.colegiatura.tipoColegiatura];
-		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
+		var cuentaInscripcion = Cuentas.findOne({seccion_id : grupo.seccion_id, inscripcion : true});
 		
 		//PREPARAR PLAN DE PAGOS
 		var remanente =  configColegiatura.importeRegular;
@@ -267,15 +267,15 @@ Meteor.methods({
 		var apMaterno = alumno.profile.apMaterno != undefined ? alumno.profile.apMaterno : "";
 		alumno.profile.nombreCompleto = nombre + apPaterno + apMaterno;
 		alumno.profile.fechaCreacion 	= new Date();
-		alumno.profile.campus_id 			= Meteor.user().profile.campus_id;
-		alumno.profile.seccion_id 		= Meteor.user().profile.seccion_id;
+		alumno.profile.campus_id 			= grupo.campus_id;
+		alumno.profile.seccion_id 		= grupo.seccion_id;
 		alumno.profile.usuarioInserto = Meteor.userId();
 		alumno.profile.estatus 				= "1";
 		
 		//PREPARAR LA INSCRIPCIÓN
 		inscripcion.planEstudios_id = grupo.planEstudios_id;		
-		inscripcion.campus_id 			= Meteor.user().profile.campus_id;
-		inscripcion.seccion_id 			= Meteor.user().profile.seccion_id;
+		inscripcion.campus_id 			= grupo.campus_id;
+		inscripcion.seccion_id 			= grupo.seccion_id;
 		inscripcion.estatus 				= 1;
 		inscripcion.semana 					= moment(new Date()).isoWeek();
 		inscripcion.abono 			= 0;
