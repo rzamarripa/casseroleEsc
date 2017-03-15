@@ -139,7 +139,7 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		if(rc.esNuevaInscripcion == false){
 			var fechaActual = new Date();
 			if(fechaInicial < fechaActual){
-				console.log("es menor", fechaInicial, fechaActual);
+				//console.log("es menor", fechaInicial, fechaActual);
 				var fechaInicial = fechaActual;
 			}
 		}
@@ -365,9 +365,9 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 
 	this.hayCupo = function(grupo_id){
-		console.log(grupo_id);
+		//console.log(grupo_id);
 		this.grupoSeleccionado = Grupos.findOne(grupo_id);
-		console.log(this.grupoSeleccionado);
+		//console.log(this.grupoSeleccionado);
 		this.turnoSeleccionado = this.grupoSeleccionado.turno_id;
 		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
 		this.grupoSeleccionado.turno = Turnos.findOne(this.turnoSeleccionado);
@@ -438,25 +438,18 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.guardar = function(inscripcion) {
 		var res = confirm("Revise que la Carga Inicial esté activada en caso de inscribir alumnos ya existentes, o desactivada para inscribir un alumno a un grupo nuevo.?");
 		if(res == true){
-			console.log(inscripcion);
-
+			//console.log(inscripcion);
+			
 			Meteor.call('inscribirAlumno', inscripcion, function(error, result){
 				if(error){
 					console.log(error);
 				}else{
 					if(result){
 						toastr.success('Alumno Inscrito');
-						$state.go("root.alumnoDetalle",{alumno_id : result});
+						$state.go("anon.pagosImprimirConceptos",{seccion_id : result[1], folioActual : result[0], alumno_id : result[2]});
 					}
 				}
 			});
-/*
-			console.log(this.pagosRealizados);
-			for (var i = 0; i < this.pagosRealizados.length; i++) {
-				console.log(this.pagosRealizados[i]);
-				Pagos.insert(this.pagosRealizados[i]);
-			}
-*/
 		}
 	}
 	

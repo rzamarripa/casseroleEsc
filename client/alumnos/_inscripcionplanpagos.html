@@ -107,11 +107,11 @@
 		<div class="pull-left" style="margin:20px;" >
 			<!-- Modal para el motivo de la condonación -->
 			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#condonarModal">
-			  Condonar
+			  Condonar 123
 			</button>
 		</div>
 		<div class="pull-right" style="margin:20px;">
-			<a type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalAbono" >Abonar</a>
+			<a type="button" class="btn btn-primary btn-lg" ng-click="al.seccion_id = curso.seccion_id" data-toggle="modal" data-target="#modalAbono" >Abonar</a>
 			<a type="button" class="btn btn-primary btn-lg" ng-click="al.pagar(al.planPagos[curso._id], curso)" ng-disabled="al.hayParaPagar">Pagar</a>
 		</div>
 	</div>
@@ -121,6 +121,7 @@
 			<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
 		</div>
 		<div class="pull-right" style="margin:20px;">
+			<a type="button" class="btn btn-primary btn-lg" ng-click="al.seccion_id = curso.seccion_id" data-toggle="modal" data-target="#modalAbono" >Abonar</a>
 			<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagarConcepto(curso)" ng-disabled="al.hayParaPagar">Pagar</a>
 			
 		</div>

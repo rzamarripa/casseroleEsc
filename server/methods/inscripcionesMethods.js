@@ -26,10 +26,11 @@ Meteor.methods({
 		var cantidad = Meteor.users.find({roles : ["alumno"], "profile.campus_id" : campus_id}).count();
 		return cantidad;
 	},
-	generaPlanPagos : function(inscripcion) {
+	generaPlanPagos : function(inscripcion, folioActual) {
 		var mfecha = moment(new Date());
 		var diaSemana 	= moment(new Date()).isoWeekday();
 		var cuentaActiva = Cuentas.findOne({estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""});
+				
 		_.each(inscripcion.planPagos.fechas, function(pago){
 			var nuevoPago = {};
 			if(pago.estatus == 1){
@@ -68,7 +69,8 @@ Meteor.methods({
 					modulo						: "colegiatura",
 					cuenta_id					: cuentaActiva._id,
 					descripcion				: "Colegiatura",
-					usuarioInserto_id : Meteor.userId()
+					usuarioInserto_id : Meteor.userId(),
+					folioActual				: folioActual
 				}
 				
 				var pago_id = Pagos.insert(nuevoPago);
@@ -338,7 +340,14 @@ Meteor.methods({
 		//SE INSERTA LA INSCRIPCIÓN UNA VEZ QUE SABEMOS EL ID DEL ALUMNO
 		inscripcion._id = Inscripciones.insert(inscripcion);
 		
+		//SE ACTUALIZA EL FOLIO DEL PAGO
+		var seccion = Secciones.findOne(grupo.seccion_id);			
+		var folioActual = seccion.folioActual || 0;
+		folioActual++;
+		
 		_.each(inscripcion.planPagos.inscripcion.conceptos,function(concepto,connceptoId){
+			
+			
 			if(!configInscripcion){
 				configInscripcion = concepto;
 				inscripcionConnceptoId = connceptoId;
@@ -380,6 +389,7 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
 				inscripcion.pagos[connceptoId].cuenta_id = conceptoActual.cuenta_id;
 				inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
+				inscripcion.pagos[connceptoId].folioActual = folioActual;
 				//Se inserta el pago completo
 				var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
 				
@@ -415,7 +425,7 @@ Meteor.methods({
 	        alumno_id 	: usuario_id
 				})
 				
-				console.log("pago id", pago_id);
+				//console.log("pago id", pago_id);
 				//Se asigna el id del pago al pago de la inscripcion
 				inscripcion.pagos[connceptoId].pago_id = pago_id;
 				inscripcion.pagos[connceptoId].planPago_id = planPago_id;
@@ -441,6 +451,7 @@ Meteor.methods({
 					inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
 					inscripcion.pagos[connceptoId].cuenta_id = cuentaActiva._id;
 					inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
+					inscripcion.pagos[connceptoId].folioActual = folioActual;
 					//Se inserta el pago completo
 					var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);
 					
@@ -477,11 +488,11 @@ Meteor.methods({
 		        alumno_id : usuario_id
 					})
 					
-					console.log("pago id-", pago_id);
+					//console.log("pago id-", pago_id);
 					//Se asigna el id del pago al pago de la inscripcion
 					inscripcion.pagos[connceptoId].pago_id = pago_id;
 					inscripcion.pagos[connceptoId].planPago_id = planPago_id;
-					console.log(inscripcion.pagos[connceptoId])
+					//console.log(inscripcion.pagos[connceptoId])
 					
 				}
 				else{
@@ -540,7 +551,7 @@ Meteor.methods({
 
 		//GENERAR PLAN DE PAGOS
 		
-		Meteor.call("generaPlanPagos", inscripcion);
+		Meteor.call("generaPlanPagos", inscripcion, folioActual);
 
 	  
 		//GENERAR COMISIÓN	  
@@ -595,10 +606,10 @@ Meteor.methods({
 			beneficiario : "vendedor"
 		});
 
-
+		Secciones.update({_id : grupo.seccion_id}, { $set : { folioActual : folioActual}});
 		
 		//RETORNAMOS EL ID DEL ALUMNO PARA SU REDIRECCIONAMIENTO A LA VISTA PERFIL
-		return inscripcion.alumno_id;
+		return [folioActual, inscripcion.seccion_id, inscripcion.alumno_id];
 	},
 	cancelarPago : function(planPago){
 		PlanPago.update({_id : planPago._id}, {$set : {estatus : 0, modificada : true, pago : 0, fechaPago : undefined, fecha : undefined, diaPago : undefined, mesPago : undefined, anioPago : undefined, semanaPago : undefined, diaSemana : undefined, cuenta_id : undefined}});

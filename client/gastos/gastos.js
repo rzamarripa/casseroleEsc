@@ -241,12 +241,10 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	  Meteor.apply('reporteComisionesGerentes', [this.semanaActual, this.anioActual, Meteor.user().profile.seccion_id, Meteor.user().profile.campus_id], function(error, result){
 		  if(result){
 			  rc.totalBonoGerente = 0;
-			  console.log(result);
 			  _.each(result, function(gerente){
 				  if(gerente.importe)
 					  rc.totalBonoGerente += gerente.importe;
 			  })
-			  console.log("comision g", rc.totalBonoGerente);
 		  }
 		  return rc.totalBonoGerente;
 	  }); 
@@ -260,7 +258,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 				  if(vendedor.bono)
 					  rc.totalBonoVendedor += vendedor.bono;
 			  })
-			  console.log("comision v", rc.totalBonoVendedor);
 		  }
 	  });
 	  

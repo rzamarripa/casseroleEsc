@@ -3,7 +3,7 @@ Meteor.publish("pagos", function(params){
 });
 
 Meteor.publish("pagosAlumno",function(options){
-  return Pagos.find({alumno_id: options.alumno_id});
+  return Pagos.find(options);
 });
 
 Meteor.publish("pagosTotales", function(options){
