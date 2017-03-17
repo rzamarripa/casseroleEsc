@@ -340,6 +340,7 @@ Meteor.methods({
 		//SE INSERTA LA INSCRIPCIÓN UNA VEZ QUE SABEMOS EL ID DEL ALUMNO
 		inscripcion._id = Inscripciones.insert(inscripcion);
 		
+		
 		//SE ACTUALIZA EL FOLIO DEL PAGO
 		var seccion = Secciones.findOne(grupo.seccion_id);			
 		var folioActual = seccion.folioActual || 0;
