@@ -346,8 +346,7 @@ Meteor.methods({
 		folioActual++;
 		
 		_.each(inscripcion.planPagos.inscripcion.conceptos,function(concepto,connceptoId){
-			
-			
+
 			if(!configInscripcion){
 				configInscripcion = concepto;
 				inscripcionConnceptoId = connceptoId;
