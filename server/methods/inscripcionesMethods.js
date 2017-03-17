@@ -252,9 +252,6 @@ Meteor.methods({
 		var mesPago 		= moment(new Date()).get('month') + 1;
 		var anioPago 		= moment(new Date()).get('year');
 		
-		
-
-
 		//OBTENER LOS OBJETOS CON LOS QUE SE LLENARÁ LA INSCRIPCIÓN
 		var grupo 						= Grupos.findOne(inscripcion.grupo_id);
 		var planEstudio 			= PlanesEstudios.findOne(grupo.planEstudios_id)
