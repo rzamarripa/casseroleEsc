@@ -131,8 +131,6 @@ Meteor.methods({
 			PlanPagos.insert(nuevoPago);
 		})
 		
-		
-		
 		inscripcion.planPagos.fechas = undefined;
 
 /*

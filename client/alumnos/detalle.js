@@ -15,7 +15,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.semanaPago = moment(new Date()).isoWeek();
 	this.anioActual = moment().get("year");
 	this.hayParaPagar = true;
-	this.tipoPlanes=["Semanal","Quincenal","Mensual"];
+	this.tipoPlanes=["Semanal"];
 	this.planEstudios_id = [];
 	this.ocupacion_id = "";
 	this.semanasSeleccionadas = [];
