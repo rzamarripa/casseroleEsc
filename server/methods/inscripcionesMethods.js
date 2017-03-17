@@ -340,6 +340,7 @@ Meteor.methods({
 		inscripcion._id = Inscripciones.insert(inscripcion);
 		
 		_.each(inscripcion.planPagos.inscripcion.conceptos,function(concepto,connceptoId){
+
 			if(!configInscripcion){
 				configInscripcion = concepto;
 				inscripcionConnceptoId = connceptoId;
