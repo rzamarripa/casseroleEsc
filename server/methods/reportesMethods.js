@@ -12,12 +12,12 @@ Meteor.methods({
 			  var diasDiferencia = fechaPago.diff(hoy, "days");
 			  console.log(pago.alumno_id, diasDiferencia);
 			  var inscripcion = Inscripciones.findOne(pago.inscripcion_id);
-				var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
+				var tipoColegiatura = pago.tipoPlan;
 			  if(undefined == arreglo[pago.alumno_id]){
 				  arreglo[pago.alumno_id] = {};
 				  arreglo[pago.alumno_id].pagos = [];
 				  arreglo[pago.alumno_id].alumno_id = pago.alumno_id;
-				  if(( diasDiferencia * -1) > inscripcion.planPagos.colegiatura[tipoColegiatura].diasRecargo ){
+				  if(( diasDiferencia * -1) > pago.diasRecargo ){
 					  arreglo[pago.alumno_id].modificador = pago.importeRecargo;
 					  arreglo[pago.alumno_id].total = pago.importe + pago.importeRecargo;
 					  totalRecargos += pago.importeRecargo;
@@ -31,8 +31,9 @@ Meteor.methods({
 				  arreglo[pago.alumno_id].pagos.push(pago);
 				  arreglo[pago.alumno_id].alumno = Meteor.users.findOne(pago.alumno_id, { fields : { profile : 1}});
 				  var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : pago.alumno_id}, { sort : {fechaPago : -1}});
+				  console.log(pago.alumno_id, ultimoPago);
 				  arreglo[pago.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
-				  arreglo[pago.alumno_id].colegiaturaUltimoPago = ultimoPago.semanaPago;
+				  arreglo[pago.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;
 				  arreglo[pago.alumno_id].deuda = pago.importe;
 				  totalDeuda += pago.importe;				  
 			  }else{
@@ -75,14 +76,17 @@ Meteor.methods({
 				var inscripcion = Inscripciones.findOne(alumno.inscripcion_id);
 				//Validar que el alumno está activo en su inscripción
 				if(inscripcion.estatus == 1){
-					//Obtener los pagos atrasados				
+					//Obtener los pagos atrasados			
+					console.log("alumno_id", alumno.alumno_id);	
 					var ultimoPago = PlanPagos.findOne({estatus : 1, alumno_id : alumno.alumno_id}, { sort : {fechaPago : -1}});
-					//validar que hay pagado la semana actual
+					console.log("ultimoPago", ultimoPago)
+					//validar que haya pagado la semana actual
 					if(ultimoPago.semana >= semanaActual && ultimoPago.anio == anioActual ){
+						console.log("alumno_id semana actual", alumno.alumno_id);	
 						//Busco la siguiente semana, pero sólo 1
 						var pago = PlanPagos.findOne({estatus : 0, alumno_id : alumno.alumno_id, semana : ultimoPago.semana + 1});
-						
-						var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
+						console.log("pago semana actual", pago);
+						var tipoColegiatura = pago.tipoPlan;
 						var fechaPago = moment(pago.fecha);
 					  var diasDiferencia = fechaPago.diff(hoy, "days");
 						if(undefined == arreglo[grupo._id]){
@@ -106,7 +110,7 @@ Meteor.methods({
 							arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 							arreglo[grupo._id].alumnos[alumno.alumno_id].total = pago.importe;
 						  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
-						  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semanaPago;						
+						  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
 							arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
 					  }else{
 						  if(arreglo[grupo._id].alumnos[alumno.alumno_id] == undefined){
@@ -126,7 +130,7 @@ Meteor.methods({
 							  
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
-							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semanaPago;						
+							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
 								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
 						  }else{
 							  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){
@@ -140,7 +144,7 @@ Meteor.methods({
 						
 					}else{
 						//Busco las semanas trasadas, pero todas
-						var pagos = PlanPagos.find({estatus : true, seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
+						var pagos = PlanPagos.find({seccion_id : seccion_id, fecha : { $lt : new Date() }, estatus : 0, alumno_id : alumno.alumno_id }).fetch();
 						_.each(pagos, function(pago){
 							var tipoColegiatura = inscripcion.planPagos.colegiatura.tipoColegiatura;
 							var fechaPago = moment(pago.fecha);
@@ -167,7 +171,7 @@ Meteor.methods({
 								arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 								arreglo[grupo._id].alumnos[alumno.alumno_id].total = pago.importe;
 							  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
-							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semanaPago;						
+							  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
 								arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
 						  }else{
 							  if(arreglo[grupo._id].alumnos[alumno.alumno_id] == undefined){
@@ -187,7 +191,7 @@ Meteor.methods({
 								  
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].pagos.push(pago);
 								  arreglo[grupo._id].alumnos[alumno.alumno_id].fechaUltimoPago = ultimoPago.fechaPago;
-								  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semanaPago;						
+								  arreglo[grupo._id].alumnos[alumno.alumno_id].colegiaturaUltimoPago = ultimoPago.semana;						
 									arreglo[grupo._id].alumnos[alumno.alumno_id].importeColegiatura = inscripcion.planPagos.colegiatura[tipoColegiatura].importeRegular;
 							  }else{
 								  if(parseInt(diasDiferencia) <= parseInt(inscripcion.planPagos.colegiatura[tipoColegiatura].diasDescuento)){

@@ -1,13 +1,14 @@
 <h2>Grupos Activos</h2>
 <div class="tree">
-	<ul role="tree" class="col-sm-3" ng-repeat="asignacionesPorMaestro in ga.gruposActivos">
+	<ul role="tree" class="col-sm-3 font-xs" ng-repeat="asignacionesPorMaestro in ga.gruposActivos">
 		<li class="parent_li" role="treeitem">
-			<span>
-				<i class="fa fa-lg fa-user"></i> {{asignacionesPorMaestro.maestro.nombre + " " + asignacionesPorMaestro.maestro.apPaterno}} </span>
+			<span >
+				<i class="fa fa-lg fa-user"></i> {{asignacionesPorMaestro.maestro.nombre + " " + asignacionesPorMaestro.maestro.apPaterno}}  ( {{asignacionesPorMaestro.maestro.nombreUsuario}} )
+			</span>
 			<ul role="group">
 				<li class="parent_li" role="treeitem" ng-repeat="asignacion in asignacionesPorMaestro.asignaciones">
 					<span class="label bg-color-orange" title="Collapse this branch">
-						<i class="fa fa-lg fa-group"></i> {{asignacion.grupo}}
+						<i class="fa fa-lg fa-group"></i> {{asignacion.grupo}} - {{asignacion.materia.nombre}}
 					</span>
 					<ul role="group" >
 						<li>
@@ -19,6 +20,11 @@
 							<a ui-sref="root.verAsistencias({grupo_id : asignacion.grupo_id, materia_id : asignacion.materia_id, maestro_id : asignacionesPorMaestro.maestro._id})">
 								<span><i class="fa fa-lg fa-list"></i> Asistencias</span>
 							</a>
+						</li>
+						<li role="treeitem">
+							<a ui-sref="root.revisarPlaneaciones({grupo_id : asignacion.grupo._id, materia_id : asignacion.materia_id, maestro_id : asignacion.maestro_id})">
+								<span><i class="fa fa-lg fa-bookmark"></i> Planeaciones</span>
+							</a>														
 						</li>
 						<li role="treeitem">
 							<a ui-sref="root.alumnoForos({grupo_id : asignacion.grupo_id})">

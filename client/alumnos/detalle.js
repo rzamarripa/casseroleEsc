@@ -20,6 +20,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.planEstudios_id = [];
 	this.ocupacion_id = "";
 	this.semanasSeleccionadas = [];
+	this.otroPago = {}; 
 	
 	this.subscribe("ocupaciones",()=>{
 		return [{_id : this.getReactively("ocupacion_id"), estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
@@ -68,6 +69,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		return [{
 			alumno_id : $stateParams.alumno_id
 		}];
+	});
+	
+	this.subscribe('conceptosPago',()=>{
+		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	});
+	
+	this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
 	});
 		
 	this.helpers({
@@ -120,6 +129,12 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				})
 				return Curriculas.find();
 			}			
+		},
+		conceptosPago : () => {
+		  return ConceptosPago.find({modulo:"otros"});
+	  },
+		mediosPublicidad : () => {
+			return MediosPublicidad.find();
 		}
 	});
 
@@ -1056,6 +1071,35 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var ocupacion = Ocupaciones.findOne(ocupacion_id);
 		if(ocupacion)
 			return ocupacion.nombre;
+	};
+    
+	this.guardarOtroPago = function(pago)
+	{  
+		var semanasPagadas = [];
+			diaActual = moment(new Date()).weekday();
+			semanaPago = moment(new Date()).isoWeek();
+			anioPago = moment(new Date()).get('year');
+		
+			pago.estatus = 1;
+			pago.usuarioAtendio = Meteor.user()._id;
+			pago.inscripcion_id = rc.inscripciones[0]._id
+			pago.dia = diaActual;
+			pago.semana = semanaPago;
+			pago.anio = anioPago;
+			pago.alumno_id = $stateParams.alumno_id;
+			pago.modulo = "Otro";
+
+
+			//this.aula.seccion_id = Meteor.user().profile.seccion_id;
+			//aula.usuarioInserto = Meteor.userId();	
+			PlanPagos.insert(pago);
+			toastr.success('Guardado correctamente.');
+			otroPago = {}; 
+
+	};
+	
+	this.regresar = function(){
+		window.history.back();
 	}
 	
 }

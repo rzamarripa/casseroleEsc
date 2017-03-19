@@ -43,12 +43,13 @@ angular.module("casserole")
     return [{
 	    prospecto_id : $stateParams.id
     }];
-
-    this.subscribe("mediosPublicidad",()=>{
-		return [{estatus:true }]
-	 });
-
   });
+  
+  this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	});
+
+
   
   this.helpers({
 	  prospecto : () => {
@@ -73,8 +74,6 @@ angular.module("casserole")
 		  return MediosPublicidad.find();
 	  },
 	});
-
-  console.log("LEWANDOWSKi")
   
   this.nuevaLlamada = true;
   this.llamada = {};

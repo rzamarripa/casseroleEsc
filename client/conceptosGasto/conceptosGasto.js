@@ -6,7 +6,7 @@ function ConceptosGastoCtrl($scope, $meteor, $reactive, $state, toastr) {
   $reactive(this).attach($scope);
   this.nuevo = true;
   this.conceptoGasto = {};
-  this.tiposGasto = ["cheques","relaciones","admon"]
+  this.tiposGasto = ["Cheques","Relaciones","Admon"]
   this.conceptoGasto.tipoGasto = "";
   this.subscribe('conceptosGasto', () => {
     return [{tipoGasto: this.getReactively('conceptoGasto.tipoGasto')}];

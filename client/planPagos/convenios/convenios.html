@@ -1,0 +1,223 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-light well-sm no-margin no-padding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="myCarousel" class="carousel profile-carousel">
+									<div class="air air-bottom-right padding-10">
+										<a ng-if="currentUser.roles[0] == 'director' || currentUser.roles[0] == 'coordinadorFinanciero'" ui-sref="root.alumnoDetalle({alumno_id : co.alumno._id})" class="btn txt-color-white bg-color-teal btn-sm"><i class="fa fa-user"></i> Ir a mi perfil</a>&nbsp;
+ 										<a ui-sref="root.editarAlumno({alumno_id : co.alumno._id})" class="btn txt-color-white bg-color-pinkDark btn-sm" ng-show="currentUser.roles[0] == 'director'">
+	 										<i class="fa fa-pencil"></i> Modificar
+	 									</a> 
+									</div>
+									<div class="air air-top-left padding-10">
+										<h4 class="txt-color-white font-md"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{co.fechaActual | date:'dd-MM-yyyy'}}</h4>
+									</div>
+									<ol class="carousel-indicators">
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											<img src="img/demo/s1.jpg" alt="" style="width:100%">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-2 profile-pic" style="text-align:left;width:initial;">
+										<img style="max-width:200px;" src="{{co.tieneFoto(co.alumno.profile.sexo, co.alumno.profile.fotografia)}}" >
+									</div>
+									<div class="col-sm-6">
+										<h1>{{co.alumno.profile.nombre}} <span class="semi-bold">{{co.alumno.profile.apPaterno}} {{co.alumno.profile.apMaterno}}</span>
+										
+										<small> (Alumno)</small></h1>
+										<ul class="list-unstyled">
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-key fa-lg"></i>&nbsp;&nbsp;
+													<span class="txt-color-darken">
+														<strong>{{co.alumno.profile.matricula}}</strong>
+													</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-phone fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{co.alumno.profile.tel1}}</span>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-envelope fa-lg"></i>&nbsp;&nbsp;<a href="mailto:{{co.alumno.profile.correo}}">{{co.alumno.profile.correo}}</a>
+												</p>
+											</li>
+											<li>
+												<p class="text-muted">
+													<i class="fa fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;<span class="txt-color-darken">{{co.alumno.profile.fechaNac | date:"dd-MM-yyyy"}}</span>
+												</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<a class="btn btn-{{co.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="co.nuevoConvenio()">
+								 {{co.nuevo == true ? 'Agregar Colegiatura' : 'Cancelar'}}
+								</a>
+								<a class="btn btn-{{co.nuevoMasivo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+									href="#collapseMasiva" aria-expanded="false" aria-controls="collapseExample" ng-click="co.nuevoConvenioMasivo()">
+								 {{co.nuevoMasivo == true ? 'Modificación Masiva' : 'Cancelar'}}
+								</a>
+								<div class="collapse" id="collapseExample">
+									<form name="form" class="form-horizontal" role="form" novalidate>
+								  	<div class="well">	    
+									    <div class="row">
+									    	<div class="col-sm-4" valida>
+													<label for="fechaPago">Fecha de Pago *</label>
+													<input name="fechaPago" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="co.pago.fecha" required="" />
+												</div>
+									    	<div class="col-sm-4" valida>
+										    	<label>Colegiatura *</label>
+										    	<input name="clave" type="text" class="form-control" placeholder="Colegiatura" ng-model="co.pago.semana" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Año *</label>
+										    	<input name="anio" type="text" class="form-control" placeholder="Año" ng-model="co.pago.anio" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Importe *</label>
+										    	<input name="importe" type="number" class="form-control" ng-model="co.pago.importe" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Recargo *</label>
+										    	<input name="recargo" type="number" class="form-control" ng-model="co.pago.importeRecargo" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Descuento *</label>
+										    	<input name="descuento" type="number" class="form-control" ng-model="co.pago.importeDescuento" required="">
+									    	</div>
+									    </div> 
+									    <div class="row">
+									    	<div class="col-sm-12">
+											    <label>Descripción</label>
+											    <textarea name="descripcion" class="form-control" placeholder="Descripción" ng-model="co.pago.descripcion" required=""></textarea>
+									    	</div>
+									    </div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="submit" ng-click="co.guardar(co.pago,form)" value="Guardar" class="btn btn-primary" ng-show="co.action" valida-form formulario="form">
+												<input type="submit" ng-click="co.actualizar(co.pago,form)" value="Actualizar" class="btn btn-primary" ng-show="!co.action" valida-form formulario="form">				
+											</div>
+										</div>	  
+								  </form>
+								</div>
+							</div>
+						</div>
+						<div class="row"> 
+							<div class="col-sm-12">
+								
+								<div class="collapse" id="collapseMasiva">
+									<form name="formMasivo" class="form-horizontal" role="form" novalidate>
+								  	<div class="well">	    
+									  	<div class="row">
+									  		<div class="col-sm-12">
+									  			<div class="alert alert-warning">
+									  			 <p><i class="fa-fw fa fa-warning"></i> La <strong>actualización masiva</strong> es una herramienta que actualizará el importe, recargo y descuento en un rango de semanas dadas, por favor asegúrese de hacerlo correctamente.</p>
+									  			 <p><strong>No se pueden modificar colegiaturas pagadas</strong></p>
+									  			</div>
+									  		</div>
+									  	</div>
+									    <div class="row">
+									    	<div class="col-sm-4" valida>
+										    	<label>Semana Inicial *</label>
+										    	<input name="semanaIncialMasiva" type="number" class="form-control" placeholder="De la semana" ng-model="co.modificacion.semanaInicial" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>
+										    	<label>Semana Final *</label>
+										    	<input name="semanaFinalMasiva" type="number" class="form-control" placeholder="A la semana" ng-model="co.modificacion.semanaFinal" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Año *</label>
+										    	<input name="anioMasiva" type="number" class="form-control" placeholder="En el año" ng-model="co.modificacion.anio" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Importe *</label>
+										    	<input name="importeMasivo" type="number" class="form-control" placeholder="Nuevo costo colegiatura" ng-model="co.modificacion.importe" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Recargo *</label>
+										    	<input name="recargoMasivo" type="number" class="form-control" placeholder="Monto recargo" ng-model="co.modificacion.recargo" required="">
+									    	</div>
+									    	<div class="col-sm-4" valida>					    
+										    	<label>Descuento *</label>
+										    	<input name="descuentoMasivo" type="number" class="form-control" placeholder="Monto descuento" ng-model="co.modificacion.descuento" required="">
+									    	</div>
+									    </div> 
+									    <div class="row">
+									    	<div class="col-sm-12" valida>
+											    <label>Descripción</label>
+											    <textarea name="descripcionMasiva" class="form-control" placeholder="Descripción" ng-model="co.modificacion.descripcion" required=""></textarea>
+									    	</div>
+									    </div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="submit" ng-click="co.modificacionMasiva(co.modificacion,formMasivo)" value="Modificar" class="btn btn-primary" valida-form formulario="formMasivo">	
+											</div>
+										</div>	  
+								  </form>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-striped table-bordered table-condensed">
+									<caption>												
+										<h4>Listado de Pagos</h4>
+									</caption>
+									<thead class="thead">
+										<tr>
+											<th class="text-center" width="5%">No.</th>
+											<th class="text-center" width="10%">Fecha de Pago</th>
+											<th class="text-center" width="15%">Colegiatura</th>
+											<th class="text-center" width="10%">Importe</th>
+											<th class="text-center" width="10%">Descuento</th>
+											<th class="text-center" width="10%">Recargo</th>
+											<th class="text-center" width="20%">Descripción</th>
+											<th class="text-center" width="20%">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-class="(pago.estatus == 1) ? 'success' : (pago.fecha < co.fechaActual && pago.estatus == 0) ? 'warning' : (pago.estatus == 2) ? 'danger' : 'info'" ng-repeat="pago in co.planPagos">
+											<td class="text-center">{{$index + 1}}</td>	
+											<td class="text-center">{{pago.fecha | date:"dd-MM-yyyy"}}</td>
+											<td class="text-center">{{pago.semana}} - {{pago.anio}}</td>
+											<td class="text-right">{{pago.importe | currency}}</td>
+											<td class="text-right">{{pago.importeDescuento | currency}}</td>
+											<td class="text-right">{{pago.importeRecargo | currency}}</td>
+											<td >{{pago.descripcion}}</td>
+											<td class="text-center">
+												<span ng-if="pago.estatus != 1">
+													<button class="btn btn-warning btn-xs" ng-click="co.editar(pago)"><i class="fa fa-pencil"></i> Editar</button>
+													<button class="btn btn-danger  btn-xs" ng-click="co.eliminar(pago)"><i class="fa fa-trash"></i> Eliminar</button>
+												</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>b
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

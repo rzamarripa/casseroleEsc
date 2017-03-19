@@ -1,20 +1,27 @@
 <h2>Vendedores</h2>
 <div class="row well">
-	<form name="form" class="form-horizontal" role="form" novalidate style="margin: auto;">
-		<div class="col-sm-2 col-sm-offset-4 text-center" valida>
+		<div class="col-sm-2 col-sm-offset-1 text-center">
 			<label for="fechaInicial">Fecha Inicial *</label>
-			<input name="fechaInicial" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.fechaInicial" required="" />
+			<input date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.fechaInicial" required="" />
 		</div>
-		<div class="col-sm-2 text-center" valida>
-			<label for="fechaFinal">Fecha Final *</label>
-			<input name="fechaFinal" date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.fechaFinal" required="" />
-		</div>
-<!--
 		<div class="col-sm-2 text-center">
-			<button ng-click="gv.buscarProspectos(gv.buscar);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+			<label for="fechaFinal">Fecha Final *</label>
+			<input date-time format="dd-MM-yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="gv.fechaFinal" required="" />
 		</div>
--->
-	</form>
+		<div class="col-sm-1 text-center" valida>
+			<label>o</label>
+		</div>
+		<div class="col-sm-2 text-center">
+			<label for="semana">Semana</label>
+			<input class="form-control"ng-model="gv.semana"/>
+		</div>
+		<div class="col-sm-2 text-center">
+			<label for="anio">Año</label>
+			<input class="form-control" ng-model="gv.anio" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<button ng-click="gv.calcularSemana(gv.semana, gv.anio);" class="btn btn-primary"><i class="fa fa-search"></i> Calcular</button>
+		</div>
 </div>
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-12">
@@ -64,9 +71,9 @@
 							<div class="collapse" id="collapseExample{{vendedor._id}}">
 								<form name="form1" class="form-horizontal" role="form" novalidate>		  		
 							    <div class="row">
-							    	<div class="col-sm-12">
+							    	<div class="col-sm-12" valida>
 								    	<label>Escriba su mensaje</label>
-							    		<textarea class="form-control" rows="3" ng-model="gv.mensaje.descripcion"></textarea>
+							    		<textarea name="mensaje" class="form-control" rows="3" ng-model="gv.mensaje.descripcion"></textarea>
 							    	</div>
 							    </div>
 									<div class="row">
