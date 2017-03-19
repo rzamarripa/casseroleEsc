@@ -34,8 +34,8 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
 	this.subscribe('prospectosPorVendedor',()=>{
 		return [{
 			"profile.campus_id" : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "",  
-			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')},
-			"profile.estatus" : 1
+			"profile.vendedor_id" : {$in:this.getCollectionReactively('vendedores_id')}
+			//"profile.estatus" : 1
 		}];
 	});
 
@@ -238,8 +238,14 @@ function GerenteVendedoresCtrl($scope, $meteor, $reactive,  $state, $stateParams
   };
   
   this.calcularSemana = function(w, y) {
-    var simple = new Date(y, 0, 1 + (w - 1) * 7);
-    rc.fechaInicial = new Date(simple);
-    rc.fechaFinal = new Date(moment(simple).add(7,"days"));
+	  console.log(w,y);
+	  if(w != undefined && y != undefined && $.isNumeric(w) && $.isNumeric(y)){
+		  var simple = new Date(y, 0, 1 + (w - 1) * 7);
+	    rc.fechaInicial = new Date(simple);
+	    rc.fechaFinal = new Date(moment(simple).add(7,"days"));
+	  }else{
+		  toastr.warning("Revise que la semana y el año esté llenado y sea numérico.")
+	  }
+    
 	}
 };

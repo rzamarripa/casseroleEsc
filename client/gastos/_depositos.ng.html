@@ -110,8 +110,8 @@
 	      	<td align="right">{{cuenta.totalDepositos + gc.gastosCheques(cuenta._id) | currency}}</td>
 	      </tr>
 	      <tr ng-if="!cuenta.inscripcion">
-	      	<td><strong>Resta por pagar</strong></td>
-	      	<td align="right">{{gc.importeSemanalPagos(cuenta._id) - (cuenta.totalDepositos + gc.gastosCheques(cuenta._id)) | currency}}</td>
+	      	<td><strong>Resta por depositar</strong></td>
+	      	<td align="right">{{(cuenta.totalDepositos + gc.gastosCheques(cuenta._id)) | currency}}</td>
 	      </tr>
 	  	</tbody>
 	  </table>
@@ -142,33 +142,6 @@
 	  		</tr>
 	  	</tbody>
 	  </table>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<table class="table table-striped">
-			<caption><h4>Listado de Depósitos</h4></caption>
-			<thead class="thead">
-				<tr>
-					<th class="text-center">No.</th>
-					<th class="text-center">Fecha</th>
-					<th class="text-center">A nombre</th>
-					<th class="text-center">Cuenta</th>
-					<th class="text-center">Tipo Gasto</th>
-					<th class="text-center">Importe</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="gasto in gc.gastos">
-					<td class="text-center">{{$index + 1}}</td>
-					<td class="text-center">{{ gasto.fecha | date:"dd-MM-yyyy hh:mm:ss" }}</td>
-					<td>{{ gasto.aNombreDe }}</td>
-					<td class="text-center">{{ gasto.cuenta.nombre }}</td>
-					<td class="text-center">Depósitos</td>
-					<td class="text-center">{{ gasto.importe | currency }}</td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
 </div>
 

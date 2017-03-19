@@ -29,7 +29,6 @@
 		        <th>Información Adicional</th>
 		        <th>Asesor</th>
 		        <th>Etapa Venta</th>
-		        <th>Acciones</th>
 	        </tr>
 	        <tr ng-repeat="prospecto in fa.prospectos">
 		        <td>{{$index + 1}}</td>
@@ -38,13 +37,21 @@
 		        <td>{{prospecto.profile.tel1}}</td>
 		        <td>{{prospecto.profile.correoCalificaciones}}</td>
 		        <td>{{prospecto.profile.observacionesGenerales}}</td>
-		        <td>{{prospecto.profile.vendedor.profile.nombre}} {{prospecto.profile.vendedor.profile.apPaterno}}</td>
-		        <td>{{prospecto.profile.etapaVenta.nombre}}</td>
-			      <td>
-							<button class="btn btn-danger btn-xs" ng-confirm-click="Está seguro de eliminar el prospecto?" confirmed-click="fa.eliminar(prospecto)">
-								<i class="fa fa-trash"></i>
-							</button>
-		        </td>
+		        <td>
+			        <span ng-if="currentUser.roles[0] == 'recepcionista'">
+				        {{prospecto.profile.vendedor.profile.nombre}} {{prospecto.profile.vendedor.profile.apPaterno}}
+				      </span>
+				      <span ng-if="currentUser.roles[0] == 'gerenteVenta'">
+				      	<select class="form-control" ng-model="prospecto.profile.vendedor_id" ng-change="fa.cambiarAsesorVenta(prospecto._id, prospecto.profile.vendedor_id)">
+					        <option value="{{vendedor._id}}" ng-repeat="vendedor in fa.vendedores">{{vendedor.profile.nombre}} {{vendedor.profile.apPaterno}}</option>
+				        </select>
+				      </span>
+				    </td>
+		        <td>
+			        <select class="form-control" ng-model="prospecto.profile.etapaVenta_id" ng-change="fa.cambiarEtapaVenta(prospecto._id, prospecto.profile.etapaVenta_id)">
+				        <option value="{{etapa._id}}" ng-repeat="etapa in fa.etapasVenta">{{etapa.nombre}}</option>
+			        </select>
+			      </td>
 	        </tr>
         </table>
       </div>            

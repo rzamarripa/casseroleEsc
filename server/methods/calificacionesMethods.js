@@ -1,7 +1,8 @@
 Meteor.methods({
 	calificar : function(calificacion){
-		Calificaciones.insert(calificacion);
+		
 	  _.each(calificacion.alumnos, function(alumno){
+		  alumno.tipo = "Ordinario";
 		  var curricula = Curriculas.findOne({alumno_id : alumno._id});		  
 		  _.each(curricula.grados, function(grado){
 			  _.each(grado, function(materia){
@@ -48,7 +49,7 @@ Meteor.methods({
 		  delete curricula._id;
 		  Curriculas.update({_id : idTemp}, { $set : curricula})
 	  })
-	  
+	  Calificaciones.insert(calificacion);
 	  return true;
 	},
 	actualizarCalificacion : function(calificacion){

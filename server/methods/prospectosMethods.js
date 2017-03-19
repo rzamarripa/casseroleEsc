@@ -1,6 +1,7 @@
 Meteor.methods({
 	buscarProspectosGerente : function(options){
 		if(options.where.nombreCompleto.length > 0){			
+			result = [];
 			let selector = {
 		  	"profile.nombreCompleto": { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' },
 		  	"profile.campus_id": options.where.campus_id
@@ -13,7 +14,10 @@ Meteor.methods({
 				prospecto.profile.etapaVenta = EtapasVenta.findOne(prospecto.profile.etapaVenta_id);
 			});
 			
-			return prospectos;
+			result[0] = prospectos;
+			result[1] = EtapasVenta.find({estatus : true, campus_id : options.where.campus_id}).fetch();
+			result[2] = Meteor.users.find({roles : ["vendedor"], "profile.campus_id" : options.where.campus_id},{ fields : {"profile.nombre" : 1, "profile.apPaterno" : 1}}).fetch();
+			return result;
 		}
 	}
 });

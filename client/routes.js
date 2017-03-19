@@ -1057,7 +1057,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       resolve: {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
-						if(user.roles[0] == "gerenteVenta"){
+						if(user.roles[0] == "gerenteVenta" || user.roles[0] == "recepcionista"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

@@ -76,6 +76,16 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  	}
 	  	return asistencias;
 	  },
+	  diasUnicos : () => {
+		  var arreglo = {};
+		  _.each(this.getReactively("asistencias"), function(asistencia){
+			  if(arreglo[asistencia.fechaAsistencia] == undefined){
+				  arreglo[asistencia.fechaAsistencia] = {};
+				  arreglo[asistencia.fechaAsistencia].fecha = asistencia.fechaAsistencia;
+			  }
+		  });
+		  return _.toArray(arreglo);
+	  },
 	  existenAsistencias : () => {
 		  return Asistencias.find().count();
 	  },
@@ -83,7 +93,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 		  var transmutar = {};
 		  var arregloCoincidencias = [];
 		  if(this.getReactively("existenAsistencias")>0){
-			  _.each(this.getReactively("asistencias"), function(alumno){
+			  _.each(rc.getReactively("asistencias"), function(alumno){
 					if(alumno.profile != undefined && "undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
 						transmutar[alumno.profile.nombreCompleto]={};
 						transmutar[alumno.profile.nombreCompleto]._id = alumno._id;
@@ -95,21 +105,32 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 					}else if(alumno.profile != undefined){
 						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
 					}
-							
 			  })
 		  }
 			transmutar = _.toArray(transmutar);
+			
+			
+			if(this.getReactively("existenAsistencias")>0){
+				var arreglo = {};
+				_.each(rc.getReactively("diasUnicos"), function(diaUnico){
+					_.each(rc.getReactively("asistencias"), function(asistencia){
+						if(arreglo[diaUnico + asistencia.alumno_id] != undefined){
+							arreglo[diaUnico + asistencia.alumno_id] = {};
+							arreglo[diaUnico + asistencia.alumno_id].nombre = asistencia.profile.nombreCompleto;
+							arreglo[diaUnico + asistencia.alumno_id].dias = [];
+							arreglo[diaUnico + asistencia.alumno_id].dias.push(asistencia.estatus);
+						}else{
+							arreglo[diaUnico + asistencia.alumno_id].dias.push(asistencia.estatus);
+						}
+					})
+				})
+					
+			}
+			
+			console.log(arreglo);
+			
+			
 			return transmutar;
-	  },
-	  diasUnicos : () => {
-		  var arreglo = {};
-		  _.each(this.getReactively("asistencias"), function(asistencia){
-			  if(arreglo[asistencia.fechaAsistencia] == undefined){
-				  arreglo[asistencia.fechaAsistencia] = {};
-				  arreglo[asistencia.fechaAsistencia].fecha = asistencia.fechaAsistencia;
-			  }
-		  });
-		  return _.toArray(arreglo);
 	  }
   });
   
@@ -122,7 +143,14 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  return 0;
 	}
 	
-	
+	/*
+		11 - 21
+		12 - 22
+		
+		
+		
+		
+	*/
   
   
 };

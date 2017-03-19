@@ -5,13 +5,21 @@ angular
 function ConceptosPagoCtrl($scope, $meteor, $reactive, $state, toastr) {
 	$reactive(this).attach($scope);
   this.action = true;
+  
 	this.subscribe('conceptosPago',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
-	 });
+	});
+	
+	this.subscribe('cuentas', () => {
+    return [{estatus: true, seccion_id: Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ''}];
+  });
   
   this.helpers({
 	  conceptosPago : () => {
-		  return ConceptosPago.find();
+		  return ConceptosPago.find({},{ sort : {orden : 1}});
+	  },
+	  cuentas : () => {
+		  return Cuentas.find();
 	  }
   });
   	  

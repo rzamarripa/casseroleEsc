@@ -39,12 +39,7 @@
 					<div ng-if="gc.descripcion(gc.gasto.concepto_id)" class="form-group col-sm-4" valida>
 					  <label>Descripción</label>
 				  	<input type="text" class="form-control"  ng-model="gc.gasto.descripcion" name="descripcion" required>
-					</div>
-					<div class="form-group col-sm-4">
-					  <label>Cheque referenciado</label>
-				  	<input type="text" class="form-control"  ng-model="gc.gasto.chequeReferenciado" >
-					</div>
-					
+					</div>					
 				</div>
 				<input value="Guardar" type="submit" class="btn btn-primary pull-right" ng-click="gc.guardar(gc.gasto, form)" valida-form formulario="form">
 			</div>

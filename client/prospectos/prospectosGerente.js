@@ -22,8 +22,9 @@ angular.module("casserole")
 					} 		   
 		    }], function(error, result){
 			  if(result){
-				  console.log(result);
-				  rc.prospectos = result;
+				  rc.prospectos = result[0];
+				  rc.etapasVenta = result[1];
+				  rc.vendedores = result[2];
 				  NProgress.set(1);
 			  }
 		
@@ -32,5 +33,17 @@ angular.module("casserole")
 	  }else{
 		  rc.prospectos = [];
 	  }
+  }
+  
+  this.cambiarEtapaVenta = function(prospecto_id, etapaVenta_id){
+	  console.log(prospecto_id, etapaVenta_id);
+	  Prospectos.update({_id : prospecto_id},{ $set : {"profile.etapaVenta_id" : etapaVenta_id}});
+	  toastr.success("Ha cambiado la Etapa de Venta");
+  }
+  
+  this.cambiarAsesorVenta = function(prospecto_id, vendedor_id){
+	  console.log(prospecto_id, vendedor_id);
+	  Prospectos.update({_id : prospecto_id},{ $set : {"profile.vendedor_id" : vendedor_id}});
+	  toastr.success("Ha cambiado de Asesor");
   }
 };

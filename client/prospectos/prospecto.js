@@ -149,6 +149,7 @@ angular.module("casserole")
 	  llamada.estatus = false;
 	  Llamadas.insert(llamada);
 	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
+	  this.validarPrimeraActividad(llamada.prospecto_id);
 	  this.llamada = {};
 	  $('.collapseLlamada').collapse('hide');
   };
@@ -180,6 +181,7 @@ angular.module("casserole")
 	  reunion.estatus = false;
 	  Reuniones.insert(reunion);
 	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
+	  this.validarPrimeraActividad(reunion.prospecto_id);
 	  this.reunion = {};
 	  $('.collapseReunion').collapse('hide');
   };
@@ -210,6 +212,7 @@ angular.module("casserole")
 	  tarea.vendedor_id = Meteor.userId();
 	  tarea.estatus = false;
 	  Tareas.insert(tarea);
+	  this.validarPrimeraActividad(tarea.prospecto_id);
 	  Prospectos.update($stateParams.id, { $set : {"profile.fechaUltimoContacto":new Date() } } )
 	  this.tarea = {};
 	  $('.collapseTarea').collapse('hide');
@@ -267,5 +270,19 @@ angular.module("casserole")
 			Tareas.remove({_id : tarea._id});
 			toastr.success("Se eliminó correctamente");
 		}			
+	}
+	
+	this.validarPrimeraActividad = function(prospecto_id){
+		var etapaVenta = EtapasVenta.findOne(rc.prospecto.profile.etapaVenta_id);
+		console.log(etapaVenta);
+		if(etapaVenta.orden == 1){
+			if(rc.llamadas.length > 0 || rc.reuniones.length > 0 || rc.tareas.length > 0){
+				var seguimiento = EtapasVenta.findOne({orden : 2});
+				console.log(seguimiento);
+				Prospectos.update(prospecto_id, { $set : {"profile.etapaVenta_id" : seguimiento._id}});
+				toastr.success("El prospecto ahora está en Seguimiento");
+			}
+		}
+		
 	}
 };

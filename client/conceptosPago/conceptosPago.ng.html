@@ -12,7 +12,7 @@
 			    <div class="row">
 				    <div class="col-sm-4" valida>
 				    	<label>Orden *</label>
-					    <input name="orden" type="text" class="form-control" ng-model="cp.conceptoPago.orden" required=""/>
+					    <input name="orden" type="number" class="form-control" ng-model="cp.conceptoPago.orden" required=""/>
 			    	</div>
 			    	<div class="col-sm-4" valida>
 				    	<label>Nombre *</label>
@@ -22,6 +22,8 @@
 				    	<label>Importe *</label>
 					    <input name="importe" type="number" class="form-control" ng-model="cp.conceptoPago.importe" required=""/>
 			    	</div>
+			    </div>
+			    <div class="row">
 			    	<div class="col-sm-4" valida>
 			    		<label>Módulo *</label>
 			    		<select name="modulo" class="form-control" ng-model="cp.conceptoPago.modulo" required>
@@ -30,6 +32,12 @@
 				    		<option value="otros">Otros</option>
 			    		</select>
 			    	</div>
+			    	<div class="col-sm-4" valida>
+							<label for="cuenta_id">Cuenta</label>
+							<select class="form-control" placeholder="Seleccione" ng-model="cp.conceptoPago.cuenta_id" name="cuenta_id" required>
+							  <option ng-repeat="cuenta in cp.cuentas" value="{{cuenta._id}}">{{cuenta.nombre}}</option>
+							</select>
+						</div>
 			    </div>
 			    <br/>
 				<div class="row">
