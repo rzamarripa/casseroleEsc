@@ -1,3 +1,10 @@
+.desactivado {
+    z-index: 1000;
+    background-color: lightgrey;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
 @import url(https://fonts.googleapis.com/css?family=Quicksand:400,300);
 body{
 	font-family: 'Quicksand', sans-serif;

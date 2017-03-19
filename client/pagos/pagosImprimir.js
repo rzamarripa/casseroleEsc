@@ -81,6 +81,7 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
     }];
   });
 
+
     this.subscribe('pagosAlumno', () => {
 
 		return [{
@@ -125,8 +126,8 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
 				}
 			})
 			console.log(rc.total, rc.total/1.16)
-			rc.subTotal= rc.total/1.16;
-			rc.iva = rc.total-rc.subTotal;
+			rc.subTotal= rc.total;
+			rc.iva = 0;
 			console.log(ret)
   			return ret
 
