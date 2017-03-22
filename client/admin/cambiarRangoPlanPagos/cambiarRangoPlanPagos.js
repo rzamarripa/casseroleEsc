@@ -30,7 +30,7 @@ function CambiarRangoPlanPagosCtrl($scope, $meteor, $reactive,  $state, $statePa
   });
 	
   this.subscribe("planPagos",()=>{
-		return [{alumno_id : this.getReactively("alumno_id"), modulo : "inscripcion"}]
+		return [{alumno_id : this.getReactively("alumno_id"), modulo : "colegiatura"}]
 	});
 	
 	this.subscribe("inscripciones",()=>{
