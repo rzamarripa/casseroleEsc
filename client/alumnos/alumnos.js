@@ -40,6 +40,10 @@ function AlumnosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe('campus',()=>{
 		return [{_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }]
 	});
+	
+	this.subscribe("mediosPublicidad",()=>{
+		return [{estatus:true }]
+	});
   
 	this.helpers({
 	  ocupaciones : () => {

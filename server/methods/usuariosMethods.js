@@ -16,7 +16,7 @@ Meteor.methods({
 			profile.maestro_id = usuario.maestro_id;
 		
 		var usuario_id = Accounts.createUser({
-			username: usuario.nombreUsuario,
+			username: "pruebazama1",
 			password: usuario.contrasena,
 			profile: profile
 		});
