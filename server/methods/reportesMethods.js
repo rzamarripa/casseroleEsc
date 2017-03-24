@@ -1,6 +1,6 @@
 Meteor.methods({
 	prospectosPorEtapaVenta: function (fechaInicial, fechaFinal) {
-    var etapasVenta = EtapasVenta.find().fetch();
+    var etapasVenta = EtapasVenta.find({campus_id : Meteor.user().profile.campus_id}).fetch();
     var medios = MediosPublicidad.find().fetch();
     var arreglo = {};
     _.each(etapasVenta, function(etapaVenta){
