@@ -96,11 +96,12 @@
 					</div> -->
 					<div class="col-sm-4">
 						<label>¿Cómo te enteraste de nosotros?</label>
-						<select class="form-control"  placeholder="Seleccione" ng-model="fa.prospecto.profile.medio_id">
+						<select class="form-control"  placeholder="Seleccione" ng-model="fa.prospecto.profile.medio_id" ng-change="fa.seleccionarMedio(fa.prospecto.profile.medio_id)">
 							<option ng-repeat="objeto in fa.mediosPublicidad" value="{{objeto._id}}">
 								{{objeto.nombre}}
 							</option>
 						</select>
+						<input type="text" ng-model="fa.prospecto.profile.otroMedio" class="form-control" ng-show="fa.otroMedioSeleccionado" placeholder="Especifique el medio"/>
 					</div>
 				</div>
 				<div class="row">

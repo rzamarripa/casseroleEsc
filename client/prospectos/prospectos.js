@@ -11,6 +11,7 @@ angular.module("casserole")
   this.buscar.nombre = '';
   this.buscar.etapaVenta_id = '';
   this.titulo = "";
+  this.otroMedioSeleccionado = false;
   
   if($stateParams.vendedor_id){
 	  
@@ -214,4 +215,14 @@ angular.module("casserole")
 			rc.prospecto.profile.thumbnail = data;
 		})
 	};
+	
+	this.seleccionarMedio = function(medio_id){
+		var medio = MediosPublicidad.findOne(medio_id);
+		if(medio.nombre == "Otro"){
+			rc.otroMedioSeleccionado = true;
+		}else{
+			rc.otroMedioSeleccionado = false;
+			rc.prospecto.profile.otroMedio = undefined;
+		}
+	}
 };

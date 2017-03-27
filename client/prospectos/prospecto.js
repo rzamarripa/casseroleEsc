@@ -86,6 +86,7 @@ angular.module("casserole")
   this.actionLlamada = true;
   this.actionReunion = true;
   this.actionTarea = true;
+  this.otroMedioSeleccionado = false;
   
   this.tipoComidas = [
     'Comida Mexicana',
@@ -286,6 +287,15 @@ angular.module("casserole")
 				toastr.success("El prospecto ahora está en Seguimiento");
 			}
 		}
-		
+	}
+	
+	this.seleccionarMedio = function(medio_id){
+		var medio = MediosPublicidad.findOne(medio_id);
+		if(medio.nombre == "Otro"){
+			rc.otroMedioSeleccionado = true;
+		}else{
+			rc.otroMedioSeleccionado = false;
+			rc.prospecto.profile.otroMedio = undefined;
+		}
 	}
 };

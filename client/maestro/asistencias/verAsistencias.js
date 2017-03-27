@@ -96,7 +96,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 			  _.each(rc.getReactively("asistencias"), function(alumno){
 					if(alumno.profile != undefined && "undefined" == typeof transmutar[alumno.profile.nombreCompleto]){
 						transmutar[alumno.profile.nombreCompleto]={};
-						transmutar[alumno.profile.nombreCompleto]._id = alumno._id;
+						transmutar[alumno.profile.nombreCompleto]._id = alumno.alumno_id;
 						transmutar[alumno.profile.nombreCompleto].nombre = alumno.profile.nombreCompleto; 
 						transmutar[alumno.profile.nombreCompleto].matricula = alumno.profile.matricula; 
 						transmutar[alumno.profile.nombreCompleto].fotografia = alumno.profile.fotografia; 
