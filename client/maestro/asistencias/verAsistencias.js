@@ -91,6 +91,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  },
 	  alumnosAsistidos : () => {
 		  var transmutar = {};
+		  var max =0;
 		  var arregloCoincidencias = [];
 		  if(this.getReactively("existenAsistencias")>0){
 			  _.each(rc.getReactively("asistencias"), function(alumno){
@@ -104,10 +105,17 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
 					}else if(alumno.profile != undefined){
 						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
+						max=Math.max(transmutar[alumno.profile.nombreCompleto].dias.length,max);
 					}
 			  })
 		  }
+	
+		  _.each(transmutar,function(objeto){
+			  if(objeto.dias.length!=max)
+			  	objeto.dias = Array(max-objeto.dias.length).fill(4).concat(objeto.dias);
+		  })
 			transmutar = _.toArray(transmutar);
+			console.log(transmutar)
 			return transmutar;
 	  }
   });

@@ -66,6 +66,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.subscribe("cuentas",()=>{
 		return [{activo:true, seccion_id : this.getReactively("seccion_id")}]
 	});
+	
+	this.subscribe("secciones",()=>{
+		return [{_id : this.getReactively("seccion_id")}]
+	});
 
 	this.subscribe("grupos",() => {
 		return [{campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : "" }];
@@ -329,6 +333,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			}
 		}	
 		rc.pagaCon =rc.totalPagar-configuracion.abono;
+		console.log(configuracion.seccion_id);
 		this.seccion_id = configuracion.seccion_id;
 		if(rc.pagaCon < 0)
 			rc.pagaCon = 0;
