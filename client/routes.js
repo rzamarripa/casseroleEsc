@@ -1583,6 +1583,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
        }]
     	}
     }) 
+    .state('root.canales', {
+      url: '/canales',
+      templateUrl: 'client/canales/canales.html',
+      controller: 'CanalesCtrl as ca',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    }) 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////

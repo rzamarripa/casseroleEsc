@@ -1,0 +1,87 @@
+<h2>Canales o Campañas</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{ca.nuevo == true ? 'primary' : 'danger'}}"	 role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="ca.nuevoCanal()">
+		   {{ca.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>					    
+						    <label>Nombre</label>
+					    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="ca.canal.nombre" required>
+			    	</div>
+			    </div>   
+			</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="ca.guardar(ca.canal)" value="Guardar" class="btn btn-primary" ng-show="ca.action" valida-form formulario="form">
+						<input type="submit" ng-click="ca.actualizar(ca.canal)" value="Actualizar" class="btn btn-primary" ng-show="!ca.action" valida-form formulario="form">	
+
+					</div>
+				</div>
+					  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+
+<!-- List -->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th class="text-center" width="10%">No.</th>
+					<th width="50%"><div class="text-center">Canales</div></th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="canal in ca.canales">
+			    <td class="text-center">{{$index + 1}}</td>
+			    <td>{{canal.nombre}}</td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="canal.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!canal.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left">
+							    <li><a href="#" ng-click="ca.editar(canal._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="ca.cambiarEstatus(canal._id)">
+							    				<i class="fa fa-{{canal.estatus ? 'trash' : 'check' }}"></i> {{canal.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
