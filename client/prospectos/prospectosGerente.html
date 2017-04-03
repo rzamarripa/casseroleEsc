@@ -29,6 +29,7 @@
 		        <th>Información Adicional</th>
 		        <th>Asesor</th>
 		        <th>Etapa Venta</th>
+		        <th>Acciones</th>
 	        </tr>
 	        <tr ng-repeat="prospecto in fa.prospectos">
 		        <td>{{$index + 1}}</td>
@@ -52,6 +53,11 @@
 				        <option value="{{etapa._id}}" ng-repeat="etapa in fa.etapasVenta">{{etapa.nombre}}</option>
 			        </select>
 			      </td>
+			      <td>
+							<button class="btn btn-danger btn-xs" ng-confirm-click="Está seguro de eliminar permanentemente el prospecto?" confirmed-click="fa.eliminar(prospecto)">
+								<i class="fa fa-trash"></i>
+							</button>
+		        </td>
 	        </tr>
         </table>
       </div>            

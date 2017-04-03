@@ -122,9 +122,9 @@
 																					<option value="Universidad">Universidad</option>
 																				</select>
 																			</div>					
-																			<div class="col-sm-3">
+																			<div class="col-sm-3" valida>
 																		    <label for="curp">Curp</label>
-																		    <input type="text" class="form-control" id="curp" placeholder="CURP" ng-model="ins.prospectoSeleccionado.profile.curp">
+																		    <input name="curp" type="text" class="form-control" id="curp" placeholder="CURP" ng-model="ins.prospectoSeleccionado.profile.curp" required="">
 																    	</div>
 																			<div class="col-sm-3">
 																				<label for="fechaNac">Fecha de nacimiento *</label>
@@ -157,10 +157,10 @@
 																			</div>
 																		</div>
 																		<div class="row">
-																			<div class="col-sm-4">
+																			<div class="col-sm-3">
 																		  	<label for="vivePadres" class="checkbox-inline"><input type="checkbox" id="vivePadres" ng-model="ins.prospectoSeleccionado.profile.vivePadres"> Vive con sus padres</label>					    
 																	  	</div>
-																			<div class="col-sm-4">
+																			<div class="col-sm-3">
 																				<label for="nivelSocial">Nivel social</label><br/>
 																		    <select ng-model="ins.prospectoSeleccionado.profile.nivelSocial" class="form-control">
 																				  <option value="Baja">Baja</option>
@@ -168,13 +168,23 @@
 																				  <option value="Alta">Alta</option>
 																				</select>
 																			</div>
-																			<div class="col-sm-4">
+																			<div class="col-sm-3">
 																				<label>¿Cómo te enteraste de nosotros?</label>
-																				<select  id="objeto" class="form-control"  placeholder="Seleccione" ng-model="ins.prospectoSeleccionado.profile.medio_id">
+																				<select class="form-control"  placeholder="Seleccione" ng-model="ins.prospectoSeleccionado.profile.medio_id" ng-change="ins.seleccionarMedio(ins.prospectoSeleccionado.profile.medio_id)">
 																					<option ng-repeat="objeto in ins.mediosPublicidad" value="{{objeto._id}}">
 																						{{objeto.nombre}}
 																					</option>
 																				</select>
+																				<input type="text" ng-model="ins.prospectoSeleccionado.profile.otroMedio" class="form-control" ng-show="ins.otroMedioSeleccionado" placeholder="Especifique el medio"/>
+																			</div>
+																			<div class="col-sm-3">
+																				<label>Canal o Campaña</label>
+																				<select class="form-control"  placeholder="Seleccione" ng-model="ins.prospectoSeleccionado.profile.canal_id">
+																					<option ng-repeat="objeto in ins.canales" value="{{objeto._id}}">
+																						{{objeto.nombre}}
+																					</option>
+																				</select>
+																				<input type="text" ng-model="ins.prospectoSeleccionado.profile.otroMedio" class="form-control" ng-show="ins.otroMedioSeleccionado" placeholder="Especifique el medio"/>
 																			</div>
 																		</div>
 																		<div class="row">

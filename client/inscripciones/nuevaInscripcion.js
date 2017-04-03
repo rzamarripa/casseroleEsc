@@ -94,6 +94,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
   this.subscribe("mediosPublicidad",()=>{
 		return [{estatus:true }]
 	});
+	
+	this.subscribe("canales",()=>{
+		return [{estatus:true }]
+	});
 
 	this.helpers({
 		cuentaActiva : () =>{
@@ -131,7 +135,11 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 		},
 	   mediosPublicidad : () => {
 		  return MediosPublicidad.find();
+	  },
+	   canales : () => {
+		  return Canales.find();
 	  }
+	  
 	});
 
 	

@@ -49,7 +49,11 @@ angular.module("casserole")
 
   this.subscribe("mediosPublicidad",()=>{
 		return [{estatus:true }]
-	 });
+	});
+	
+	this.subscribe("canales",()=>{
+		return [{estatus:true }]
+	});
   
   this.helpers({
 	  prospectos : () => {
@@ -70,6 +74,9 @@ angular.module("casserole")
 	   mediosPublicidad : () => {
 		  return MediosPublicidad.find();
 	  },
+	  canales : () => {
+		  return Canales.find();
+	  }
   });
   
   this.guardar = function(prospecto, form)

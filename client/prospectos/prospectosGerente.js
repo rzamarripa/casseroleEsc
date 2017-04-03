@@ -46,4 +46,9 @@ angular.module("casserole")
 	  Prospectos.update({_id : prospecto_id},{ $set : {"profile.vendedor_id" : vendedor_id}});
 	  toastr.success("Ha cambiado de Asesor");
   }
+  
+  this.eliminar = function(prospecto){
+		Prospectos.remove({_id : prospecto._id});		
+		this.buscarProspectosGerente();
+	}
 };

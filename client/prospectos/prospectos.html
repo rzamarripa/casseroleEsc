@@ -4,7 +4,7 @@
 		<a class="btn btn-primary" href="/nuevoProspecto">
 		  Nuevo
 		</a>
-		<label>Buscar: <input ng-model="fa.buscar.nombre" class="form-control"></label>
+<!-- 		<label>Buscar: <input ng-model="fa.buscar.nombre" class="form-control"></label> -->
 	</div>
 </div>
 <div class="row well">
@@ -27,7 +27,7 @@
 		        <th>Teléfono</th>
 		        <th>Correo</th>
 		        <th>Información Adicional</th>
-		        <th>Acciones</th>
+		        <th>Estatus</th>
 	        </tr>
 	        <tr ng-repeat="prospecto in fa.prospectos">
 		        <td>{{$index + 1}}</td>
@@ -37,9 +37,8 @@
 		        <td>{{prospecto.profile.correoCalificaciones}}</td>
 		        <td>{{prospecto.profile.observacionesGenerales}}</td>
 			      <td>
-							<button class="btn btn-danger btn-xs" ng-confirm-click="Está seguro de eliminar el prospecto?" confirmed-click="fa.eliminar(prospecto)">
-								<i class="fa fa-trash"></i>
-							</button>
+							<span class="label label-success" ng-show="prospecto.profile.estatus == 3">Inscrito</span>
+							<span class="label label-warning" ng-show="prospecto.profile.estatus == 2">No Inscrito</span>
 		        </td>
 	        </tr>
         </table>

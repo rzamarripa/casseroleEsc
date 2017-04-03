@@ -148,13 +148,13 @@
 		  <h4>Domicilio</h4>
 		  <div class="well">
 			  <div class="row">
-			  	<div class="col-sm-6" valida>
-			  		<label for="calleNum">Calle y número *</label>
-				    <input name="calleNum" type="text" class="form-control" id="calleNum" placeholder="Calle y Número" ng-model="fa.prospecto.profile.calleNum" required="">
+			  	<div class="col-sm-6">
+			  		<label for="calleNum">Calle y número</label>
+				    <input name="calleNum" type="text" class="form-control" id="calleNum" placeholder="Calle y Número" ng-model="fa.prospecto.profile.calleNum">
 			  	</div>
-			  	<div class="col-sm-6" valida>
-						<label for="colonia">Colonia *</label>
-						<input name="colonia" type="text" class="form-control" id="colonia" placeholder="Colonia" ng-model="fa.prospecto.profile.colonia" required="">
+			  	<div class="col-sm-6">
+						<label for="colonia">Colonia</label>
+						<input name="colonia" type="text" class="form-control" id="colonia" placeholder="Colonia" ng-model="fa.prospecto.profile.colonia">
 			  	</div>
 			  </div>
 			  <div class="row">
@@ -164,9 +164,9 @@
 			  	</div>
 			  </div>	
 			  <div class="row">
-			  	<div class="col-sm-6">
+			  	<div class="col-sm-6" valida>
 			  		<label for="tel1">Tel. 1</label>
-						<input type="text" class="form-control" id="tel1" placeholder="Teléfono 1" ng-model="fa.prospecto.profile.tel1">
+						<input name="tel1" type="text" class="form-control" id="tel1" placeholder="Teléfono 1" ng-model="fa.prospecto.profile.tel1" required="">
 			  	</div>
 			  	<div class="col-sm-6">
 						<label for="tel2">Tel. 2</label>
