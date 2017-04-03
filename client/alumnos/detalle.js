@@ -353,20 +353,17 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		if(cobro.estatus == 1){
 			return "bg-color-green txt-color-white";
 		}			
-		if(cobro.estatus == 5 || cobro.tmpestatus==5)
+		if(cobro.estatus == 5 || cobro.tmpestatus==5){
 			return "bg-color-blue txt-color-white";
-		else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual)){
+		}else if(cobro.estatus == 0 && (cobro.semana >= this.semanaPago && cobro.anio >= this.anioActual)){
 			
-		}
-		else if(cobro.estatus == 3){
+		}else if(cobro.estatus == 3){
 			return "bg-color-blueDark txt-color-white";	
-		}
-		else if(cobro.estatus == 2){
+		}else if(cobro.estatus == 2){
 			return "bg-color-red txt-color-white";
-		}
-		else if(cobro.estatus == 6)
+		}else if(cobro.estatus == 6){
 			return "bg-color-greenLight txt-color-white";
-		else if(cobro.tiempoPago == 1 || cobro.anio < this.anioActual || (cobro.semana < this.semanaPago && cobro.anio == this.anioActual)){
+		}else if(cobro.tiempoPago == 1 || cobro.anio < this.anioActual || (cobro.semana < this.semanaPago && cobro.anio == this.anioActual)){
 			return "bg-color-orange txt-color-white";
 		}
 		
@@ -636,7 +633,6 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var anioPago = moment(new Date()).get('year');
 		var diaActual = moment(new Date()).get('date');
 		this.ppago = this.totalPagar-configuracion.abono;
-		this.ppago = this.totalPagar-configuracion.abono;
 		if(this.ppago <= 0){
 			configuracion.abono -= this.totalPagar;
 			this.ppago = 0;
@@ -702,7 +698,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		window.open(url,'_blank');
 	}
 
-	this.condonarConcepto = function( configuracion){
+	this.condonarConcepto = function(configuracion){
 		if (confirm("Está seguro que desea condonar el cobro por $" + parseFloat(rc.totalPagar))) {
 			
 			//ASIGNAR FOLIO
@@ -718,9 +714,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			var mesPago = moment(new Date()).get('month') + 1;
 			var anioPago = moment(new Date()).get('year');
 			
-			
 			_.each(configuracion.pagos, function(pago) {
 				var conceptoPago = ConceptosPago.findOne(pago.concepto_id);
+				pago.motivo = rc.motivoCondonoConcepto;
 				if(pago.tmpestatus == 5){
 					if(pago.faltante){
 						pago.condonado = pago.importe-pago.pago;
@@ -729,9 +725,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						pago.condonado = pago.importe;
 						pago.pago = 0;
 					}
-					
-					//rc.condonarPago(pago,semanasCondonadas);
-					
+					pago.estatus = 3;		
 					var nuevoPago = Pagos.insert({
 						importeRegular : pago.condonado,
 						pago : pago.pago,
@@ -753,18 +747,23 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 						modulo : "inscripcion",
 						descripcion : pago.descripcion,
 						nombre : pago.nombre,
-						folioActual : folioActual
+						folioActual : folioActual,
+						motivo : rc.motivoCondonoConcepto
 					});
 					
 					//delete pago._id;
 					delete pago.tmpestatus;
 					delete pago.tmpPago
-					PlanPagos.update(idTemp, {$set : pago});
+					//PlanPagos.update(idTemp, {$set : pago});
 				}
 			});
 			var idTemp = configuracion._id;
 			Inscripciones.update({_id:configuracion._id},{$set:{pagos:configuracion.pagos}});
 			Secciones.update({_id : seccion._id}, {$set : { folioActual : folioActual}});
+			$('#condonarModalConceptosInscripcion').modal('hide');
+			$('body').removeClass('modal-open');
+			$('.modal-backdrop').remove();
+			rc.motivoCondonoConcepto = "";
 			var url = $state.href("anon.pagosImprimirConceptos",{seccion_id : configuracion.seccion_id, folioActual : folioActual, alumno_id 	: configuracion.alumno_id},{newTab : true}); 
 			window.open(url,'_blank');
 		}
@@ -773,46 +772,45 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.pagarConcepto = function( configuracion){
 
 		function sortProperties(obj, sortedBy, isNumericSort, reverse) {
-            sortedBy = sortedBy || 1; // by default first key
-            isNumericSort = isNumericSort || false; // by default text sort
-            reverse = reverse || false; // by default no reverse
+      sortedBy = sortedBy || 1; // by default first key
+      isNumericSort = isNumericSort || false; // by default text sort
+      reverse = reverse || false; // by default no reverse
 
-            var reversed = (reverse) ? -1 : 1;
+      var reversed = (reverse) ? -1 : 1;
 
-            var sortable = [];
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    sortable.push([key, obj[key]]);
-                }
-            }
-            if (isNumericSort)
-                sortable.sort(function (a, b) {
-                    return reversed * (a[1][sortedBy] - b[1][sortedBy]);
-                });
-            else
-                sortable.sort(function (a, b) {
-                    var x = a[1][sortedBy].toLowerCase(),
-                        y = b[1][sortedBy].toLowerCase();
-                    return x < y ? reversed * -1 : x > y ? reversed : 0;
-                });
-            return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+      var sortable = [];
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          sortable.push([key, obj[key]]);
         }
+      }
+      if (isNumericSort)
+        sortable.sort(function (a, b) {
+          return reversed * (a[1][sortedBy] - b[1][sortedBy]);
+        });
+      else
+        sortable.sort(function (a, b) {
+          var x = a[1][sortedBy].toLowerCase(),
+              y = b[1][sortedBy].toLowerCase();
+          return x < y ? reversed * -1 : x > y ? reversed : 0;
+        });
+      return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+    }
 
-        function sortObjects(objects, sortedBy, isNumericSort, reverse) {
-		    var newObject = {};
-		    sortedBy = sortedBy || 1; // by default first key
-            isNumericSort = isNumericSort || false; // by default text sort
-            reverse = reverse || false; // by default no reverse
-		    var sortedArray = sortProperties(objects, sortedBy, isNumericSort, reverse);
-		    for (var i = 0; i < sortedArray.length; i++) {
-		        var key = sortedArray[i][0];
-		        var value = sortedArray[i][1];
-		        newObject[key] = value;
-		    }
-		    return newObject;
+    function sortObjects(objects, sortedBy, isNumericSort, reverse) {
+	    var newObject = {};
+	    sortedBy = sortedBy || 1; // by default first key
+          isNumericSort = isNumericSort || false; // by default text sort
+          reverse = reverse || false; // by default no reverse
+	    var sortedArray = sortProperties(objects, sortedBy, isNumericSort, reverse);
+	    for (var i = 0; i < sortedArray.length; i++) {
+	        var key = sortedArray[i][0];
+	        var value = sortedArray[i][1];
+	        newObject[key] = value;
+	    }
+	    return newObject;
 		}
 		
-
 		if (confirm("Está seguro que desea realizar el cobro por $" + parseFloat(rc.ttotalpagar))) {
 			var semanasCondonadas = [];
 			var diaSemana = moment().isoWeekday();

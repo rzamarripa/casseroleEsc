@@ -18,6 +18,8 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
   
   this.calendario 	= {};
 	this.calendario.eventos = [];
+	
+	window.rc = rc;
   		
 	if($stateParams.id != ""){
 		this.subscribe("calendarios",()=>{
@@ -53,6 +55,7 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
 	    toastr.error('Error al agregar la evento.');
 	    return;
     }
+    console.log(evento, form)
     var mayor = 0;
 	  _.each(this.calendario.eventos, function(eventoActual){
 		  if(eventoActual._id > mayor){
@@ -275,6 +278,6 @@ function CalendarioDetalleCtrl($compile, $scope, $meteor, $reactive, $state, $st
     }
   };
   
-  //this.eventSources = [this.calendario.eventos, eventosTotales];
+  this.eventSources = [this.calendario.eventos, eventosTotales];
   
 };

@@ -2,3 +2,4 @@ produccion
 node_modules
 #IDE files 
 .project
+server/smtp.js

@@ -106,7 +106,7 @@
 	<div ng-if="al.inscripcionCompleta(curso)">
 		<div class="pull-left" style="margin:20px;" >
 			<!-- Modal para el motivo de la condonación -->
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#condonarModal"">
+			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#condonarModal">
 			  Condonar
 			</button>
 		</div>
@@ -118,12 +118,14 @@
 
 	<div ng-if="!al.inscripcionCompleta(curso)">
 		<div class="pull-left" style="margin:20px;" >
-			<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
+<!-- 			<button type="button" class="btn btn-primary btn-lg" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button> -->
+			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#condonarModalConceptosInscripcion">
+			  Condonar
+			</button>
 		</div>
 		<div class="pull-right" style="margin:20px;">
 			<a type="button" class="btn btn-primary btn-lg" ng-click="al.seccion_id = curso.seccion_id" data-toggle="modal" data-target="#modalAbono" >Abonar</a>
 			<a target="_blank" type="button" class="btn btn-primary btn-lg" ng-click="al.pagarConcepto(curso)" ng-disabled="al.hayParaPagar">Pagar</a>
-			
 		</div>
 	</div>
 	
@@ -150,6 +152,33 @@
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				        <button type="button" class="btn btn-primary" valida-form formulario="formCondonado" ng-click="al.condonar(al.planPagos[curso._id], curso, al.motivoCondono)" ng-disabled="al.hayParaPagar">Condonar</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			<hr class="simple"/>
+		</div>
+		<div class="row">
+		<div class="col-sm-12">
+			<!-- Modal -->
+				<div class="modal fade" id="condonarModalConceptosInscripcion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Motivo</h4>
+				      </div>
+				      <div class="modal-body">
+					      <form name="formCondonado" novalidate>
+						      <div class="form-group" valida>
+							      <label for="motivoCondono">Motivo por el cual está condonando</label>
+							      <textarea name="motivoCondono" ng-model="al.motivoCondonoConcepto" rows="3" class="form-control" required></textarea>
+						      </div>
+					      </form>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				        <button type="button" class="btn btn-primary" valida-form formulario="formCondonado" ng-click="al.condonarConcepto(curso)" ng-disabled="al.hayParaPagar">Condonar</button>
 				      </div>
 				    </div>
 				  </div>

@@ -9,6 +9,7 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
   this.calendario.eventos = [];
   var eventosTotales = [];
   this.eventSources = [];
+  window.rc = rc;
   
 	this.subscribe("calendarios",()=>{
 		return [{estatus : true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}];
@@ -17,15 +18,16 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
 	this.helpers({
 		calendarios : () => {
 			return Calendarios.find();
-		},
-		calendario : () => {
-			var calendario = Calendarios.findOne();
-			if(calendario.eventos.length > 0){
-				rc.eventSources = [calendario.eventos];
-				return calendario;
-			}
 		}
 	});	
+	
+	this.getEventos = function(calendario){
+		console.log(calendario.eventos);
+		_.each(calendario.eventos, function(evento){
+			evento.stick = true;
+		})
+		rc.eventSources = [calendario.eventos, calendario.eventos.length];
+	}
   
   /* Render Tooltip */
 
@@ -75,6 +77,6 @@ function AlumnoCalendarioCtrl($compile, $scope, $meteor, $reactive, $state, $sta
     }
   };
   
-  this.eventSources = [this.calendario.eventos, this.calendario.eventos.lenght];
+  //this.eventSources = [this.calendario.eventos, this.calendario.eventos.lenght];
   
 };

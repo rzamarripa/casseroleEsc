@@ -13,7 +13,8 @@
 		<table class="table table-bordered">
 			<tr ng-repeat="calendario in c.calendarios">
 				<td>
-					<a href="#" ng-click="c.getEventos(calendario.eventos)"> {{calendario.nombre}} </a></td>
+					<a href="#" ng-click="c.getEventos(calendario)"> {{calendario.nombre}} </a>
+				</td>
 			</tr>
 		</table>
 	</div>

@@ -7,17 +7,20 @@ function DeudoresGrupoCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
   this.semanaActual = moment().isoWeek();
   this.anioActual = moment().get("year");
   this.deudores = [];
+  this.cargaTerminada = false;
 	NProgress.set(0.5);
+	
   Meteor.apply('cobranza', [Meteor.user().profile.seccion_id], function(error, result){
 	  rc.deudores = result;
 	  NProgress.set(1);
+	  this.cargaTerminada = true;
     $scope.$apply();
   });
   
   this.imprimirGrupo = function(elem)
   {
 	  var divToPrint=document.getElementById(elem);
-		newWin= window.open("");
+		newWin = window.open("");
 		newWin.document.write(divToPrint.outerHTML);
 		newWin.print();
 		newWin.close();

@@ -51,16 +51,16 @@
 			    	</div>
 			    </div>
 			    <div class="row">
-			    	<div class="col-sm-4">					    
-				    	<label>Correo</label>
-				    	<input type="text" class="form-control" placeholder="Correo" ng-model="maes.maestro.correo">
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Correo *</label>
+				    	<input name="correo" type="text" class="form-control" placeholder="Correo" ng-model="maes.maestro.correo" required="">
 			    	</div>
 			    	<div class="col-sm-4" valida>
 				    	<label>Sexo *</label>
 					    <select name="genero" ng-model="maes.maestro.sexo" class="form-control" required>
 							  <option value="masculino">Masculino</option>
 							  <option value="femenino">Femenino</option>
-						</select>
+							</select>
 			    	</div>			    	
 			    </div>
 			  </div>

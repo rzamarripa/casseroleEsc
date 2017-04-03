@@ -9,7 +9,7 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.alumnos_id = [];
   this.deudores = [];
   this.totales = [];
-  
+  this.cargaTerminada = false;
   NProgress.set(0.5);
 	
   Meteor.apply('deudores', [Meteor.user().profile.seccion_id], function(error, result){
@@ -18,6 +18,7 @@ function DeudoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		  result.splice(0, 1);
 		  rc.deudores = result;
 		  NProgress.set(1);
+		  rc.cargaTerminada = true;
 	  }	  
 
     $scope.$apply();

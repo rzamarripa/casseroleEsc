@@ -11,6 +11,7 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
   this.otrosCobros = [];
   this.totales = 0.00;
   this.modulo = "todos";
+  this.cargaTerminada = true;
   
   this.subscribe('todosUsuarios',()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]
@@ -35,6 +36,7 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 	
 	this.calcularCobros = function(fechaInicial, fechaFinal, usuario_id, form){
 		NProgress.set(0.5);
+		rc.cargaTerminada = false;
 		if(form.$invalid){
 			toastr.error('Error al enviar los datos, por favor llene todos los campos.');
 			NProgress.set(1);
@@ -42,13 +44,16 @@ function CobranzaCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
     }
 		this.totales = 0.00;
 		Meteor.apply('historialCobranza', [this.fechaInicial, this.fechaFinal, Meteor.user().profile.seccion_id, usuario_id, this.modulo], function(error, result){
-		  _.each(result, function(cobro){
-			  rc.totales += cobro.pago;
-		  })
-		  console.log(result);
-		  rc.otrosCobros = result;
-		  NProgress.set(1);
-	    $scope.$apply();
+			if(result){
+				_.each(result, function(cobro){
+				  rc.totales += cobro.pago;
+			  })
+			  console.log(result);
+			  rc.otrosCobros = result;
+			  NProgress.set(1);
+			  rc.cargaTerminada = true;
+		    $scope.$apply();
+			}		  
 	  });
 	}
 	

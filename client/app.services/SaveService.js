@@ -1,10 +1,10 @@
 angular.module('casserole').service('SaveService', function ($meteor) {
 	this.save = function(collectionName, object, callback){
 		if(!collectionName || !object || !callback){
-			throw new Error('Dice el cosme que no estás mandando todos los parametros');
+			throw new Error('No estás mandando todos los parametros');
 		}
 		if(!eval(collectionName)){
-			throw new Error('Dice el cosme que la colleccion "'+collectionName+'" no existe');
+			throw new Error('La colleccion "'+collectionName+'" no existe');
 		}
 		NProgress.set(0.3);
 		$("body").css("cursor", "progress");
@@ -21,10 +21,10 @@ angular.module('casserole').service('SaveService', function ($meteor) {
 
 	this.saveUser = function(collectionName, object, rol, callback){
 		if(!collectionName || !object || !rol || !callback){
-			throw new Error('Dice el cosme que no estás mandando todos los parametros');
+			throw new Error('No estás mandando todos los parametros');
 		}
 		if(!Mongo.Collection.get(collectionName)){
-			throw new Error('Dice el cosme que la colleccion "'+collectionName+'" no existe');
+			throw new Error('La colleccion "'+collectionName+'" no existe');
 		}
 		NProgress.set(0.3);
 		$("body").css("cursor", "progress");
