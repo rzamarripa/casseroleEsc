@@ -126,7 +126,7 @@ function AlumnoMuroCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams
     eventos : () => {
 	    if(this.getReactively("calendario")){
 		    //ME FALTA ORDENAR 
-		    return _.sortBy(rc.calendario.eventos, function(evento) { return evento.start.dateTime; });
+		    return _.sortBy(rc.calendario.eventos, function(evento) { return evento.start; });
 	    }
     }
 
