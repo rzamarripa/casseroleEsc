@@ -704,7 +704,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			inscripcion_id : configuracion._id,
 			diaSemana		: diaSemana,
 			cuenta_id		: rc.cuenta._id,
-			folioActual : folioActual
+			folioActual : folioActual,
+			usuarioInserto_id : Meteor.userId()
 		});
 	
 		_.each(planPagos, function(pago) {
