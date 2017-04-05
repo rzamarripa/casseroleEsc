@@ -16,9 +16,14 @@ function PagosImprimirConceptosCtrl($scope, $meteor, $reactive, $state, $statePa
 		  rc.pagos = result[1];
 		  rc.alumno = result[2];
 		  rc.folio = $stateParams.folioActual;
+		  rc.semanas = result[3];
+		  console.log(result);
 		  _.each(result[1], function(pago){
 			  rc.total += pago.pago;
 		  })
+	  }else{
+		  console.log(error);
 	  }
+	  $scope.$apply();
   })
 };

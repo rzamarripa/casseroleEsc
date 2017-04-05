@@ -610,7 +610,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			this.ttotalpagar = 0.00;
 			this.cantSeleccionados = 0;
 			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
-			var url = $state.href("anon.pagosImprimir",{seccion_id : configuracion.seccion_id, folioActual : folioActual, alumno_id : configuracion.alumno_id},{newTab : true});
+			var url = $state.href("anon.pagosImprimirConceptos",{seccion_id : configuracion.seccion_id, folioActual : folioActual, alumno_id : configuracion.alumno_id},{newTab : true});
 			window.open(url,'_blank');
 			// var win = window.open($state.href('anon.pagosImprimir', {semanas : semanasPagadas, id : $stateParams.alumno_id}),'_blank');
 			// win.focus();
@@ -1254,11 +1254,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
     
 	this.guardarOtroPago = function(pago)
 	{  
-		
+		var seccion = Secciones.findOne(rc.alumno.profile.seccion_id);
+		var folioActual = seccion.folioActual;
+		folioActual++;
 		var semanasPagadas = [];
 		var conceptoActual = ConceptosPago.findOne(pago.concepto_id);
 		diaActual = moment(new Date()).isoWeekday();
 		semanaPago = moment(new Date()).isoWeek();
+		mesPago = moment(new Date()).get('month') + 1;
 		anioPago = moment(new Date()).get('year');
 		pago.estatus = 1;
 		pago.usuarioInserto_id = Meteor.userId();
@@ -1270,16 +1273,23 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		pago.anio = anioPago;
 		pago.alumno_id = $stateParams.alumno_id;
 		pago.modulo = "Otro";
+		pago.diaPago     = diaActual;
+		pago.mesPago     = mesPago;
+		pago.semanaPago  = semanaPago;
+		pago.anioPago = anioPago;
 		pago.fechaPago = new Date();
 		pago.descripcion = conceptoActual.nombre;
 		pago.cuenta_id = rc.cuenta._id;
 		pago.cuenta = rc.cuenta.nombre;
-		
+		pago.folioActual = folioActual;
+		pago.pago = conceptoActual.importe * pago.cantidad;
+		Pagos.insert(pago);
 		PlanPagos.insert(pago);
 		toastr.success('Guardado correctamente.');
 		this.otroPago = {}; 
-
-
+		Secciones.update({_id : seccion._id}, {$set : { folioActual : folioActual}});
+		var url = $state.href("anon.pagosImprimirConceptos",{seccion_id : seccion._id, folioActual : folioActual, alumno_id 	: pago.alumno_id},{newTab : true}); 
+		window.open(url,'_blank');
 	};
 	
 	this.regresar = function(){

@@ -39,7 +39,8 @@
 								<th class="text-right">IMPORTE</th>
 							</tr>
 							<tr ng-repeat="pago in pi.pagos">
-								<td class="text-left">{{pago.descripcion}}</td>
+								<td class="text-left" ng-show="pago.modulo == 'colegiatua'">{{pago.descripcion}} | <span ng-repeat="semana in pi.semanas">{{semana}}<span ng-show="!$last"> | </span></span></td>
+								<td class="text-left" ng-show="pago.modulo == 'Otro'">{{pago.descripcion}}</td>
 								<td class="text-right">{{pago.pago | currency}}</td>
 							</tr>
 							<tr>
