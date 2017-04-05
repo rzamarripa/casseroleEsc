@@ -88,6 +88,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.subscribe("mediosPublicidad",()=>{
 		return [{estatus:true }]
 	});
+	
+	this.subscribe("pagoVacaciones",()=>{
+		return [{estatus:true }]
+	});
 		
 	this.helpers({
 		alumno : () => {
@@ -303,41 +307,71 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		rc.ttotalpagar = rc.pagaCon
 
 	}
+	
+	this.validarPagoVacaciones = function(cobro){
+		var pagosVacaciones = PagoVacaciones.find().fetch();
+		_.each(pagosVacaciones, function(pagoVacacion){
+			if(pagoVacacion.semana == cobro.semana){
+				return true;
+			}else{
+				return false;
+			}
+		})
+		console.log(cobro, "pago vacaciones");
+		return true;
+	}
 
 	this.seleccionarSemana = function(cobro, plan, configuracion){
-		rc.hayParaPagar = true;
-		rc.totalPagar = 0;
-		rc.cantSeleccionados = 0;
-		rc.semanasSeleccionadas = [];
-		for (var i = 0; i < cobro.numeroPago; i++) {
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 2){
-				rc.hayParaPagar = false;
-				rc.cantSeleccionados++;
-				if(plan[i].estatus == 6 || plan[i].faltante > 0){
-					rc.totalPagar += plan[i].faltante;
-				}
-				else{
-					
-					rc.totalPagar += this.calcularImporteU(plan[i], configuracion);
-				}
-				rc.semanasSeleccionadas.push(plan[i]);
-				plan[i].estatus = 5;
-				//plan[i].pago = this.calcularImporteU(plan,i)
+		//TODO ESTOY MODIFICANDO ESTA SECCIÓN
+		var pagosVacaciones = PagoVacaciones.find().fetch();
+		_.each(pagosVacaciones, function(pagoVacacion){
+			if(pagoVacacion.semana == cobro.semana){
+				console.log("adios")
+				cobro.estatus = 5;
+				rc.totalPagar += cobro.importeRegular;
+				rc.pagaCon =rc.totalPagar-configuracion.abono;
+				rc.seccion_id = configuracion.seccion_id;
+				if(rc.pagaCon < 0)
+					rc.pagaCon = 0;
+				rc.ttotalpagar = rc.pagaCon
+			}else{
+				console.log("hola")
+				rc.hayParaPagar = true;
+				rc.totalPagar = 0;
+				rc.cantSeleccionados = 0;
+				rc.semanasSeleccionadas = [];
+				for (var i = 0; i < cobro.numeroPago; i++) {
+					if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 2){
+						rc.hayParaPagar = false;
+						rc.cantSeleccionados++;
+						if(plan[i].estatus == 6 || plan[i].faltante > 0){
+							rc.totalPagar += plan[i].faltante;
+						}
+						else{
+							
+							rc.totalPagar += rc.calcularImporteU(plan[i], configuracion);
+						}
+						rc.semanasSeleccionadas.push(plan[i]);
+						plan[i].estatus = 5;
+						//plan[i].pago = this.calcularImporteU(plan,i)
+					}
+				};
+				for (var i = cobro.numeroPago; i < plan.length; i++) {
+					if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante && plan[i].estatus != 2)
+						plan[i].estatus = 6;		
+					if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 6 && plan[i].estatus != 2){
+						plan[i].estatus = 0;
+					}
+				}	
+				rc.pagaCon =rc.totalPagar-configuracion.abono;
+				rc.seccion_id = configuracion.seccion_id;
+				if(rc.pagaCon < 0)
+					rc.pagaCon = 0;
+				rc.ttotalpagar = rc.pagaCon
 			}
-		};
-		for (var i = cobro.numeroPago; i < plan.length; i++) {
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].faltante && plan[i].estatus != 2)
-				plan[i].estatus = 6;		
-			if(plan[i].estatus != 1 && plan[i].estatus != 3 && plan[i].estatus != 6 && plan[i].estatus != 2){
-				plan[i].estatus = 0;
-			}
-		}	
-		rc.pagaCon =rc.totalPagar-configuracion.abono;
-		console.log(configuracion.seccion_id);
-		this.seccion_id = configuracion.seccion_id;
-		if(rc.pagaCon < 0)
-			rc.pagaCon = 0;
-		rc.ttotalpagar = rc.pagaCon
+		})
+		
+		
 	}
 
 	
@@ -576,7 +610,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			this.ttotalpagar = 0.00;
 			this.cantSeleccionados = 0;
 			//$state.go("anon.pagosImprimir",{semanas : semanasPagadas, id : $stateParams.alumno_id});
-			var url = $state.href("anon.pagosImprimirConceptos",{seccion_id : configuracion.seccion_id, folioActual : folioActual, alumno_id : configuracion.alumno_id},{newTab : true});
+			var url = $state.href("anon.pagosImprimir",{seccion_id : configuracion.seccion_id, folioActual : folioActual, alumno_id : configuracion.alumno_id},{newTab : true});
 			window.open(url,'_blank');
 			// var win = window.open($state.href('anon.pagosImprimir', {semanas : semanasPagadas, id : $stateParams.alumno_id}),'_blank');
 			// win.focus();
@@ -638,6 +672,9 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var anioPago = moment(new Date()).get('year');
 		var diaActual = moment(new Date()).get('date');
 		this.ppago = this.totalPagar-configuracion.abono;
+		var seccion = Secciones.findOne(configuracion.seccion_id);
+		var folioActual = seccion.folioActual;
+		folioActual++;
 		if(this.ppago <= 0){
 			configuracion.abono -= this.totalPagar;
 			this.ppago = 0;
@@ -666,7 +703,8 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			anioPago    : anioPago,
 			inscripcion_id : configuracion._id,
 			diaSemana		: diaSemana,
-			cuenta_id		: rc.cuenta._id
+			cuenta_id		: rc.cuenta._id,
+			folioActual : folioActual
 		});
 	
 		_.each(planPagos, function(pago) {
@@ -695,10 +733,10 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				PlanPagos.update(idTemp, {$set : pago});
 			}
 		});
-		
+		Secciones.update({_id : seccion._id}, {$set : { folioActual : folioActual}});
 		rc.motivoCondono = "";
 		// c = condonar
-		var url = $state.href("anon.pagosImprimir",{pago : condonado, alumno_id 	: configuracion.alumno_id, tipo : "c"},{newTab : true}); 
+		var url = $state.href("anon.pagosImprimir",{pago : condonado, alumno_id 	: configuracion.alumno_id, tipo : "c", folioActual : folioActual},{newTab : true}); 
 		
 		window.open(url,'_blank');
 	}
@@ -1216,14 +1254,14 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
     
 	this.guardarOtroPago = function(pago)
 	{  
-
+		
 		var semanasPagadas = [];
 		var conceptoActual = ConceptosPago.findOne(pago.concepto_id);
 		diaActual = moment(new Date()).isoWeekday();
 		semanaPago = moment(new Date()).isoWeek();
 		anioPago = moment(new Date()).get('year');
 		pago.estatus = 1;
-		pago.usuarioInserto_id = Meteor.user()._id;
+		pago.usuarioInserto_id = Meteor.userId();
 		pago.inscripcion_id = rc.inscripciones[0]._id;
 		pago.campus_id = rc.alumno.profile.campus_id;
 		pago.seccion_id = rc.alumno.profile.seccion_id;
@@ -1249,6 +1287,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	}
 	
 	this.getConceptoPago = function(conceptoPago_id){
+		this.seccion_id = rc.inscripciones[0].seccion_id;
 		var conceptoActual = ConceptosPago.findOne(conceptoPago_id);
 		if(this.otroPago.cantidad == undefined){
 			this.otroPago.cantidad = 1;

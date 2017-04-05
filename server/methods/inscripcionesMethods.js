@@ -381,7 +381,7 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].seccion_id = grupo.seccion_id;
 				inscripcion.pagos[connceptoId].campus_id = grupo.campus_id;
 				inscripcion.pagos[connceptoId].cuenta_id = conceptoActual.cuenta_id;
-				inscripcion.pagos[connceptoId].usuarioInserto_id = concepto.usuarioInserto;
+				inscripcion.pagos[connceptoId].usuarioInserto_id = Meteor.userId();
 				inscripcion.pagos[connceptoId].folioActual = folioActual;
 				//Se inserta el pago completo
 				var pago_id = Pagos.insert(inscripcion.pagos[connceptoId]);

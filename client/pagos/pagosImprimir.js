@@ -15,6 +15,7 @@ function PagosImprimirCtrl($scope, $meteor, $reactive, $state, $stateParams, toa
   this.total = 0.00;
   this.iva = 0.00;
   this.alumno = {};
+  this.folio = $stateParams.folioActual;
   
 	this.subscribe('alumno', () => {
     return [{

@@ -356,6 +356,7 @@
 							<td >{{pago.descripcion}}</td>
 							<td class="text-center">
 								<span ng-if="pago.estatus == 0">
+									<button class="btn btn-primary btn-xs" ng-click="cpp.pagar(pago)"><i class="fa fa-check"></i></button>
 									<button class="btn btn-warning btn-xs" ng-click="cpp.editar(pago)"><i class="fa fa-pencil"></i></button>
 									<button class="btn btn-danger  btn-xs" ng-click="cpp.cambiarEstatus(pago, 2, 'eliminar')"><i class="fa fa-trash"></i></button>
 								</span>

@@ -1,0 +1,71 @@
+<h2>Pago Vacaciones</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{pv.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ng-click="pv.nuevoPagoVacaciones()">
+		 {{pv.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4">
+				    	<label>Sección</label>
+				    	<select ng-model="pv.pagoVacacion.seccion_id" class="form-control">
+					    	<option value="{{seccion._id}}" ng-repeat="seccion in pv.secciones">{{seccion.nombreseccion}}</option>
+				    	</select>
+			    	</div>
+			    	<div class="col-sm-2" valida>					    
+				    	<label>Semana *</label>
+				    	<input name="semana" type="number" class="form-control" placeholder="Nombre" ng-model="pv.pagoVacacion.semana" required="">
+			    	</div>
+			    	<div class="col-sm-2" valida>					    
+				    	<label>Año *</label>
+				    	<input name="anio" type="number" class="form-control" placeholder="Nombre" ng-model="pv.pagoVacacion.anio" required="">
+			    	</div>
+			    </div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" ng-click="pv.guardar(pv.pagoVacacion,form)" value="Guardar" class="btn btn-primary" ng-show="pv.action" valida-form formulario="form"/>
+						<input type="submit" ng-click="pv.actualizar(pv.pagoVacacion,form)" value="Actualizar" class="btn btn-primary" ng-show="!pv.action" valida-form formulario="form"/>				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<tr>
+				<th>No.</th>
+				<th>Sección</th>
+				<th>Semana</th>
+				<th>Año</th>
+				<th>Acciones</th>
+			</tr>
+			<tr ng-repeat="vacacion in pv.vacaciones">
+				<td>{{$index + 1}}</td>
+				<td>{{vacacion.seccion.nombreseccion}}</td>
+				<td>{{vacacion.semana}}</td>
+				<td>{{vacacion.anio}}</td>
+				<td>
+			    <div class="text-center">
+				    <div class="btn-group">
+						  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    <span class="caret"></span>
+						    <span class="sr-only">Toggle Dropdown</span>
+						  </button>
+						  <ul class="dropdown-menu text-left">
+						    <li><a href="#" ng-click="pv.editar(vacacion._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+						    <li><a href="#" ng-click="pv.cambiarEstatus(vacacion._id)"><i class="fa fa-{{vacacion.estatus ? 'trash' : 'check' }}"></i> {{vacacion.estatus ? "Desactivar" : "Activar" }}</a></li>
+						  </ul>
+						</div>
+			    </div>				    
+		    </td>
+			</tr>
+		</table>
+	</div>
+</div>

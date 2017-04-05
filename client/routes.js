@@ -64,7 +64,7 @@ angular.module('casserole').config(['$injector', function ($injector) {
       }
     })
     .state('anon.pagosImprimir', {
-      url: '/pagosImprimir/:pago/:alumno_id/:tipo',
+      url: '/pagosImprimir/:pago/:alumno_id/:tipo/:folioActual',
       templateUrl: 'client/pagos/pagosImprimir.ng.html',
       controller: 'PagosImprimirCtrl as pi'
     })
@@ -998,6 +998,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
 				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
 					return $meteor.requireValidUser(function(user) {
 						if(user.roles[0] == "director"){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}					 	
+         });
+       }]
+    	}
+    })
+    .state('root.pagosVacaciones', {
+      url: '/pagosVacaciones',
+      templateUrl: 'client/admin/pagosVacaciones.html',
+      controller: 'PagosVacacionesCtrl as pv',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(user.roles[0] == "admin"){
 							return true;
 						}else{
 							return 'UNAUTHORIZED'; 

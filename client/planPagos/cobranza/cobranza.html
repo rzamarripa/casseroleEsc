@@ -8,14 +8,21 @@
 			<label for="fechaFinal">Fecha Final *</label>
 			<input date-time name="fechaFinal" format="dd-MM-yyyy" class="form-control" readonly="" style="background-color: white" view="date" max-view="year" min-view="date" ng-model="oc.fechaFinal" required="" />
 		</div>
-		<div class="col-sm-3 text-center" valida>
+		<div class="col-sm-2 text-center" valida>
 			<label for="fechaFinal">Usuario *</label>
 			<select name="usuarios" class="form-control" ng-model="oc.usuario_id">
 				<option value="todos" selected="selected">Todos</option>
 				<option value="{{usuario._id}}" ng-repeat="usuario in oc.usuariosSeccion">{{usuario.profile.nombreCompleto}}</option>
 			</select>
 		</div>
-		<div class="col-sm-3 text-center" valida>
+		<div class="col-sm-2 text-center" valida>
+			<label for="fechaFinal">Cuentas *</label>
+			<select name="cuentas" class="form-control" ng-model="oc.cuenta_id">
+				<option value="todos" selected="selected">Todas</option>
+				<option value="{{cuenta._id}}" ng-repeat="cuenta in oc.cuentas">{{cuenta.nombre}}</option>
+			</select>
+		</div>
+		<div class="col-sm-2 text-center" valida>
 			<label for="fechaFinal">Módulo *</label>
 			<select name="usuarios" class="form-control" ng-model="oc.modulo">
 				<option value="todos" selected="selected">Todos</option>
@@ -25,7 +32,7 @@
 			</select>
 		</div>
 		<div class="col-sm-2 text-center">
-			<button ng-click="oc.calcularCobros(oc.fechaIncial, oc.fechaFinal, oc.usuario_id, form);" class="btn btn-primary" valida-form formulario="form"><i class="fa fa-search"></i> Calcular</button>
+			<button ng-click="oc.calcularCobros(oc.fechaInicial, oc.fechaFinal, oc.usuario_id, oc.cuenta_id, form);" class="btn btn-primary" valida-form formulario="form"><i class="fa fa-search"></i> Calcular</button>
 		</div>
 	</form>
 </div>
