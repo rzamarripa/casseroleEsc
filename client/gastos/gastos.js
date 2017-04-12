@@ -143,7 +143,9 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
       return false
     }
   }
-////////Depositos
+  
+	////////Depositos////////
+	
   this.importeDiarioPagos = function(dia, cuenta_id){
     pagos = Pagos.find({diaPago:dia, cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
@@ -187,24 +189,25 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
   }
   this.restosInscripcion = function(cuenta_id){
 	  comisionesVendedor = Comisiones.find({beneficiario:"vendedor", cuenta_id:cuenta_id}).fetch();
-	  console.log(comisionesVendedor.length);
+	  //console.log(comisionesVendedor.length);
 	  rc.registrosInscripcion = comisionesVendedor.length;
     totalComisiones = _.reduce(comisionesVendedor, function(memo, comision){return memo + comision.importeComision},0);
     return totalComisiones;
   }
-////////////////////////
-///////////relaciones
+
+	///////////relaciones////////////////////////
+  
   this.comisiones = function(cuenta_id){
 	  comisionesGerente = Comisiones.find({beneficiario:"gerente", cuenta_id:cuenta_id}).fetch();
 	  rc.registrosComision = comisionesGerente.length;
     totalComisiones = _.reduce(comisionesGerente, function(memo, comision){return memo + comision.importeComision},0);
     return totalComisiones;
   }
-////////////////////////
+	////////////////////////
 
 	this.tieneSubconceptos = function(concepto_id){
 		var concepto = ConceptosGasto.findOne(concepto_id);
-		console.log(concepto);
+		//console.log(concepto);
 		if(concepto.campoSubconceptos == true){
 			rc.campoSubconceptos = true;
 			rc.subconceptos = concepto.subconceptos;
@@ -217,7 +220,7 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 	
 	this.desgloseImporteDiarioPagos = function(dia, cuenta_id){
-		console.log(dia);
+		//console.log(dia);
 		var id = "#myModal" + dia + cuenta_id;
 		$(id).modal('show');
 		rc.diaSeleccionado = dias[dia];
