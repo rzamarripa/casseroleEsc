@@ -6,11 +6,12 @@ function MateriasCtrl($scope, $meteor, $reactive, $state, toastr) {
 	$reactive(this).attach($scope);
 	this.action = true;
 	
-/*
 	$(document).ready(function() {
-	  $('.summernote').summernote();
+	  $('#summernote').summernote({
+		  height : 250
+	  });
 	});
-*/
+
 	
 	this.subscribe("materias",()=>{
 		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : "" }]

@@ -3,9 +3,9 @@
 	<thead>
 		<tr>
 			<th width="10%"><div class="text-center">No.</div></th>
-			<th width="10%"><div class="text-center">Periodo</div></th>
-			<th width="10%"><div class="text-center">Sesiones</div></th>
-			<th width="10%"><div class="text-center">Bloque</div></th>
+			<th width="10%"><div class="text-center">Apertura</div></th>
+			<th width="10%"><div class="text-center">Desarrollo</div></th>
+			<th width="10%"><div class="text-center">Cierre</div></th>
 			<th width="10%"><div class="text-center">Grupo</div></th>	
 			
 			<th width="10%">
@@ -23,9 +23,9 @@
 	<tbody>
     <tr ng-repeat="planeacion in pc.planeacionesPapelera">
 	    <td>{{ $index + 1}}</td>
-	    <td>{{planeacion.periodoAplicacion}}</td>
-	    <td>{{planeacion.totalSesionesYTiempo}}</td>
-	    <td>{{planeacion.nombreBloque}}</td>
+	    <td>{{planeacion.apertura}}</td>
+	    <td>{{planeacion.desarrollo}}</td>
+	    <td>{{planeacion.cierre}}</td>
 	    <td>{{pc.grupo.nombre}}</td>
 	    <td>
 		    <div class="text-center">							    	
