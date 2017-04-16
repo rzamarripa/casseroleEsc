@@ -323,6 +323,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 
 	this.seleccionarSemana = function(cobro, plan, configuracion){
 		//TODO ESTOY MODIFICANDO ESTA SECCIÓN
+/*
 		var pagosVacaciones = PagoVacaciones.find().fetch();
 		_.each(pagosVacaciones, function(pagoVacacion){
 			if(pagoVacacion.semana == cobro.semana){
@@ -335,7 +336,11 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 					rc.pagaCon = 0;
 				rc.ttotalpagar = rc.pagaCon
 			}else{
-				console.log("hola")
+				
+			}
+		})
+*/
+		console.log("hola")
 				rc.hayParaPagar = true;
 				rc.totalPagar = 0;
 				rc.cantSeleccionados = 0;
@@ -367,10 +372,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 				rc.seccion_id = configuracion.seccion_id;
 				if(rc.pagaCon < 0)
 					rc.pagaCon = 0;
-				rc.ttotalpagar = rc.pagaCon
-			}
-		})
-		
+				rc.ttotalpagar = rc.pagaCon	
 		
 	}
 
