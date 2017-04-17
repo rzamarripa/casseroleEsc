@@ -82,6 +82,11 @@
 					<div class="row">
 						<div class="col-sm-12" ng-class="_materia.aprobado == true ? 'txt-white' : _materia.aprobado != undefined ? 'txt-white' : ''">
 							<strong>{{_materia.materia.nombreCorto}}</strong>
+							<select class="form-control" ng-model="_materia.tipo">
+								<option value="Ordinario">Ordinario</option>
+								<option value="Extraordinario">Extraordinario</option>
+								<option value="Equivalencia">Equivalencia</option>
+							</select>
 							<input type="range" ng-model="_materia.calificacion" min="0" max="10" class="form-control" ng-change="ac.estaAprobado(_materia)"/>
 						</div>
 					</div>
