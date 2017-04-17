@@ -393,10 +393,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 					}
 				})
 				
-				if(ra <= 52 ){
+				if(ra <= rc.weeksInYear(rc.grupo.anio) ){
 					asignacion.semanas.push({anio : rc.grupo.anio, semana : ra});
 				}else{
-					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra) - 52});
+					asignacion.semanas.push({anio : rc.grupo.anio + 1, semana : (ra) - rc.weeksInYear(rc.grupo.anio)});
 				}
 			})
 		}else{
@@ -416,10 +416,10 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 					}
 				})
 				console.log(ra);
-				if(ra <= 52){
+				if(ra <= rc.weeksInYear(ultimaSemana.anio)){
 					asignacion.semanas.push({ anio : ultimaSemana.anio, semana : ra });
 				}else{
-					asignacion.semanas.push({ anio : ultimaSemana.anio + 1, semana : ra - 52 });
+					asignacion.semanas.push({ anio : ultimaSemana.anio + 1, semana : ra - rc.weeksInYear(ultimaSemana.anio) });
 				}
 			})			
 		}
@@ -428,6 +428,40 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 		rc.asignacion = {};
 		rc.materias = [];
 		
+	}
+	//Para saber cuántas semanas tiene el año
+	this.weeksInYear = function(year) {
+	  var d = new Date(year, 11, 31);
+	  var week = getWeekNumber(d)[1];
+	  return week == 1? getWeekNumber(d.setDate(24))[1] : week;
+	}
+	
+	function getWeekNumber(d) {
+	    // Copy date so don't modify original
+	    d = new Date(+d);
+	    d.setHours(0,0,0);
+	    // Set to nearest Thursday: current date + 4 - current day number
+	    // Make Sunday's day number 7
+	    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+	    // Get first day of year
+	    var yearStart = new Date(d.getFullYear(),0,1);
+	    // Calculate full weeks to nearest Thursday
+	    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)
+	    // Return array of year and week number
+	    return [d.getFullYear(), weekNo];
+	}
+	
+	function weeksInYear(year) {
+	  var month = 11, day = 31, week;
+	
+	  // Find week that 31 Dec is in. If is first week, reduce date until
+	  // get previous week.
+	  do {
+	    d = new Date(year, month, day--);
+	    week = getWeekNumber(d)[1];
+	  } while (week == 1);
+	
+	  return week;
 	}
 	
 	this.editarAsignacion = function(asignacionCambio){
