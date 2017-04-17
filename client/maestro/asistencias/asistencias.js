@@ -89,7 +89,7 @@ angular
 		},
 		existeAsistencia : () => {
 			var asistencias = Asistencias.find({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}}).fetch();		
-			if(asistencias != undefined){
+			if(asistencias.length > 0){
 				rc.alumnos_id = _.pluck(asistencias, "alumno_id");
 			}
 			return asistencias;
