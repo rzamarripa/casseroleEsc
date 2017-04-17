@@ -31,6 +31,8 @@ Meteor.methods({
 		return usuario_id;
 	},
 	sendEmail: function (to, from, subject, text) {
+		console.log(subject);
+		console.log(text)
     this.unblock();
     Email.send({
       to: to,
@@ -115,6 +117,7 @@ Meteor.methods({
 	  usuario.contrasena = Math.random().toString(36).substring(2,7);
 	  //Reviso cuantos usuario hay con el rol asignado de ese campus
 	  var cantidadUsuarios = 0;
+	  var profile = usuario.profile;
 	  if(prefijo == "c"){
 		  cantidadUsuarios = Meteor.users.find({"profile.campus_id": usuario.profile.campus_id, roles : { $in : ["coordinadorAcademico", "coordinadorFinanciero"]}}).count();
 	  }else{
@@ -152,13 +155,13 @@ Meteor.methods({
 		
 		Roles.addUsersToRoles(usuario_id, rol);
 	  Meteor.call('sendEmail',
-			profile.email,
+			profile.correo,
 			'sistema@casserole.edu.mx',
 			'Bienvenido a Casserole',
-			'Usuario: '+ usuario.nombreUsuario + ' contraseña: '+ usuario.contrasena
+			'Usuario: '+ usuario.username + ' contraseña: '+ usuario.password
 		);
 		
-		return usaurio.usarname;
+		return usuario.username;
   },
   modificarUsuario: function (usuario, rol) {		
 	  console.log("usuario enviado", usuario);

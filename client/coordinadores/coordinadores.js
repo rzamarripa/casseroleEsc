@@ -80,8 +80,6 @@ function CoordinadoresCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 				rc.nuevo = true;
 				rc.coordinador = {};
 				$('.collapse').collapse('hide');
-				form.$setPristine();
-				form.$setUntouched();	
 			}
 		});
 	};
