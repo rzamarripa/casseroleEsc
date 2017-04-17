@@ -7,6 +7,9 @@ angular
 	this.campus_id = "";
 	this.rolSeleccionado = {};
 	this.usuario = {};
+	this.usuario.profile = {};
+	this.usuario.profile.nombre = "";
+	this.usuario.profile.apPaterno = "";
 	this.roles = [
 		{_id : "d",	nombre : "director", rol : "Director"},
 		{_id : "c",	nombre : "coordinadorAcademico", rol : "Coordinador Académico"},
@@ -15,7 +18,7 @@ angular
 		{_id : "g",	nombre : "gerenteVentas", rol : "Gerente de Ventas"},
 		{_id : "r",	nombre : "recepcionista", rol : "Recepcionista"},
 	]
-	
+		
 	window.rc = rc;
 	
 	this.subscribe("campus", () => {

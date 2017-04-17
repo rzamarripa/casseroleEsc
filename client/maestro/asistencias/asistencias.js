@@ -79,7 +79,7 @@ angular
 		alumnos : () => {
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
-				//rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
+				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 
 				return rc.alumnos_id;
 			}
