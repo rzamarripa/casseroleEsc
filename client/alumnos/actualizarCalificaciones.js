@@ -58,7 +58,7 @@ function ActualizarCalificacionesCtrl($scope, $meteor, $reactive, $state, toastr
 	}
 	
 	this.estaAprobado = function(materia){
-		if(materia.calificacion >= 6){
+		if(parseInt(materia.calificacion) >= 6){
 			materia.aprobado = true;
 		}else{
 			materia.aprobado = false;

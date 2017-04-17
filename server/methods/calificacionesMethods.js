@@ -118,7 +118,7 @@ Meteor.methods({
 				if(materia.calificacion != undefined && materia.calificacion >= 0 && materia.calificacion <= 10){
 					materia.estatus = 1;
 					materia.fechaCreacion = new Date();
-					if(materia.calificacion >= 7){
+					if(materia.calificacion >= 6){
 						materia.aprobado = true;
 						var estaReprobado = Reprobados.findOne({alumno_id : curricula.alumno_id, materia_id : materia.materia._id});
 						if(estaReprobado){
