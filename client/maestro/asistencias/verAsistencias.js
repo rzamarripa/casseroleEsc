@@ -105,8 +105,10 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
 					}else if(alumno.profile != undefined){
 						transmutar[alumno.profile.nombreCompleto].dias.push(alumno.estatus);
-						max=Math.max(transmutar[alumno.profile.nombreCompleto].dias.length,max);
+						
 					}
+					if(alumno.profile)
+						max=Math.max(transmutar[alumno.profile.nombreCompleto].dias.length,max);
 			  })
 		  }
 	
@@ -117,7 +119,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 			transmutar = _.toArray(transmutar);
 			console.log(transmutar)
 			return transmutar;
-	  }
+		}
   });
   
   
