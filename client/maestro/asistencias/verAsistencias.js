@@ -63,6 +63,7 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  asistencias : () => {
 	  	var asistencias = Asistencias.find({},{ sort : {fechaAsistencia : 1}}).fetch();
 	  	if(this.getReactively("grupo") || this.getReactively("alumnos_id") != undefined){
+		  	rc.alumnos_id = _.pluck(asistencias, "alumno_id");
 		  	_.each(rc.getReactively("alumnos"),function(alumno){
 			  	_.each(asistencias, function(alumnoAsistencia){
 				  	if(alumnoAsistencia.alumno_id == alumno._id){

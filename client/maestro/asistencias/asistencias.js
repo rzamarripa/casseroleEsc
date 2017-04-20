@@ -79,7 +79,7 @@ angular
 		alumnos : () => {
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
-				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
+				//rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 
 				return rc.alumnos_id;
 			}
@@ -88,7 +88,11 @@ angular
 			return Turnos.findOne();
 		},
 		existeAsistencia : () => {
-			return Asistencias.find({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}}).fetch();		
+			var asistencias = Asistencias.find({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}}).fetch();		
+			if(asistencias != undefined){
+				rc.alumnos_id = _.pluck(asistencias, "alumno_id");
+			}
+			return asistencias;
 		},
 		cantidadAsistenciasRealizadas : () => {
 			return Asistencias.find().count();
@@ -102,15 +106,15 @@ angular
 		listaAsistencia : () => {
 			var resultado = {};
 			if(rc.existeAsistencia){
-				if(this.getReactively("existeAsistencia").length > 0 && this.getReactively("alumnos")){
+				if(this.getReactively("existeAsistencia").length > 0 && this.getReactively("alumnos_id")){
 					rc.sePuede = true;
 					rc.existe = true;
 					if(rc.existeAsistencia.length > 0){
-						if(rc.existeAsistencia.length < rc.grupo.alumnos.length){
+						if(rc.existeAsistencia.length < rc.alumnos_id.length){
 							//console.log("nuevos alumnos");
 							var alumnosAsistidos = _.pluck(rc.existeAsistencia, "alumno_id");
 							//console.log("asistidos", alumnosAsistidos);
-							var alumnosGrupo = _.pluck(rc.grupo.alumnos, "alumno_id");
+							var alumnosGrupo = rc.alumnos_id;
 							//console.log("alumnos ex", alumnosGrupo);
 							var alumnosNuevos = _.difference(alumnosGrupo, alumnosAsistidos);
 							//console.log("alumnos Nuevos", alumnosNuevos);
@@ -131,13 +135,13 @@ angular
 						}
 						_.each(rc.existeAsistencia, function(asistencia){						
 							var al = Meteor.users.findOne(asistencia.alumno_id,{ fields : { 
-																																						"profile.nombreCompleto" : 1,
-																																						"profile.matricula" : 1,
-																																						"profile.fotografia" : 1,
-																																						"profile.sexo" : 1,
-																																						"profile.estatus" : 1,
-																																						_id : 1
-																																				}},{ sort : { "profile.nombreCompleto" : 1}});
+													"profile.nombreCompleto" : 1,
+													"profile.matricula" : 1,
+													"profile.fotografia" : 1,
+													"profile.sexo" : 1,
+													"profile.estatus" : 1,
+													_id : 1
+											}},{ sort : { "profile.nombreCompleto" : 1}});
 							if(al){
 								asistencia.profile = al.profile;
 								if(al.profile.fotografia === undefined){
