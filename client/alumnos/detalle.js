@@ -551,7 +551,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			//ASIGNAR FOLIO
 			
 			var seccion = Secciones.findOne(configuracion.seccion_id);
-			var folioActual = seccion.folioActual;
+			var folioActual = seccion.folioActual || 1;
 			folioActual++;
 			
 			pago_id = Pagos.insert({
@@ -675,7 +675,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		var diaActual = moment(new Date()).get('date');
 		this.ppago = this.totalPagar-configuracion.abono;
 		var seccion = Secciones.findOne(configuracion.seccion_id);
-		var folioActual = seccion.folioActual;
+		var folioActual = seccion.folioActual || 1;
 		folioActual++;
 		if(this.ppago <= 0){
 			configuracion.abono -= this.totalPagar;
@@ -750,7 +750,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			//ASIGNAR FOLIO
 			
 			var seccion = Secciones.findOne(configuracion.seccion_id);
-			var folioActual = seccion.folioActual;
+			var folioActual = seccion.folioActual || 1;
 			folioActual++;
 			
 			var semanasCondonadas = [];
@@ -879,7 +879,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			var pagosInsertados = [];
 			
 			var seccion = Secciones.findOne(configuracion.seccion_id)
-			var folioActual = seccion.folioActual;
+			var folioActual = seccion.folioActual || 1;
 			folioActual++;
 			_.each(configuracion.pagos, function(pago,ipago) {
 				var conceptoPago = ConceptosPago.findOne(pago.concepto_id);

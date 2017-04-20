@@ -31,15 +31,14 @@
 						</div>
 						<table class="table">
 							<tr>
-								<th>ALUMNO</th>
-								<th class="text-right">{{pi.alumno.profile.nombreCompleto}}</th>
+								<th colspan="2">ALUMNO<br/><span class="pull-right">{{pi.alumno.profile.nombreCompleto}}</span></th>
 							</tr>
 							<tr>
 								<th>CONCEPTO</th>
 								<th class="text-right">IMPORTE</th>
 							</tr>
 							<tr ng-repeat="pago in pi.pagos">
-								<td class="text-left" ng-show="pago.modulo == 'colegiatua'">{{pago.descripcion}} | <span ng-repeat="semana in pi.semanas">{{semana}}<span ng-show="!$last"> | </span></span></td>
+								<td width="70%" class="text-left" ng-show="pago.modulo == 'colegiatura'">{{pago.descripcion}} | <span ng-repeat="semana in pi.semanas">{{semana}}<span ng-show="!$last"> | </span></span></td>
 								<td class="text-left" ng-show="pago.modulo == 'Otro'">{{pago.descripcion}}</td>
 								<td class="text-right">{{pago.pago | currency}}</td>
 							</tr>

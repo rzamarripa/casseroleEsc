@@ -1230,6 +1230,22 @@ angular.module('casserole').config(['$injector', function ($injector) {
          });
        }]
       }
+    })
+    .state('root.usuariosAdmin', {
+      url: '/usuariosAdmin/',
+      templateUrl: 'client/admin/usuarios/usuarios.html',
+      controller: 'UsuariosAdminCtrl as ua',
+      resolve: {
+				"currentUser": ["$meteor", "toastr", function($meteor, toastr){
+					return $meteor.requireValidUser(function(user) {
+						if(Roles.userIsInRole(Meteor.userId(), ['admin'])){
+							return true;
+						}else{
+							return 'UNAUTHORIZED'; 
+						}
+         });
+       }]
+      }
     })       
     .state('root.verAsistencias', {
       url: '/verAsistencias/:grupo_id/:materia_id/:maestro_id',

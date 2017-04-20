@@ -112,7 +112,7 @@ Meteor.methods({
 	  return cantidad;
   },
   generarUsuario : function (prefijo, usuario, rol){
-	  
+	  usuario.contrasena = Math.random().toString(36).substring(2,7);
 	  //Reviso cuantos usuario hay con el rol asignado de ese campus
 	  var cantidadUsuarios = 0;
 	  if(prefijo == "c"){
@@ -134,14 +134,14 @@ Meteor.methods({
 	  	usuarioNuevo = prefijo + usuarioNuevo;
 			usuario.username = usuarioNuevo;
 		  usuario.profile.usuario = usuarioNuevo;
-		  usuario.password = "123qwe";
+		  usuario.password = usuario.contrasena;
 		  
 	  }else{
 		  
 		  //Si no existen Usuarios generamos al primero
 		  usuario.username = prefijo + anio + campus.clave + "0001";
 		  usuario.profile.usuario = prefijo + anio + campus.clave + "0001";
-		  usuario.password = "123qwe";
+		  usuario.password = usuario.contrasena;
 	  }
 
 	  var usuario_id = Accounts.createUser({
@@ -151,7 +151,14 @@ Meteor.methods({
 		});
 		
 		Roles.addUsersToRoles(usuario_id, rol);
-	  
+	  Meteor.call('sendEmail',
+			profile.email,
+			'sistema@casserole.edu.mx',
+			'Bienvenido a Casserole',
+			'Usuario: '+ usuario.nombreUsuario + ' contraseña: '+ usuario.contrasena
+		);
+		
+		return usaurio.usarname;
   },
   modificarUsuario: function (usuario, rol) {		
 	  console.log("usuario enviado", usuario);
@@ -200,7 +207,7 @@ Meteor.methods({
 					});
 					
 					_.each(alumno.profile.grupos, function(grupo){
-						grupo.inasistenciasSemana = Asistencias.find({alumno_id : alumno._id, grupo_id : grupo._id, estatus : 0}).count();
+						grupo.inasistenciasSemana = Asistencias.find({alumno_id : alumno._id, grupo_id : grupo._id, estatus : 0, semana : moment().isoWeek()}).count();
 						if(grupo.inasistenciasSemana >= grupo.turno.inasistencias){
 							grupo.classButton = "btn-danger";
 						}else{						

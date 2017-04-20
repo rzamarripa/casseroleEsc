@@ -57,8 +57,6 @@ function GerentesVentaCtrl($scope, $meteor, $reactive,  $state, $stateParams, to
 				rc.nuevo = true;
 				rc.gerenteVenta = {};
 				$('.collapse').collapse('hide');
-				form.$setPristine();
-				form.$setUntouched();	
 			}
 		});
 	};

@@ -1,0 +1,112 @@
+<div class="row">
+	<div class="col-sm-12">
+		<form name="form" class="form-horizontal" role="form" novalidate>
+			<div class="well">
+		    <div class="row">
+		    	<div class="col-sm-3" valida>
+			    	<label>Campus *</label>
+			    	<select ng-model="ua.usuario.profile.campus_id" class="form-control" name="campus" ng-change="ua.getSecciones(ua.usuario.profile.campus_id)" required>
+				    	<option value="{{campus._id}}" ng-repeat="campus in ua.campus">{{campus.nombre}}</option>
+			    	</select>
+		    	</div>
+		    	<div class="col-sm-3" valida>					    
+			    	<label>Sección *</label>
+			    	<select ng-model="ua.usuario.profile.seccion_id" class="form-control" name="seccion" required>
+				    	<option value="{{seccion._id}}" ng-repeat="seccion in ua.secciones">{{seccion.nombreseccion}}</option>
+			    	</select>
+		    	</div>
+		    	<div class="col-sm-3" valida>
+			    	<label>Rol *</label>
+			    	<select ng-model="ua.rolSeleccionado" class="form-control" name="rol" required>
+				    	<option value="{{rol}}" ng-repeat="rol in ua.roles">{{rol.rol}}</option>
+			    	</select>
+		    	</div>
+		    	<div class="col-sm-3">
+			    	<button class="btn btn-primary" ng-click="ua.generarUsuario()">
+			    		Generar Usuario
+			    	</button>
+		    	</div>
+				</div>
+			</div> 
+	  	<div class="well">
+		    <div class="row">
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Nombre de usuario *</label>
+				    	<input name="nombreusuario" type="text" class="form-control" placeholder="Nombre de usuario" ng-model="ua.usuario.profile.nombreUsuario" required="" disabled="">
+			    	</div>    	   
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Contraseña *</label>
+				    	<input name="contrasena" type="password" class="form-control" placeholder="Contraseña" 
+				    	ng-model="ua.usuario.profile.contrasena" 
+				    	ng-change="maes.validarContrasena(ua.usuario.profile.contrasena, ua.usuario.profile.confirmarContrasena)"
+				    	required="">
+<!-- 					    	<div class="note note-success" ng-if="!maes.validaContrasena == true">Las contraseñas no coinciden.</div> -->
+			    	</div>		    				    	    
+			    	<div class="col-sm-4" valida>					    
+				    	<label>Confirmar Contraseña *</label>
+				    	<input name="confirmar" type="password" class="form-control" placeholder="Confirmar Contraseña" 
+				    		ng-model="ua.usuario.profile.confirmarContrasena" 
+				    		ng-change="maes.validarContrasena(ua.usuario.profile.contrasena, ua.usuario.profile.confirmarContrasena)"
+				    		required="">
+				    	<div class="note note-success" ng-if="!maes.validaContrasena == true">Las contraseñas no coinciden.</div>
+			    	</div>
+			</div>
+		</div> 
+		  <div class="well">	
+		    <div class="row">
+		    	<div class="col-sm-4" valida>					    
+			    	<label>Nombre *</label>
+			    	<input name="nombre" type="text" class="form-control" placeholder="Nombre" ng-model="ua.usuario.profile.nombre" required="">
+		    	</div>
+		    	<div class="col-sm-4" valida>					    
+			    	<label>Apellido Paterno *</label>
+			    	<input name="apellidoPaterno" type="text" class="form-control" placeholder="Apellido Paterno" ng-model="ua.usuario.profile.apPaterno" required="">
+		    	</div>
+		    	<div class="col-sm-4">					    
+			    	<label>Apellido Materno</label>
+			    	<input type="text" class="form-control" placeholder="Apellido Materno" ng-model="ua.usuario.profile.apMaterno">
+		    	</div>
+		    </div>
+		    <div class="row">
+		    	<div class="col-sm-4" valida>					    
+			    	<label>Correo *</label>
+			    	<input name="correo" type="text" class="form-control" placeholder="Correo" ng-model="ua.usuario.profile.correo" required="">
+		    	</div>
+		    	<div class="col-sm-4">					    
+			    	<label>Teléfono</label>
+			    	<input type="text" class="form-control" placeholder="Teléfono" ng-model="ua.usuario.profile.telefono">
+		    	</div>
+		    	<div class="col-sm-4" valida>
+			    	<label>Sexo *</label>
+				    <select name="genero" ng-model="ua.usuario.profile.sexo" class="form-control" required>
+						  <option value="masculino">Masculino</option>
+						  <option value="femenino">Femenino</option>
+						</select>
+		    	</div>			    	
+		    </div>
+		  </div>
+    	<div class="well">
+    		<div class="row">
+		    	<div class="col-sm-4">					    
+			    	<label>Direccción </label>
+			    	<input type="text" class="form-control" placeholder="Direccción" ng-model="ua.usuario.profile.direccion">
+		    	</div>
+		    	<div class="col-sm-4">					    
+			    	<label>Ciudad </label>
+			    	<input type="text" class="form-control" placeholder="Ciudad" ng-model="ua.usuario.profile.ciudad">
+		    	</div>
+		    	<div class="col-sm-4">					    
+			    	<label>Estado </label>
+			    	<input type="text" class="form-control" placeholder="Estado" ng-model="ua.usuario.profile.estado">
+		    	</div>
+				</div>
+    	</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<input type="submit" ng-click="maes.guardar(ua.usuario,form)" value="Guardar" class="btn btn-primary" ng-show="maes.action" valida-form formulario="form" />
+					<input type="submit" ng-click="maes.actualizar(ua.usuario,form)" value="Actualizar" class="btn btn-primary" ng-show="!maes.action" valida-form formulario="form" />				
+				</div>
+			</div>	  
+	  </form>
+	</div>
+</div>
