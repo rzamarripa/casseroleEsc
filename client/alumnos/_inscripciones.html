@@ -12,21 +12,21 @@
 			          <div class="widget-body-toolbar">
 									<div class="row">										
 										<div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
-											<span class="lead" ng-show="!al.mostrarOcultarSep && curso.fechaSep != undefined">Fecha SEP: {{curso.fechaSep | date:"dd-MM-yyyy"}}</span>
-											<div class="input-group" ng-show="al.mostrarOcultarSep">
+											<span class="lead" ng-show="!curso.mostrarOcultarSep && curso.fechaSep != undefined">Fecha SEP: {{curso.fechaSep | date:"dd-MM-yyyy"}}</span>
+											<div class="input-group" ng-show="curso.mostrarOcultarSep">
 												<span class="input-group-addon"><i class="fa fa-search"></i></span>
 												<input name="fechaSep" format="dd-MM-yyyy" date-time class="form-control" view="date" max-view="year" min-view="date" ng-model="curso.fechaSep"/>												
 											</div>
 											<div class="input-group">
-												<button type="button" class="btn btn-primary" ng-click="al.guardarSep(curso)" ng-show="al.mostrarOcultarSep">Guardar</button>
+												<button type="button" class="btn btn-primary" ng-click="al.guardarSep(curso)" ng-show="curso.mostrarOcultarSep">Guardar</button>
 											</div>
 										</div>
 										<div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
-											<div class="widget-toolbar" id="switch-1" role="menu">
+											<div class="widget-toolbar" id="switch-{{curso._id}}" role="menu">
 												<span class="onoffswitch-title"><i class="fa fa-university"></i>SEP</span>
 												<span class="onoffswitch">
-													<input type="checkbox" name="onoffswitch" ng-model="curso.sep" ng-click="al.cambiarSep(curso)" class="onoffswitch-checkbox" id="myonoffswitch">
-													<label class="onoffswitch-label" for="myonoffswitch"> 
+													<input type="checkbox" name="onoffswitch" ng-model="curso.sep" ng-click="al.cambiarSep(curso, $index)" class="onoffswitch-checkbox" id="myonoffswitch{{curso._id}}">
+													<label class="onoffswitch-label" for="myonoffswitch{{curso._id}}"> 
 														<span class="onoffswitch-inner" data-swchon-text="SI" data-swchoff-text="NO"></span> 
 														<span class="onoffswitch-switch"></span> 
 													</label> 

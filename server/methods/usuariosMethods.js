@@ -198,7 +198,7 @@ Meteor.methods({
 			_.each(alumnos, function(alumno, indice){
 				if(Inscripciones.find({alumno_id : alumno._id, estatus : 1}).count() > 0){
 					alumno.profile.seccion = Secciones.findOne(alumno.profile.seccion_id);
-					alumno.profile.inscripciones = Inscripciones.find({alumno_id : alumno._id, estatus : 1}).fetch();
+					alumno.profile.inscripciones = Inscripciones.find({alumno_id : alumno._id}).fetch();
 					alumno.profile.grupos = [];
 					_.each(alumno.profile.inscripciones, function(inscripcion){
 						var grupo = Grupos.findOne(inscripcion.grupo_id);

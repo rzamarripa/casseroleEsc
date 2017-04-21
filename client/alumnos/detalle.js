@@ -28,7 +28,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	this.cantAtrasadas 	= 0;
 	this.cantPagadas 		= 0;
 	this.cantSeleccionados = 0;
-	this.mostrarOcultarSep = false;
+	//this.mostrarOcultarSep = false;
 	this.seccion_id = "";
 	this.cambiarPassword = true;
 	window.rc = rc;
@@ -138,6 +138,7 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 			
 			if(inscripciones.length > 0){
 				_.each(inscripciones, function(inscripcion){
+					inscripcion.mostrarOcultarSep = inscripcion.mostrarOcultarSep || false;
 					inscripcion.grupo = Grupos.findOne(inscripcion.grupo_id);
 					inscripcion.curricula = Curriculas.findOne({planEstudios_id : inscripcion.planEstudios_id});
 					inscripcion.seccion = Secciones.findOne({_id : inscripcion.seccion_id});
@@ -1447,17 +1448,19 @@ function AlumnosDetalleCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
   }
   
   this.guardarSep = function(inscripcion){
+	  
 	  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep, fechaSep : inscripcion.fechaSep }});
-	  rc.mostrarOcultarSep = false;
-	  toastr.success("Se actualizó correctamente");
+	  inscripcion.mostrarOcultarSep = false;
+	  toastr.success("Se actualizó correctamente"); 
   }
   
-  this.cambiarSep = function(inscripcion){
+  this.cambiarSep = function(inscripcion, index){
+	  console.log("cambiar", inscripcion, index);
 	  if(inscripcion.sep == false){
-		  rc.mostrarOcultarSep = false;
+		  inscripcion.mostrarOcultarSep = false;
 		  Inscripciones.update({_id : inscripcion._id}, {$set : {sep : inscripcion.sep}, $unset : { fechaSep : ""}});
 	  }else{
-		  rc.mostrarOcultarSep = true;
+		  inscripcion.mostrarOcultarSep = true;
 	  }
 	  
   }
