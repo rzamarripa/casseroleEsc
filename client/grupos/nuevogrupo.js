@@ -356,17 +356,20 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 
 	this.agregarAsignacion = function(asignacion, form2){
 		if(asignacion == undefined || asignacion.maestro_id == undefined || 
-				asignacion.materia == undefined || asignacion.grado == undefined ||
-				rc.grupo.anio == undefined || rc.grupo.semanaInicio == undefined || 
-				rc.grupo.semanaFin == undefined || rc.grupo.ciclo_id == undefined){
+				asignacion.materia 	== undefined || asignacion.grado 				== undefined ||
+				rc.grupo.anio 			== undefined || rc.grupo.semanaInicio 	== undefined || 
+				rc.grupo.semanaFin 	== undefined || rc.grupo.ciclo_id 			== undefined){
 			toastr.error('Por favor seleccione maestro, plan de estudios, ciclo, grado, materia y año para agregar una asignación.');
 			return
 		}
+		
 		var ciclo = Ciclos.findOne(rc.grupo.ciclo_id);
 		var vacaciones = ciclo.vacaciones;
 		var materia = JSON.parse(asignacion.materia);
 		
+		//Es para ver si existe la materia en las asignaciones agregadas.
 		var x = !!_.where(rc.grupo.asignaciones, {materia_id:materia._id}).length;
+		
 		if(x == true){
 			toastr.warning('Esta materia ya está agregada.');
 			return
@@ -437,18 +440,18 @@ function NuevoGrupoCtrl($scope, $meteor, $reactive, $state, $stateParams, toastr
 	}
 	
 	function getWeekNumber(d) {
-	    // Copy date so don't modify original
-	    d = new Date(+d);
-	    d.setHours(0,0,0);
-	    // Set to nearest Thursday: current date + 4 - current day number
-	    // Make Sunday's day number 7
-	    d.setDate(d.getDate() + 4 - (d.getDay()||7));
-	    // Get first day of year
-	    var yearStart = new Date(d.getFullYear(),0,1);
-	    // Calculate full weeks to nearest Thursday
-	    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)
-	    // Return array of year and week number
-	    return [d.getFullYear(), weekNo];
+    // Copy date so don't modify original
+    d = new Date(+d);
+    d.setHours(0,0,0);
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    // Get first day of year
+    var yearStart = new Date(d.getFullYear(),0,1);
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)
+    // Return array of year and week number
+    return [d.getFullYear(), weekNo];
 	}
 	
 	function weeksInYear(year) {

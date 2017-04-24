@@ -32,7 +32,7 @@ angular
 		});
 	}else{
 		this.subscribe('asistencias', ()  => {
-			return [{ grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id}]
+			return [{ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}, grupo_id : $stateParams.grupo_id, materia_id : $stateParams.materia_id, maestro_id : $stateParams.maestro_id}]
 		});
 	}
 		
@@ -79,7 +79,7 @@ angular
 		alumnos : () => {
 			if(this.getReactively("grupo")){
 				rc.turno_id = rc.grupo.turno_id;
-				rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
+				
 
 				return rc.alumnos_id;
 			}
@@ -88,9 +88,12 @@ angular
 			return Turnos.findOne();
 		},
 		existeAsistencia : () => {
-			var asistencias = Asistencias.find({ fechaAsistencia : { $gte : this.fechaInicio, $lt : this.fechaFin}}).fetch();		
+			var asistencias = Asistencias.find({ }).fetch();		
 			if(asistencias.length > 0){
 				rc.alumnos_id = _.pluck(asistencias, "alumno_id");
+			}else{
+				if(rc.grupo)
+					rc.alumnos_id = _.pluck(rc.grupo.alumnos, "alumno_id");
 			}
 			return asistencias;
 		},
@@ -188,7 +191,7 @@ angular
 			}
 			
 			//alumnos = _.toArray(alumnos);
-			return alumnos;
+			return rc.existeAsistencia;
 		}
   });
   

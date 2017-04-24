@@ -80,9 +80,9 @@ function MaestroVerAsistenciasCtrl($scope, $meteor, $reactive, $state, $statePar
 	  diasUnicos : () => {
 		  var arreglo = {};
 		  _.each(this.getReactively("asistencias"), function(asistencia){
-			  if(arreglo[asistencia.fechaAsistencia] == undefined){
-				  arreglo[asistencia.fechaAsistencia] = {};
-				  arreglo[asistencia.fechaAsistencia].fecha = asistencia.fechaAsistencia;
+			  if(arreglo[asistencia.fechaAsistencia.getDate() + "-" + asistencia.fechaAsistencia.getMonth() + "-" + asistencia.fechaAsistencia.getFullYear()] == undefined){
+				  arreglo[asistencia.fechaAsistencia.getDate() + "-" + asistencia.fechaAsistencia.getMonth() + "-" + asistencia.fechaAsistencia.getFullYear()] = {};
+				  arreglo[asistencia.fechaAsistencia.getDate() + "-" + asistencia.fechaAsistencia.getMonth() + "-" + asistencia.fechaAsistencia.getFullYear()].fecha = asistencia.fechaAsistencia;
 			  }
 		  });
 		  return _.toArray(arreglo);
