@@ -37,6 +37,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	this.subscribe("secciones",() => {
 		return [{estatus:true, campus_id : Meteor.user() != undefined ? Meteor.user().profile.campus_id : ""}]
 	});
+	
+	this.subscribe('conceptosPago',()=>{
+		return [{seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""}]
+	});
 
 	this.subscribe('conceptosComision',() => {
 		return [{seccion_id : this.getReactively('inscripcion.seccion_id') ? this.getReactively('inscripcion.seccion_id'):"a"}]
@@ -167,10 +171,10 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 			}
 			
 			var pago = {
-				semana 			    : mfecha.isoWeek(),
-				fecha 			    : new Date(mfecha.toDate().getTime()),
+				semana 			    		: mfecha.isoWeek(),
+				fecha 			    		: new Date(mfecha.toDate().getTime()),
 				dia                 : mfecha.isoWeekday(),
-				tipoPlan 		    : 'Semanal',
+				tipoPlan 		    		: 'Semanal',
 				numeroPago 	        : i + 1,				
 				importeRecargo      : this.inscripcion.planPagos.colegiatura.Semanal.importeRecargo,
 				importeDescuento    : this.inscripcion.planPagos.colegiatura.Semanal.importeDescuento,
@@ -185,8 +189,8 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 				estatus             : 0,
 				tiempoPago          : 0,
 				modificada          : false,
-				mes					: mfecha.get('month') + 1,
-				anio				: anio
+				mes									: mfecha.get('month') + 1,
+				anio								: anio
 			}
 			
 			if(i == 0){
@@ -365,20 +369,21 @@ function NuevaInscripcionCtrl($scope, $meteor, $reactive, $state, toastr) {
 	}
 
 	this.hayCupo = function(grupo_id){
-		//console.log(grupo_id);
+		//OBTENER EL GRUPO
 		this.grupoSeleccionado = Grupos.findOne(grupo_id);
-		//console.log(this.grupoSeleccionado);
+		//SELECCIONAR EL TURNO DEL GRUPO
 		this.turnoSeleccionado = this.grupoSeleccionado.turno_id;
 		var planEstudios = PlanesEstudios.findOne(this.grupoSeleccionado.planEstudios_id);
 		this.grupoSeleccionado.turno = Turnos.findOne(this.turnoSeleccionado);
-		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion,colegiatura:this.grupoSeleccionado.colegiatura };
+		this.inscripcion.planPagos = { inscripcion:this.grupoSeleccionado.inscripcion, colegiatura:this.grupoSeleccionado.colegiatura };
 		this.inscripcion.planPagos.colegiatura.fechaInicial = this.grupoSeleccionado.fechaInicio;
 		this.inscripcion.planPagos.colegiatura.Semanal.totalPagos = planEstudios.semanas;
 		var _inscripcion = this.inscripcion.planPagos.inscripcion;
 		_inscripcion.importeRegular =0;
 		for(var sid in _inscripcion.conceptos){
-
-			var _concepto = _inscripcion.conceptos[sid];
+			var _concepto = _inscripcion.conceptos[sid];			
+			var conceptoActual = ConceptosPago.findOne({_id : sid});
+			_concepto.cuenta_id = conceptoActual.cuenta_id;
 			if(_concepto.estatus){
 				_inscripcion.importeRegular += _concepto.importe;
 			}

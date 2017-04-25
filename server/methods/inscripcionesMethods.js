@@ -88,7 +88,6 @@ Meteor.methods({
 					tiempoPago =1;
 				}
 			
-
 	    	nuevoPago = {
 	  			alumno_id         : inscripcion.alumno_id,
 					inscripcion_id    : inscripcion._id,
@@ -258,7 +257,7 @@ Meteor.methods({
 		var vendedor 					= Meteor.users.findOne({_id : inscripcion.vendedor_id});
 		var configColegiatura = inscripcion.planPagos.colegiatura[inscripcion.planPagos.colegiatura.tipoColegiatura];
 		var cuentaInscripcion = Cuentas.findOne({seccion_id : grupo.seccion_id, inscripcion : true});
-		var cuentaActiva = Cuentas.findOne({estatus:true, seccion_id : grupo.seccion_id});
+		var cuentaActiva = Cuentas.findOne({activo:true, seccion_id : grupo.seccion_id});
 		
 		//PREPARAR PLAN DE PAGOS
 		var remanente =  configColegiatura.importeRegular;
