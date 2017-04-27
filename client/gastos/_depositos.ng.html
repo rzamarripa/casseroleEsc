@@ -47,7 +47,7 @@
 	      <tr ng-repeat="(key, dia) in gc.diasActuales track by $index">
 	        <td ><a href="#" ng-click="gc.desgloseImporteDiarioPagos(key, cuenta._id)">{{dia}}</a></td>
 	        <td class="text-right">
-		        {{gc.importeDiarioPagos(key+1, cuenta._id) | currency}}
+		        {{gc.importeDiarioPagos(key + 1, cuenta._id) | currency}}
 		        <div class="modal fade text-left" id="myModal{{key}}{{cuenta._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 						  <div class="modal-dialog" role="document">
 						    <div class="modal-content">

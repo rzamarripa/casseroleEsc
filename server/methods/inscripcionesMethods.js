@@ -28,6 +28,7 @@ Meteor.methods({
 	},
 	generaPlanPagos : function(inscripcion) {
 		var mfecha = moment(new Date());
+		var diaSemana 	= moment(new Date()).isoWeekday();
 		var cuentaActiva = Cuentas.findOne({estatus:true, seccion_id : Meteor.user() != undefined ? Meteor.user().profile.seccion_id : ""});
 		_.each(inscripcion.planPagos.fechas, function(pago){
 			var nuevoPago = {};
@@ -56,7 +57,8 @@ Meteor.methods({
 					mesPago			  		: mfecha.get('month') + 1,
 					anioPago		  		: mfecha.get('year'),
 					semanaPago        : mfecha.isoWeek(),
-					diaPago           : mfecha.isoWeekday(),
+					diaPago     			: moment().date(),
+					diaSemana					: diaSemana,
 					faltante          : pago.importeRegular-pago.pago,
 					estatus           : 1,
 					tiempoPago        : 0,
@@ -86,40 +88,41 @@ Meteor.methods({
 
 		    	nuevoPago = {
 		  			alumno_id         : inscripcion.alumno_id,
-					inscripcion_id    : inscripcion._id,
-					vendedor_id       : inscripcion.vendedor_id,
-					seccion_id        : inscripcion.seccion_id,
-					campus_id         : inscripcion.campus_id,
-					fechaInscripcion  : inscripcion.fechaInscripcion,
-					semana            : pago.semana,
-					fecha             : pago.fecha,
-					fechaCreacion			: new Date(),
-					dia               : pago.dia,
-					tipoPlan          : pago.tipoPlan,
-					numeroPago        : pago.numeroPago,
-					importeRecargo    : pago.importeRecargo,
-					importeDescuento  : pago.importeDescuento,
-					importeRegular    : pago.importeRegular,
-					diasRecargo       : pago.diasRecargo,
-					diasDescuento     : pago.diasDescuento,
-					importe           : pesos,
-					faltante          : pago.faltante,
-					pago              : 0,
-					mesPago					  : undefined,
-				  	anioPago				  : undefined,
-					fechaPago         : undefined,
-					semanaPago        : undefined,
-					diaPago           : undefined,
-					estatus           : pago.estatus,
-					tiempoPago        : tiempoPago,
-					modificada        : false,
-					mes               : pago.mes,
-					anio              : pago.anio,
-					pago_id           : undefined,
-					modulo						: "colegiatura",
-					cuenta_id					: cuentaActiva._id,
-					descripcion				: "Colegiatura"			
-				}
+						inscripcion_id    : inscripcion._id,
+						vendedor_id       : inscripcion.vendedor_id,
+						seccion_id        : inscripcion.seccion_id,
+						campus_id         : inscripcion.campus_id,
+						fechaInscripcion  : inscripcion.fechaInscripcion,
+						semana            : pago.semana,
+						fecha             : pago.fecha,
+						fechaCreacion			: new Date(),
+						dia               : pago.dia,
+						tipoPlan          : pago.tipoPlan,
+						numeroPago        : pago.numeroPago,
+						importeRecargo    : pago.importeRecargo,
+						importeDescuento  : pago.importeDescuento,
+						importeRegular    : pago.importeRegular,
+						diasRecargo       : pago.diasRecargo,
+						diasDescuento     : pago.diasDescuento,
+						importe           : pesos,
+						faltante          : pago.faltante,
+						pago              : 0,
+						mesPago					  : undefined,
+					  anioPago				  : undefined,
+						fechaPago         : undefined,
+						semanaPago        : undefined,
+						diaPago           : undefined,
+						diaSemana					: diaSemana,
+						estatus           : pago.estatus,
+						tiempoPago        : tiempoPago,
+						modificada        : false,
+						mes               : pago.mes,
+						anio              : pago.anio,
+						pago_id           : undefined,
+						modulo						: "colegiatura",
+						cuenta_id					: cuentaActiva._id,
+						descripcion				: "Colegiatura"			
+					}
 	  		}
 		  
 			PlanPagos.insert(nuevoPago);
@@ -163,7 +166,7 @@ Meteor.methods({
 		var cuentaInscripcion = Cuentas.findOne({inscripcion: true});
 
 		//VARIABLES REUTILIZABLES
-		var diaActual 	= moment(new Date()).isoWeekday();
+		var diaSemana 	= moment(new Date()).isoWeekday();
 		var semanaPago 	= moment(new Date()).isoWeek();
 		var mesPago 		= moment(new Date()).get('month') + 1;
 		var anioPago 		= moment(new Date()).get('year');
@@ -179,7 +182,8 @@ Meteor.methods({
 			seccion_id  : Meteor.user().profile.seccion_id,
 			campus_id 	: Meteor.user().profile.campus_id,
 			fechaPago 	: new Date(),
-			diaPago     : diaActual,
+			diaPago     : moment().date(),
+			diaSemana		: diaSemana,
 			mesPago     : mesPago,
 			semanaPago  : semanaPago,
 			anioPago    : anioPago,
@@ -235,7 +239,7 @@ Meteor.methods({
 		}
 
 		//VARIABLES REUTILIZABLES
-		var diaActual 	= moment(new Date()).isoWeekday();
+		var diaSemana 	= moment(new Date()).isoWeekday();
 		var semanaPago 	= moment(new Date()).isoWeek();
 		var mesPago 		= moment(new Date()).get('month') + 1;
 		var anioPago 		= moment(new Date()).get('year');
@@ -350,7 +354,8 @@ Meteor.methods({
 				inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 				inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 				inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-				inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
+				inscripcion.pagos[connceptoId].diaPago = moment().date();
+				inscripcion.pagos[connceptoId].diaSemana = moment().isoWeekday();
 				inscripcion.pagos[connceptoId].tiempoPago = 0;
 			}
 			else if(remanente>0){
@@ -362,7 +367,8 @@ Meteor.methods({
 					inscripcion.pagos[connceptoId].semanaPago = moment().isoWeek();
 					inscripcion.pagos[connceptoId].anioPago = moment().get('year');
 					inscripcion.pagos[connceptoId].mesPago = moment().get('month')+1;
-					inscripcion.pagos[connceptoId].diaPago = moment().isoWeekday();
+					inscripcion.pagos[connceptoId].diaPago = moment().date();
+					inscripcion.pagos[connceptoId].diaSemana = moment().isoWeekday();
 					inscripcion.pagos[connceptoId].tiempoPago = 0;
 				}
 				else
@@ -394,7 +400,8 @@ Meteor.methods({
 			usuarioInserto_id 	: Meteor.userId(),
 			importe 		: inscripcion.importePagado - inscripcion.cambio,
 			cuenta_id   : cuentaInscripcion._id,
-			diaPago     : diaActual,
+			diaPago     : moment().date(),
+			diaSemana		: diaSemana,
 			mesPago     : mesPago,
 			semanaPago  : semanaPago,
 			anioPago    : anioPago,
@@ -421,7 +428,8 @@ Meteor.methods({
 			seccion_id  : Meteor.user().profile.seccion_id,
 			campus_id 	: Meteor.user().profile.campus_id,
 			fechaPago 	: new Date(),
-			diaPago     : diaActual,
+			diaPago     : moment().date(),
+			diaSemana		: diaSemana,
 			mesPago     : mesPago,
 			semanaPago  : semanaPago,
 			anioPago    : anioPago,
@@ -445,7 +453,8 @@ Meteor.methods({
 			seccion_id  : Meteor.user().profile.seccion_id,
 			campus_id 	: Meteor.user().profile.campus_id,
 			fechaPago 	: new Date(),
-			diaPago     : diaActual,
+			diaPago     : moment().date(),
+			diaSemana		: diaSemana,
 			mesPago     : mesPago,
 			semanaPago  : semanaPago,
 			anioPago    : anioPago,

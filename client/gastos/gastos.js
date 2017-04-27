@@ -67,6 +67,9 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     },
     cuentaActiva : () =>{
       return Cuentas.findOne({inscripcion:true});
+    },
+    cuentaCheques : () => {
+	    return Cuentas.findOne({inscripcion:false});
     }
   });
 
@@ -79,7 +82,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     this.nuevo = !this.nuevo;
   }
   this.guardar = function(gasto, form){
-	  console.log(form);	  
     if(form.$invalid){
       toastr.error('Llene toda la información.');
       return;
@@ -91,11 +93,11 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     gasto.seccion_id = Meteor.user().profile.seccion_id;
     gasto.tipoGasto = this.tipoGasto;
     gasto.diaSemana = this.diaActual;
-    if(gasto.tipoGasto != "Depositos")
+    if(gasto.tipoGasto == "Cheques")
+	    gasto.cuenta_id = this.cuentaCheques._id;
+    else if(gasto.tipoGasto != "Depositos")
 	    gasto.cuenta_id = this.cuentaActiva._id;
     Gastos.insert(gasto);
-    form.$setPristine();
-    form.$setUntouched();
     this.gasto = {}; 
     this.nuevo = false;
     $('.collapse').collapse('hide');
@@ -111,8 +113,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     concepto.estatus = true;
     ConceptosGasto.insert(concepto);
     this.concepto = {}; 
-    form.$setPristine();
-    form.$setUntouched();
     return toastr.success('Guardado correctamente');
   }
 
@@ -147,7 +147,8 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	////////Depositos////////
 	
   this.importeDiarioPagos = function(dia, cuenta_id){
-    pagos = Pagos.find({diaPago:dia, cuenta_id:cuenta_id}).fetch();
+	  console.log(dia, cuenta_id)
+    pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
     return importe;
   }
