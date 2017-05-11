@@ -10,6 +10,16 @@ angular
 	this.existe = false;
 	this.seccion_id = "";
 	this.grupo = {};
+	window.rc = rc;
+	
+	Meteor.apply("mostrarListadoAlumnosCalificaciones", [$stateParams], function(error, result){
+		if(result){
+			if(result.materia_id != undefined)
+				rc.existe = true;
+			console.log(result);
+			rc.capturaCalificaciones = result;
+		}
+	})
 		
 	this.subscribe('calificaciones', () => {		
 		return [{
@@ -55,12 +65,7 @@ angular
 		}]
 	});
 
-	this.subscribe('alumnos', () => {		
-		return [{
-			_id : { $in : this.getCollectionReactively('alumnos_id')}
-		}]
-	});
-
+	
 	this.subscribe('maestrosMateriasGrupos', () => {
 		return [{
 			grupo_id: $stateParams.grupo_id
@@ -75,19 +80,26 @@ angular
 			return Maestros.findOne($stateParams.maestro_id);
 		},
 		materia : () => {
+			this.seccion_id = this.getReactively("grupo.seccion_id");
 			return Materias.findOne($stateParams.materia_id);
 		},
+/*
 		alumnosGrupo : () => {
 			var grupo = Grupos.findOne($stateParams.grupo_id);
-			rc.alumnos_id = _.pluck(grupo.alumnos, "alumno_id");
-			this.seccion_id = this.getReactively("grupo.seccion_id");
+			if(grupo){
+				rc.alumnos_id = _.pluck(grupo.alumnos, "alumno_id");
+				
+			}
+			
 			return Meteor.users.find({roles : ["alumno"]}).fetch();
 		},
+*/
 		sePuede : () => {
 			var seccion = Secciones.findOne();
 			if(seccion)
 				return seccion.abrirCalificaciones;
 		},
+/*
 		alumnos : () => {
 			if(this.alumnosGrupo){
 				var alumnos = [];
@@ -105,6 +117,8 @@ angular
 		calificaciones : () => {
 			return Calificaciones.find();
 		},
+*/
+/*
 		capturaCalificaciones : () => {
 			var resultado = {};
 			if(this.getReactively("calificaciones")){
@@ -122,10 +136,12 @@ angular
 															"profile.sexo" : 1,
 															_id : 1
 													}}).fetch();
+							
 				}
 			}
 			return resultado;
 		}
+*/
   });
   
   this.guardar = function(calificacion){

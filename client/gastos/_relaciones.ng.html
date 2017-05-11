@@ -51,20 +51,20 @@
 	    <thead>
 	      <tr>
 	      	<th>Concepto</th>
-	        <th>Registros</th>
-	        <th>Cantidad</th>
+	        <th class="text-center">Registros</th>
+	        <th class="text-center">Cantidad</th>
 	      </tr> 
 	    </thead>
 	    <tbody>
 	    	<tr>
 	    		<td>Restos de inscripción</td>
-	    		<td>{{gc.registrosInscripcion}}</td>
-	    		<td align="right">{{gc.restosInscripcion(gc.cuentaActiva._id) | currency}}</td>
+	    		<td class="text-center">{{gc.registrosInscripcion}}</td>
+	    		<td class="text-right">{{gc.restosInscripcion(gc.cuentaActiva._id) | currency}}</td>
 	    	</tr>
 	      <tr>
 	        <td>Comisiones</td>
-	        <td>{{gc.registrosComision}}</td>
-	        <td align="right">{{gc.comisiones(gc.cuentaActiva._id) | currency}}</td>
+	        <td class="text-center">{{gc.registrosComision}}</td>
+	        <td class="text-right">{{gc.comisiones(gc.cuentaActiva._id) | currency}}</td>
 	      </tr>
 	    </tbody>
 	  </table>

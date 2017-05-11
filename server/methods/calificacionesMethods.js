@@ -158,7 +158,47 @@ Meteor.methods({
 		Curriculas.update({_id : idTemp}, { $set : curricula});
 		
 		return true;
-	}
+	},
+	mostrarListadoAlumnosCalificaciones : function(parametros){
+		var calificaciones = Calificaciones.findOne({grupo_id : parametros.grupo_id, materia_id : parametros.materia_id, maestro_id : parametros.maestro_id})
+		var grupo = Grupos.findOne({_id : parametros.grupo_id});
+		
+		var resultado = {};
+			
+		if(calificaciones && calificaciones.alumnos.length > 0){
+			existe = true;
+			resultado = calificaciones;
+			
+			var alumnosCalificados = _.pluck(calificaciones.alumnos, "_id");
+			var alumnosGrupo = _.pluck(grupo.alumnos, "alumno_id");
+			
+			var alumnosNuevos = _.difference(alumnosGrupo, alumnosCalificados);
+			
+			if(alumnosNuevos.length > 0){
+				_.each(alumnosNuevos, function(alumno_id){
+			
+					var alu = Meteor.users.findOne({_id : alumno_id})
+			
+					calificaciones.alumnos.push(alu)
+			
+				})
+				return resultado;
+			}
+				
+		}else{
+			
+			var alumnosGrupo = _.pluck(grupo.alumnos, "alumno_id");
+			resultado.alumnos = Meteor.users.find({_id : { $in : alumnosGrupo}},{ fields : { 
+													"profile.nombreCompleto" : 1,
+													"profile.matricula" : 1,
+													"profile.fotografia" : 1,
+													"profile.sexo" : 1,
+													_id : 1
+											}}).fetch();
+		}
+		
+		return resultado;
+	} 
 })
 
 

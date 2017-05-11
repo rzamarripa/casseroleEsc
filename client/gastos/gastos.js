@@ -147,20 +147,19 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	////////Depositos////////
 	
   this.importeDiarioPagos = function(dia, cuenta_id){
-	  console.log(dia, cuenta_id)
     pagos = Pagos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe}, 0);
     return importe;
   }
 
   this.importeSemanalPagos = function(cuenta_id){
-    pagos = Pagos.find({cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();
+    pagos = Pagos.find({cuenta_id:cuenta_id}).fetch();
     importe = _.reduce(pagos, function(memo, pago){return memo + pago.importe},0);
     return importe;
   }
 
   this.importeDiarioGastos = function(dia, cuenta_id){
-    gastos = Gastos.find({diaSemana:dia, cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();  
+    gastos = Gastos.find({diaSemana:dia, cuenta_id:cuenta_id}).fetch();  
     importe = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
     return importe;
   }
@@ -188,6 +187,13 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
     //console.log(totalGastos + totalComisiones)
     return totalGastos;// + totalComisiones;
   }
+  
+  this.gastosCheques = function(cuenta_id){
+    gastos = Gastos.find({tipoGasto:"Cheques", cuenta_id : cuenta_id }).fetch();
+    totalGastos = _.reduce(gastos, function(memo, gasto){return memo + gasto.importe},0);
+    return totalGastos;
+  }
+  
   this.restosInscripcion = function(cuenta_id){
 	  comisionesVendedor = Comisiones.find({beneficiario:"vendedor", cuenta_id:cuenta_id}).fetch();
 	  //console.log(comisionesVendedor.length);
@@ -225,6 +231,6 @@ function GastosCtrl($scope, $meteor, $reactive, $state, toastr) {
 		var id = "#myModal" + dia + cuenta_id;
 		$(id).modal('show');
 		rc.diaSeleccionado = dias[dia];
-		rc.detallePagos = Pagos.find({diaPago:dia+1, cuenta_id:cuenta_id, semanaPago : this.semanaActual, anioPago : this.anioActual}).fetch();
+		rc.detallePagos = Pagos.find({diaSemana:dia+1, cuenta_id:cuenta_id}).fetch();
 	}
 };
